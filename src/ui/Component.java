@@ -26,5 +26,5 @@ public abstract class Component
 	{
 	}
 	
-	public abstract void mouseEvent(int posX, int posY, byte b);
+	public abstract void mouseEvent(int posX, int posY, byte b, boolean c);
 }

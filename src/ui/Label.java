@@ -11,7 +11,7 @@ public class Label extends Component
 	}
 
 	@Override
-	public void mouseEvent(int posX, int posY, byte b)
+	public void mouseEvent(int posX, int posY, byte b, boolean c)
 	{
 	}
 }

@@ -192,4 +192,15 @@ public class RenderHelper
 		ttf.drawString(x, y, text, color);
 		glDisable(GL_BLEND);
 	}
+
+	public static void glColorHex(String hex)
+	{
+		glColor3f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f);
+	}
+
+	public static void glColorHex(String hex, float alpha)
+	{
+		glColor4f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f, alpha);
+	}
+
 }

@@ -1,7 +1,5 @@
 package ui;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.awt.Font;
 
 import org.newdawn.slick.Color;
@@ -32,14 +30,19 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
-		if (state != 1) glColor4f(34f / 255f, 34f / 255f, 34f / 255f, 0.6f);
-		else glColor4f(1, 153f / 255f, 51f / 255f, 0.6f);
+		if (state != 1) RenderHelper.glColorHex("222222", 0.6f);
+		else RenderHelper.glColorHex("ff9933", 0.6f);
+
 		RenderHelper.renderRect(x, y, width, height);
 
-		RenderHelper.renderText(x, y, title, Color.white, new Font("Times New Roman", Font.BOLD, 25));
+		RenderHelper.renderText(x, y, title, Color.gray, new Font(Font.SANS_SERIF, Font.BOLD, 25));
 	}
 
 	@Override
-	public void mouseEvent(int posX, int posY, byte b)
-	{}
+	public void mouseEvent(int posX, int posY, byte b, boolean c)
+	{
+		if (!c) state = 0;
+		else if ((b & 1) == 1) state = 2;
+		else state = 1;
+	}
 }
