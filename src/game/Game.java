@@ -2,7 +2,6 @@ package game;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
 
 import render.util.RenderHelper;
 import static org.lwjgl.opengl.GL11.*;
@@ -17,6 +16,11 @@ public class Game
 
 	public void gameLoop()
 	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glEnable(GL_DEPTH_TEST);
+
 		gluPerspective((float) 30, 640f / 480f, 0.001f, 100);
 		glPushMatrix();
 		{
@@ -45,15 +49,23 @@ public class Game
 			glEnd();
 		}
 		glPopMatrix();
-		
-		gluOrtho2D(-100, 100, -100, 100);
 
+		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
+		glLoadIdentity();
+		glOrtho(0.0, 640, 480, 0.0, -1.0, 10.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		glClear(GL_DEPTH_BUFFER_BIT);
 		{
-			glColor4d(1, 1, 1, 1);
-			RenderHelper.renderRect(-50, -50, 100, 100);
+			glColor4d(0, 1, 1, 1);
+			RenderHelper.renderRect(0, 0, 500, 500);
 		}
+
+		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 
 		Display.update();
 		Display.sync(60);
