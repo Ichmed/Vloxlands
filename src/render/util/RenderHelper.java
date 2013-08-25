@@ -85,17 +85,17 @@ public class RenderHelper
 		return null;
 	}
 
-	public static void renderRect(int posX, int posY, int sizeX, int sizeY)
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY)
 	{
 		renderRect(posX, posY, sizeX, sizeY, 1, 1);
 	}
 
-	public static void renderRect(int posX, int posY, int sizeX, int sizeY, float texSizeX, float texSizeY)
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texSizeX, float texSizeY)
 	{
 		renderRect(posX, posY, sizeX, sizeY, 0, 0, texSizeX, texSizeY);
 	}
 
-	public static void renderRect(int posX, int posY, int sizeX, int sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY)
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY)
 	{
 		GL11.glBegin(GL11.GL_QUADS);
 
