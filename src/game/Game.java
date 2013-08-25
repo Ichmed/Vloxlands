@@ -23,7 +23,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 
-		gluPerspective((float) 30, 640f / 480f, 0.001f, 100);
+		gluPerspective((float) 30, Display.getWidth() / (float)Display.getHeight(), 0.001f, 100);
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

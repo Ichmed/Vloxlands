@@ -42,5 +42,6 @@ public class Button extends Component
 	@Override
 	public void mouseEvent(int posX, int posY, byte b)
 	{
+		System.err.println(posX+":"+posY);
 	}
 }
