@@ -2,6 +2,7 @@ import game.Game;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
 public class Main
 {
@@ -11,6 +12,7 @@ public class Main
 		try
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
+			Display.setDisplayMode(new DisplayMode(640, 480));
 			Display.create();
 			Game.initGLSettings();
 			while(!Display.isCloseRequested()) Game.currentGame.gameLoop();
