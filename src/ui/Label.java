@@ -9,4 +9,9 @@ public class Label extends Component
 		super(x, y, width, height);
 		this.title = title;
 	}
+
+	@Override
+	public void mouseEvent(int posX, int posY, byte b)
+	{
+	}
 }

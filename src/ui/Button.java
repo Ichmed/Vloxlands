@@ -36,4 +36,9 @@ public class Button extends Component
 
 		RenderHelper.renderText(x, y, title, new Font("Times New Roman", Font.BOLD, 25));
 	}
+
+	@Override
+	public void mouseEvent(int posX, int posY, byte b)
+	{
+	}
 }
