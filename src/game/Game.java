@@ -44,8 +44,6 @@ public class Game
 		}
 		glPopMatrix();
 
-		System.out.println(pos);
-
 		Display.update();
 		Display.sync(60);
 	}
