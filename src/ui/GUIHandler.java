@@ -24,9 +24,6 @@ public class GUIHandler
 	{
 		int x = Mouse.getX();
 		int y = Display.getHeight() - Mouse.getY();
-
-		
-		System.out.println(x + " " + y);
 		
 		for(Component c : components)
 		{
