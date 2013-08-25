@@ -1,6 +1,6 @@
 package ui;
 
-public class Component
+public abstract class Component
 {
 	int x;
 	int y;
@@ -25,4 +25,6 @@ public class Component
 	public void draw()
 	{
 	}
+	
+	public abstract void mouseEvent(int posX, int posY, byte b);
 }
