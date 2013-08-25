@@ -1,11 +1,32 @@
 package game;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
+import static org.lwjgl.opengl.GL11.glPointSize;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.glVertex3f;
+import static org.lwjgl.util.glu.GLU.gluPerspective;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import render.util.RenderHelper;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
+import ui.Button;
+import ui.GUIHandler;
 
 public class Game
 {
@@ -58,10 +79,8 @@ public class Game
 		glLoadIdentity();
 
 		glClear(GL_DEPTH_BUFFER_BIT);
-		{
-			glColor4d(0, 1, 1, 1);
-			RenderHelper.renderRect(0, 0, 500, 500);
-		}
+
+		GUIHandler.renderComponents();
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -74,6 +93,8 @@ public class Game
 	public static void initGame()
 	{
 		currentGame = new Game();
+		
+		GUIHandler.addComponent(new Button(40,40,200,200,"LOL, es geht"));
 	}
 
 	public static void initGLSettings()

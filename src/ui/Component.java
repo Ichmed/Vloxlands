@@ -8,7 +8,7 @@ public class Component
 	int height;
 
 	String texture;
-	
+
 	boolean visible;
 
 	public Component(int x, int y, int width, int height)
@@ -18,6 +18,7 @@ public class Component
 		this.width = width;
 		this.height = height;
 
+		visible = true;
 		texture = null;
 	}
 

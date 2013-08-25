@@ -27,8 +27,9 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
-		if (state != 1) glColor4f(34f / 255f, 34f / 255f, 34f / 255f, 0.6f);
-		else glColor4f(1, 153f / 255f, 51f / 255f, 0.6f);
+//		if (state != 1) glColor4f(34f / 255f, 34f / 255f, 34f / 255f, 0.6f);
+//		else glColor4f(1, 153f / 255f, 51f / 255f, 0.6f);
+		glColor3f(1,1,0);
 		RenderHelper.renderRect(x, y, width, height);
 	}
 }
