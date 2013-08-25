@@ -3,6 +3,7 @@ package render.util;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -22,10 +24,6 @@ public class RenderHelper
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();	
 //	public static HashMap<String, Model> models = new HashMap<>();	
 
-	@Deprecated
-	public static final char[] characterChart = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '.', ',', ':', ';',
-			'-', '+', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\'', '"', '!', '?', '=', '*', '_', '#', '\'', ' ' };
-	
 	public static boolean bindTexture(String path)
 	{
 		Texture t = textures.get(path);
@@ -114,43 +112,6 @@ public class RenderHelper
 		GL11.glEnd();
 	}
 
-	@Deprecated
-	public static void renderString(int posX, int posY, String s)
-	{
-		renderString(posX, posY, s, 20);
-	}
-
-	@Deprecated
-	public static void renderString(int posX, int posY, String s, int size)
-	{
-		renderString(posX, posY, s, size, -1);
-	}
-	
-	@Deprecated
-	public static void renderString(int posX, int posY, String s, int size, int frame)
-	{
-		char[] characters = s.toCharArray();
-		for (int i = 0; i < characters.length; i++)
-		{
-			if (frame >= 0)
-			{
-				int a = (characters.length == 1 ? 3 : (i == 0 ? 0 : (i == characters.length - 1 ? 2 : 1)));
-				bindTexture("textFrames.png");
-				renderRect(posX + (size * i), posY, size, size, a * 0.25f, frame * 0.25f, 0.25f, 0.25f);
-			}
-
-			char c = characters[i];
-			int j = 0;
-			for (j = 0; j < characterChart.length; j++)
-				if (characterChart[j] == Character.toUpperCase(c)) break;
-
-			bindTexture("characters.png");
-			int x = j % 16;
-			int y = (j - x) / 16;
-			renderRect(posX + (size * i), posY, size, size, 0.0625f * x, 0.0625f * y, 0.0625f, 0.0625f);
-		}
-	}
-	
 	public static void initGLSettings()
 	{
 		glMatrixMode(GL_PROJECTION);
@@ -219,5 +180,13 @@ public class RenderHelper
 			glVertex3f(0, y, z);
 		}
 		glEnd();
+	}
+
+	public static void renderText(float x, float y, String text, Font font){
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);		
+		TrueTypeFont ttf = new TrueTypeFont(font, true);
+		ttf.drawString(x, y, text);
+		glDisable(GL_BLEND);
 	}
 }

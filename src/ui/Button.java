@@ -1,6 +1,9 @@
 package ui;
 
 import static org.lwjgl.opengl.GL11.*;
+
+import java.awt.Font;
+
 import render.util.RenderHelper;
 
 public class Button extends Component
@@ -30,5 +33,7 @@ public class Button extends Component
 		if (state != 1) glColor4f(34f / 255f, 34f / 255f, 34f / 255f, 0.6f);
 		else glColor4f(1, 153f / 255f, 51f / 255f, 0.6f);
 		RenderHelper.renderRect(x, y, width, height);
+
+		RenderHelper.renderText(x, y, title, new Font("Times New Roman", Font.BOLD, 25));
 	}
 }
