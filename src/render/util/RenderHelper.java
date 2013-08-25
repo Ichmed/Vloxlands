@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -21,8 +22,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 public class RenderHelper
 {
-	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();	
-//	public static HashMap<String, Model> models = new HashMap<>();	
+	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+
+	// public static HashMap<String, Model> models = new HashMap<>();
 
 	public static boolean bindTexture(String path)
 	{
@@ -40,31 +42,31 @@ public class RenderHelper
 			return true;
 		}
 	}
-	
-//	/**
-//	 * Returns a model. If it doesn't exist the method will try to load it
-//	 * @param path The path to the model file
-//	 * @return The model / null if the model could not be loaded
-//	 */
-//	public static Model getModel(String path)
-//	{
-//		Model m = models.get(path);
-//		if(m == null)
-//		{
-//			models.put(path, ModelLoader.loadModel(path));
-//			m = models.get(path);
-//		}
-//		return m;
-//	}
-	
-//	/**
-//	 * Renders a model at the GL-coordinate-origin. If it doesn't exist the method will try to load the model
-//	 * @param path The path to the model file
-//	 */
-//	public static void renderModel(String path)
-//	{
-//		getModel(path).renderModel();
-//	}
+
+	// /**
+	// * Returns a model. If it doesn't exist the method will try to load it
+	// * @param path The path to the model file
+	// * @return The model / null if the model could not be loaded
+	// */
+	// public static Model getModel(String path)
+	// {
+	// Model m = models.get(path);
+	// if(m == null)
+	// {
+	// models.put(path, ModelLoader.loadModel(path));
+	// m = models.get(path);
+	// }
+	// return m;
+	// }
+
+	// /**
+	// * Renders a model at the GL-coordinate-origin. If it doesn't exist the method will try to load the model
+	// * @param path The path to the model file
+	// */
+	// public static void renderModel(String path)
+	// {
+	// getModel(path).renderModel();
+	// }
 
 	private static Texture loadTexture(String path)
 	{
@@ -123,7 +125,7 @@ public class RenderHelper
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 	}
-	
+
 	public static void renderBox(float x, float y, float z)
 	{
 		glDisable(GL_CULL_FACE);
@@ -135,7 +137,7 @@ public class RenderHelper
 			glVertex3f(0, 0, z);
 		}
 		glEnd();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glVertex3f(0, 0, 0);
@@ -144,7 +146,7 @@ public class RenderHelper
 			glVertex3f(0, y, 0);
 		}
 		glEnd();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glVertex3f(0, 0, 0);
@@ -153,7 +155,7 @@ public class RenderHelper
 			glVertex3f(0, 0, z);
 		}
 		glEnd();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glVertex3f(x, 0, 0);
@@ -162,7 +164,7 @@ public class RenderHelper
 			glVertex3f(x, 0, z);
 		}
 		glEnd();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glVertex3f(0, y, 0);
@@ -171,7 +173,7 @@ public class RenderHelper
 			glVertex3f(0, y, z);
 		}
 		glEnd();
-		
+
 		glBegin(GL_QUADS);
 		{
 			glVertex3f(0, 0, z);
@@ -182,11 +184,12 @@ public class RenderHelper
 		glEnd();
 	}
 
-	public static void renderText(float x, float y, String text, Font font){
+	public static void renderText(float x, float y, String text, Color color, Font font)
+	{
 		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);		
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		TrueTypeFont ttf = new TrueTypeFont(font, true);
-		ttf.drawString(x, y, text);
+		ttf.drawString(x, y, text, color);
 		glDisable(GL_BLEND);
 	}
 }

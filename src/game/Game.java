@@ -7,7 +7,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import ui.Button;
-import ui.Component;
 import ui.GUIHandler;
 
 public class Game
@@ -52,9 +51,8 @@ public class Game
 			glEnd();
 		}
 		glPopMatrix();
-		
+
 		GUIHandler.handleMouse();
-		
 
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -66,10 +64,10 @@ public class Game
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glEnable(GL_TEXTURE_2D);
 		glShadeModel(GL_SMOOTH);
-		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);  
 
 		GUIHandler.renderComponents();
-		
+
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
 		glMatrixMode(GL_MODELVIEW);
