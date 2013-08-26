@@ -32,6 +32,8 @@ public class Face
 		
 		glPushMatrix();
 		{
+			glEnable(GL_BLEND);
+			
 			glTranslatef(pos.x, pos.y, pos.z);
 			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
 			glTranslatef(0.5f, 0.5f, 0.5f);

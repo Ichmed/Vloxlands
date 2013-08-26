@@ -51,11 +51,15 @@ public class Map
 							for (int z = 0; z < 256; z++)
 							{
 								if (i.getVoxelId(x, y, z) == 0) continue;
-
-								int ti = Voxel.getVoxelForId(i.getVoxelId(x, y, z)).getTextureIndex();
+								Voxel v = Voxel.getVoxelForId(i.getVoxelId(x, y, z));
 								for (Direction d : Direction.values())
 								{
-									if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque()) i.faces[0].add(new Face(d, new Vector3f(x, y, z), ti));
+									if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque())
+									{
+										Face f = new Face(d, new Vector3f(x, y, z), v.getTextureIndex());
+										if(v.isOpaque())i.faces.add(f);
+										else i.transparentFaces.add(f);
+									}
 								}
 							}
 						}
@@ -76,14 +80,14 @@ public class Map
 		{
 
 			Island island = new Island();
-			int voxels = 80;
+			int voxels = 300;
 
 			for (int j = 0; j < voxels; j++)
 			{
-				short x = (short) ((Math.random() * 200));
-				short y = (short) ((Math.random() * 200));
-				short z = (short) ((Math.random() * 200));
-				island.setVoxel(x, y, z, (byte) -127, (byte) 0);
+				short x = (short) ((Math.random() * 20));
+				short y = (short) ((Math.random() * 20));
+				short z = (short) ((Math.random() * 20));
+				island.setVoxel(x, y, z, (byte) ((Math.random() * 3) -128), (byte) 0);
 			}
 
 			map.addIsland(island);

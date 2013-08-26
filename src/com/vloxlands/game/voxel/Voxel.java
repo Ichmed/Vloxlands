@@ -12,8 +12,10 @@ public class Voxel
 	
 	static
 	{
-		voxelList[0] = new VoxelAir().setName("Air").setTextureIndex(0).setOpaque(false);		
+		voxelList[0] = new VoxelAir().setName("Air").setTextureIndex(0).setOpaque(false);
 		voxelList[1] = new Voxel().setName("Stone").setTextureIndex(1);
+		voxelList[2] = new Voxel().setName("Dirt").setTextureIndex(2);
+		voxelList[3] = new Voxel().setName("Crystall").setTextureIndex(3).setOpaque(false);
 	}
 	
 	public synchronized static Voxel getVoxelForId(int id)

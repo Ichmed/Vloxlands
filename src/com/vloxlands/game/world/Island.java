@@ -2,13 +2,8 @@ package com.vloxlands.game.world;
 
 import java.util.ArrayList;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.Face;
-import com.vloxlands.settings.CFG;
-import com.vloxlands.util.Direction;
 
 public class Island
 {
@@ -17,8 +12,8 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 
-	@SuppressWarnings("rawtypes")
-	ArrayList[] faces = new ArrayList[64];
+	ArrayList<Face> faces = new ArrayList<>();
+	ArrayList<Face> transparentFaces = new ArrayList<>();
 
 	short width = MAXSIZE;
 	short height = MAXSIZE;
@@ -26,10 +21,6 @@ public class Island
 
 	public Island()
 	{
-		for (int i = 0; i < faces.length; i++)
-		{
-			faces[i] = new ArrayList<Face>();
-		}
 		for (int i = 0; i < MAXSIZE; i++)
 		{
 			for (int j = 0; j < MAXSIZE; j++)
@@ -59,7 +50,7 @@ public class Island
 
 	public short getVoxelId(short x, short y, short z)
 	{
-		if(x > 255 || y > 255 || z > 255 || x < 0 || y < 0 || z < 0) return 0;
+		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return 0;
 		return (short) (voxels[x][y][z] + 128);
 	}
 
@@ -151,14 +142,12 @@ public class Island
 	{
 		this.depth = depth;
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	public void render()
 	{
-		for (ArrayList<Face> a : faces)
-			for (Face f : a)
-			{
-				f.render();
-			}
+		for (Face f : faces)
+			f.render();
+		for (Face f : transparentFaces)
+			f.render();
 	}
 }
