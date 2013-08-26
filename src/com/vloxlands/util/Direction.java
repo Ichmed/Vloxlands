@@ -21,7 +21,7 @@ public enum Direction
 		rot = new Vector3f(rotX, rotY, rotZ);
 	}
 	
-	public Vector3f getNeededRotation(Direction a, Direction b)
+	public static Vector3f getNeededRotation(Direction a, Direction b)
 	{		
 		return new Vector3f(b.rot.x - a.rot.x, b.rot.y - a.rot.y, b.rot.z - a.rot.z);
 	}
