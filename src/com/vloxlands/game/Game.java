@@ -20,7 +20,7 @@ public class Game
 	int i = 0;
 
 	long start = 0;
-	int frames = 0;
+	int frames = 20;
 
 	Scene scene;
 
@@ -67,11 +67,11 @@ public class Game
 		if (scene != null) scene.update();
 
 		RenderAssistant.set2DRenderMode(true);
-		
+
 		GUIAssistant.renderComponents();
 
 		RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
-		
+
 		RenderAssistant.set2DRenderMode(false);
 
 		Display.update();
@@ -105,5 +105,6 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_ALPHA_TEST);
 	}
 }

@@ -39,14 +39,16 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
-		if (state != 1) RenderAssistant.glColorHex("222222", 0.6f);
-		else RenderAssistant.glColorHex("ff9933", 0.6f);
+		//TODO:  Get the background to trancparency of 0.6f
+		
+		if (state != 1) Color.decode("#222222").bind();
+		else Color.decode("#ff9933").bind();
+
+		RenderAssistant.renderRect(x, y, width, height);
 
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-
-		RenderAssistant.renderRect(x, y, width, height);
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.decode("#cccccc"), font);
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
 	}
 
 	@Override
