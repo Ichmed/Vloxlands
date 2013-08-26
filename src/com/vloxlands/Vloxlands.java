@@ -23,6 +23,7 @@ public class Vloxlands
 
 		Map map = MapAssistant.loadMap("testMap");
 		MapAssistant.saveMap(map, "testMap2");
+//		MapAssistant.saveMap(Map.generateRandomMap(), "testMap");
 		
 		// -- UniVersion & Reporter initialization -- //
 		UniVersion.offline = !CFG.INTERNET;
