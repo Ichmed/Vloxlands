@@ -97,7 +97,7 @@ public class Compressor
 		}
 	}
 
-	public static byte[] rowCompression(byte[] b)
+	public static byte[] compressRow(byte[] b)
 	{
 		try
 		{
