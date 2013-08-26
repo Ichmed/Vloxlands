@@ -48,9 +48,9 @@ public class Button extends Component
 		RenderAssistant.renderRect(x, y, width, height);
 		glDisable(GL_BLEND);
 
-		 int tx = FontAssistant.getFont(font).getWidth(title);
-		 int mx = width / 2 - tx / 2;
-		 RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
+		int tx = FontAssistant.getFont(font).getWidth(title);
+		int mx = width / 2 - tx / 2;
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
 	}
 
 	@Override

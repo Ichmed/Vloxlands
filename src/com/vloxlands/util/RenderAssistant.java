@@ -205,7 +205,7 @@ public class RenderAssistant
 			glLoadIdentity();
 
 			glClear(GL_DEPTH_BUFFER_BIT);
-//			glEnable(GL_TEXTURE_2D);
+			// glEnable(GL_TEXTURE_2D);
 			glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
 		}

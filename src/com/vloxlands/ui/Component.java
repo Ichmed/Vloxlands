@@ -25,7 +25,7 @@ public abstract class Component
 	public void draw()
 	{
 	}
-	
+
 	public abstract void mouseEvent(int posX, int posY, byte b, boolean c);
 
 	public int getX()
