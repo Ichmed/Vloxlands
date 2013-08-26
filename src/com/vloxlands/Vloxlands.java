@@ -1,5 +1,7 @@
 package com.vloxlands;
 
+import java.nio.ByteBuffer;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -32,6 +34,8 @@ public class Vloxlands
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
 			Display.setDisplayMode(new DisplayMode(640, 480));
+			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResource("/img/logo16.png")), Assistant.loadImage(Vloxlands.class.getResource("/img/logo32.png")) });
+			Display.setTitle("Vloxlands");
 			Display.create();
 			Game.initGLSettings();
 			Game.currentGame.setScene(new Scene_Mainmenu());
