@@ -97,10 +97,4 @@ public class Voxel
 	{
 		return opaque;
 	}
-
-	public void render(int x, int y, int z)
-	{
-		glTranslated(x, y, z);
-		RenderAssistant.renderVoxel((byte)0, this.getTextureIndex());
-	}
 }
