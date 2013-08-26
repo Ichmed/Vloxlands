@@ -96,21 +96,28 @@ public class RenderAssistant
 
 	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY)
 	{
-		GL11.glBegin(GL11.GL_QUADS);
+		glPushMatrix();
+		{
+			glDisable(GL_CULL_FACE);
+			
+			GL11.glBegin(GL11.GL_QUADS);
+			{
+				GL11.glTexCoord2d(texPosX, texPosY + texSizeY);
+				GL11.glVertex2f(posX, posY);
 
-		GL11.glTexCoord2d(texPosX, texPosY + texSizeY);
-		GL11.glVertex2f(posX, posY);
+				GL11.glTexCoord2d(texPosX + texSizeX, texPosY + texSizeY);
+				GL11.glVertex2f(posX + sizeX, posY);
 
-		GL11.glTexCoord2d(texPosX + texSizeX, texPosY + texSizeY);
-		GL11.glVertex2f(posX + sizeX, posY);
+				GL11.glTexCoord2d(texPosX + texSizeX, texPosY);
+				GL11.glVertex2f(posX + sizeX, posY + sizeY);
 
-		GL11.glTexCoord2d(texPosX + texSizeX, texPosY);
-		GL11.glVertex2f(posX + sizeX, posY + sizeY);
+				GL11.glTexCoord2d(texPosX, texPosY);
+				GL11.glVertex2f(posX, posY + sizeY);
+			}
+			GL11.glEnd();
+		}
+		glPopMatrix();
 
-		GL11.glTexCoord2d(texPosX, texPosY);
-		GL11.glVertex2f(posX, posY + sizeY);
-
-		GL11.glEnd();
 	}
 
 	public static void initGLSettings()
@@ -129,25 +136,13 @@ public class RenderAssistant
 	{
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
-		
-		double squareSize =  0.03125d;
+
+		double squareSize = 0.03125d;
 
 		bindTexture("textures/voxelTextures.png");
 
-		// glDisable(GL_CULL_FACE);
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2d(texX * squareSize, texY * squareSize);
-			glVertex3f(0, 0, 0);
-			glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-			glVertex3f(1, 0, 0);
-			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-			glVertex3f(1, 0, 1);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
-			glVertex3f(0, 0, 1);
-		}
-		glEnd();
-
+		 glDisable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		glBegin(GL_QUADS);
 		{
 			glTexCoord2d(texX * squareSize, texY * squareSize);
@@ -156,62 +151,75 @@ public class RenderAssistant
 			glVertex3f(1, 0, 0);
 			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
 			glVertex3f(1, 1, 0);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
+			glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
 			glVertex3f(0, 1, 0);
 		}
 		glEnd();
 
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2d(texX * squareSize, texY * squareSize);
-			glVertex3f(0, 0, 0);
-			glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-			glVertex3f(0, 1, 0);
-			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-			glVertex3f(0, 1, 1);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
-			glVertex3f(0, 0, 1);
-		}
-		glEnd();
-
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2d(texX * squareSize, texY * squareSize);
-			glVertex3f(1, 0, 0);
-			glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-			glVertex3f(1, 1, 0);
-			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-			glVertex3f(1, 1, 1);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
-			glVertex3f(1, 0, 1);
-		}
-		glEnd();
-
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2d(texX * squareSize, texY * squareSize);
-			glVertex3f(0, 1, 0);
-			glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-			glVertex3f(1, 1, 0);
-			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-			glVertex3f(1, 1, 1);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
-			glVertex3f(0, 1, 1);
-		}
-		glEnd();
-
-		glBegin(GL_QUADS);
-		{
-			glTexCoord2d(texX * squareSize, texY * squareSize);
-			glVertex3f(0, 0, 1);
-			glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-			glVertex3f(1, 0, 1);
-			glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-			glVertex3f(1, 1, 1);
-			glTexCoord2d(texX * squareSize, (texY + 1)  * squareSize);
-			glVertex3f(0, 1, 1);
-		}
-		glEnd();
+		 glBegin(GL_QUADS);
+		 {
+		 glTexCoord2d(texX * squareSize, texY * squareSize);
+		 glVertex3f(0, 0, 0);
+		 glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+		 glVertex3f(1, 0, 0);
+		 glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(1, 1, 0);
+		 glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(0, 1, 0);
+		 }
+		 glEnd();
+		
+		 glBegin(GL_QUADS);
+		 {
+		 glTexCoord2d(texX * squareSize, texY * squareSize);
+		 glVertex3f(0, 0, 0);
+		 glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+		 glVertex3f(0, 1, 0);
+		 glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(0, 1, 1);
+		 glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(0, 0, 1);
+		 }
+		 glEnd();
+		
+		 glBegin(GL_QUADS);
+		 {
+		 glTexCoord2d(texX * squareSize, texY * squareSize);
+		 glVertex3f(1, 0, 0);
+		 glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+		 glVertex3f(1, 1, 0);
+		 glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(1, 1, 1);
+		 glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(1, 0, 1);
+		 }
+		 glEnd();
+		
+		 glBegin(GL_QUADS);
+		 {
+		 glTexCoord2d(texX * squareSize, texY * squareSize);
+		 glVertex3f(0, 1, 0);
+		 glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+		 glVertex3f(1, 1, 0);
+		 glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(1, 1, 1);
+		 glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(0, 1, 1);
+		 }
+		 glEnd();
+		
+		 glBegin(GL_QUADS);
+		 {
+		 glTexCoord2d(texX * squareSize, texY * squareSize);
+		 glVertex3f(0, 0, 1);
+		 glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+		 glVertex3f(1, 0, 1);
+		 glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(1, 1, 1);
+		 glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+		 glVertex3f(0, 1, 1);
+		 }
+		 glEnd();
 	}
 
 	public static void renderText(float x, float y, String text, Color color, Font f)

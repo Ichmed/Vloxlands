@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
@@ -11,6 +12,7 @@ import com.vloxlands.game.util.Camera;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
+import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class Game
@@ -25,6 +27,8 @@ public class Game
 
 	Scene scene;
 
+	public float cameraSpeed = 0.1f;
+
 	public void gameLoop()
 	{
 		if (start == 0) start = System.currentTimeMillis();
@@ -33,6 +37,7 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 
 		gluPerspective((float) 30, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		glPushMatrix();
@@ -40,29 +45,19 @@ public class Game
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			glTranslated(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+			glRotated(camera.getRotation().x, 1f, 0f, 0f);
+			glRotated(camera.getRotation().y, 0f, 1f, 0f);
+			glRotated(camera.getRotation().z, 0f, 0f, 1f);
 
-			if (Keyboard.isKeyDown(Keyboard.KEY_W))
-			{
-				camera.move(0, 0, 0.1f);
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_S))
-			{
-				camera.move(0, 0, -0.1f);
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_A))
-			{
-				camera.move(0.1f, 0, 0);
-			}
-			if (Keyboard.isKeyDown(Keyboard.KEY_D))
-			{
-				camera.move(-0.1f, 0, 0);
-			}
-			
+			moveCamera();
+			rotateCamera();
+
 			glColor3f(0.5f, 0.5f, 1.0f);
 
 			glColor4d(1, 1, 1, 1);
-			
-			RenderAssistant.renderVoxel((byte)0, 1);
+
+			glTranslated(0, 0, -5);
+			RenderAssistant.renderVoxel((byte) 0, 1);
 
 		}
 		glPopMatrix();
@@ -77,7 +72,7 @@ public class Game
 
 		while (Keyboard.next())
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
-		
+
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
 
 		RenderAssistant.set2DRenderMode(false);
@@ -114,5 +109,24 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_ALPHA_TEST);
+	}
+
+	public void moveCamera()
+	{
+		float speed = 0.3f;
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) camera.move(0, 0, speed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) camera.move(0, speed, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) camera.move(speed, 0, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) camera.move(0, 0, -speed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) camera.move(0, -speed, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) camera.move(-speed, 0, 0);
+	}
+
+	public void rotateCamera()
+	{
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) camera.rotate(-0.3f, 0, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) camera.rotate(0, -0.3f, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) camera.rotate(0.3f, 0, 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) camera.rotate(0, 0.3f, 0);
 	}
 }

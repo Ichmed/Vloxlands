@@ -2,10 +2,12 @@ package com.vloxlands.game.util;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.Game;
+
 public class Camera
 {
-	Vector3f position = new Vector3f();
-	Vector3f rotation = new Vector3f();
+	public Vector3f position = new Vector3f();
+	public Vector3f rotation = new Vector3f();
 
 	public Vector3f getPosition()
 	{
@@ -39,6 +41,17 @@ public class Camera
 	
 	public void move(float x, float y, float z)
 	{
-		this.position.translate(x, y, z);
+		float speed = Game.currentGame.cameraSpeed;
+		this.position.translate(x * speed, y * speed, z * speed);
+	}
+
+	public void move(double d, double y, double e)
+	{
+		this.move((float)d, (float)y, (float)e);
+	}
+	
+	public void rotate(float x, float y, float z)
+	{
+		this.rotation.translate(x, y, z);
 	}
 }
