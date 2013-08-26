@@ -13,6 +13,21 @@ public class Island
 	short height = MAXSIZE;
 	short depth = MAXSIZE;
 
+	public Island()
+	{
+		for (int i = 0; i < MAXSIZE; i++)
+		{
+			for (int j = 0; j < MAXSIZE; j++)
+			{
+				for (int k = 0; k < MAXSIZE; k++)
+				{
+					voxels[i][j][k] = -128;
+					voxelMetadata[i][j][k] = -128;
+				}
+			}
+		}
+	}
+
 	public void placeVoxel(short x, short y, short z, byte id)
 	{
 		voxels[x][y][z] = id;
@@ -46,6 +61,11 @@ public class Island
 	public void setVoxel(short x, short y, short z, byte id, byte metadata)
 	{
 		voxels[x][y][z] = id;
+		voxelMetadata[x][y][z] = metadata;
+	}
+
+	public void setVoxelMetadata(short x, short y, short z, byte metadata)
+	{
 		voxelMetadata[x][y][z] = metadata;
 	}
 
