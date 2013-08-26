@@ -33,8 +33,6 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		gluPerspective((float) 30, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		glPushMatrix();
