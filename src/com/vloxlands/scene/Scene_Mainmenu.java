@@ -13,10 +13,10 @@ public class Scene_Mainmenu implements Scene
 	@Override
 	public void init()
 	{
-		start = new Button(Display.getWidth() / 2 - 100, Display.getHeight() / 2 - 80, 200, 60, "Spiel starten");
+		start = new Button(Display.getWidth() / 2 - 110, Display.getHeight() / 2 - 80, 220, 60, "Spiel starten");
 		GUIAssistant.addComponent(start);
 
-		quit = new Button(Display.getWidth() / 2 - 100, Display.getHeight() / 2 + 20, 200, 60, "Spiel beenden");
+		quit = new Button(Display.getWidth() / 2 - 110, Display.getHeight() / 2 + 20, 220, 60, "Spiel beenden");
 		GUIAssistant.addComponent(quit);
 
 	}

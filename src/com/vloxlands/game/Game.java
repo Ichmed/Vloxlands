@@ -5,9 +5,12 @@ import static org.lwjgl.util.glu.GLU.*;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.Color;
 
 import com.vloxlands.scene.Scene;
+import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
+import com.vloxlands.util.RenderAssistant;
 
 public class Game
 {
@@ -16,10 +19,15 @@ public class Game
 	float pos = 0;
 	int i = 0;
 
+	long start = 0;
+	int frames = 0;
+
 	Scene scene;
 
 	public void gameLoop()
 	{
+		if (start == 0) start = System.currentTimeMillis();
+
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
@@ -58,10 +66,19 @@ public class Game
 
 		if (scene != null) scene.update();
 
+		RenderAssistant.set2DRenderMode(true);
+		
 		GUIAssistant.renderComponents();
+
+		RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
+		
+		RenderAssistant.set2DRenderMode(false);
 
 		Display.update();
 		Display.sync(60);
+
+		frames++;
+
 	}
 
 	public static void initGame()
@@ -75,6 +92,11 @@ public class Game
 
 		scene = s;
 		scene.init();
+	}
+
+	public int getFPS()
+	{
+		return Math.round(frames / ((System.currentTimeMillis() - start) / 1000f));
 	}
 
 	public static void initGLSettings()

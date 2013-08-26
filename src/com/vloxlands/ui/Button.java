@@ -4,7 +4,8 @@ import java.awt.Font;
 
 import org.newdawn.slick.Color;
 
-import com.vloxlands.render.util.RenderHelper;
+import com.vloxlands.util.FontAssistant;
+import com.vloxlands.util.RenderAssistant;
 
 public class Button extends Component
 {
@@ -15,11 +16,14 @@ public class Button extends Component
 	 */
 	int state;
 
+	Font font;
+
 	public Button(int x, int y, int width, int height, String title)
 	{
 		super(x, y, width, height);
 		this.title = title;
 		this.state = 0;
+		this.font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	}
 
 	public void setState(int s)
@@ -35,12 +39,14 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
-		if (state != 1) RenderHelper.glColorHex("222222", 0.6f);
-		else RenderHelper.glColorHex("ff9933", 0.6f);
+		if (state != 1) RenderAssistant.glColorHex("222222", 0.6f);
+		else RenderAssistant.glColorHex("ff9933", 0.6f);
 
-		RenderHelper.renderRect(x, y, width, height);
+		int tx = FontAssistant.getFont(font).getWidth(title);
+		int mx = width / 2 - tx / 2;
 
-		RenderHelper.renderText(x, y, title, Color.gray, new Font(Font.SANS_SERIF, Font.BOLD, 25));
+		RenderAssistant.renderRect(x, y, width, height);
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.decode("#cccccc"), font);
 	}
 
 	@Override

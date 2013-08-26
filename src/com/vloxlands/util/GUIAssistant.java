@@ -6,7 +6,6 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import com.vloxlands.render.util.RenderHelper;
 import com.vloxlands.ui.Component;
 
 public class GUIAssistant
@@ -20,12 +19,8 @@ public class GUIAssistant
 
 	public static void renderComponents()
 	{
-		RenderHelper.set2DRenderMode(true);
-
 		for (Component c : components)
 			if (c.isVisible()) c.draw();
-
-		RenderHelper.set2DRenderMode(false);
 	}
 
 	public static void clearComponents()

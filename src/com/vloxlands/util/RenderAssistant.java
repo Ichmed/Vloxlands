@@ -13,7 +13,6 @@ import java.util.HashMap;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -184,12 +183,11 @@ public class RenderAssistant
 		glEnd();
 	}
 
-	public static void renderText(float x, float y, String text, Color color, Font font)
+	public static void renderText(float x, float y, String text, Color color, Font f)
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		TrueTypeFont ttf = new TrueTypeFont(font, true);
-		ttf.drawString(x, y, text, color);
+		FontAssistant.getFont(f).drawString(x, y, text, color);
 		glDisable(GL_BLEND);
 	}
 
