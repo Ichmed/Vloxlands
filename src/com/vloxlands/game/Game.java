@@ -1,4 +1,4 @@
-package game;
+package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
@@ -6,8 +6,8 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import ui.Button;
-import ui.GUIHandler;
+import com.vloxlands.ui.Button;
+import com.vloxlands.ui.GUIHandler;
 
 public class Game
 {

@@ -1,4 +1,4 @@
-package ui;
+package com.vloxlands.ui;
 
 public abstract class Component
 {

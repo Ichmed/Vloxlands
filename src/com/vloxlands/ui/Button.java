@@ -1,10 +1,10 @@
-package ui;
+package com.vloxlands.ui;
 
 import java.awt.Font;
 
 import org.newdawn.slick.Color;
 
-import render.util.RenderHelper;
+import com.vloxlands.render.util.RenderHelper;
 
 public class Button extends Component
 {

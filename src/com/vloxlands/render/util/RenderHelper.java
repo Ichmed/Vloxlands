@@ -1,4 +1,4 @@
-package render.util;
+package com.vloxlands.render.util;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
