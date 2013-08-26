@@ -1,5 +1,9 @@
 package com.vloxlands.ui;
 
+import java.awt.Font;
+
+import com.vloxlands.util.FontAssistant;
+
 public abstract class Component
 {
 	int x;
@@ -11,13 +15,16 @@ public abstract class Component
 
 	boolean visible;
 
+	public Font font;
+	
 	public Component(int x, int y, int width, int height)
 	{
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-
+		this.font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
+		
 		visible = true;
 		texture = null;
 	}

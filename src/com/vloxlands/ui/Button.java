@@ -2,8 +2,6 @@ package com.vloxlands.ui;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.awt.Font;
-
 import org.newdawn.slick.Color;
 
 import com.vloxlands.util.FontAssistant;
@@ -18,14 +16,11 @@ public class Button extends Component
 	 */
 	int state;
 
-	Font font;
-
 	public Button(int x, int y, int width, int height, String title)
 	{
 		super(x, y, width, height);
 		this.title = title;
 		this.state = 0;
-		this.font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	}
 
 	public void setState(int s)
@@ -59,5 +54,15 @@ public class Button extends Component
 		if (!c) state = 0;
 		else if ((b & 1) == 1) state = 2;
 		else state = 1;
+	}
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
 	}
 }

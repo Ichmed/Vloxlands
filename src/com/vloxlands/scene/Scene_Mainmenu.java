@@ -1,9 +1,13 @@
 package com.vloxlands.scene;
 
-import org.lwjgl.opengl.Display;
+import java.awt.Font;
 
-import com.vloxlands.ui.Button;
-import com.vloxlands.util.GUIAssistant;
+import org.lwjgl.opengl.*;
+
+import com.vloxlands.ui.*;
+import com.vloxlands.util.*;
+
+import de.dakror.universion.UniVersion;
 
 public class Scene_Mainmenu implements Scene
 {
@@ -18,7 +22,9 @@ public class Scene_Mainmenu implements Scene
 
 		quit = new Button(Display.getWidth() / 2 - 110, Display.getHeight() / 2 + 20, 220, 60, "Spiel beenden");
 		GUIAssistant.addComponent(quit);
-
+		Label version = new Label(0, Display.getHeight() - 20, -1, -1, UniVersion.prettyVersion());
+		version.font = version.font.deriveFont(Font.PLAIN, 20f);
+		GUIAssistant.addComponent(version);
 	}
 
 	@Override

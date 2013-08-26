@@ -1,7 +1,7 @@
 package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
+import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
@@ -20,7 +20,8 @@ public class Game
 	int i = 0;
 
 	long start = 0;
-	int frames = 20;
+	int frames = 21;
+	boolean showFPS = false;
 
 	Scene scene;
 
@@ -70,7 +71,8 @@ public class Game
 
 		GUIAssistant.renderComponents();
 
-		RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
+		if (Keyboard.isKeyDown(Keyboard.KEY_F4)) showFPS = !showFPS;
+		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
 
 		RenderAssistant.set2DRenderMode(false);
 
