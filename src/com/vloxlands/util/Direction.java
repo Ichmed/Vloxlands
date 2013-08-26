@@ -12,7 +12,7 @@ public enum Direction
 	WEST(0, 0, -1, 0, -90, 0);
 	
 	
-	Vector3f dir;
+	public Vector3f dir;
 	Vector3f rot;
 	
 	Direction(int x, int y, int z, int rotX, int rotY, int rotZ)

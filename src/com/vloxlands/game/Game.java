@@ -82,6 +82,7 @@ public class Game
 	{
 		currentGame = new Game();
 		currentMap = Map.generateRandomMap();
+		currentMap.startMap();
 	}
 
 	public void setScene(Scene s)

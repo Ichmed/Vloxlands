@@ -16,7 +16,8 @@ public class Map
 
 	public void render()
 	{
-		 for(Island i : islands) i.render();
+		for (Island i : islands)
+			i.render();
 	}
 
 	public Island[] getIslands()
@@ -27,6 +28,23 @@ public class Map
 	public void addIsland(Island i)
 	{
 		islands.add(i);
+	}
+
+	public void generateFaces()
+	{
+		for (Island i : islands)
+			i.generateFaces();
+	}
+
+	public void startMap()
+	{
+		new Thread()
+		{
+			public void run()
+			{
+				generateFaces();
+			}
+		}.start();
 	}
 
 	public static Map generateRandomMap()
@@ -45,7 +63,7 @@ public class Map
 				short x = (short) (Math.random() * Island.MAXSIZE);
 				short y = (short) (Math.random() * Island.MAXSIZE);
 				short z = (short) (Math.random() * Island.MAXSIZE);
-				island.setVoxel(x, y, z, /*(byte) (Math.random() * 255)*/(byte)2, (byte) /* (Math.random() * 255) */0);
+				island.setVoxel(x, y, z, (byte) -127, (byte) 0);
 			}
 
 			map.addIsland(island);

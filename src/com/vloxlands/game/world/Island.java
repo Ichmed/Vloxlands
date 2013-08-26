@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.Face;
 import com.vloxlands.settings.CFG;
@@ -29,8 +30,6 @@ public class Island
 		{
 			faces[i] = new ArrayList<Face>();
 		}
-		faces[0].add(new Face(Direction.EAST, new Vector3f(), 1));
-		faces[0].add(new Face(Direction.UP, new Vector3f(), 1));
 		for (int i = 0; i < MAXSIZE; i++)
 		{
 			for (int j = 0; j < MAXSIZE; j++)
@@ -60,7 +59,13 @@ public class Island
 
 	public short getVoxelId(short x, short y, short z)
 	{
-		return voxels[x][y][z];
+		if(x > 255 || y > 255 || z > 255 || x < 0 || y < 0 || z < 0) return 0;
+		return (short) (voxels[x][y][z] + 128);
+	}
+
+	private int getVoxelId(int x, int y, int z)
+	{
+		return getVoxelId((short) x, (short) y, (short) z);
 	}
 
 	public byte getMetadata(short x, short y, short z)
@@ -155,5 +160,36 @@ public class Island
 			{
 				f.render();
 			}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void generateFaces()
+	{
+		for(int t = 0; t < 64; t++)
+		{
+			int cx = t % 4;
+			int cy = (t / 4) % 4;
+		    int cz = t / 16;
+		    
+			for(int x = 0; x < 64; x++)
+			{
+				for(int y = 0; y < 64; y++)
+				{
+					for(int z = 0; z < 64; z++)
+					{
+						int posX = (cx * 64) + x;
+						int posY = (cy * 64) + y;
+						int posZ = (cz * 64) + z;
+						
+						int ti = Voxel.getVoxelForId(this.getVoxelId(posX, posY, posZ)).getTextureIndex();
+						for(Direction d : Direction.values())
+						{
+							if(!Voxel.getVoxelForId(this.getVoxelId(posX + (int)d.dir.x, posY + (int)d.dir.y, posZ + (int)d.dir.z)).isOpaque())
+								this.faces[t].add(new Face(d, new Vector3f(posX, posY, posZ), ti));
+						}
+					}
+				}
+			}
+		}
 	}
 }
