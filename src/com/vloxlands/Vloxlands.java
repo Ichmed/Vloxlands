@@ -7,9 +7,11 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.world.Map;
 import com.vloxlands.scene.Scene_Mainmenu;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Assistant;
+import com.vloxlands.util.MapAssistant;
 
 import de.dakror.universion.UniVersion;
 
@@ -18,6 +20,8 @@ public class Vloxlands
 	public static void main(String[] args)
 	{
 		CFG.INTERNET = Assistant.isInternetReachable();
+
+		MapAssistant.saveMap(Map.generateRandomMap());
 
 		// -- UniVersion & Reporter initialization -- //
 		UniVersion.offline = !CFG.INTERNET;

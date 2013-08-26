@@ -1,5 +1,6 @@
 package com.vloxlands.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,6 +89,35 @@ public class Compressor
 			dis.readFully(fileData);
 			dis.close();
 			return fileData;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static byte[] rowCompression(byte[] b)
+	{
+		try
+		{
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			byte active = b[0];
+			int same = 1;
+			for (int i = 1; i < b.length; i++)
+			{
+				if (b[i] == active && same < 255) same++;
+				else
+				{
+					baos.write(new byte[] { (byte) same, active });
+					same = 1;
+					active = b[i];
+				}
+			}
+			
+			baos.write(new byte[] { (byte) same, active });
+			
+			return baos.toByteArray();
 		}
 		catch (Exception e)
 		{
