@@ -153,9 +153,7 @@ public class Island
 		for (ArrayList<Face> a : faces)
 			for (Face f : a)
 			{
-				CFG.p(f);
 				f.render();
-				
 			}
 	}
 }
