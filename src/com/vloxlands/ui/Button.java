@@ -1,5 +1,7 @@
 package com.vloxlands.ui;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Font;
 
 import org.newdawn.slick.Color;
@@ -39,16 +41,16 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
-		//TODO:  Get the background to trancparency of 0.6f
-		
-		if (state != 1) Color.decode("#222222").bind();
-		else Color.decode("#ff9933").bind();
-
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		if (state != 1) RenderAssistant.glColorHex("222222", 0.6f);
+		else RenderAssistant.glColorHex("ff9933", 0.6f);
 		RenderAssistant.renderRect(x, y, width, height);
+		glDisable(GL_BLEND);
 
-		int tx = FontAssistant.getFont(font).getWidth(title);
-		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
+		 int tx = FontAssistant.getFont(font).getWidth(title);
+		 int mx = width / 2 - tx / 2;
+		 RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
 	}
 
 	@Override

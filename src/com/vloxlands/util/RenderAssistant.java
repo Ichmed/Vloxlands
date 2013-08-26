@@ -186,9 +186,11 @@ public class RenderAssistant
 	public static void renderText(float x, float y, String text, Color color, Font f)
 	{
 		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		FontAssistant.getFont(f).drawString(x, y, text, color);
 		glDisable(GL_BLEND);
+		glDisable(GL_TEXTURE_2D);
 	}
 
 	public static void set2DRenderMode(boolean t)
@@ -203,7 +205,7 @@ public class RenderAssistant
 			glLoadIdentity();
 
 			glClear(GL_DEPTH_BUFFER_BIT);
-			glEnable(GL_TEXTURE_2D);
+//			glEnable(GL_TEXTURE_2D);
 			glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
 		}
@@ -213,5 +215,10 @@ public class RenderAssistant
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		}
+	}
+
+	public static void glColorHex(String hex, float alpha)
+	{
+		glColor4f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f, alpha);
 	}
 }
