@@ -15,5 +15,4 @@ public class Assistant
 			return false;
 		}
 	}
-
 }

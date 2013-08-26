@@ -1,13 +1,31 @@
 package com.vloxlands.game;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glColor4d;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glPointSize;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glTranslated;
+import static org.lwjgl.opengl.GL11.glVertex3f;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import com.vloxlands.ui.Button;
-import com.vloxlands.ui.GUIHandler;
+import com.vloxlands.scene.Scene;
+import com.vloxlands.util.GUIAssistant;
 
 public class Game
 {
@@ -16,6 +34,8 @@ public class Game
 	float pos = 0;
 	int i = 0;
 
+	Scene scene;
+
 	public void gameLoop()
 	{
 		glMatrixMode(GL_PROJECTION);
@@ -23,7 +43,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 
-		gluPerspective((float) 30, Display.getWidth() / (float)Display.getHeight(), 0.001f, 100);
+		gluPerspective((float) 30, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -52,25 +72,11 @@ public class Game
 		}
 		glPopMatrix();
 
-		GUIHandler.handleMouse();
+		GUIAssistant.handleMouse();
 
-		glMatrixMode(GL_PROJECTION);
-		glPushMatrix();
-		glLoadIdentity();
-		glOrtho(0.0, 640, 480, 0.0, -1.0, 10.0);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		if (scene != null) scene.update();
 
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glEnable(GL_TEXTURE_2D);
-		glShadeModel(GL_SMOOTH);
-		glDisable(GL_DEPTH_TEST);  
-
-		GUIHandler.renderComponents();
-
-		glMatrixMode(GL_PROJECTION);
-		glPopMatrix();
-		glMatrixMode(GL_MODELVIEW);
+		GUIAssistant.renderComponents();
 
 		Display.update();
 		Display.sync(60);
@@ -79,8 +85,14 @@ public class Game
 	public static void initGame()
 	{
 		currentGame = new Game();
+	}
 
-		GUIHandler.addComponent(new Button(40, 40, 200, 200, "LOL, es geht"));
+	public void setScene(Scene s)
+	{
+		GUIAssistant.clearComponents();
+
+		scene = s;
+		scene.init();
 	}
 
 	public static void initGLSettings()
@@ -90,5 +102,4 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 	}
-
 }

@@ -1,4 +1,4 @@
-package com.vloxlands.render.util;
+package com.vloxlands.util;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
@@ -20,7 +20,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 //import render.Model;
 //import util.math.MathHelper;
 
-public class RenderHelper
+public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 

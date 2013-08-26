@@ -1,4 +1,4 @@
-package com.vloxlands.ui;
+package com.vloxlands.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,10 @@ import java.util.List;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-public class GUIHandler
+import com.vloxlands.render.util.RenderHelper;
+import com.vloxlands.ui.Component;
+
+public class GUIAssistant
 {
 	private static List<Component> components = new ArrayList<>();
 
@@ -17,8 +20,17 @@ public class GUIHandler
 
 	public static void renderComponents()
 	{
+		RenderHelper.set2DRenderMode(true);
+
 		for (Component c : components)
-			if (c.visible) c.draw();
+			if (c.isVisible()) c.draw();
+
+		RenderHelper.set2DRenderMode(false);
+	}
+
+	public static void clearComponents()
+	{
+		components.clear();
 	}
 
 	public static void handleMouse()
@@ -33,7 +45,7 @@ public class GUIHandler
 			if (Mouse.isButtonDown(1)) b += 2;
 			if (Mouse.isButtonDown(2)) b += 4;
 
-			c.mouseEvent(x - c.x, y - c.y, b, x > c.x && x <= c.x + c.width && y > c.y && y <= c.y + c.height);
+			c.mouseEvent(x - c.getX(), y - c.getY(), b, x > c.getX() && x <= c.getX() + c.getWidth() && y > c.getY() && y <= c.getY() + c.getHeight());
 		}
 	}
 }

@@ -27,6 +27,11 @@ public class Button extends Component
 		state = s;
 	}
 
+	public int getState()
+	{
+		return state;
+	}
+
 	@Override
 	public void draw()
 	{
