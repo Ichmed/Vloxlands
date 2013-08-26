@@ -32,8 +32,7 @@ public class RenderAssistant
 		{
 			t.bind();
 			return true;
-		}
-		else
+		} else
 		{
 			t = loadTexture(path);
 			t.bind();
@@ -59,7 +58,8 @@ public class RenderAssistant
 	// }
 
 	// /**
-	// * Renders a model at the GL-coordinate-origin. If it doesn't exist the method will try to load the model
+	// * Renders a model at the GL-coordinate-origin. If it doesn't exist the
+	// method will try to load the model
 	// * @param path The path to the model file
 	// */
 	// public static void renderModel(String path)
@@ -72,12 +72,10 @@ public class RenderAssistant
 		try
 		{
 			return TextureLoader.getTexture(".png", new FileInputStream(new File(path)));
-		}
-		catch (FileNotFoundException e)
+		} catch (FileNotFoundException e)
 		{
 			e.printStackTrace();
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
@@ -125,60 +123,89 @@ public class RenderAssistant
 		glEnable(GL_CULL_FACE);
 	}
 
-	public static void renderBox(float x, float y, float z)
+	public static void renderVoxel(byte occlusion, int textureIndex)
 	{
-		glDisable(GL_CULL_FACE);
+		int texX = textureIndex % 32;
+		int texY = textureIndex / 32;
+
+		bindTexture("textures/voxelTextures.png");
+
+		// glDisable(GL_CULL_FACE);
 		glBegin(GL_QUADS);
 		{
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
 			glVertex3f(0, 0, 0);
-			glVertex3f(x, 0, 0);
-			glVertex3f(x, 0, z);
-			glVertex3f(0, 0, z);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 0, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(1, 0, 1);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(0, 0, 1);
 		}
 		glEnd();
 
 		glBegin(GL_QUADS);
 		{
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
 			glVertex3f(0, 0, 0);
-			glVertex3f(x, 0, 0);
-			glVertex3f(x, y, 0);
-			glVertex3f(0, y, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 0, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(1, 1, 0);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(0, 1, 0);
 		}
 		glEnd();
 
 		glBegin(GL_QUADS);
 		{
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
 			glVertex3f(0, 0, 0);
-			glVertex3f(0, y, 0);
-			glVertex3f(0, y, z);
-			glVertex3f(0, 0, z);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(0, 1, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(0, 1, 1);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(0, 0, 1);
 		}
 		glEnd();
 
 		glBegin(GL_QUADS);
 		{
-			glVertex3f(x, 0, 0);
-			glVertex3f(x, y, 0);
-			glVertex3f(x, y, z);
-			glVertex3f(x, 0, z);
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 0, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 1, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(1, 1, 1);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(1, 0, 1);
 		}
 		glEnd();
 
 		glBegin(GL_QUADS);
 		{
-			glVertex3f(0, y, 0);
-			glVertex3f(x, y, 0);
-			glVertex3f(x, y, z);
-			glVertex3f(0, y, z);
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
+			glVertex3f(0, 1, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 1, 0);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(1, 1, 1);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(0, 1, 1);
 		}
 		glEnd();
 
 		glBegin(GL_QUADS);
 		{
-			glVertex3f(0, 0, z);
-			glVertex3f(x, 0, z);
-			glVertex3f(x, y, z);
-			glVertex3f(0, y, z);
+			glTexCoord2f(texX * 0.03125f, texY * 0.03125f);
+			glVertex3f(0, 0, 1);
+			glTexCoord2f((texX + 1) * 0.03125f, texY * 0.03125f);
+			glVertex3f(1, 0, 1);
+			glTexCoord2f((texX + 1) * 0.03125f, (texY + 1) * 0.03125f);
+			glVertex3f(1, 1, 1);
+			glTexCoord2f(texX * 0.03125f, (texY + 1)  * 0.03125f);
+			glVertex3f(0, 1, 1);
 		}
 		glEnd();
 	}
@@ -205,11 +232,10 @@ public class RenderAssistant
 			glLoadIdentity();
 
 			glClear(GL_DEPTH_BUFFER_BIT);
-			// glEnable(GL_TEXTURE_2D);
+			glDisable(GL_TEXTURE_2D);
 			glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
-		}
-		else
+		} else
 		{
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();

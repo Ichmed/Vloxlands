@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
+import com.vloxlands.game.util.Camera;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
@@ -16,8 +17,7 @@ public class Game
 {
 	public static Game currentGame;
 
-	float pos = 0;
-	int i = 0;
+	public Camera camera = new Camera();
 
 	long start = 0;
 	int frames = 21;
@@ -33,33 +33,39 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		gluPerspective((float) 30, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			glTranslated(0, 0, pos);
+			glTranslated(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 
-			if (Keyboard.isKeyDown(Keyboard.KEY_UP))
+			if (Keyboard.isKeyDown(Keyboard.KEY_W))
 			{
-				pos += 0.1f;
+				camera.move(0, 0, 0.1f);
 			}
-
-			if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+			if (Keyboard.isKeyDown(Keyboard.KEY_S))
 			{
-				pos -= 0.1f;
+				camera.move(0, 0, -0.1f);
 			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_A))
+			{
+				camera.move(0.1f, 0, 0);
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_D))
+			{
+				camera.move(-0.1f, 0, 0);
+			}
+			
 			glColor3f(0.5f, 0.5f, 1.0f);
 
-			glPointSize(10);
 			glColor4d(1, 1, 1, 1);
+			
+			RenderAssistant.renderVoxel((byte)0, 1);
 
-			glBegin(GL_POINTS);
-			{
-				glVertex3f(0, 0, 0);
-			}
-			glEnd();
 		}
 		glPopMatrix();
 

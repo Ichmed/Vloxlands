@@ -36,4 +36,9 @@ public class Camera
 	{
 		this.rotation = new Vector3f(x, y, z);
 	}
+	
+	public void move(float x, float y, float z)
+	{
+		this.position.translate(x, y, z);
+	}
 }

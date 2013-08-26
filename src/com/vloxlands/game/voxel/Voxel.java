@@ -6,11 +6,12 @@ public class Voxel
 	
 	private String name = "NA";
 	int textureIndex = 0;
+	boolean opaque = true;
 	
 	static
 	{
-		voxelList[0] = new VoxelAir().setName("Air").setTextureIndex(0);
-		
+		voxelList[0] = new VoxelAir().setName("Air").setTextureIndex(0).setOpaque(false);		
+		voxelList[1] = new Voxel().setName("Stone").setTextureIndex(1);
 	}
 	
 	public static Voxel getVoxelForId(int id)
@@ -79,5 +80,16 @@ public class Voxel
 	public int getTextureIndex()
 	{
 		return textureIndex;		
+	}
+	
+	public Voxel setOpaque(boolean b)
+	{
+		this.opaque = b;
+		return this;
+	}
+
+	public boolean isOpaque()
+	{
+		return opaque;
 	}
 }
