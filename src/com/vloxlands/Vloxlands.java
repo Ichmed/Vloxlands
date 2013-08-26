@@ -1,5 +1,6 @@
 package com.vloxlands;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.LWJGLException;
@@ -38,6 +39,9 @@ public class Vloxlands
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
+		
+
+		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 
 		Game.initGame();
 		try
