@@ -1,6 +1,13 @@
 package com.vloxlands.game.world;
 
+import java.util.ArrayList;
+
+import org.lwjgl.util.vector.Vector3f;
+
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.render.Face;
+import com.vloxlands.settings.CFG;
+import com.vloxlands.util.Direction;
 
 public class Island
 {
@@ -9,12 +16,21 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 
+	@SuppressWarnings("rawtypes")
+	ArrayList[] faces = new ArrayList[32];
+
 	short width = MAXSIZE;
 	short height = MAXSIZE;
 	short depth = MAXSIZE;
 
 	public Island()
 	{
+		for (int i = 0; i < faces.length; i++)
+		{
+			faces[i] = new ArrayList<Face>();
+		}
+		faces[0].add(new Face(Direction.EAST, new Vector3f(), 1));
+		faces[0].add(new Face(Direction.UP, new Vector3f(), 1));
 		for (int i = 0; i < MAXSIZE; i++)
 		{
 			for (int j = 0; j < MAXSIZE; j++)
@@ -129,5 +145,17 @@ public class Island
 	public void setDepth(short depth)
 	{
 		this.depth = depth;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void render()
+	{
+		for (ArrayList<Face> a : faces)
+			for (Face f : a)
+			{
+				CFG.p(f);
+				f.render();
+				
+			}
 	}
 }

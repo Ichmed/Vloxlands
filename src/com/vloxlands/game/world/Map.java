@@ -16,7 +16,7 @@ public class Map
 
 	public void render()
 	{
-		// for(Island i : islands) i.render();
+		 for(Island i : islands) i.render();
 	}
 
 	public Island[] getIslands()
