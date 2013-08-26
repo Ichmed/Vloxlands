@@ -21,9 +21,13 @@ public class Vloxlands
 	{
 		CFG.INTERNET = Assistant.isInternetReachable();
 
-		Map map = MapAssistant.loadMap("testMap");
-		MapAssistant.saveMap(map, "testMap2");
-//		MapAssistant.saveMap(Map.generateRandomMap(), "testMap");
+		MapAssistant.saveMap(Map.generateRandomMap(), "testMap");
+//		CFG.p("------------------");
+//		Map map = MapAssistant.loadMap("testMap");
+//		CFG.p("------------------");
+//		MapAssistant.saveMap(map, "testMap2");
+		// Map map2 = MapAssistant.loadMap("testMap2");
+//		System.exit(0);
 		
 		// -- UniVersion & Reporter initialization -- //
 		UniVersion.offline = !CFG.INTERNET;

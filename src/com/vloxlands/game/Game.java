@@ -51,7 +51,7 @@ public class Game
 
 			moveCamera();
 			rotateCamera();
-			
+
 			currentMap.render();
 		}
 		glPopMatrix();
@@ -106,7 +106,10 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_ALPHA_TEST);
+//		glEnable(GL_ALPHA_TEST);
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_POINT_SMOOTH);
+//		glEnable(GL_POLYGON_SMOOTH);
 	}
 
 	public void moveCamera()

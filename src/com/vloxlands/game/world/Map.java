@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import com.vloxlands.game.entity.Entity;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.Face;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 
 public class Map
@@ -72,19 +70,19 @@ public class Map
 	public static Map generateRandomMap()
 	{
 		Map map = new Map();
-		int islands = 2;
+		int islands = 1;
 
 		for (int i = 0; i < islands; i++)
 		{
 
 			Island island = new Island();
-			int voxels = 300;
+			int voxels = 80;
 
 			for (int j = 0; j < voxels; j++)
 			{
-				short x = (short) ((Math.random() * 20));
-				short y = (short) ((Math.random() * 20));
-				short z = (short) ((Math.random() * 20));
+				short x = (short) ((Math.random() * 200));
+				short y = (short) ((Math.random() * 200));
+				short z = (short) ((Math.random() * 200));
 				island.setVoxel(x, y, z, (byte) -127, (byte) 0);
 			}
 

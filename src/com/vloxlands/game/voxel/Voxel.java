@@ -1,9 +1,6 @@
 package com.vloxlands.game.voxel;
 
 
-import static org.lwjgl.opengl.GL11.*;
-
-import com.vloxlands.util.RenderAssistant;
 
 public class Voxel
 {
@@ -19,7 +16,7 @@ public class Voxel
 		voxelList[1] = new Voxel().setName("Stone").setTextureIndex(1);
 	}
 	
-	public static Voxel getVoxelForId(int id)
+	public synchronized static Voxel getVoxelForId(int id)
 	{
 		return voxelList[id];
 	}	
