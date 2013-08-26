@@ -44,14 +44,12 @@ public class MapAssistant
 			byte[] ids = new byte[(int) length];
 			System.arraycopy(data, pos, ids, 0, (int) length);
 			pos += length;
-
 			bb = ByteBuffer.wrap(data, pos, 4);
 			pos += 4;
 			length = bb.getInt();
 			byte[] mds = new byte[(int) length];
 			System.arraycopy(data, pos, mds, 0, (int) length);
 			pos += length;
-
 			map.addIsland(loadIsland(ids, mds));
 		}
 		return map;
