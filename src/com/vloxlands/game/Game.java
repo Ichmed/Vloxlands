@@ -71,7 +71,9 @@ public class Game
 
 		GUIAssistant.renderComponents();
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_F4)) showFPS = !showFPS;
+		while (Keyboard.next())
+			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
+		
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
 
 		RenderAssistant.set2DRenderMode(false);
