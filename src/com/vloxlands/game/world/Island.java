@@ -63,7 +63,7 @@ public class Island
 		return (short) (voxels[x][y][z] + 128);
 	}
 
-	private int getVoxelId(int x, int y, int z)
+	int getVoxelId(int x, int y, int z)
 	{
 		return getVoxelId((short) x, (short) y, (short) z);
 	}
@@ -160,36 +160,5 @@ public class Island
 			{
 				f.render();
 			}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void generateFaces()
-	{
-		for(int t = 0; t < 64; t++)
-		{
-			int cx = t % 4;
-			int cy = (t / 4) % 4;
-		    int cz = t / 16;
-		    
-			for(int x = 0; x < 64; x++)
-			{
-				for(int y = 0; y < 64; y++)
-				{
-					for(int z = 0; z < 64; z++)
-					{
-						int posX = (cx * 64) + x;
-						int posY = (cy * 64) + y;
-						int posZ = (cz * 64) + z;
-						
-						int ti = Voxel.getVoxelForId(this.getVoxelId(posX, posY, posZ)).getTextureIndex();
-						for(Direction d : Direction.values())
-						{
-							if(!Voxel.getVoxelForId(this.getVoxelId(posX + (int)d.dir.x, posY + (int)d.dir.y, posZ + (int)d.dir.z)).isOpaque())
-								this.faces[t].add(new Face(d, new Vector3f(posX, posY, posZ), ti));
-						}
-					}
-				}
-			}
-		}
 	}
 }
