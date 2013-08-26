@@ -13,6 +13,11 @@ public class Map
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{
 	}
+	
+	public void render()
+	{
+//		for(Island i : islands) i.render();
+	}
 
 	public Island[] getIslands()
 	{

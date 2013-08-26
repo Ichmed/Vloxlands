@@ -1,5 +1,10 @@
 package com.vloxlands.game.voxel;
 
+
+import static org.lwjgl.opengl.GL11.*;
+
+import com.vloxlands.util.RenderAssistant;
+
 public class Voxel
 {
 	private static Voxel[] voxelList = new Voxel[256];
@@ -91,5 +96,11 @@ public class Voxel
 	public boolean isOpaque()
 	{
 		return opaque;
+	}
+
+	public void render(int x, int y, int z)
+	{
+		glTranslated(x, y, z);
+		RenderAssistant.renderVoxel((byte)0, this.getTextureIndex());
 	}
 }

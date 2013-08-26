@@ -4,25 +4,25 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
 import com.vloxlands.game.util.Camera;
+import com.vloxlands.game.world.Map;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class Game
 {
 	public static Game currentGame;
+	public static Map currentMap;
 
 	public Camera camera = new Camera();
 
 	long start = 0;
-	int frames = 21;
+	public int frames = 21;
 	boolean showFPS = false;
 
 	Scene scene;
@@ -51,14 +51,8 @@ public class Game
 
 			moveCamera();
 			rotateCamera();
-
-			glColor3f(0.5f, 0.5f, 1.0f);
-
-			glColor4d(1, 1, 1, 1);
-
-			glTranslated(0, 0, -5);
-			RenderAssistant.renderVoxel((byte) 0, 1);
-
+			
+			currentMap.render();
 		}
 		glPopMatrix();
 
@@ -87,6 +81,7 @@ public class Game
 	public static void initGame()
 	{
 		currentGame = new Game();
+		currentMap = Map.generateRandomMap();
 	}
 
 	public void setScene(Scene s)
