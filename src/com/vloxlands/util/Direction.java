@@ -4,12 +4,17 @@ import org.lwjgl.util.vector.Vector3f;
 
 public enum Direction
 {
-	NORTH(1, 0, 0, 0, 0, 0),
+	NORTH(1, 0, 0, 0, -90, 0),
+	
 	UP(0, 1, 0, 90, 0, 0),
-	EAST(0, 0, 1, 0, 90, 0),
-	SOUTH(-1, 0, 0, 0, 180, 0),
+	
+	EAST(0, 0, -1, 0, 0, 0),
+	
+	SOUTH(-1, 0, 0, 0, 90, 0),
+	
 	DOWN(0, -1, 0, -90, 0, 0),
-	WEST(0, 0, -1, 0, -90, 0);
+	
+	WEST(0, 0, 1, 0, 180, 0);
 	
 	
 	public Vector3f dir;

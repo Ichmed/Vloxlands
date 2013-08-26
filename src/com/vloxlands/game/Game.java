@@ -83,6 +83,8 @@ public class Game
 		currentGame = new Game();
 		currentMap = Map.generateRandomMap();
 		currentMap.startMap();
+		currentGame.camera.setPosition(0, 0, 0);
+		currentGame.camera.setRotation(0, 180, 0);
 	}
 
 	public void setScene(Scene s)

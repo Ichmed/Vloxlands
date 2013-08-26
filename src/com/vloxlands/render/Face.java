@@ -32,6 +32,7 @@ public class Face
 		
 		glPushMatrix();
 		{
+			glTranslatef(pos.x, pos.y, pos.z);
 			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
 			glTranslatef(0.5f, 0.5f, 0.5f);
 			glRotatef(v.x, 1, 0, 0);
@@ -41,14 +42,14 @@ public class Face
 			
 			glBegin(GL_QUADS);
 			{
-				glTexCoord2d(texX * squareSize, texY * squareSize);
-				glVertex3f(0, 0, 0);
-				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-				glVertex3f(1, 0, 0);
-				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-				glVertex3f(1, 1, 0);
 				glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
 				glVertex3f(0, 1, 0);
+				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+				glVertex3f(1, 1, 0);
+				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+				glVertex3f(1, 0, 0);
+				glTexCoord2d(texX * squareSize, texY * squareSize);
+				glVertex3f(0, 0, 0);
 			}
 			glEnd();
 		}

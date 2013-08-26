@@ -18,7 +18,7 @@ public class Island
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 
 	@SuppressWarnings("rawtypes")
-	ArrayList[] faces = new ArrayList[32];
+	ArrayList[] faces = new ArrayList[64];
 
 	short width = MAXSIZE;
 	short height = MAXSIZE;

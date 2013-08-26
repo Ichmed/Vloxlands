@@ -45,34 +45,26 @@ public class Map
 			{
 				for (Island i : islands)
 				{
-					for (int t = 0; t < 64; t++)
+
+					for (int x = 0; x < 256; x++)
 					{
-						int cx = t % 4;
-						int cy = (t / 4) % 4;
-						int cz = t / 16;
-
-						for (int x = 0; x < 64; x++)
+						for (int y = 0; y < 256; y++)
 						{
-							for (int y = 0; y < 64; y++)
+							for (int z = 0; z < 256; z++)
 							{
-								for (int z = 0; z < 64; z++)
+								if (i.getVoxelId(x, y, z) == 0) continue;
+
+								int ti = Voxel.getVoxelForId(i.getVoxelId(x, y, z)).getTextureIndex();
+								for (Direction d : Direction.values())
 								{
-									int posX = (cx * 64) + x;
-									int posY = (cy * 64) + y;
-									int posZ = (cz * 64) + z;
-
-									if (i.getVoxelId(posX, posY, posZ) == 0) continue;
-
-									int ti = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ)).getTextureIndex();
-									for (Direction d : Direction.values())
-									{
-										if (!Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z)).isOpaque()) i.faces[t].add(new Face(d, new Vector3f(posX, posY, posZ), ti));
-									}
+									if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque()) i.faces[0].add(new Face(d, new Vector3f(x, y, z), ti));
 								}
 							}
 						}
 					}
+
 				}
+				System.out.println("Finished generating Faces");
 			}
 		}.start();
 	}
@@ -86,13 +78,13 @@ public class Map
 		{
 
 			Island island = new Island();
-			int voxels = 10;
+			int voxels = 300;
 
 			for (int j = 0; j < voxels; j++)
 			{
-				short x = (short) (Math.random() * Island.MAXSIZE);
-				short y = (short) (Math.random() * Island.MAXSIZE);
-				short z = (short) (Math.random() * Island.MAXSIZE);
+				short x = (short) ((Math.random() * 20));
+				short y = (short) ((Math.random() * 20));
+				short z = (short) ((Math.random() * 20));
 				island.setVoxel(x, y, z, (byte) -127, (byte) 0);
 			}
 
