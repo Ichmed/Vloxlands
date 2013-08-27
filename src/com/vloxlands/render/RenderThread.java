@@ -9,10 +9,13 @@ import com.vloxlands.util.Direction;
 
 public class RenderThread extends Thread
 {
-	public void run(String arg, Island i)
+	public static final int GENERATE_FACES = 0;
+	public static final int GENERATE_ALL_FACES = 1;
+	
+	public void run(int arg, Object... args)
 	{
-		if (arg.startsWith("generateFaces ")) generateFaces(Integer.valueOf(arg.split(" ")[1]), i);
-		else if(arg.startsWith("generateAllFaces")) generateAllFaces();
+		if (arg == GENERATE_FACES) generateFaces((Integer) args[0], (Island) args[1]);
+		else if(arg == GENERATE_ALL_FACES) generateAllFaces();
 	}
 
 	public void generateFaces(int chunk, Island i)
@@ -46,8 +49,8 @@ public class RenderThread extends Thread
 					}
 				}
 			}
-
 		}
+		System.out.println("Finished generating Faces for chunk " + chunk + " on island " + i);
 	}
 
 	public void generateAllFaces()
@@ -75,5 +78,6 @@ public class RenderThread extends Thread
 				}
 			}
 		}
+		System.out.println("Finished generating all Faces");
 	}
 }

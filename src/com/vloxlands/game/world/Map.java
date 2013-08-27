@@ -3,12 +3,8 @@ package com.vloxlands.game.world;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import com.vloxlands.game.entity.Entity;
-import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.render.Face;
-import com.vloxlands.util.Direction;
+import com.vloxlands.render.RenderThread;
 
 public class Map
 {
@@ -37,38 +33,7 @@ public class Map
 
 	public void startMap()
 	{
-		new Thread()
-		{
-			public void run()
-			{
-				for (Island i : islands)
-				{
-
-					for (int x = 0; x < 256; x++)
-					{
-						for (int y = 0; y < 256; y++)
-						{
-							for (int z = 0; z < 256; z++)
-							{
-								if (i.getVoxelId(x, y, z) == 0) continue;
-								Voxel v = Voxel.getVoxelForId(i.getVoxelId(x, y, z));
-								for (Direction d : Direction.values())
-								{
-									if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque())
-									{
-										Face f = new Face(d, new Vector3f(x, y, z), v.getTextureIndex());
-										if(v.isOpaque())i.faces.add(f);
-										else i.transparentFaces.add(f);
-									}
-								}
-							}
-						}
-					}
-
-				}
-				System.out.println("Finished generating Faces");
-			}
-		}.start();
+		new RenderThread().run(RenderThread.GENERATE_ALL_FACES);
 	}
 
 	public static Map generateRandomMap()
