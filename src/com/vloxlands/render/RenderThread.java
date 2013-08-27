@@ -40,7 +40,8 @@ public class RenderThread extends Thread
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
 					for (Direction d : Direction.values())
 					{
-						if (!Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z)).isOpaque())
+						Voxel w = Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z));
+						if (!w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
 							if (v.isOpaque()) i.faces.add(f);
@@ -67,7 +68,8 @@ public class RenderThread extends Thread
 						Voxel v = Voxel.getVoxelForId(i.getVoxelId(x, y, z));
 						for (Direction d : Direction.values())
 						{
-							if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque())
+							Voxel w = Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z));
+							if (!w.isOpaque() && !(w == v))
 							{
 								VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
 								if (v.isOpaque()) i.faces.add(f);
