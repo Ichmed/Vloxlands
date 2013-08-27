@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.newdawn.slick.Color;
 
@@ -29,9 +30,11 @@ public class Game
 	Scene scene;
 
 	public float cameraSpeed = 0.1f;
+	public int cameraRotationSpeed = 180;
 
 	public void gameLoop()
 	{
+		
 		if (start == 0) start = System.currentTimeMillis();
 
 		glMatrixMode(GL_PROJECTION);
@@ -39,19 +42,29 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		
+		moveCamera();
+		if(Mouse.isButtonDown(1))
+		{
+			Mouse.setGrabbed(true);
+			rotateCamera();
+		}
+		else Mouse.setGrabbed(false);
+		
 
-		gluPerspective((float) 30, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
+		gluPerspective((float) 50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
+		
+		glRotated(camera.getRotation().x, 1f, 0f, 0f);
+		glRotated(camera.getRotation().y, 0f, 1f, 0f);
+		glRotated(camera.getRotation().z, 0f, 0f, 1f);
+		
+		glTranslated(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+		
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			glTranslated(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-			glRotated(camera.getRotation().x, 1f, 0f, 0f);
-			glRotated(camera.getRotation().y, 0f, 1f, 0f);
-			glRotated(camera.getRotation().z, 0f, 0f, 1f);
 
-			moveCamera();
-			rotateCamera();
 
 			currentMap.render();
 		}
@@ -130,9 +143,11 @@ public class Game
 
 	public void rotateCamera()
 	{
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) camera.rotate(-0.3f, 0, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) camera.rotate(0, -0.3f, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) camera.rotate(0.3f, 0, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) camera.rotate(0, 0.3f, 0);
+		float x = ((Mouse.getY() - (Display.getHeight() / 2)) / (float) Display.getHeight()) * cameraRotationSpeed;
+		float y = ((Mouse.getX() - (Display.getWidth() / 2)) / (float) Display.getWidth()) * cameraRotationSpeed;
+		
+		camera.rotate(-x, y, 0);
+		
+		Mouse.setCursorPosition((Display.getWidth() / 2), (Display.getHeight() / 2));
 	}
 }
