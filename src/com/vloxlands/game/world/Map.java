@@ -20,6 +20,11 @@ public class Map
 			i.render();
 	}
 	
+	public void onTick()
+	{
+		for(Island i : islands) i.onTick();
+	}
+	
 	public Island[] getIslands()
 	{
 		return islands.toArray(new Island[] {});
@@ -33,5 +38,11 @@ public class Map
 	public void startMap()
 	{
 		new RenderThread().run(RenderThread.GENERATE_ALL_FACES);
+		for (Island i : islands) i.calculateWeight();
+	}
+	
+	public float calculateUplift(float height)
+	{
+		return 0;
 	}
 }

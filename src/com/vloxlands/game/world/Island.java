@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
+import static org.lwjgl.opengl.GL11.*;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.util.Direction;
@@ -41,7 +42,7 @@ public class Island
 	
 	public void onTick()
 	{
-		
+		this.pos.translate(0, -weight / 100000, 0);
 	}
 	
 	public void calculateWeight()
@@ -146,6 +147,7 @@ public class Island
 	
 	public void render()
 	{
+		glTranslatef(this.pos.x, this.pos.y, this.pos.z);
 		for (VoxelFace f : faces)
 			f.render();
 		for (VoxelFace f : transparentFaces)

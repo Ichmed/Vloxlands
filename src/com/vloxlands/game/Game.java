@@ -92,6 +92,8 @@ public class Game
 		
 		RenderAssistant.set2DRenderMode(false);
 		
+		currentMap.onTick();
+		
 		Display.update();
 		Display.sync(60);
 		
