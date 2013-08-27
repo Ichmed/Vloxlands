@@ -1,10 +1,10 @@
 package com.vloxlands.game.world;
 
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
-
-import static org.lwjgl.opengl.GL11.*;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
@@ -33,7 +33,7 @@ public class Island
 			{
 				for (int k = 0; k < MAXSIZE; k++)
 				{
-					voxels[i][j][k] = -128;
+					voxels[i][j][k] = Voxel.AIR.getId();
 					voxelMetadata[i][j][k] = -128;
 				}
 			}
@@ -42,7 +42,7 @@ public class Island
 	
 	public void onTick()
 	{
-		this.pos.translate(0, (uplift * Game.currentMap.calculateUplift(this.pos.y) - this.weight) / 100000f, 0);
+		pos.translate(0, (uplift * Game.currentMap.calculateUplift(pos.y) - weight) / 100000f, 0);
 	}
 	
 	public void calculateWeight()
@@ -53,14 +53,14 @@ public class Island
 			for (int y = 0; y < 256; y++)
 			{
 				for (int z = 0; z < 256; z++)
-				{					
-					if (this.getVoxelId(x, y, z) == 0) continue;
-					weight += Voxel.getVoxelForId(this.getVoxelId(x, y, z)).getWeight();
+				{
+					if (getVoxelId(x, y, z) == 0) continue;
+					weight += Voxel.getVoxelForId(getVoxelId(x, y, z)).getWeight();
 				}
 			}
 		}
 	}
-
+	
 	public void calculateUplift()
 	{
 		uplift = 0;
@@ -69,64 +69,60 @@ public class Island
 			for (int y = 0; y < 256; y++)
 			{
 				for (int z = 0; z < 256; z++)
-				{					
-					if (this.getVoxelId(x, y, z) == 0) continue;
-					uplift += Voxel.getVoxelForId(this.getVoxelId(x, y, z)).getUplift();
+				{
+					if (getVoxelId(x, y, z) == 0) continue;
+					uplift += Voxel.getVoxelForId(getVoxelId(x, y, z)).getUplift();
 				}
 			}
 		}
 	}
 	
-	public void placeVoxel(short x, short y, short z, byte id)
+	public void placeVoxel(int x, int y, int z, byte id)
 	{
-		this.placeVoxel(x, y, z, id, (byte)0);
+		placeVoxel(x, y, z, id, (byte) 0);
 	}
 	
-	public void placeVoxel(short x, short y, short z, byte id, byte metadata)
+	public void placeVoxel(int x, int y, int z, byte id, byte metadata)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
-		this.weight += Voxel.getVoxelForId(id).getWeight();
-		this.uplift += Voxel.getVoxelForId(id).getUplift();
+		weight += Voxel.getVoxelForId(id).getWeight();
+		uplift += Voxel.getVoxelForId(id).getUplift();
 	}
 	
-	public void removeVoxel(short x, short y, short z)
+	public void removeVoxel(int x, int y, int z)
 	{
-		Voxel v = Voxel.getVoxelForId(this.getVoxelId(x, y, z));
-		this.setVoxel(x, y, z, Voxel.AIR.getId());
-		this.weight -= v.getWeight();
-		this.uplift -= v.getUplift();
+		Voxel v = Voxel.getVoxelForId(getVoxelId(x, y, z));
+		setVoxel(x, y, z, Voxel.AIR.getId());
+		weight -= v.getWeight();
+		uplift -= v.getUplift();
 	}
 	
-	public short getVoxelId(short x, short y, short z)
+	public byte getVoxelId(int x, int y, int z)
 	{
 		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return 0;
-		return (short) (voxels[x][y][z] + 128);
+		return voxels[x][y][z];
 	}
 	
-	public int getVoxelId(int x, int y, int z)
-	{
-		return getVoxelId((short) x, (short) y, (short) z);
-	}
 	
-	public byte getMetadata(short x, short y, short z)
+	public byte getMetadata(int x, int y, int z)
 	{
 		return voxelMetadata[x][y][z];
 	}
 	
-	public void setVoxel(short x, short y, short z, byte id)
+	public void setVoxel(int x, int y, int z, byte id)
 	{
-		this.setVoxel(x, y, z, id, (byte)0);
+		voxels[x][y][z] = id;
 	}
 	
-	public void setVoxel(short x, short y, short z, byte id, byte metadata)
+	public void setVoxel(int x, int y, int z, byte id, byte metadata)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 	}
 	
-	public void setVoxelMetadata(short x, short y, short z, byte metadata)
+	public void setVoxelMetadata(int x, int y, int z, byte metadata)
 	{
 		voxelMetadata[x][y][z] = metadata;
 	}
@@ -165,7 +161,7 @@ public class Island
 	
 	public void render()
 	{
-		glTranslatef(this.pos.x, this.pos.y, this.pos.z);
+		glTranslatef(pos.x, pos.y, pos.z);
 		for (VoxelFace f : faces)
 			f.render();
 		for (VoxelFace f : transparentFaces)
@@ -180,5 +176,25 @@ public class Island
 	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
+	}
+	
+	public void grassify()
+	{
+		for (int i = 0; i < Island.MAXSIZE; i++)
+		{
+			for (int j = 0; j < Island.MAXSIZE; j++)
+			{
+				for (int k = 0; k < Island.MAXSIZE; k++)
+				{
+					if (getVoxelId(i, j, k) == Voxel.DIRT.getId())
+					{
+						if (j == 0 || getVoxelId(i, j - 1, k) == Voxel.AIR.getId())
+						{
+							setVoxel(i, j, k, Voxel.GRASS.getId());
+						}
+					}
+				}
+			}
+		}
 	}
 }

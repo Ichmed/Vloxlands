@@ -20,8 +20,8 @@ public class MathHelper
 		return buffer;
 	}
 	
-	public static Vector2f setVector2fLength(Vector2f v, float length)
+	public static Vector2f scaleVector2f(Vector2f v, float scale)
 	{
-		return new Vector2f(v.x * (length / v.length()), v.y * (length / v.length()));
+		return new Vector2f(v.x * scale, v.y * scale);
 	}
 }

@@ -45,6 +45,7 @@ public class Assistant
 	
 	public static void setFileContent(File f, String s)
 	{
+		f.getParentFile().mkdirs();
 		try
 		{
 			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(f));

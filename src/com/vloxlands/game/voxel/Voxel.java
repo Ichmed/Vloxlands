@@ -1,5 +1,6 @@
 package com.vloxlands.game.voxel;
 
+
 public class Voxel
 {
 	private static Voxel[] voxelList = new Voxel[256];
@@ -10,9 +11,9 @@ public class Voxel
 	boolean replaceable = false;
 	float smoothness = 0;
 	private byte id;
-	private float weight = 1;
+	private float weight = 0;
 	private float uplift = 0;
-
+	
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false).setWeight(0);
 	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
 	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(2).setSmoothness(0.3f);
@@ -28,6 +29,11 @@ public class Voxel
 			System.exit(1);
 		}
 		this.id = (byte) (id - 128);
+	}
+	
+	public synchronized static Voxel getVoxelForId(byte id)
+	{
+		return voxelList[(int) id + 128];
 	}
 	
 	public synchronized static Voxel getVoxelForId(int id)
@@ -112,34 +118,34 @@ public class Voxel
 	{
 		return smoothness;
 	}
-
+	
 	public Voxel setSmoothness(float smooth)
 	{
 		this.smoothness = smooth;
 		return this;
 	}
-
+	
 	public byte getId()
 	{
 		return id;
 	}
-
+	
 	public float getWeight()
 	{
 		return weight;
 	}
-
+	
 	public Voxel setWeight(float weight)
 	{
 		this.weight = weight;
 		return this;
 	}
-
+	
 	public float getUplift()
 	{
 		return uplift;
 	}
-
+	
 	public Voxel setUplift(float uplift)
 	{
 		this.uplift = uplift;

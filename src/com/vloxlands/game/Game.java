@@ -105,7 +105,7 @@ public class Game
 		currentGame = new Game();
 		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();
-		currentGame.camera.setPosition(-128.5f, -50, -128.5f);
+		currentGame.camera.setPosition(-128.5f, -20, -128.5f);
 		currentGame.camera.setRotation(90, 0, 0);
 	}
 	

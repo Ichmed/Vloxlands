@@ -78,16 +78,16 @@ public class MapAssistant
 		
 		for (int i = 0; i < ids.length; i++)
 		{
-			short[] pos = get3DIndex(i);
+			int[] pos = get3DIndex(i);
 			island.setVoxel(pos[0], pos[1], pos[2], ids[i], mds[i]);
 		}
 		
 		return island;
 	}
 	
-	public static short[] get3DIndex(int i)
+	public static int[] get3DIndex(int i)
 	{
-		return new short[] { (short) (i / (float) Math.pow(Island.MAXSIZE, 2)), (short) ((i / (float) Island.MAXSIZE) % Island.MAXSIZE), (short) (i % Island.MAXSIZE) };
+		return new int[] { (int) (i / (float) Math.pow(Island.MAXSIZE, 2)), (int) ((i / (float) Island.MAXSIZE) % Island.MAXSIZE), (i % Island.MAXSIZE) };
 	}
 	
 	private static void saveIsland(Island island, OutputStream os) throws Exception
