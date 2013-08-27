@@ -160,6 +160,14 @@ public class Game
 			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
 			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q))
+		{
+			camera.move(0, 0.5f, 0);
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_E))
+		{
+			camera.move(0, -0.5f, 0);
+		}
 	}
 	
 	public void rotateCamera()
