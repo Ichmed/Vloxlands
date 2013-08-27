@@ -87,7 +87,7 @@ public class Map
 				short x = (short) ((Math.random() * 20));
 				short y = (short) ((Math.random() * 20));
 				short z = (short) ((Math.random() * 20));
-				island.setVoxel(x, y, z, (byte) ((Math.random() * 3) -128), (byte) 0);
+				island.setVoxel(x, y, z, (byte) ((Math.random() * 4) -128), (byte) 0);
 			}
 
 			map.addIsland(island);
