@@ -50,7 +50,7 @@ public class RenderThread extends Thread
 				}
 			}
 		}
-		System.out.println("Finished generating Faces for chunk " + chunk + " on island " + i);
+		System.out.println("[Render Thread]: Finished generating Faces for chunk " + chunk + " on island " + i);
 	}
 	
 	public void generateAllFaces()
@@ -77,7 +77,8 @@ public class RenderThread extends Thread
 					}
 				}
 			}
+			System.out.println("[Render Thread]: Finished generating all Faces on Island " + i);
 		}
-		System.out.println("Finished generating all Faces");
+		System.out.println("[Render Thread]: Finished generating all Faces");
 	}
 }
