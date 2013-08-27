@@ -105,7 +105,7 @@ public class Compressor
 			byte same = (byte) -127;
 			for (int i = 1; i < b.length; i++)
 			{
-				if (b[i] == active && same < 127) same += (byte) 1;
+				if (b[i] == active && same < 127) same += 1;
 				else
 				{
 					baos.write(new byte[] { same, active });
@@ -114,7 +114,7 @@ public class Compressor
 				}
 			}
 			
-			baos.write(new byte[] { (byte) same, active });
+			baos.write(new byte[] {  same, active });
 			
 			return baos.toByteArray();
 		}

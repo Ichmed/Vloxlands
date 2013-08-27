@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 
@@ -12,6 +14,7 @@ public class MapAssistant
 {
 	public static void saveMap(Map m, String name)
 	{
+		new File("src/test").mkdir();
 		try
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -31,8 +34,6 @@ public class MapAssistant
 	
 	public static Map loadMap(String name)
 	{
-		new File("src/test/").mkdir();
-		
 		Map map = new Map();
 		// -- bin file -- //
 		File bin = new File("src/test/" + name + ".bin");
@@ -40,7 +41,14 @@ public class MapAssistant
 		int pos = 0;
 		while (pos < data.length)
 		{
-			ByteBuffer bb = ByteBuffer.wrap(data, pos, 4);
+			Vector3f vec = new Vector3f();
+			ByteBuffer bb = ByteBuffer.wrap(data, pos, 12);
+			vec.x = bb.getFloat();
+			vec.y = bb.getFloat();
+			vec.z = bb.getFloat();
+			pos += 12;
+			
+			bb = ByteBuffer.wrap(data, pos, 4);
 			int length = bb.getInt();
 			pos += 4;
 			
@@ -53,16 +61,17 @@ public class MapAssistant
 			int length2 = bb.getInt();
 			byte[] mds = new byte[length2];
 			System.arraycopy(data, pos, mds, 0, length2);
-			pos += length;
+			pos += length2;
 			
-			map.addIsland(loadIsland(ids, mds));
+			map.addIsland(loadIsland(vec, ids, mds));
 		}
 		return map;
 	}
 	
-	private static Island loadIsland(byte[] ids, byte[] mds)
+	private static Island loadIsland(Vector3f vec, byte[] ids, byte[] mds)
 	{
 		Island island = new Island();
+		island.setPos(vec);
 		
 		ids = Compressor.decompressRow(ids);
 		mds = Compressor.decompressRow(mds);
@@ -86,15 +95,21 @@ public class MapAssistant
 		byte[] ids = Compressor.compressRow(island.getVoxels());
 		byte[] mds = Compressor.compressRow(island.getVoxelMetadatas());
 		
-		ByteBuffer bb = ByteBuffer.allocate(4);
+		ByteBuffer bb = ByteBuffer.allocate(12);
+		bb.putFloat(island.getPos().x);
+		bb.putFloat(island.getPos().y);
+		bb.putFloat(island.getPos().z);
+		os.write(bb.array());
+		
+		bb = ByteBuffer.allocate(4);
 		bb.putInt(ids.length);
 		os.write(bb.array());
 		
 		os.write(ids);
 		
-		ByteBuffer bb2 = ByteBuffer.allocate(4);
-		bb2.putInt(mds.length);
-		os.write(bb2.array());
+		bb = ByteBuffer.allocate(4);
+		bb.putInt(mds.length);
+		os.write(bb.array());
 		
 		os.write(mds);
 	}

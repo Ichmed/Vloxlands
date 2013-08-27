@@ -9,7 +9,7 @@ import com.vloxlands.render.Face;
 
 public class Island
 {
-	public static final int MAXSIZE = 2;
+	public static final int MAXSIZE = 256;
 	
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
@@ -91,7 +91,7 @@ public class Island
 			{
 				for (int k = 0; k < MAXSIZE; k++)
 				{
-					bytes[i * MAXSIZE + j * MAXSIZE + k] = voxels[i][j][k];
+					bytes[(i * MAXSIZE + j) * MAXSIZE + k] = voxels[i][j][k];
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public class Island
 			{
 				for (int k = 0; k < MAXSIZE; k++)
 				{
-					bytes[i * MAXSIZE + j * MAXSIZE + k] = voxelMetadata[i][j][k];
+					bytes[(i * MAXSIZE + j) * MAXSIZE + k] = voxelMetadata[i][j][k];
 				}
 			}
 		}
