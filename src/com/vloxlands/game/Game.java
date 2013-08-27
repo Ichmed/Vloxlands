@@ -53,7 +53,7 @@ public class Game
 		if (Mouse.isButtonDown(1))
 		{
 			Mouse.setGrabbed(true);
-			if (p == -1) rotateCamera();
+			if (p != 1) rotateCamera();
 			else Mouse.setCursorPosition((Display.getWidth() / 2), (Display.getHeight() / 2));
 		}
 		else Mouse.setGrabbed(false);
