@@ -2,12 +2,14 @@ package com.vloxlands.game.world;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.Face;
 
 public class Island
 {
-	public static final int MAXSIZE = 256;
+	public static final int MAXSIZE = 2;
 	
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
@@ -15,12 +17,11 @@ public class Island
 	public ArrayList<Face> faces = new ArrayList<>();
 	public ArrayList<Face> transparentFaces = new ArrayList<>();
 	
-	short width = MAXSIZE;
-	short height = MAXSIZE;
-	short depth = MAXSIZE;
+	Vector3f pos;
 	
 	public Island()
 	{
+		pos = new Vector3f(0, 0, 0);
 		for (int i = 0; i < MAXSIZE; i++)
 		{
 			for (int j = 0; j < MAXSIZE; j++)
@@ -113,36 +114,6 @@ public class Island
 		return bytes;
 	}
 	
-	public short getWidth()
-	{
-		return width;
-	}
-	
-	public void setWidth(short width)
-	{
-		this.width = width;
-	}
-	
-	public short getHeight()
-	{
-		return height;
-	}
-	
-	public void setHeight(short height)
-	{
-		this.height = height;
-	}
-	
-	public short getDepth()
-	{
-		return depth;
-	}
-	
-	public void setDepth(short depth)
-	{
-		this.depth = depth;
-	}
-	
 	public void render()
 	{
 		for (Face f : faces)
@@ -151,12 +122,24 @@ public class Island
 			f.render();
 	}
 	
+	public Vector3f getPos()
+	{
+		return pos;
+	}
+	
+	public void setPos(Vector3f pos)
+	{
+		this.pos = pos;
+	}
+	
 	public static Island generatePerfectIsland()
 	{
 		// TODO: do work
 		int topLayers = (int) (Math.random() * 3 + 3);
 		int tailLayers = (int) (Math.random() * 8 + 8);
+		Island island = new Island();
 		
-		return null;
+		return island;
+		
 	}
 }
