@@ -4,16 +4,17 @@ public class Voxel
 {
 	private static Voxel[] voxelList = new Voxel[256];
 	
-	private String name = "N/A";
+	private String name = "NA";
 	int textureIndex = 0;
 	boolean opaque = true;
 	boolean replaceable = false;
-	
+	float smoothness = 0;
+
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false);
-	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1);
-	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(2);
+	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
+	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(2).setSmoothness(0.3f);
 	public static final Voxel CRYSTAL = new Voxel(3).setName("Crystal").setTextureIndex(3).setOpaque(false);
-	public static final Voxel GRASS = new Voxel(4).setName("Grass").setTextureIndex(4);
+	public static final Voxel GRASS = new Voxel(4).setName("Grass").setTextureIndex(4).setSmoothness(0.5f);
 	
 	public Voxel(int id)
 	{
@@ -101,5 +102,16 @@ public class Voxel
 	public boolean isOpaque()
 	{
 		return opaque;
+	}
+	
+	public float getSmoothness()
+	{
+		return smoothness;
+	}
+
+	public Voxel setSmoothness(float smooth)
+	{
+		this.smoothness = smooth;
+		return this;
 	}
 }
