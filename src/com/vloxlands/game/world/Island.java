@@ -12,8 +12,8 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 
-	ArrayList<Face> faces = new ArrayList<>();
-	ArrayList<Face> transparentFaces = new ArrayList<>();
+	public ArrayList<Face> faces = new ArrayList<>();
+	public ArrayList<Face> transparentFaces = new ArrayList<>();
 
 	short width = MAXSIZE;
 	short height = MAXSIZE;
@@ -54,7 +54,7 @@ public class Island
 		return (short) (voxels[x][y][z] + 128);
 	}
 
-	int getVoxelId(int x, int y, int z)
+	public int getVoxelId(int x, int y, int z)
 	{
 		return getVoxelId((short) x, (short) y, (short) z);
 	}

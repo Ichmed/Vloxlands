@@ -12,7 +12,7 @@ import com.vloxlands.util.Direction;
 
 public class Map
 {
-	ArrayList<Island> islands = new ArrayList<>();
+	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
 
 	public void placeVoxel(Island i, int x, int y, int z, int id)
