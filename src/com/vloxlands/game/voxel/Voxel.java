@@ -15,9 +15,11 @@ public class Voxel
 
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false).setWeight(0);
 	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
-	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(2).setSmoothness(0.3f);
-	public static final Voxel CRYSTAL = new Voxel(3).setName("Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(1);
-	public static final Voxel GRASS = new Voxel(4).setName("Grass").setTextureIndex(4).setSmoothness(0.5f);
+	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(34).setSmoothness(0.3f);
+	public static final Voxel WEAK_CRYSTAL = new Voxel(3).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(0);
+	public static final Voxel MEDIUM_CRYSTAL = new Voxel(4).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(1);
+	public static final Voxel STRONG_CRYSTAL = new Voxel(5).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(10);
+	public static final Voxel GRASS = new Voxel(6).setName("Grass").setTextureIndex(2).setSmoothness(0.5f);
 	
 	public Voxel(int id)
 	{
