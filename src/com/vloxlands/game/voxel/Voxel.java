@@ -37,7 +37,6 @@ public class Voxel
 	
 	public synchronized static Voxel getVoxelForId(byte id)
 	{
-		CFG.p(id);
 		return voxelList[(int) id + 128];
 	}
 	
