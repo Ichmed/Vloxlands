@@ -2,42 +2,18 @@ package com.vloxlands.game.voxel;
 
 public class Voxel
 {
-	public static enum VoxelType
-	{
-		AIR(0, 0, "Air", false, true),
-		STONE(1, 1, "Stone", true, false),
-		// TODO finish
-		;
-		
-		private Voxel voxel;
-		
-		private VoxelType(int id, int tid, String name, boolean opaque, boolean replaceable)
-		{
-			this.voxel = new Voxel(id);
-			this.voxel.setTextureIndex(tid);
-			this.voxel.setName(name);
-			this.voxel.setOpaque(opaque);
-			this.voxel.setReplaceable(replaceable);
-		}
-		
-		public Voxel getVoxel()
-		{
-			return this.voxel;
-		}
-	}
-	
 	private static Voxel[] voxelList = new Voxel[256];
 	
-	private String name = "NA";
+	private String name = "N/A";
 	int textureIndex = 0;
 	boolean opaque = true;
 	boolean replaceable = false;
 	
-	// public static final Voxel air = new VoxelAir(0).setName("Air").setTextureIndex(0).setOpaque(false);
-	// public static final Voxel stone = new Voxel(1).setName("Stone").setTextureIndex(1);
-	// public static final Voxel dirt = new Voxel(2).setName("Dirt").setTextureIndex(2);
-	// public static final Voxel crystall = new Voxel(3).setName("Crystall").setTextureIndex(3).setOpaque(false);
-	// public static final Voxel grass = new Voxel(4).setName("Grass").setTextureIndex(4);
+	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false);
+	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1);
+	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(2);
+	public static final Voxel CRYSTAL = new Voxel(3).setName("Crystal").setTextureIndex(3).setOpaque(false);
+	public static final Voxel GRASS = new Voxel(4).setName("Grass").setTextureIndex(4);
 	
 	public Voxel(int id)
 	{
@@ -74,12 +50,12 @@ public class Voxel
 	
 	public boolean isReplaceable()
 	{
-		return replaceable;
+		return false;
 	}
 	
-	public void setReplaceable(boolean b)
+	public void setReplaceable(boolean replaceable)
 	{
-		replaceable = b;
+		this.replaceable = replaceable;
 	}
 	
 	public Voxel setName(String s)
@@ -105,9 +81,10 @@ public class Voxel
 		return -1;
 	}
 	
-	public void setTextureIndex(int i)
+	public Voxel setTextureIndex(int i)
 	{
 		this.textureIndex = i;
+		return this;
 	}
 	
 	public int getTextureIndex()
@@ -115,9 +92,10 @@ public class Voxel
 		return textureIndex;
 	}
 	
-	public void setOpaque(boolean b)
+	public Voxel setOpaque(boolean b)
 	{
 		this.opaque = b;
+		return this;
 	}
 	
 	public boolean isOpaque()
