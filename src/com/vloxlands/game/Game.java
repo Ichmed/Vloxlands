@@ -12,7 +12,6 @@ import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.scene.Scene;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -141,7 +140,6 @@ public class Game
 	
 	public void moveCamera()
 	{
-		float speed = 0.3f;
 		double x = Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
 		double y = -Math.sin(Math.toRadians(camera.rotation.x)) * cameraSpeed;
 		double z = -Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;

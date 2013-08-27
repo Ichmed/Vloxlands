@@ -2,7 +2,6 @@ package com.vloxlands.game.world;
 
 import java.util.ArrayList;
 
-import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -10,7 +9,6 @@ import static org.lwjgl.opengl.GL11.*;
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
-import com.vloxlands.util.Direction;
 
 public class Island
 {
