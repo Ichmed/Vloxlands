@@ -16,6 +16,7 @@ import com.vloxlands.util.RenderAssistant;
 
 public class Game
 {
+	public static final int CHUNK_SIZE = 64;
 	public static Game currentGame;
 	public static Map currentMap;
 
