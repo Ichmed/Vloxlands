@@ -3,6 +3,7 @@ package com.vloxlands.util;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector2f;
 
 public class MathHelper
 {
@@ -17,5 +18,10 @@ public class MathHelper
 		buffer.put(fs);
 		buffer.flip();
 		return buffer;
+	}
+	
+	public static Vector2f setVector2fLength(Vector2f v, float length)
+	{
+		return new Vector2f(v.x * (length / v.length()), v.y * (length / v.length()));
 	}
 }
