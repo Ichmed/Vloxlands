@@ -134,12 +134,32 @@ public class Game
 	public void moveCamera()
 	{
 		float speed = 0.3f;
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) camera.move(0, 0, speed);
-		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) camera.move(0, speed, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) camera.move(speed, 0, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_S)) camera.move(0, 0, -speed);
-		if (Keyboard.isKeyDown(Keyboard.KEY_E)) camera.move(0, -speed, 0);
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) camera.move(-speed, 0, 0);
+		double x = Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
+		double y = -Math.sin(Math.toRadians(camera.rotation.x)) * cameraSpeed;
+		double z = -Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_W))
+		{
+			camera.position.x -= x * Math.cos(Math.toRadians(camera.rotation.x));
+			camera.position.y -= y;
+			camera.position.z -= z * Math.cos(Math.toRadians(camera.rotation.x));
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_S))
+		{
+			camera.position.x += x * Math.cos(Math.toRadians(camera.rotation.x));
+			camera.position.y += y;
+			camera.position.z += z * Math.cos(Math.toRadians(camera.rotation.x));
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_A))
+		{
+			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;
+			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_D))
+		{
+			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
+			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
+		}
 	}
 	
 	public void rotateCamera()
