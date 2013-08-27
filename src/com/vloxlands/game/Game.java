@@ -10,6 +10,7 @@ import org.newdawn.slick.Color;
 
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
@@ -95,7 +96,7 @@ public class Game
 	public static void initGame()
 	{
 		currentGame = new Game();
-		currentMap = Map.generateRandomMap();
+		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();
 		currentGame.camera.setPosition(0, 0, 0);
 		currentGame.camera.setRotation(0, 180, 0);

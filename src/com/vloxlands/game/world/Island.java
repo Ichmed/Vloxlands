@@ -2,6 +2,7 @@ package com.vloxlands.game.world;
 
 import java.util.ArrayList;
 
+import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
@@ -130,16 +131,5 @@ public class Island
 	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
-	}
-	
-	public static Island generatePerfectIsland()
-	{
-		// TODO: do work
-		int topLayers = (int) (Math.random() * 3 + 3);
-		int tailLayers = (int) (Math.random() * 8 + 8);
-		Island island = new Island();
-		
-		return island;
-		
 	}
 }
