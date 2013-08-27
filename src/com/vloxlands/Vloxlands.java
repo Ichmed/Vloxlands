@@ -23,15 +23,15 @@ public class Vloxlands
 		// -- UniVersion & Reporter initialization -- //
 		UniVersion.offline = !CFG.INTERNET;
 		UniVersion.init(Vloxlands.class, CFG.VERSION, CFG.PHASE);
-
+		
 		if (!CFG.DEBUG)
 		{
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
-
+		
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
-
+		
 		Game.initGame();
 		try
 		{
@@ -42,10 +42,10 @@ public class Vloxlands
 			Display.create();
 			Game.initGLSettings();
 			Game.currentGame.setScene(new Scene_Mainmenu());
-
+			
 			while (!Display.isCloseRequested())
 				Game.currentGame.gameLoop();
-
+			
 		}
 		catch (LWJGLException e)
 		{

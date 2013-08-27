@@ -17,12 +17,12 @@ public class Compressor
 	{
 		compressFile(f, (s + ((s.length() < 18) ? "                 " : "")).getBytes());
 	}
-
+	
 	public static void compressFile(File f, byte[] input)
 	{
 		setFileContent(f, compress(input));
 	}
-
+	
 	public static byte[] compress(byte[] b)
 	{
 		byte[] length = ByteBuffer.allocate(4).putInt(b.length).array();
@@ -35,10 +35,10 @@ public class Compressor
 		byte[] output = new byte[compr.length + 4];
 		System.arraycopy(length, 0, output, 0, length.length);
 		System.arraycopy(compr, 0, output, 4, compr.length);
-
+		
 		return output;
 	}
-
+	
 	public static byte[] decompress(byte[] b)
 	{
 		try
@@ -57,29 +57,28 @@ public class Compressor
 			return null;
 		}
 	}
-
+	
 	public static String decompressFile(File f)
 	{
 		byte[] decompressed = decompress(getFileContentAsByteArray(f));
 		String text = new String(decompressed);
 		return text;
 	}
-
+	
 	public static void setFileContent(File f, byte[] b)
 	{
 		try
 		{
 			f.createNewFile();
-
+			
 			FileOutputStream fos = new FileOutputStream(f);
 			fos.write(b);
 			fos.close();
 		}
 		catch (Exception e)
-		{
-		}
+		{}
 	}
-
+	
 	public static byte[] getFileContentAsByteArray(File f)
 	{
 		try
@@ -96,7 +95,7 @@ public class Compressor
 			return null;
 		}
 	}
-
+	
 	public static byte[] compressRow(byte[] b)
 	{
 		try
@@ -114,9 +113,9 @@ public class Compressor
 					active = b[i];
 				}
 			}
-
+			
 			baos.write(new byte[] { (byte) same, active });
-
+			
 			return baos.toByteArray();
 		}
 		catch (Exception e)
@@ -125,7 +124,7 @@ public class Compressor
 			return null;
 		}
 	}
-
+	
 	public static byte[] decompressRow(byte[] b)
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();

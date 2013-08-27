@@ -20,14 +20,14 @@ public class Face
 		this.pos = pos;
 		this.textureIndex = textureIndex;
 	}
-
+	
 	public void render()
 	{
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
-
+		
 		double squareSize = 0.03125d;
-
+		
 		RenderAssistant.bindTexture("textures/voxelTextures.png");
 		
 		glPushMatrix();

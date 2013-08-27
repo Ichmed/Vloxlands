@@ -23,7 +23,7 @@ public class Assistant
 			return false;
 		}
 	}
-
+	
 	public static ByteBuffer loadImage(URL url)
 	{
 		try
@@ -42,7 +42,7 @@ public class Assistant
 			return null;
 		}
 	}
-
+	
 	public static void setFileContent(File f, String s)
 	{
 		try
@@ -52,7 +52,6 @@ public class Assistant
 			osw.close();
 		}
 		catch (Exception e)
-		{
-		}
+		{}
 	}
 }

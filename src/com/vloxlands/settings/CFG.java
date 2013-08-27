@@ -8,12 +8,12 @@ public class CFG
 	// -- debug -- //
 	public static boolean DEBUG = true;
 	public static boolean INTERNET;
-
+	
 	public static void p(Object p)
 	{
 		System.out.println(p);
 	}
-
+	
 	public static void b(Object... b)
 	{
 		String s = "";

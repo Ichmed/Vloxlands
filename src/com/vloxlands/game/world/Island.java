@@ -8,17 +8,17 @@ import com.vloxlands.render.Face;
 public class Island
 {
 	public static final int MAXSIZE = 256;
-
+	
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
-
+	
 	public ArrayList<Face> faces = new ArrayList<>();
 	public ArrayList<Face> transparentFaces = new ArrayList<>();
-
+	
 	short width = MAXSIZE;
 	short height = MAXSIZE;
 	short depth = MAXSIZE;
-
+	
 	public Island()
 	{
 		for (int i = 0; i < MAXSIZE; i++)
@@ -33,54 +33,54 @@ public class Island
 			}
 		}
 	}
-
+	
 	public void placeVoxel(short x, short y, short z, byte id)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = 0;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
 	}
-
+	
 	public void placeVoxel(short x, short y, short z, byte id, byte metadata)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
 	}
-
+	
 	public short getVoxelId(short x, short y, short z)
 	{
 		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return 0;
 		return (short) (voxels[x][y][z] + 128);
 	}
-
+	
 	public int getVoxelId(int x, int y, int z)
 	{
 		return getVoxelId((short) x, (short) y, (short) z);
 	}
-
+	
 	public byte getMetadata(short x, short y, short z)
 	{
 		return voxelMetadata[x][y][z];
 	}
-
+	
 	public void setVoxel(short x, short y, short z, byte id)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = 0;
 	}
-
+	
 	public void setVoxel(short x, short y, short z, byte id, byte metadata)
 	{
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 	}
-
+	
 	public void setVoxelMetadata(short x, short y, short z, byte metadata)
 	{
 		voxelMetadata[x][y][z] = metadata;
 	}
-
+	
 	public byte[] getVoxels()
 	{
 		byte[] bytes = new byte[(int) Math.pow(MAXSIZE, 3)];
@@ -96,7 +96,7 @@ public class Island
 		}
 		return bytes;
 	}
-
+	
 	public byte[] getVoxelMetadatas()
 	{
 		byte[] bytes = new byte[(int) Math.pow(MAXSIZE, 3)];
@@ -112,32 +112,32 @@ public class Island
 		}
 		return bytes;
 	}
-
+	
 	public short getWidth()
 	{
 		return width;
 	}
-
+	
 	public void setWidth(short width)
 	{
 		this.width = width;
 	}
-
+	
 	public short getHeight()
 	{
 		return height;
 	}
-
+	
 	public void setHeight(short height)
 	{
 		this.height = height;
 	}
-
+	
 	public short getDepth()
 	{
 		return depth;
 	}
-
+	
 	public void setDepth(short depth)
 	{
 		this.depth = depth;
@@ -149,5 +149,14 @@ public class Island
 			f.render();
 		for (Face f : transparentFaces)
 			f.render();
+	}
+	
+	public static Island generatePerfectIsland()
+	{
+		// TODO: do work
+		int topLayers = (int) (Math.random() * 3 + 3);
+		int tailLayers = (int) (Math.random() * 8 + 8);
+		
+		return null;
 	}
 }

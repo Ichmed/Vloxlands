@@ -8,9 +8,9 @@ import org.newdawn.slick.TrueTypeFont;
 public class FontAssistant
 {
 	private static HashMap<Font, TrueTypeFont> fonts = new HashMap<>();
-
+	
 	public static Font GAMEFONT;
-
+	
 	public static TrueTypeFont getFont(Font f)
 	{
 		if (fonts.containsKey(f)) return fonts.get(f);
@@ -21,7 +21,7 @@ public class FontAssistant
 			return uf;
 		}
 	}
-
+	
 	static
 	{
 		try

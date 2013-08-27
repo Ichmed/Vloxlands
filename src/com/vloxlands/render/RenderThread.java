@@ -15,17 +15,17 @@ public class RenderThread extends Thread
 	public void run(int arg, Object... args)
 	{
 		if (arg == GENERATE_FACES) generateFaces((Integer) args[0], (Island) args[1]);
-		else if(arg == GENERATE_ALL_FACES) generateAllFaces();
+		else if (arg == GENERATE_ALL_FACES) generateAllFaces();
 	}
-
+	
 	public void generateFaces(int chunk, Island i)
 	{
 		int cx = chunk % 4;
 		int cy = (chunk / 4) % 4;
 		int cz = chunk / 16;
-
+		
 		int chunkSize = Game.CHUNK_SIZE;
-
+		
 		for (int x = 0; x < 64; x++)
 		{
 			for (int y = 0; y < 64; y++)
@@ -35,7 +35,7 @@ public class RenderThread extends Thread
 					int posX = (cx * chunkSize) + x;
 					int posY = (cy * chunkSize) + y;
 					int posZ = (cz * chunkSize) + z;
-
+					
 					if (i.getVoxelId(posX, posY, posZ) == 0) continue;
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
 					for (Direction d : Direction.values())
@@ -52,7 +52,7 @@ public class RenderThread extends Thread
 		}
 		System.out.println("Finished generating Faces for chunk " + chunk + " on island " + i);
 	}
-
+	
 	public void generateAllFaces()
 	{
 		for (Island i : Game.currentMap.islands)

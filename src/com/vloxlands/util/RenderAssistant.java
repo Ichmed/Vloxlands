@@ -22,9 +22,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
-
+	
 	// public static HashMap<String, Model> models = new HashMap<>();
-
+	
 	public static boolean bindTexture(String path)
 	{
 		Texture t = textures.get(path);
@@ -32,7 +32,8 @@ public class RenderAssistant
 		{
 			t.bind();
 			return true;
-		} else
+		}
+		else
 		{
 			t = loadTexture(path);
 			t.bind();
@@ -42,7 +43,7 @@ public class RenderAssistant
 			return true;
 		}
 	}
-
+	
 	// /**
 	// * Returns a model. If it doesn't exist the method will try to load it
 	// * @param path The path to the model file
@@ -58,7 +59,7 @@ public class RenderAssistant
 	// }
 	// return m;
 	// }
-
+	
 	// /**
 	// * Renders a model at the GL-coordinate-origin. If it doesn't exist the
 	// method will try to load the model
@@ -68,32 +69,34 @@ public class RenderAssistant
 	// {
 	// getModel(path).renderModel();
 	// }
-
+	
 	private static Texture loadTexture(String path)
 	{
 		try
 		{
 			return TextureLoader.getTexture(".png", new FileInputStream(new File(path)));
-		} catch (FileNotFoundException e)
+		}
+		catch (FileNotFoundException e)
 		{
 			e.printStackTrace();
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		return null;
 	}
-
+	
 	public static void renderRect(float posX, float posY, float sizeX, float sizeY)
 	{
 		renderRect(posX, posY, sizeX, sizeY, 1, 1);
 	}
-
+	
 	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texSizeX, float texSizeY)
 	{
 		renderRect(posX, posY, sizeX, sizeY, 0, 0, texSizeX, texSizeY);
 	}
-
+	
 	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY)
 	{
 		glPushMatrix();
@@ -104,34 +107,34 @@ public class RenderAssistant
 			{
 				GL11.glTexCoord2d(texPosX, texPosY + texSizeY);
 				GL11.glVertex2f(posX, posY);
-
+				
 				GL11.glTexCoord2d(texPosX + texSizeX, texPosY + texSizeY);
 				GL11.glVertex2f(posX + sizeX, posY);
-
+				
 				GL11.glTexCoord2d(texPosX + texSizeX, texPosY);
 				GL11.glVertex2f(posX + sizeX, posY + sizeY);
-
+				
 				GL11.glTexCoord2d(texPosX, texPosY);
 				GL11.glVertex2f(posX, posY + sizeY);
 			}
 			GL11.glEnd();
 		}
 		glPopMatrix();
-
+		
 	}
-
+	
 	public static void initGLSettings()
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		gluPerspective(100, (float) Display.getWidth() / Display.getHeight(), 0.01f, 1000);
 		glMatrixMode(GL_MODELVIEW);
-
+		
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 	}
-
+	
 	public static void renderText(float x, float y, String text, Color color, Font f)
 	{
 		glEnable(GL_BLEND);
@@ -141,7 +144,7 @@ public class RenderAssistant
 		glDisable(GL_BLEND);
 		glDisable(GL_TEXTURE_2D);
 	}
-
+	
 	public static void set2DRenderMode(boolean t)
 	{
 		if (t)
@@ -152,19 +155,20 @@ public class RenderAssistant
 			glOrtho(0.0, Display.getWidth(), Display.getHeight(), 0.0, -1.0, 10.0);
 			glMatrixMode(GL_MODELVIEW);
 			glLoadIdentity();
-
+			
 			glClear(GL_DEPTH_BUFFER_BIT);
 			glDisable(GL_TEXTURE_2D);
 			glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
-		} else
+		}
+		else
 		{
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		}
 	}
-
+	
 	public static void glColorHex(String hex, float alpha)
 	{
 		glColor4f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f, alpha);

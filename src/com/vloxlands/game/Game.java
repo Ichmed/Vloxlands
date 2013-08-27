@@ -20,23 +20,23 @@ public class Game
 	public static final int CHUNK_SIZE = 64;
 	public static Game currentGame;
 	public static Map currentMap;
-
+	
 	public Camera camera = new Camera();
-
+	
 	long start = 0;
 	public int frames = 21;
 	boolean showFPS = false;
-
+	
 	Scene scene;
-
+	
 	public float cameraSpeed = 0.1f;
 	public int cameraRotationSpeed = 180;
-
+	
 	public void gameLoop()
 	{
 		
 		if (start == 0) start = System.currentTimeMillis();
-
+		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
@@ -44,14 +44,14 @@ public class Game
 		glEnable(GL_CULL_FACE);
 		
 		moveCamera();
-		if(Mouse.isButtonDown(1))
+		if (Mouse.isButtonDown(1))
 		{
 			Mouse.setGrabbed(true);
 			rotateCamera();
 		}
 		else Mouse.setGrabbed(false);
 		
-
+		
 		gluPerspective((float) 50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
@@ -63,35 +63,35 @@ public class Game
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
+			
+			
+			
 			currentMap.render();
 		}
 		glPopMatrix();
-
+		
 		GUIAssistant.handleMouse();
-
+		
 		if (scene != null) scene.update();
-
+		
 		RenderAssistant.set2DRenderMode(true);
-
+		
 		GUIAssistant.renderComponents();
-
+		
 		while (Keyboard.next())
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
-
+		
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
-
+		
 		RenderAssistant.set2DRenderMode(false);
-
+		
 		Display.update();
 		Display.sync(60);
-
+		
 		frames++;
-
+		
 	}
-
+	
 	public static void initGame()
 	{
 		currentGame = new Game();
@@ -100,20 +100,20 @@ public class Game
 		currentGame.camera.setPosition(0, 0, 0);
 		currentGame.camera.setRotation(0, 180, 0);
 	}
-
+	
 	public void setScene(Scene s)
 	{
 		GUIAssistant.clearComponents();
-
+		
 		scene = s;
 		scene.init();
 	}
-
+	
 	public int getFPS()
 	{
 		return Math.round(frames / ((System.currentTimeMillis() - start) / 1000f));
 	}
-
+	
 	public static void initGLSettings()
 	{
 		glMatrixMode(GL_PROJECTION);
@@ -121,7 +121,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		// glEnable(GL_ALPHA_TEST);
-
+		
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_POINT_SMOOTH);
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
@@ -129,7 +129,7 @@ public class Game
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	}
-
+	
 	public void moveCamera()
 	{
 		float speed = 0.3f;
@@ -140,7 +140,7 @@ public class Game
 		if (Keyboard.isKeyDown(Keyboard.KEY_E)) camera.move(0, -speed, 0);
 		if (Keyboard.isKeyDown(Keyboard.KEY_D)) camera.move(-speed, 0, 0);
 	}
-
+	
 	public void rotateCamera()
 	{
 		float x = ((Mouse.getY() - (Display.getHeight() / 2)) / (float) Display.getHeight()) * cameraRotationSpeed;
