@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
+import com.vloxlands.util.Direction;
 
 public class Island
 {
@@ -19,6 +20,8 @@ public class Island
 	public ArrayList<VoxelFace> transparentFaces = new ArrayList<>();
 	
 	Vector3f pos;
+	
+	public float weight;
 	
 	public Island()
 	{
@@ -36,11 +39,30 @@ public class Island
 		}
 	}
 	
+	public void onTick()
+	{
+		
+	}
+	
+	public void calculateWeight()
+	{
+		weight = 0;
+		for (int x = 0; x < 256; x++)
+		{
+			for (int y = 0; y < 256; y++)
+			{
+				for (int z = 0; z < 256; z++)
+				{					
+					if (this.getVoxelId(x, y, z) == 0) continue;
+					weight += Voxel.getVoxelForId(this.getVoxelId(x, y, z)).getWeight();
+				}
+			}
+		}
+	}
+	
 	public void placeVoxel(short x, short y, short z, byte id)
 	{
-		voxels[x][y][z] = id;
-		voxelMetadata[x][y][z] = 0;
-		Voxel.getVoxelForId(id).onPlaced(x, y, z);
+		this.placeVoxel(x, y, z, id, (byte)0);
 	}
 	
 	public void placeVoxel(short x, short y, short z, byte id, byte metadata)
@@ -48,6 +70,14 @@ public class Island
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
+		this.weight += Voxel.getVoxelForId(id).getWeight();
+	}
+	
+	public void removeVoxel(short x, short y, short z)
+	{
+		Voxel v = Voxel.getVoxelForId(this.getVoxelId(x, y, z));
+		this.setVoxel(x, y, z, Voxel.AIR.getId());
+		this.weight -= v.getWeight();
 	}
 	
 	public short getVoxelId(short x, short y, short z)
@@ -68,8 +98,7 @@ public class Island
 	
 	public void setVoxel(short x, short y, short z, byte id)
 	{
-		voxels[x][y][z] = id;
-		voxelMetadata[x][y][z] = 0;
+		this.setVoxel(x, y, z, id, (byte)0);
 	}
 	
 	public void setVoxel(short x, short y, short z, byte id, byte metadata)
