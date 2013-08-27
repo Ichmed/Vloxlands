@@ -1,5 +1,7 @@
 package com.vloxlands.game.voxel;
 
+import com.vloxlands.settings.CFG;
+
 
 public class Voxel
 {
@@ -15,26 +17,27 @@ public class Voxel
 	private float uplift = 0;
 	
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false).setWeight(0);
-	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
-	public static final Voxel DIRT = new Voxel(2).setName("Dirt").setTextureIndex(34).setSmoothness(0.3f);
-	public static final Voxel WEAK_CRYSTAL = new Voxel(3).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(0);
-	public static final Voxel MEDIUM_CRYSTAL = new Voxel(4).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(1);
-	public static final Voxel STRONG_CRYSTAL = new Voxel(5).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(10);
-	public static final Voxel GRASS = new Voxel(6).setName("Grass").setTextureIndex(2).setSmoothness(0.5f);
+	public static final Voxel STONE = new Voxel(-127).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
+	public static final Voxel DIRT = new Voxel(-126).setName("Dirt").setTextureIndex(34).setSmoothness(0.3f);
+	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(0);
+	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(1);
+	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(10);
+	public static final Voxel GRASS = new Voxel(-122).setName("Grass").setTextureIndex(2).setSmoothness(0.5f);
 	
 	public Voxel(int id)
 	{
-		if (voxelList[id] == null) voxelList[id] = this;
+		if (voxelList[id + 128] == null) voxelList[id + 128] = this;
 		else
 		{
-			System.err.println("[Voxel]: The ID " + id + " was already taken up by \"" + voxelList[id].name + "\"");
+			System.err.println("[Voxel]: The ID " + id + " was already taken up by \"" + voxelList[id + 128].name + "\"");
 			System.exit(1);
 		}
-		this.id = (byte) (id - 128);
+		this.id = (byte) id;
 	}
 	
 	public synchronized static Voxel getVoxelForId(byte id)
 	{
+		CFG.p(id);
 		return voxelList[(int) id + 128];
 	}
 	
