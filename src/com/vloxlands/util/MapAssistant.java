@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
-import com.vloxlands.settings.CFG;
 
 public class MapAssistant
 {
@@ -32,6 +31,8 @@ public class MapAssistant
 
 	public static Map loadMap(String name)
 	{
+		new File("src/test/").mkdir();
+
 		Map map = new Map();
 		// -- bin file -- //
 		File bin = new File("src/test/" + name + ".bin");
@@ -40,8 +41,8 @@ public class MapAssistant
 		while (pos < data.length)
 		{
 			ByteBuffer bb = ByteBuffer.wrap(data, pos, 4);
-			pos += 4;
 			int length = bb.getInt();
+			pos += 4;
 
 			byte[] ids = new byte[length];
 			System.arraycopy(data, pos, ids, 0, length);
@@ -54,9 +55,7 @@ public class MapAssistant
 			System.arraycopy(data, pos, mds, 0, length2);
 			pos += length;
 
-			CFG.p("length: " + (length + length2));
-
-			map.addIsland(loadIsland(ids, new byte[] {}));
+			map.addIsland(loadIsland(ids, mds));
 		}
 		return map;
 	}
@@ -65,49 +64,21 @@ public class MapAssistant
 	{
 		Island island = new Island();
 
-		int c = 0;
+		ids = Compressor.decompressRow(ids);
+		mds = Compressor.decompressRow(mds);
 
-		// -- IDs -- //
-		for (int i = 0; i < ids.length; i += 2)
+		for (int i = 0; i < ids.length; i++)
 		{
-			int t = i / 2;
-			short[] pos = get3DIndex(t);
-			island.setVoxel(pos[0], pos[1], pos[2], ids[t + 1]);
-
-			c += 2;
-			for (byte j = (byte) 1; j < ids[i]; j++)
-			{
-				pos = get3DIndex(t + j);
-				island.setVoxel(pos[0], pos[1], pos[2], ids[t + 1]);
-			}
+			short[] pos = get3DIndex(i);
+			island.setVoxel(pos[0], pos[1], pos[2], ids[i], mds[i]);
 		}
-
-		CFG.p(c);
-		
-		CFG.p("loaded: " + (c / (float)(ids.length + mds.length) * 50) + "%");
-		// -- Metadatas -- //
-		for (int i = 0; i < mds.length; i += 2)
-		{
-			int t = i / 2;
-			short[] pos = get3DIndex(t);
-			island.setVoxelMetadata(pos[0], pos[1], pos[2], mds[t + 1]);
-
-			c += 2;
-			for (byte j = (byte) 1; j < mds[i]; j++)
-			{
-				pos = get3DIndex(t + j);
-				island.setVoxelMetadata(pos[0], pos[1], pos[2], mds[t + 1]);
-			}
-		}
-		CFG.p(c);
-		CFG.p("loaded: " + (c / (float)(ids.length + mds.length) * 50) + "%");
 
 		return island;
 	}
 
-	private static short[] get3DIndex(int i)
+	public static short[] get3DIndex(int i)
 	{
-		return new short[] { (short) Math.round(i / (float) Math.pow(Island.MAXSIZE, 2)), (short) (Math.round(i / (float) Island.MAXSIZE) % Island.MAXSIZE), (short) (i % Island.MAXSIZE) };
+		return new short[] { (short) (i / (float) Math.pow(Island.MAXSIZE, 2)), (short) ((i / (float) Island.MAXSIZE) % Island.MAXSIZE), (short) (i % Island.MAXSIZE) };
 	}
 
 	private static void saveIsland(Island island, OutputStream os) throws Exception
@@ -115,17 +86,15 @@ public class MapAssistant
 		byte[] ids = Compressor.compressRow(island.getVoxels());
 		byte[] mds = Compressor.compressRow(island.getVoxelMetadatas());
 
-		CFG.p("save: " + (ids.length + mds.length));
-
 		ByteBuffer bb = ByteBuffer.allocate(4);
 		bb.putInt(ids.length);
 		os.write(bb.array());
 
 		os.write(ids);
 
-		bb = ByteBuffer.allocate(4);
-		bb.putInt(mds.length);
-		os.write(bb.array());
+		ByteBuffer bb2 = ByteBuffer.allocate(4);
+		bb2.putInt(mds.length);
+		os.write(bb2.array());
 
 		os.write(mds);
 	}

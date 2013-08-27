@@ -103,20 +103,20 @@ public class Compressor
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte active = b[0];
-			int same = 1;
+			byte same = (byte) -127;
 			for (int i = 1; i < b.length; i++)
 			{
-				if (b[i] == active && same < 255) same++;
+				if (b[i] == active && same < 127) same += (byte) 1;
 				else
 				{
-					baos.write(new byte[] { (byte) same, active });
-					same = 1;
+					baos.write(new byte[] { same, active });
+					same = -127;
 					active = b[i];
 				}
 			}
-			
+
 			baos.write(new byte[] { (byte) same, active });
-			
+
 			return baos.toByteArray();
 		}
 		catch (Exception e)
@@ -124,5 +124,18 @@ public class Compressor
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static byte[] decompressRow(byte[] b)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		for (int i = 0; i < b.length; i += 2)
+		{
+			for (int j = 0; j < b[i] + 128; j++)
+			{
+				baos.write(b[i + 1]);
+			}
+		}
+		return baos.toByteArray();
 	}
 }

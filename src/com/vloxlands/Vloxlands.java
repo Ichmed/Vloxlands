@@ -8,11 +8,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.game.world.Map;
 import com.vloxlands.scene.Scene_Mainmenu;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Assistant;
-import com.vloxlands.util.MapAssistant;
 
 import de.dakror.universion.UniVersion;
 
@@ -21,14 +19,6 @@ public class Vloxlands
 	public static void main(String[] args)
 	{
 		CFG.INTERNET = Assistant.isInternetReachable();
-
-		MapAssistant.saveMap(Map.generateRandomMap(), "testMap");
-//		CFG.p("------------------");
-//		Map map = MapAssistant.loadMap("testMap");
-//		CFG.p("------------------");
-//		MapAssistant.saveMap(map, "testMap2");
-		// Map map2 = MapAssistant.loadMap("testMap2");
-//		System.exit(0);
 		
 		// -- UniVersion & Reporter initialization -- //
 		UniVersion.offline = !CFG.INTERNET;
@@ -39,7 +29,6 @@ public class Vloxlands
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
-		
 
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 
