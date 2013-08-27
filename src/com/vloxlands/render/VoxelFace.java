@@ -8,14 +8,14 @@ import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.RenderAssistant;
 
-public class Face
+public class VoxelFace
 {
 	Direction dir;
 	Vector3f pos;
 	int textureIndex;
 	Vector3f tl = new Vector3f(0, 1, 0), tr = new Vector3f(1, 1, 0), bl = new Vector3f(0, 0, 0), br = new Vector3f(1, 0, 0);
 	
-	public Face(Direction dir, Vector3f pos, Voxel v)
+	public VoxelFace(Direction dir, Vector3f pos, Voxel v)
 	{
 		super();
 		this.dir = dir;

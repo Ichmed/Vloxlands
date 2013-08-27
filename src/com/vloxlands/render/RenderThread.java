@@ -42,7 +42,7 @@ public class RenderThread extends Thread
 					{
 						if (!Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z)).isOpaque())
 						{
-							Face f = new Face(d, new Vector3f(x, y, z), v);
+							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
 							if (v.isOpaque()) i.faces.add(f);
 							else i.transparentFaces.add(f);
 						}
@@ -69,7 +69,7 @@ public class RenderThread extends Thread
 						{
 							if (!Voxel.getVoxelForId(i.getVoxelId(x + (int) d.dir.x, y + (int) d.dir.y, z + (int) d.dir.z)).isOpaque())
 							{
-								Face f = new Face(d, new Vector3f(x, y, z), v);
+								VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
 								if (v.isOpaque()) i.faces.add(f);
 								else i.transparentFaces.add(f);
 							}

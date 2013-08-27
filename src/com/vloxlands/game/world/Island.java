@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.render.Face;
+import com.vloxlands.render.VoxelFace;
 
 public class Island
 {
@@ -15,8 +15,8 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	
-	public ArrayList<Face> faces = new ArrayList<>();
-	public ArrayList<Face> transparentFaces = new ArrayList<>();
+	public ArrayList<VoxelFace> faces = new ArrayList<>();
+	public ArrayList<VoxelFace> transparentFaces = new ArrayList<>();
 	
 	Vector3f pos;
 	
@@ -117,9 +117,9 @@ public class Island
 	
 	public void render()
 	{
-		for (Face f : faces)
+		for (VoxelFace f : faces)
 			f.render();
-		for (Face f : transparentFaces)
+		for (VoxelFace f : transparentFaces)
 			f.render();
 	}
 	
