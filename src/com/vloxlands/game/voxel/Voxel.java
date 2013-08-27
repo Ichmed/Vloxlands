@@ -9,6 +9,7 @@ public class Voxel
 	boolean opaque = true;
 	boolean replaceable = false;
 	float smoothness = 0;
+	private byte id;
 
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false);
 	public static final Voxel STONE = new Voxel(1).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
@@ -24,6 +25,7 @@ public class Voxel
 			System.err.println("[Voxel]: The ID " + id + " was already taken up by \"" + voxelList[id].name + "\"");
 			System.exit(1);
 		}
+		this.id = (byte) (id - 128);
 	}
 	
 	public synchronized static Voxel getVoxelForId(int id)
@@ -113,5 +115,10 @@ public class Voxel
 	{
 		this.smoothness = smooth;
 		return this;
+	}
+
+	public byte getId()
+	{
+		return id;
 	}
 }

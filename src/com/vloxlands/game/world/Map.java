@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vloxlands.game.entity.Entity;
+import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.RenderThread;
 
 public class Map
@@ -44,14 +45,11 @@ public class Map
 		{
 			
 			Island island = new Island();
-			int voxels = 300;
+			int voxels = 20;
 			
 			for (int j = 0; j < voxels; j++)
 			{
-				short x = (short) ((Math.random() * 20));
-				short y = (short) ((Math.random() * 20));
-				short z = (short) ((Math.random() * 20));
-				island.setVoxel(x, y, z, (byte) ((Math.random() * 4) - 128), (byte) 0);
+				island.setVoxel((short)j, (short)0, (short)0, Voxel.STONE.getId(), (byte) 0);
 			}
 			
 			map.addIsland(island);
