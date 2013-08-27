@@ -12,6 +12,7 @@ import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.scene.Scene;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -45,10 +46,15 @@ public class Game
 		glEnable(GL_CULL_FACE);
 		
 		moveCamera();
+		
+		Mouse.next();
+		int p = Mouse.getEventButton();
+		
 		if (Mouse.isButtonDown(1))
 		{
 			Mouse.setGrabbed(true);
-			rotateCamera();
+			if (p == -1) rotateCamera();
+			else Mouse.setCursorPosition((Display.getWidth() / 2), (Display.getHeight() / 2));
 		}
 		else Mouse.setGrabbed(false);
 		
@@ -137,7 +143,7 @@ public class Game
 		double x = Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
 		double y = -Math.sin(Math.toRadians(camera.rotation.x)) * cameraSpeed;
 		double z = -Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;
-
+		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
 			camera.position.x -= x * Math.cos(Math.toRadians(camera.rotation.x));
