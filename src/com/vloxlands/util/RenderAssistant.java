@@ -16,6 +16,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
+import com.vloxlands.render.util.ShaderLoader;
+
 //import render.Model;
 //import util.math.MathHelper;
 
@@ -121,18 +123,6 @@ public class RenderAssistant
 		}
 		glPopMatrix();
 		
-	}
-	
-	public static void initGLSettings()
-	{
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluPerspective(100, (float) Display.getWidth() / Display.getHeight(), 0.01f, 1000);
-		glMatrixMode(GL_MODELVIEW);
-		
-		glShadeModel(GL_SMOOTH);
-		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_CULL_FACE);
 	}
 	
 	public static void renderText(float x, float y, String text, Color color, Font f)
