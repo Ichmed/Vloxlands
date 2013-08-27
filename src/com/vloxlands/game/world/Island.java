@@ -6,6 +6,8 @@ import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
+
+import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.util.Direction;
@@ -22,7 +24,7 @@ public class Island
 	
 	Vector3f pos;
 	
-	public float weight;
+	public float weight, uplift;
 	
 	public Island()
 	{
@@ -42,7 +44,7 @@ public class Island
 	
 	public void onTick()
 	{
-		this.pos.translate(0, -weight / 100000, 0);
+		this.pos.translate(0, (uplift * Game.currentMap.calculateUplift(this.pos.y) - this.weight) / 100000f, 0);
 	}
 	
 	public void calculateWeight()
@@ -60,6 +62,22 @@ public class Island
 			}
 		}
 	}
+
+	public void calculateUplift()
+	{
+		uplift = 0;
+		for (int x = 0; x < 256; x++)
+		{
+			for (int y = 0; y < 256; y++)
+			{
+				for (int z = 0; z < 256; z++)
+				{					
+					if (this.getVoxelId(x, y, z) == 0) continue;
+					uplift += Voxel.getVoxelForId(this.getVoxelId(x, y, z)).getUplift();
+				}
+			}
+		}
+	}
 	
 	public void placeVoxel(short x, short y, short z, byte id)
 	{
@@ -72,6 +90,7 @@ public class Island
 		voxelMetadata[x][y][z] = metadata;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
 		this.weight += Voxel.getVoxelForId(id).getWeight();
+		this.uplift += Voxel.getVoxelForId(id).getUplift();
 	}
 	
 	public void removeVoxel(short x, short y, short z)
@@ -79,6 +98,7 @@ public class Island
 		Voxel v = Voxel.getVoxelForId(this.getVoxelId(x, y, z));
 		this.setVoxel(x, y, z, Voxel.AIR.getId());
 		this.weight -= v.getWeight();
+		this.uplift -= v.getUplift();
 	}
 	
 	public short getVoxelId(short x, short y, short z)

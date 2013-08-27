@@ -11,6 +11,8 @@ public class Map
 	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
 	
+	public int maxHeight = 512;
+	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}
 	
@@ -38,11 +40,15 @@ public class Map
 	public void startMap()
 	{
 		new RenderThread().run(RenderThread.GENERATE_ALL_FACES);
-		for (Island i : islands) i.calculateWeight();
+		for (Island i : islands)
+		{
+			i.calculateWeight();
+			i.calculateUplift();
+		}
 	}
 	
 	public float calculateUplift(float height)
 	{
-		return 0;
+		return ((1 - (height / maxHeight)) * 2) + 0.1f;
 	}
 }
