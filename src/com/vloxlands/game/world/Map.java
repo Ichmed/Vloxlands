@@ -11,7 +11,7 @@ public class Map
 	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
 	
-	public int maxHeight = 512;
+	public static final int MAXHEIGHT = 512;
 	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}
@@ -24,7 +24,8 @@ public class Map
 	
 	public void onTick()
 	{
-		for(Island i : islands) i.onTick();
+		for (Island i : islands)
+			i.onTick();
 	}
 	
 	public Island[] getIslands()
@@ -47,8 +48,8 @@ public class Map
 		}
 	}
 	
-	public float calculateUplift(float height)
+	public static float calculateUplift(float height)
 	{
-		return ((1 - (height / maxHeight)) * 2) + 0.1f;
+		return ((1 - (height / MAXHEIGHT)) * 2) + 0.1f;
 	}
 }

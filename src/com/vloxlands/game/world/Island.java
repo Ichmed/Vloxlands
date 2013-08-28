@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
+import com.vloxlands.settings.CFG;
 
 public class Island
 {
@@ -42,7 +42,8 @@ public class Island
 	
 	public void onTick()
 	{
-		pos.translate(0, (uplift * Game.currentMap.calculateUplift(pos.y) - weight) / 100000f, 0);
+		CFG.p("moving for: " + (uplift * Map.calculateUplift(pos.y) - weight) / 100000f);
+		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f, 0);
 	}
 	
 	public void calculateWeight()
@@ -113,6 +114,7 @@ public class Island
 	public void setVoxel(int x, int y, int z, byte id)
 	{
 		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return;
+		
 		voxels[x][y][z] = id;
 	}
 	
@@ -178,8 +180,9 @@ public class Island
 		this.pos = pos;
 	}
 	
-	public void grassify()
+	public int grassify()
 	{
+		int grassed = 0;
 		for (int i = 0; i < Island.MAXSIZE; i++)
 		{
 			for (int j = 0; j < Island.MAXSIZE; j++)
@@ -190,11 +193,14 @@ public class Island
 					{
 						if (getVoxelId(i, j + 1, k) == Voxel.AIR.getId())
 						{
+							grassed++;
 							setVoxel(i, j, k, Voxel.GRASS.getId());
 						}
 					}
 				}
 			}
 		}
+		
+		return grassed;
 	}
 }

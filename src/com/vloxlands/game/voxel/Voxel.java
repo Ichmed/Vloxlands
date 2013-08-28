@@ -1,6 +1,5 @@
 package com.vloxlands.game.voxel;
 
-import com.vloxlands.settings.CFG;
 
 
 public class Voxel
@@ -13,15 +12,15 @@ public class Voxel
 	boolean replaceable = false;
 	float smoothness = 0;
 	private byte id;
-	private float weight = 0;
+	private float weight = 1f;
 	private float uplift = 0;
 	
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false).setWeight(0);
 	public static final Voxel STONE = new Voxel(-127).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
 	public static final Voxel DIRT = new Voxel(-126).setName("Dirt").setTextureIndex(34).setSmoothness(0.3f);
-	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(0);
-	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(1);
-	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(10);
+	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(1);
+	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(10);
+	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Strong Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(50);
 	public static final Voxel GRASS = new Voxel(-122).setName("Grass").setTextureIndex(2).setSmoothness(0.5f);
 	
 	public Voxel(int id)

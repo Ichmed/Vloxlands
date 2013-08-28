@@ -3,8 +3,6 @@ package com.vloxlands.game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
-import java.awt.peer.LightweightPeer;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -14,7 +12,6 @@ import org.newdawn.slick.Color;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
-import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
