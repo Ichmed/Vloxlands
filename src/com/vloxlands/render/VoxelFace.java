@@ -4,8 +4,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.Direction;
+import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class VoxelFace
@@ -62,5 +64,10 @@ public class VoxelFace
 			glEnd();
 		}
 		glPopMatrix();
+	}
+	
+	public double getDistanceToCamera()
+	{
+		return MathHelper.subtractVector3f(Game.currentGame.camera.position, this.pos).length();
 	}
 }

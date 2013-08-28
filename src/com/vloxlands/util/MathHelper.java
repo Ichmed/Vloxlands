@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class MathHelper
 {
@@ -84,5 +85,10 @@ public class MathHelper
 		while (Vector2f.sub(v, center, null).length() > radius - rad2);
 		
 		return v;
+	}
+	
+	public static Vector3f subtractVector3f(Vector3f a, Vector3f b)
+	{
+		return new Vector3f(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 }
