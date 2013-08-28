@@ -5,9 +5,10 @@ void main()
 {
 	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
 
-	if(lighting != 0)
+	if(lighting != 0f)
 	{
 		vec3 vertexPosition = (gl_ModelViewMatrix * gl_Vertex).xyz;
+		
 		vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);    
  		vec3 surfaceNormal = (gl_NormalMatrix * gl_Normal).xyz;
     
