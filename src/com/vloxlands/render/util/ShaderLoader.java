@@ -8,11 +8,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.vloxlands.settings.CFG;
+
 public class ShaderLoader
 {
 	
 	private static HashMap<String, Integer> programs = new HashMap<>();
-	private static String currentProgramName;
+	private static String currentProgramName = "";
 	
 	public static int loadProgram(String path, String vertexName, String fragmentName)
 	{
@@ -98,6 +100,10 @@ public class ShaderLoader
 	
 	public static int getCurrentProgram()
 	{
-		return programs.get(currentProgramName);
+		CFG.p(programs);
+		return programs
+				.get(
+						currentProgramName
+						);
 	}
 }

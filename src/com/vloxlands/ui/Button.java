@@ -36,6 +36,7 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
+		RenderAssistant.disable(GL_LIGHTING);
 		RenderAssistant.bindTexture("graphics/textures/ui/button.png");
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

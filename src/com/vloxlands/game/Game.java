@@ -49,6 +49,8 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		ShaderLoader.useProgram("graphics/shaders/", "default");
+		RenderAssistant.enable(GL_LIGHTING);
 		
 		moveCamera();
 		
@@ -75,7 +77,6 @@ public class Game
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			ShaderLoader.useProgram("graphics/shaders/", "default");
 			currentMap.render();
 			
 			glPointSize(5);
@@ -124,6 +125,8 @@ public class Game
 		{
 			lightPos.x--;
 		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
+		else cameraSpeed = 0.1f;
 		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { lightPos.x, lightPos.y, lightPos.z, 1 }));
 
 		
