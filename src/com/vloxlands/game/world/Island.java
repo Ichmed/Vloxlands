@@ -105,7 +105,6 @@ public class Island
 		return voxels[x][y][z];
 	}
 	
-	
 	public byte getMetadata(int x, int y, int z)
 	{
 		return voxelMetadata[x][y][z];
@@ -188,7 +187,7 @@ public class Island
 				{
 					if (getVoxelId(i, j, k) == Voxel.DIRT.getId())
 					{
-						if (j == 0 || getVoxelId(i, j - 1, k) == Voxel.AIR.getId())
+						if (getVoxelId(i, j - 1, k) == Voxel.AIR.getId())
 						{
 							setVoxel(i, j, k, Voxel.GRASS.getId());
 						}

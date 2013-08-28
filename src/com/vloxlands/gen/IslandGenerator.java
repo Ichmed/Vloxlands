@@ -35,7 +35,7 @@ public class IslandGenerator
 		
 	}
 	
-	private static void generateBezier(Vector2f p0, Vector2f p1, Vector2f p2, Vector2f p3, int radius, int off, int h, byte b, Island island)
+	private static void generateBezier(Vector2f p3, Vector2f p2, Vector2f p1, Vector2f p0, int radius, int off, int h, byte b, Island island)
 	{
 		
 		Vector2f s0 = Vector2f.sub(p1, p0, null);
