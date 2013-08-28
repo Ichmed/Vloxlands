@@ -29,31 +29,35 @@ public class ShaderLoader
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(path + vertexName + ".vert"));
 			String line;
-			while((line = reader.readLine()) != null)
+			while ((line = reader.readLine()) != null)
 				vertexSource.append(line).append('\n');
 			reader.close();
 		}
-		catch(IOException e){e.printStackTrace();}
-
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
 		try
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(path + fragmentName + ".frag"));
 			String line;
-			while((line = reader.readLine()) != null)
+			while ((line = reader.readLine()) != null)
 				fragmentSource.append(line).append("\n");
 			reader.close();
 		}
-		catch(IOException e){e.printStackTrace();}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		glShaderSource(vertex, vertexSource);
 		glCompileShader(vertex);
-		if(glGetShaderi(vertex, GL_COMPILE_STATUS) == GL_FALSE)
-			System.err.println(vertexName + "_vertex " + "Vertex-Shader '" + vertexName + "' could not be compiled \n Error log:\n" + glGetShaderInfoLog(vertex, 1024));
+		if (glGetShaderi(vertex, GL_COMPILE_STATUS) == GL_FALSE) System.err.println(vertexName + "_vertex " + "Vertex-Shader '" + vertexName + "' could not be compiled \n Error log:\n" + glGetShaderInfoLog(vertex, 1024));
 		
 		glShaderSource(fragment, fragmentSource);
 		glCompileShader(fragment);
-		if(glGetShaderi(fragment, GL_COMPILE_STATUS) == GL_FALSE)
-			System.err.println(fragmentName + "_fragment " + "Fragment-Shader '" + fragmentName + "' could not be compiled \n Error log:\n" + glGetShaderInfoLog(fragment, 1024));
+		if (glGetShaderi(fragment, GL_COMPILE_STATUS) == GL_FALSE) System.err.println(fragmentName + "_fragment " + "Fragment-Shader '" + fragmentName + "' could not be compiled \n Error log:\n" + glGetShaderInfoLog(fragment, 1024));
 		
 		glAttachShader(program, vertex);
 		glAttachShader(program, fragment);
@@ -68,7 +72,7 @@ public class ShaderLoader
 	{
 		programs.put(path + name, loadProgram(path, name, name));
 	}
-
+	
 	public static void createProgram(String path, String vertexName, String fragmentName)
 	{
 		programs.put(path + vertexName + "-" + fragmentName, loadProgram(path, vertexName, fragmentName));
@@ -83,23 +87,24 @@ public class ShaderLoader
 	public static boolean useProgram(String path, String name, boolean doWork)
 	{
 		Integer i = programs.get(path + name);
-		if(i == null)
+		if (i == null)
 		{
-			if(doWork)createProgram(path, name);
+			if (doWork) createProgram(path, name);
 			else return false;
 			i = programs.get(path + name);
 		}
-		if(i != null)
+		if (i != null)
 		{
 			glUseProgram(i);
 			currentProgramName = path + name;
 			return true;
 		}
-		return false;		
+		return false;
 	}
 	
 	public static int getCurrentProgram()
 	{
-		return (int)programs.get(currentProgramName);
+		if (programs.get(currentProgramName) == null) return -1;
+		return (int) programs.get(currentProgramName);
 	}
 }
