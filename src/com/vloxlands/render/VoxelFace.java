@@ -30,7 +30,7 @@ public class VoxelFace
 		
 		double squareSize = 0.03125d;
 		
-		RenderAssistant.bindTexture("textures/voxelTextures.png");
+		RenderAssistant.bindTexture("graphics/textures/voxelTextures.png");
 		
 		glPushMatrix();
 		{

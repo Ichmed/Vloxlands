@@ -3,17 +3,22 @@ package com.vloxlands.game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
+import java.awt.peer.LightweightPeer;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
+import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class Game
@@ -32,6 +37,7 @@ public class Game
 	
 	public float cameraSpeed = 0.1f;
 	public int cameraRotationSpeed = 180;
+	private Vector3f lightPos = new Vector3f();
 	
 	public void gameLoop()
 	{
@@ -69,9 +75,7 @@ public class Game
 		glPushMatrix();
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
-			
-			
+			ShaderLoader.useProgram("graphics/shaders/", "default");			
 			currentMap.render();
 		}
 		glPopMatrix();
@@ -91,7 +95,32 @@ public class Game
 		
 		RenderAssistant.set2DRenderMode(false);
 		
+		if (Keyboard.isKeyDown(Keyboard.KEY_R))
+		{
+			lightPos.x = -camera.position.x;
+			lightPos.y = -camera.position.y;
+			lightPos.z = -camera.position.z;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
+		{
+			lightPos.z++;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
+		{
+			lightPos .z--;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+		{
+			lightPos.x++;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+		{
+			lightPos.x--;
+		}
+		
 		currentMap.onTick();
+		
+		System.out.println(lightPos);
 		
 		Display.update();
 		Display.sync(60);
@@ -136,6 +165,18 @@ public class Game
 		glEnable(GL_LINE_SMOOTH);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1f }));
+		glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));
+		glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT, GL_DIFFUSE);
+		glMaterialf(GL_FRONT, GL_SHININESS, 1000f);
+		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { currentGame.lightPos.x, currentGame.lightPos.y, currentGame.lightPos.z, 1 }));
+
+
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
 	}
 	
 	public void moveCamera()

@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.newdawn.slick.Color;
 
+import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
@@ -36,6 +37,7 @@ public class Button extends Component
 	@Override
 	public void draw()
 	{
+		RenderAssistant.bindTexture("graphics/textures/ui/button.png");
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		if (state != 1) RenderAssistant.glColorHex("222222", 0.6f);
