@@ -24,5 +24,9 @@ void main()
 		{
   		}
     }
+    else
+    {
+    	color.rgb = gl_FrontMaterial.diffuse.rgb;
+    }
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 }
