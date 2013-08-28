@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import org.newdawn.slick.Color;
 
-import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
