@@ -92,7 +92,7 @@ public class ShaderLoader
 		if(i != null)
 		{
 			glUseProgram(i);
-			currentProgramName = name;
+			currentProgramName = path + name;
 			return true;
 		}
 		return false;		
@@ -100,10 +100,6 @@ public class ShaderLoader
 	
 	public static int getCurrentProgram()
 	{
-		CFG.p(programs);
-		return programs
-				.get(
-						currentProgramName
-						);
+		return (int)programs.get(currentProgramName);
 	}
 }

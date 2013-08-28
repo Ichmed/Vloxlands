@@ -79,7 +79,7 @@ public class Game
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			currentMap.render();
 			
-			glPointSize(5);
+			glPointSize(10);
 			glBegin(GL_POINTS);
 			{
 				glVertex3f(lightPos.x, lightPos.y, lightPos.z);
