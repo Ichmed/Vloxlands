@@ -1,6 +1,7 @@
 package com.vloxlands.render;
 
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
@@ -44,8 +45,8 @@ public class RenderThread extends Thread
 						if (!w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
-							if (v.isOpaque()) i.faces.add(f);
-							else i.transparentFaces.add(f);
+							if (v.isOpaque()) i.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
+							else i.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
 						}
 					}
 				}
@@ -72,8 +73,8 @@ public class RenderThread extends Thread
 							if (!w.isOpaque() && !(w == v))
 							{
 								VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
-								if (v.isOpaque()) i.faces.add(f);
-								else i.transparentFaces.add(f);
+								if (w.isOpaque()) i.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
+								else i.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
 							}
 						}
 					}
