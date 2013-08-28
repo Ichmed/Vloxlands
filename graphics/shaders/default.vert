@@ -1,26 +1,28 @@
 varying vec3 color;
+uniform float lighting;
 
 void main()
 {
-    gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0; 
+	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+
+	if(lighting != 0)
+	{
+		vec3 vertexPosition = (gl_ModelViewMatrix * gl_Vertex).xyz;
+		vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);    
+ 		vec3 surfaceNormal = (gl_NormalMatrix * gl_Normal).xyz;
     
-    vec3 vertexPosition = (gl_ModelViewMatrix * gl_Vertex).xyz;
-    vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);    
-    vec3 surfaceNormal = (gl_NormalMatrix * gl_Normal).xyz;
+		float diffuseLightIntensity = max(0.0, dot(surfaceNormal, lightDirection));
     
-    float diffuseLightIntensity = max(0.0, dot(surfaceNormal, lightDirection));
+		color.rgb = diffuseLightIntensity * gl_FrontMaterial.diffuse.rgb;
+ 		color += gl_FrontMaterial.ambient.rgb + gl_LightModel.ambient.rgb;
     
-    color.rgb = diffuseLightIntensity * gl_FrontMaterial.diffuse.rgb;
-    color += gl_FrontMaterial.ambient.rgb + gl_LightModel.ambient.rgb;
+		vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));
     
-    vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));
+		float specular = max(0.0, dot(surfaceNormal, reflectionDirection));
     
-    float specular = max(0.0, dot(surfaceNormal, reflectionDirection));
-    
-    if(diffuseLightIntensity != 0.0)
-    {
-        float fspecular = pow(specular, gl_FrontMaterial.shininess);
-        color.rgb += (gl_FrontMaterial.specular.rgb * fspecular);
+		if(diffuseLightIntensity != 0.0)
+		{
+  		}
     }
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
 }

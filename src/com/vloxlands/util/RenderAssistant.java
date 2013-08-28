@@ -1,7 +1,6 @@
 package com.vloxlands.util;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import java.awt.Font;
 import java.io.File;
@@ -10,8 +9,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -162,5 +163,23 @@ public class RenderAssistant
 	public static void glColorHex(String hex, float alpha)
 	{
 		glColor4f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f, alpha);
+	}
+	
+	public static void enable(int key)
+	{
+		if(key == GL_LIGHTING)
+		{
+			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
+			ARBShaderObjects.glUniform1fARB(location, 1);
+		}
+	}
+	
+	public static void disable(int key)
+	{
+		if(key == GL_LIGHTING)
+		{
+			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
+			ARBShaderObjects.glUniform1fARB(location, 0);
+		}
 	}
 }

@@ -12,6 +12,7 @@ public class ShaderLoader
 {
 	
 	private static HashMap<String, Integer> programs = new HashMap<>();
+	private static String currentProgramName;
 	
 	public static int loadProgram(String path, String vertexName, String fragmentName)
 	{
@@ -89,8 +90,14 @@ public class ShaderLoader
 		if(i != null)
 		{
 			glUseProgram(i);
+			currentProgramName = name;
 			return true;
 		}
 		return false;		
+	}
+	
+	public static int getCurrentProgram()
+	{
+		return programs.get(currentProgramName);
 	}
 }
