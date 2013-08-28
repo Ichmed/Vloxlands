@@ -8,7 +8,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.VoxelFace;
-import com.vloxlands.settings.CFG;
 
 public class Island
 {
@@ -42,7 +41,6 @@ public class Island
 	
 	public void onTick()
 	{
-		CFG.p("moving for: " + (uplift * Map.calculateUplift(pos.y) - weight) / 100000f);
 		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f, 0);
 	}
 	
