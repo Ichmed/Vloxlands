@@ -49,7 +49,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		ShaderLoader.useProgram("graphics/shaders/", "default");
+		//ShaderLoader.useProgram("graphics/shaders/", "default");
 		RenderAssistant.enable(GL_LIGHTING);
 		
 		moveCamera();
@@ -144,7 +144,7 @@ public class Game
 		currentGame = new Game();
 		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();
-		currentGame.camera.setPosition(128.5f, 20, 128.5f);
+		currentGame.camera.setPosition(128.5f, 160, 128.5f);
 		currentGame.camera.setRotation(90, 0, 0);
 	}
 	

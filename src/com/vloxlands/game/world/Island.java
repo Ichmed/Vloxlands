@@ -112,6 +112,7 @@ public class Island
 	
 	public void setVoxel(int x, int y, int z, byte id)
 	{
+		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return;
 		voxels[x][y][z] = id;
 	}
 	
