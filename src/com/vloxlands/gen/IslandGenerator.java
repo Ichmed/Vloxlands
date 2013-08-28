@@ -1,5 +1,6 @@
 package com.vloxlands.gen;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector2f;
@@ -36,11 +37,17 @@ public class IslandGenerator
 		int x = Island.MAXSIZE / 2;
 		int z = Island.MAXSIZE / 2;
 		
-		// int spikes = (int) (Math.random() * 10 + 10);
-		//
 		
-		generateBezier(ISLAND_BEZIER, x, z, radius, START_Y, topLayers, Voxel.DIRT.getId(), true);
+		// -- top Layers -- //
 		
+		generateBezier(ISLAND_BEZIER, x, z, radius, START_Y, topLayers, 
+				// set ratio Dirt : Stone  15 : 1
+				createRatio(new byte[] { Voxel.DIRT.getId(), Voxel.STONE.getId() }, 
+						new int[] { 15, 1 })
+						
+				,true);
+		
+		// -- Spikes -- //
 		for (int i = 0; i < 20; i++)
 		{
 			int MAXRAD = (int) ((radius * 0.3f) + 2);
@@ -50,10 +57,47 @@ public class IslandGenerator
 			
 			Vector2f pos = MathHelper.getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
 			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
-			currentIsland.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.STONE.getId());
-			generateBezier(SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, START_Y - 1, h, Voxel.STONE.getId(), false);
+			currentIsland.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.STONE.getId());	
+			generateBezier(SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, START_Y - 1, h, 
+					
+					// set ratio Stone : Dirt  5 : 1
+					createRatio(new byte[] { Voxel.STONE.getId(), Voxel.DIRT.getId() }, 
+							new int[] { 5, 1 })
+					
+					, false);
 		}
 		
+		generateCrystals();
+		
+		for (int i = 0; i < Island.MAXSIZE; i++) // x axis
+		{
+			for (int j = 0; j < Island.MAXSIZE; j++) // z axis
+			{
+				if (currentIsland.getVoxelId(i, START_Y, j) == Voxel.STONE.getId()) currentIsland.setVoxel(i, START_Y, j, Voxel.DIRT.getId());
+			}
+		}
+		currentIsland.grassify();
+		
+		
+		CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
+		return currentIsland;
+	}
+	
+	private static byte[] createRatio(byte[] keys, int[] vals)
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		for (int i = 0; i < keys.length; i++)
+		{
+			for (int j = 0; j < vals[i]; j++)
+			{
+				baos.write(keys[i]);
+			}
+		}
+		return baos.toByteArray();
+	}
+	
+	private static void generateCrystals()
+	{
 		currentIsland.calculateWeight();
 		
 		float weightNeededToUplift = currentIsland.weight / Map.calculateUplift(0);
@@ -76,11 +120,6 @@ public class IslandGenerator
 		currentIsland.calculateUplift();
 		
 		currentIsland.initBalance = (currentIsland.uplift * Map.calculateUplift(0) - currentIsland.weight) / 100000f;
-		
-		currentIsland.grassify();
-		
-		CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
-		return currentIsland;
 	}
 	
 	private static void placeCrystals(int[] amounts)
@@ -111,7 +150,7 @@ public class IslandGenerator
 		{
 			case 0: // qubic
 			{
-				depth = height = width = (int) ((Math.random() * 3) + (index + 1)* 2);
+				depth = height = width = (int) ((Math.random() * 3) + (index + 1));
 				
 				float maxDistance = (float) (width * Math.sqrt(3)) / 2;
 				
@@ -170,7 +209,7 @@ public class IslandGenerator
 		return v;
 	}
 	
-	private static void generateBezier(float[] c, int x, int z, int radius, int off, int h, byte b, boolean force)
+	private static void generateBezier(float[] c, int x, int z, int radius, int off, int h, byte[] b, boolean force)
 	{
 		for (int i = 0; i < h; i++)
 		{
@@ -182,7 +221,7 @@ public class IslandGenerator
 		}
 	}
 	
-	private static void fillHorizontalCircle(int x, int y, int z, float radius, byte b, boolean force)
+	private static void fillHorizontalCircle(int x, int y, int z, float radius, byte[] b, boolean force)
 	{
 		Vector2f center = new Vector2f(x, z);
 		for (int i = 0; i < Island.MAXSIZE; i++) // x axis
@@ -194,7 +233,7 @@ public class IslandGenerator
 				{
 					if (force || (!force && currentIsland.getVoxelId(i, y, j) == Voxel.AIR.getId()))
 					{
-						currentIsland.setVoxel(i, y, j, b);
+						currentIsland.setVoxel(i, y, j, b[(int) (Math.random() * b.length)]);
 					}
 				}
 			}
