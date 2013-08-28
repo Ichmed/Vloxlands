@@ -25,7 +25,6 @@ public class IslandGenerator
 	
 	public static Island generatePerfectIsland()
 	{
-		CFG.p("------------------------------------------------------------------");
 		long time = System.currentTimeMillis();
 		
 		int radius = (int) (Math.random() * 32) + 32;
@@ -58,15 +57,11 @@ public class IslandGenerator
 		currentIsland.calculateWeight();
 		
 		float weightNeededToUplift = currentIsland.weight / Map.calculateUplift(0);
-		CFG.p(weightNeededToUplift);
-		while (weightNeededToUplift > 100) // after that, place manually
+		while (weightNeededToUplift > 100)
 		{
 			int index = (int) (Math.random() * CRYSTALS.length);
 			weightNeededToUplift -= createCrystalVein(index);
 		}
-		
-		CFG.p(weightNeededToUplift + " left");
-		
 		int[] amounts = new int[CRYSTALS.length];
 		
 		for (int i = 0; i < amounts.length; i++)
@@ -80,12 +75,11 @@ public class IslandGenerator
 		currentIsland.calculateWeight();
 		currentIsland.calculateUplift();
 		
-		CFG.p(weightNeededToUplift + " left");
+		currentIsland.initBalance = (currentIsland.uplift * Map.calculateUplift(0) - currentIsland.weight) / 100000f;
 		
 		currentIsland.grassify();
 		
 		CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
-		CFG.p("------------------------------------------------------------------");
 		return currentIsland;
 	}
 	
@@ -117,7 +111,7 @@ public class IslandGenerator
 		{
 			case 0: // qubic
 			{
-				depth = height = width = (int) ((Math.random() * 3) + Math.pow(index, 2));
+				depth = height = width = (int) ((Math.random() * 3) + (index + 1)* 2);
 				
 				float maxDistance = (float) (width * Math.sqrt(3)) / 2;
 				

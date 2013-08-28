@@ -21,7 +21,7 @@ public class Island
 	
 	Vector3f pos;
 	
-	public float weight, uplift;
+	public float weight, uplift, initBalance = 0;
 	
 	public Island()
 	{
@@ -41,7 +41,7 @@ public class Island
 	
 	public void onTick()
 	{
-		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f, 0);
+		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance, 0);
 	}
 	
 	public void calculateWeight()
