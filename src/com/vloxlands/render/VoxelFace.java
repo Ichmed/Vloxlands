@@ -47,16 +47,16 @@ public class VoxelFace
 			glBegin(GL_QUADS);
 			{
 				glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
-				glNormal3d(0, 0, 1);
+				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
-				glNormal3d(0, 0, 1);
+				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
-				glNormal3d(0, 0, 1);
+				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				glTexCoord2d(texX * squareSize, texY * squareSize);
-				glNormal3d(0, 0, 1);
+				glNormal3d(0, 0, -1);
 				glVertex3f(bl.x, bl.y, bl.z);
 			}
 			glEnd();
