@@ -187,7 +187,7 @@ public class Island
 				{
 					if (getVoxelId(i, j, k) == Voxel.DIRT.getId())
 					{
-						if (getVoxelId(i, j - 1, k) == Voxel.AIR.getId())
+						if (getVoxelId(i, j + 1, k) == Voxel.AIR.getId())
 						{
 							setVoxel(i, j, k, Voxel.GRASS.getId());
 						}
