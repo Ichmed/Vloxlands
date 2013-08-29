@@ -37,7 +37,7 @@ public class Model
 	{}
 	
 	/**
-	 * renders the Model with the textures, color, etc. specified in the .obj and the .mtl file
+	 * renders the Model with the textures, color, etc.
 	 */
 	public void renderModel()
 	{

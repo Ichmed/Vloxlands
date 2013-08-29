@@ -12,6 +12,9 @@ import org.newdawn.slick.Color;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.render.model.Model;
+import com.vloxlands.render.util.ModelLoader;
+import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
@@ -30,6 +33,8 @@ public class Game
 	public int frames = 21;
 	boolean showFPS = false;
 	
+	Model m = ModelLoader.loadModel("graphics/models/crystal.obj");
+	
 	Scene scene;
 	
 	public float cameraSpeed = 0.1f;
@@ -46,7 +51,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		// ShaderLoader.useProgram("graphics/shaders/", "default");
+		ShaderLoader.useProgram("graphics/shaders/", "default");
 		RenderAssistant.enable(GL_LIGHTING);
 		
 		moveCamera();
@@ -82,6 +87,14 @@ public class Game
 				glVertex3f(lightPos.x, lightPos.y, lightPos.z);
 			}
 			glEnd();
+		}
+		glPopMatrix();
+		
+
+		glPushMatrix();
+		{
+			glTranslated(128, 160, 128);
+			m.renderModel();
 		}
 		glPopMatrix();
 		

@@ -3,6 +3,8 @@ package com.vloxlands.game.world;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import com.vloxlands.game.entity.Entity;
 import com.vloxlands.render.RenderThread;
 
@@ -19,7 +21,11 @@ public class Map
 	public void render()
 	{
 		for (Island i : islands)
+		{
+			GL11.glPushMatrix();
 			i.render();
+			GL11.glPopMatrix();			
+		}
 	}
 	
 	public void onTick()
