@@ -114,7 +114,7 @@ public class Compressor
 				}
 			}
 			
-			baos.write(new byte[] {  same, active });
+			baos.write(new byte[] { same, active });
 			
 			return baos.toByteArray();
 		}

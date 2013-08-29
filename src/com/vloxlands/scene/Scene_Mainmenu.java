@@ -2,10 +2,11 @@ package com.vloxlands.scene;
 
 import java.awt.Font;
 
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.Display;
 
-import com.vloxlands.ui.*;
-import com.vloxlands.util.*;
+import com.vloxlands.ui.Button;
+import com.vloxlands.ui.Label;
+import com.vloxlands.util.GUIAssistant;
 
 import de.dakror.universion.UniVersion;
 

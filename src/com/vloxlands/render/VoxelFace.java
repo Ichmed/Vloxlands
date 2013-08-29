@@ -1,13 +1,12 @@
 package com.vloxlands.render;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import static org.lwjgl.opengl.GL11.*;
+
+import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.Direction;
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class VoxelFace

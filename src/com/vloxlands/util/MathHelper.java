@@ -88,19 +88,20 @@ public class MathHelper
 		return v;
 	}
 	
-	public static Vector3f rotateVector3f(Vector3f npos, Vector3f nrot, float rotation) {
-	   Matrix4f matrix = new Matrix4f();
-
-	   Vector3f pos = new Vector3f(npos);
-
-	   matrix.m03 = pos.x;
-	   matrix.m13 = pos.y;
-	   matrix.m23 = pos.z;
-
-	   Vector3f rot = new Vector3f(nrot);
-
-	   Matrix4f.rotate((float) Math.toRadians(rotation), rot, matrix, matrix);
-
-	   return new Vector3f(matrix.m03, matrix.m13, matrix.m23);
+	public static Vector3f rotateVector3f(Vector3f npos, Vector3f nrot, float rotation)
+	{
+		Matrix4f matrix = new Matrix4f();
+		
+		Vector3f pos = new Vector3f(npos);
+		
+		matrix.m03 = pos.x;
+		matrix.m13 = pos.y;
+		matrix.m23 = pos.z;
+		
+		Vector3f rot = new Vector3f(nrot);
+		
+		Matrix4f.rotate((float) Math.toRadians(rotation), rot, matrix, matrix);
+		
+		return new Vector3f(matrix.m03, matrix.m13, matrix.m23);
 	}
 }

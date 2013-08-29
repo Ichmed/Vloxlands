@@ -2,7 +2,7 @@ package com.vloxlands.render.model;
 
 import org.lwjgl.util.vector.Vector3f;
 
-public class Face 
+public class Face
 {
 	public final Vector3f[] points;
 	

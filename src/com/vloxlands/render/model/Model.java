@@ -17,13 +17,13 @@ public class Model
 	public List<Vector3f> vertices = new ArrayList<Vector3f>();
 	public List<Vector3f> normals = new ArrayList<Vector3f>();
 	public List<Vector2f> tetxures = new ArrayList<Vector2f>();
-
+	
 	public HashMap<String, Material> materials = new HashMap<>();
-
+	
 	public boolean hasNormals = false;
 	public boolean hasTextures = false;
 	public boolean usesMaterials = false;
-
+	
 	/**
 	 * A list of all faces that make up this model, divided into smaller groups for use with materials
 	 */
@@ -32,11 +32,10 @@ public class Model
 	 * A list of all materials used by this model
 	 */
 	public List<String> faceMaterials = new ArrayList<>();
-
+	
 	public Model()
-	{
-	}
-
+	{}
+	
 	/**
 	 * renders the Model with the textures, color, etc. specified in the .obj and the .mtl file
 	 */
@@ -51,18 +50,18 @@ public class Model
 				if (m.hasTexture) RenderAssistant.bindTexture(m.texturePath);
 				else glDisable(GL_TEXTURE_2D);
 				
-//				glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
-
-				glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[]{m.ambientColor.x, m.ambientColor.y, m.ambientColor.z, m.ambientColor.w}));
-				glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[]{m.diffuseColor.x, m.diffuseColor.y, m.diffuseColor.z, m.diffuseColor.w}));
-				glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[]{m.specularColor.x, m.specularColor.y, m.specularColor.z, m.specularColor.w}));
+				// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
 				
-				glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);							
+				glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { m.ambientColor.x, m.ambientColor.y, m.ambientColor.z, m.ambientColor.w }));
+				glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { m.diffuseColor.x, m.diffuseColor.y, m.diffuseColor.z, m.diffuseColor.w }));
+				glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { m.specularColor.x, m.specularColor.y, m.specularColor.z, m.specularColor.w }));
+				
+				glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);
 			}
 			glBegin(GL_TRIANGLES);
 			for (Face face : this.faces.get(i))
 			{
-				for(int j = 0; j < face.points.length; j++)
+				for (int j = 0; j < face.points.length; j++)
 				{
 					if (this.hasNormals)
 					{
@@ -85,24 +84,23 @@ public class Model
 	}
 	
 	/**
-	 * 
 	 * @return Returns a list of all faces used by this model without dividing them into material-groups
 	 */
 	public List<Face> getFaceList()
 	{
 		List<Face> l = new ArrayList<>();
-		for(List<Face> p : this.faces)
+		for (List<Face> p : this.faces)
 		{
-			for(Face f : p)
+			for (Face f : p)
 				l.add(f);
 		}
-		return l;		
+		return l;
 	}
 	
 	public Vector3f[] getVerteciesAsArray()
 	{
 		Vector3f[] v = new Vector3f[this.vertices.size()];
-		for(int i = 0; i < this.vertices.size(); i++)
+		for (int i = 0; i < this.vertices.size(); i++)
 		{
 			Vector3f w = this.vertices.get(i);
 			v[i] = new Vector3f(w.x, w.y, w.z);

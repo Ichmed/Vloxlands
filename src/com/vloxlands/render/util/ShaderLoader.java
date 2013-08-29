@@ -8,8 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-import com.vloxlands.settings.CFG;
-
 public class ShaderLoader
 {
 	

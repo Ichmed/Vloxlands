@@ -45,13 +45,17 @@ public class Island
 	public Island clone()
 	{
 		Island island = new Island();
-		for (int i = 0; i < MAXSIZE; i++) {
-			for (int j = 0; j < MAXSIZE; j++) {
+		for (int i = 0; i < MAXSIZE; i++)
+		{
+			for (int j = 0; j < MAXSIZE; j++)
+			{
 				island.voxels[i][j] = Arrays.copyOf(voxels[i][j], MAXSIZE);
 			}
 		}
-		for (int i = 0; i < MAXSIZE; i++) {
-			for (int j = 0; j < MAXSIZE; j++) {
+		for (int i = 0; i < MAXSIZE; i++)
+		{
+			for (int j = 0; j < MAXSIZE; j++)
+			{
 				island.voxelMetadata[i][j] = Arrays.copyOf(voxelMetadata[i][j], MAXSIZE);
 			}
 		}

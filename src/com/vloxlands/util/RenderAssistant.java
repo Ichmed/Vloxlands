@@ -167,7 +167,7 @@ public class RenderAssistant
 	
 	public static void enable(int key)
 	{
-		if(key == GL_LIGHTING)
+		if (key == GL_LIGHTING)
 		{
 			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
 			ARBShaderObjects.glUniform1fARB(location, 1);
@@ -176,7 +176,7 @@ public class RenderAssistant
 	
 	public static void disable(int key)
 	{
-		if(key == GL_LIGHTING)
+		if (key == GL_LIGHTING)
 		{
 			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
 			ARBShaderObjects.glUniform1fARB(location, 0);

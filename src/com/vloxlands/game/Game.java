@@ -46,7 +46,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		//ShaderLoader.useProgram("graphics/shaders/", "default");
+		// ShaderLoader.useProgram("graphics/shaders/", "default");
 		RenderAssistant.enable(GL_LIGHTING);
 		
 		moveCamera();
@@ -112,7 +112,7 @@ public class Game
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
 		{
-			lightPos .z--;
+			lightPos.z--;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
 		{
@@ -125,7 +125,7 @@ public class Game
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
 		else cameraSpeed = 0.1f;
 		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { lightPos.x, lightPos.y, lightPos.z, 1 }));
-
+		
 		
 		currentMap.onTick();
 		
@@ -172,18 +172,18 @@ public class Game
 		glEnable(GL_LINE_SMOOTH);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
-//		glEnable(GL_LIGHTING);
+		
+		// glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1f }));
 		glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
-
-		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[]{1, 0, 0, 1}));
-		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[]{1, 1, 1, 1}));
-		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[]{0.1f, 0.1f, 0.1f, 1}));
+		
+		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
+		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
+		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
 	}
 	
 	public void moveCamera()
