@@ -182,4 +182,10 @@ public class RenderAssistant
 			ARBShaderObjects.glUniform1fARB(location, 0);
 		}
 	}
+	
+	public static void setUniform(String name, float value)
+	{
+		int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name);
+		ARBShaderObjects.glUniform1fARB(location, value);
+	}
 }

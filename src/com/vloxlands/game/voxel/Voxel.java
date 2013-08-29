@@ -14,13 +14,14 @@ public class Voxel
 	private byte id;
 	private float weight = 1f;
 	private float uplift = 0;
+	private float brightness;
 	
 	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(0).setOpaque(false).setWeight(0);
 	public static final Voxel STONE = new Voxel(-127).setName("Stone").setTextureIndex(1).setSmoothness(0.1f);
 	public static final Voxel DIRT = new Voxel(-126).setName("Dirt").setTextureIndex(34).setSmoothness(0.3f);
-	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(1);
-	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(5);
-	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Strong Crystal").setTextureIndex(67).setOpaque(false).setWeight(0).setUplift(20);
+	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(3).setOpaque(false).setWeight(0).setUplift(1).setBrightness(0.2f);
+	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(35).setOpaque(false).setWeight(0).setUplift(5).setBrightness(0.5f);
+	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Strong Crystal").setTextureIndex(67).setOpaque(false).setWeight(0).setUplift(20).setBrightness(0.7f);
 	public static final Voxel GRASS = new Voxel(-122).setName("Grass").setTextureIndex(2).setSmoothness(0.5f);
 	
 	public Voxel(int id)
@@ -152,6 +153,17 @@ public class Voxel
 	public Voxel setUplift(float uplift)
 	{
 		this.uplift = uplift;
+		return this;
+	}
+
+	public float getBrightness()
+	{
+		return brightness;
+	}
+
+	public Voxel setBrightness(float brightness)
+	{
+		this.brightness = brightness;
 		return this;
 	}
 }

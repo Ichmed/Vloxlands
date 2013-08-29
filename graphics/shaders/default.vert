@@ -1,5 +1,6 @@
 varying vec3 color;
 uniform float lighting;
+uniform float faceBrightness;
 
 void main()
 {
@@ -16,6 +17,7 @@ void main()
     
 		color.rgb = diffuseLightIntensity * gl_FrontMaterial.diffuse.rgb;
  		color += gl_FrontMaterial.ambient.rgb + gl_LightModel.ambient.rgb;
+ 		color += faceBrightness;
     
 		vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));
     
