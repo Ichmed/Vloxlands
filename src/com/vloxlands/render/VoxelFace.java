@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -27,15 +28,17 @@ public class VoxelFace
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
 		
-		rotate();
+		if (dir != Direction.WEST && dir != Direction.EAST) rotate();
 	}
 	
 	private void rotate()
 	{
-		float c = Vector3f.dot(Direction.EAST.dir, dir.dir);
+		CFG.p(dir);
+		float theta = (float) Math.acos(Vector3f.dot(Direction.WEST.dir, dir.dir));
+		float c = (float) Math.cos(theta);
 		
-		Vector3f axis = Vector3f.cross(Direction.EAST.dir, dir.dir, null);
-		float s = (float) Math.sqrt(1 - Math.pow(c, 2));
+		Vector3f axis = (Vector3f) Vector3f.cross(Direction.WEST.dir, dir.dir, null).normalise();
+		float s = (float) Math.sin(theta);
 		float C = 1 - c;
 		
 		Matrix3f m = new Matrix3f();
@@ -66,24 +69,27 @@ public class VoxelFace
 			
 			glTranslatef(pos.x, pos.y, pos.z);
 			
-//			 Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
-//			 glTranslatef(0.5f, 0.5f, 0.5f);
-//			 glRotatef(v.x, 1, 0, 0);
-//			 glRotatef(v.y, 0, 1, 0);
-//			 glRotatef(v.z, 0, 0, 1);
-//			 glTranslatef(-0.5f, -0.5f, -0.5f);
-			
+			// Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
+			// glTranslatef(0.5f, 0.5f, 0.5f);
+			// glRotatef(v.x, 1, 0, 0);
+//			 glRotatef(180, 1, 0, 1);
+			// glRotatef(v.z, 0, 0, 1);
+			// glTranslatef(-0.5f, -0.5f, -0.5f);
 			glBegin(GL_QUADS);
 			{
+				
 				glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
+				
 				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
+				
 				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
+				
 				glTexCoord2d(texX * squareSize, texY * squareSize);
 				glNormal3d(0, 0, -1);
 				glVertex3f(bl.x, bl.y, bl.z);
