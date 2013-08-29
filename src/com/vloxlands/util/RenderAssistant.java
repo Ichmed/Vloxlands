@@ -13,11 +13,14 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import com.vloxlands.render.util.ShaderLoader;
+import com.vloxlands.settings.CFG;
 
 //import render.Model;
 //import util.math.MathHelper;
@@ -25,6 +28,8 @@ import com.vloxlands.render.util.ShaderLoader;
 public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+	
+	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition;
 	
 	// public static HashMap<String, Model> models = new HashMap<>();
 	
@@ -183,9 +188,40 @@ public class RenderAssistant
 		}
 	}
 	
-	public static void setUniform(String name, float value)
+	public static int getUniformLocation(String name)
 	{
-		int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name);
-		ARBShaderObjects.glUniform1fARB(location, value);
+		CFG.p(ShaderLoader.getCurrentProgram());
+		HashMap<String, Integer> h = uniformPosition
+				.get((Integer)ShaderLoader
+						.getCurrentProgram());
+		if(h == null) h = new HashMap<>();
+		if(h.get(name) == null) h.put(name, GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name));
+		return (int) h.get(name);
+		
+	}
+	
+	public static void setUniform1f(String name, float value)
+	{
+		ARBShaderObjects.glUniform1fARB(getUniformLocation(name), value);
+	}
+	
+	public static void setUniform2f(String name, Vector2f v)
+	{
+		setUniform2f(name, v.x, v.y);
+	}
+	
+	public static void setUniform2f(String name, float a, float b)
+	{
+		ARBShaderObjects.glUniform2fARB(getUniformLocation(name), a, b);
+	}
+	
+	public static void setUniform3f(String name, Vector3f v)
+	{
+		setUniform3f(name, v.x, v.y, v.z);
+	}
+	
+	public static void setUniform3f(String name, float a, float b, float c)
+	{
+		ARBShaderObjects.glUniform3fARB(getUniformLocation(name), a, b, c);
 	}
 }

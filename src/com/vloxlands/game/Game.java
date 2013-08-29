@@ -53,7 +53,7 @@ public class Game
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		
-//		ShaderLoader.useProgram("graphics/shaders/", "default");
+		ShaderLoader.useProgram("graphics/shaders/", "default");
 		if(CFG.LIGHTING)RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
 
@@ -125,6 +125,7 @@ public class Game
 			lightPos.x = camera.position.x;
 			lightPos.y = camera.position.y;
 			lightPos.z = camera.position.z;
+			RenderAssistant.setUniform3f("lightPosition", this.lightPos);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
@@ -144,8 +145,7 @@ public class Game
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
 		else cameraSpeed = 0.1f;
-		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { lightPos.x, lightPos.y, lightPos.z, 1 }));
-		
+
 		
 		currentMap.onTick();
 		
