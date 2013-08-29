@@ -28,7 +28,7 @@ public class IslandGenerator
 	public static final boolean OVR_R = false;
 	
 	
-	public static final float[] ISLAND_BEZIER = new float[] { 0.6f, 0.6f, 0.7f, 0.5f, 0.8f, 0.5f, 1, 0.3f };
+	public static final float[] ISLAND_BEZIER = new float[] { 0.6f, 0.4f, 0.7f, 0.5f, 0.8f, 0.5f, 1, 0.3f };
 	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 1f, 0.5f, 0.5f, 0, 0, 0 };
 	
 	public static final float MIN_VEIN_DISTANCE = 30;
@@ -43,7 +43,7 @@ public class IslandGenerator
 		
 		int radius = getRandomRadius(ISLAND_MIDDLE);
 		
-		Island L = generatePerfectIsland(128, Island.MAXSIZE / 2, 128, radius);
+		Island L = generatePerfectIsland(128, Island.MAXSIZE / 2 + 4, 128, radius);
 		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.MAXSIZE / 2, 128, radius);
 		
 		Island m = mergeIslandData(L, R, OVR_L);
