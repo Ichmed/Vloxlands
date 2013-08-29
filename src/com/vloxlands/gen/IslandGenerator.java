@@ -72,7 +72,7 @@ public class IslandGenerator
 		generateBezier(island, ISLAND_BEZIER, x, z, radius, y, topLayers, createRatio(new byte[] { Voxel.DIRT.getId(), Voxel.STONE.getId() }, new int[] { 10, 1 }), true);
 		
 		// -- Spikes -- //
-		for (int i = 0; i < radius * 4; i++)
+		for (int i = 0; i < radius; i++)
 		{
 			int MAXRAD = (int) ((radius * 0.3f) + 2);
 			int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;

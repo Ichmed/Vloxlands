@@ -37,7 +37,7 @@ public class Vloxlands
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
 			Display.setDisplayMode(new DisplayMode(1080, 720));
-			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResource("/img/logo16.png")), Assistant.loadImage(Vloxlands.class.getResource("/img/logo32.png")) });
+			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResource("graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResource("graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			Display.create();
 			Game.initGLSettings();
