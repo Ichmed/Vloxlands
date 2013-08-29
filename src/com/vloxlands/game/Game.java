@@ -56,6 +56,8 @@ public class Game
 //		ShaderLoader.useProgram("graphics/shaders/", "default");
 		if(CFG.LIGHTING)RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
 		
@@ -81,7 +83,6 @@ public class Game
 		
 		glPushMatrix();
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			currentMap.render();
 			
 			glPointSize(10);
