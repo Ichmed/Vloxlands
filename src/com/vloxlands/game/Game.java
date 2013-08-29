@@ -16,6 +16,7 @@ import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.GUIAssistant;
 import com.vloxlands.util.MathHelper;
@@ -51,8 +52,9 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-//		ShaderLoader.useProgram("graphics/shaders/", "default");
-		RenderAssistant.enable(GL_LIGHTING);
+		ShaderLoader.useProgram("graphics/shaders/", "default");
+		if(CFG.LIGHTING)RenderAssistant.enable(GL_LIGHTING);
+		else RenderAssistant.disable(GL_LIGHTING);
 		
 		moveCamera();
 		
@@ -107,7 +109,10 @@ public class Game
 		GUIAssistant.renderComponents();
 		
 		while (Keyboard.next())
+		{
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
+			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
+		}
 		
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
 		
@@ -177,7 +182,7 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
-		// glEnable(GL_ALPHA_TEST);
+		glEnable(GL_ALPHA_TEST);
 		
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_POINT_SMOOTH);
@@ -186,7 +191,7 @@ public class Game
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		
-		// glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1f }));
 		glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));

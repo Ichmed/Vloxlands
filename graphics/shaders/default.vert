@@ -20,12 +20,14 @@ void main()
  		color += faceBrightness;
     
 		vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));
-    
+		
 		float specular = max(0.0, dot(surfaceNormal, reflectionDirection));
     
 		if(diffuseLightIntensity != 0.0)
 		{
-  		}
+			float fspecular = pow(specular, gl_FrontMaterial.shininess);
+			color.rgb += (gl_FrontMaterial.specular.rgb * fspecular);
+		}
     }
     else
     {
