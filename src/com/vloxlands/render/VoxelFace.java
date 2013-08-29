@@ -9,9 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class VoxelFace
@@ -28,30 +26,23 @@ public class VoxelFace
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
 		
-//		if (dir != Direction.WEST && dir != Direction.EAST) rotate();
+		rotate();
 	}
 	
-	private void rotate()
+	public void rotate()
 	{
-		CFG.p(dir);
-		float theta = (float) Math.acos(Vector3f.dot(Direction.WEST.dir, dir.dir));
-		float c = (float) Math.cos(theta);
+		Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
 		
-		Vector3f axis = (Vector3f) Vector3f.cross(Direction.WEST.dir, dir.dir, null).normalise();
-		float s = (float) Math.sin(theta);
-		float C = 1 - c;
+		Matrix3f rotX = new Matrix3f();
+		rotX.loadTranspose(FloatBuffer.wrap(new float[] { 1, 0, 0, 0, (float) Math.cos(v.x), (float) -Math.sin(v.x), 0, (float) Math.sin(v.x), (float) Math.cos(v.x) }));
 		
-		Matrix3f m = new Matrix3f();
-		m.loadTranspose(FloatBuffer.wrap(new float[] { //
-		axis.x * axis.x * C + c /*    */, axis.x * axis.y * C - axis.z * s /*   */, axis.x * axis.z * C + axis.y * s, //
-		axis.y * axis.x * C + axis.z * s, axis.y * axis.y * C + c /*            */, axis.y * axis.z * C - axis.x * s, //
-		axis.z * axis.x * C - axis.y * s, axis.z * axis.y * C + axis.x * s /*   */, axis.z * axis.z * C + c //
-		}));
+		Matrix3f rotY = new Matrix3f();
+		rotY.loadTranspose(FloatBuffer.wrap(new float[] { (float) Math.cos(v.y), 0, (float) Math.sin(v.y), 0, 1, 0, (float) -Math.sin(v.y), 0, (float) Math.cos(v.y) }));
 		
-		tl = MathHelper.vector3fDotMatrix3f(tl, m);
-		tr = MathHelper.vector3fDotMatrix3f(tr, m);
-		bl = MathHelper.vector3fDotMatrix3f(bl, m);
-		br = MathHelper.vector3fDotMatrix3f(br, m);
+		Matrix3f rotZ = new Matrix3f();
+		rotZ.loadTranspose(FloatBuffer.wrap(new float[] { (float) Math.cos(v.z), (float) -Math.sin(v.z), 0, (float) Math.sin(v.z), (float) Math.cos(v.z), 0, 0, 0, 1 }));
+		
+		
 	}
 	
 	public void render()
@@ -69,12 +60,12 @@ public class VoxelFace
 			
 			glTranslatef(pos.x, pos.y, pos.z);
 			
-			 Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
-			 glTranslatef(0.5f, 0.5f, 0.5f);
-			 glRotatef(v.x, 1, 0, 0);
-			 glRotatef(v.y, 0, 1, 0);
-			 glRotatef(v.z, 0, 0, 1);
-			 glTranslatef(-0.5f, -0.5f, -0.5f);
+			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
+			glTranslatef(0.5f, 0.5f, 0.5f);
+			glRotatef(v.x, 1, 0, 0);
+			glRotatef(v.y, 0, 1, 0);
+			glRotatef(v.z, 0, 0, 1);
+			glTranslatef(-0.5f, -0.5f, -0.5f);
 			glBegin(GL_QUADS);
 			{
 				
