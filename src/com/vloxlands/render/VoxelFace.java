@@ -68,6 +68,6 @@ public class VoxelFace
 	
 	public double getDistanceToCamera()
 	{
-		return MathHelper.subtractVector3f(Game.currentGame.camera.position, this.pos).length();
+		return Vector3f.sub(Game.currentGame.camera.position, this.pos, null).length();
 	}
 }
