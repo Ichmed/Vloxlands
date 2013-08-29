@@ -34,9 +34,6 @@ public class IslandGenerator
 	public static final float MIN_VEIN_DISTANCE = 30;
 	public static final Voxel[] CRYSTALS = { Voxel.STRONG_CRYSTAL, Voxel.MEDIUM_CRYSTAL, Voxel.WEAK_CRYSTAL };
 	
-	private static ArrayList<Vector3f> veinCenters;
-	
-	
 	public static Island generateIsland()
 	{
 		long time = System.currentTimeMillis();
@@ -65,10 +62,7 @@ public class IslandGenerator
 		
 		Island island = new Island();
 		
-		veinCenters = new ArrayList<>();
-		
 		// -- top Layers -- //
-		
 		generateBezier(island, ISLAND_BEZIER, x, z, radius, y, topLayers, createRatio(new byte[] { Voxel.DIRT.getId(), Voxel.STONE.getId() }, new int[] { 10, 1 }), true);
 		
 		// -- Spikes -- //
@@ -77,12 +71,14 @@ public class IslandGenerator
 			int MAXRAD = (int) ((radius * 0.3f) + 2);
 			int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
 			
-			int radiusAt0 = (int) (MathHelper.bezierCurve(ISLAND_BEZIER, 0).y * radius);
+			Vector2f highest = getHighestBezierValue(ISLAND_BEZIER);
 			
-			Vector2f pos = MathHelper.getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
-			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
+			int radiusAt0 = (int) (highest.y * radius);
+			
+			Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
+			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.4f);
 			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.STONE.getId());
-			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, y - 1, h, createRatio(new byte[] { Voxel.STONE.getId(), Voxel.DIRT.getId() }, new int[] { 5, 1 }), false);
+			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.STONE.getId(), Voxel.DIRT.getId() }, new int[] { 5, 1 }), false);
 		}
 		
 		for (int i = 0; i < Island.MAXSIZE; i++) // x axis
@@ -94,6 +90,23 @@ public class IslandGenerator
 		}
 		
 		return island;
+	}
+	
+	private static Vector2f getHighestBezierValue(float[] bezier)
+	{
+		float y = 0;
+		float x = 0;
+		for (float i = 0; i < 1; i += 0.01f)
+		{
+			Vector2f v = MathHelper.bezierCurve(bezier, i);
+			if (v.y > y)
+			{
+				x = i;
+				y = v.y;
+			}
+		}
+		
+		return new Vector2f(x, y);
 	}
 	
 	private static int getRandomRadius(int size)
@@ -191,20 +204,19 @@ public class IslandGenerator
 			}
 		}
 		
-		veinCenters.add(c);
 		return uplifted;
 	}
 	
-	@SuppressWarnings("unused")
-	private static float getDistanceToClosesetVein(Vector3f v)
+	public static Vector2f getRandomCircleInCircle(Vector2f center, int radius, int rad2)
 	{
-		float dist = Float.MAX_VALUE;
-		for (Vector3f vector : veinCenters)
+		Vector2f v = new Vector2f();
+		do
 		{
-			if (Vector3f.sub(v, vector, null).length() < dist) dist = Vector3f.sub(v, vector, null).length();
+			v = new Vector2f((int) Math.round(Math.random() * radius * 2 - radius + center.x), (int) Math.round(Math.random() * radius * 2 - radius + center.y));
 		}
+		while (Vector2f.sub(v, center, null).length() > radius - rad2);
 		
-		return dist;
+		return v;
 	}
 	
 	/**
