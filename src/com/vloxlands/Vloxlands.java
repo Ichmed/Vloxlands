@@ -1,9 +1,9 @@
 package com.vloxlands;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
@@ -37,7 +37,7 @@ public class Vloxlands
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
 			Display.setDisplayMode(new DisplayMode(1080, 720));
-			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResource("graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResource("graphics/logo/logo32.png")) });
+			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(new FileInputStream(new File("graphics/logo/logo16.png"))), Assistant.loadImage(new FileInputStream(new File("graphics/logo/logo32.png"))) });
 			Display.setTitle("Vloxlands");
 			Display.create();
 			Game.initGLSettings();
@@ -47,7 +47,7 @@ public class Vloxlands
 				Game.currentGame.gameLoop();
 			
 		}
-		catch (LWJGLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

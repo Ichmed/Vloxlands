@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
-import java.net.URL;
 import java.nio.ByteBuffer;
 
 import org.newdawn.slick.opengl.PNGDecoder;
@@ -24,11 +23,10 @@ public class Assistant
 		}
 	}
 	
-	public static ByteBuffer loadImage(URL url)
+	public static ByteBuffer loadImage(InputStream is)
 	{
 		try
 		{
-			InputStream is = url.openStream();
 			PNGDecoder decoder = new PNGDecoder(is);
 			ByteBuffer bb = ByteBuffer.allocateDirect(decoder.getWidth() * decoder.getHeight() * 4);
 			decoder.decode(bb, decoder.getWidth() * 4, PNGDecoder.RGBA);
