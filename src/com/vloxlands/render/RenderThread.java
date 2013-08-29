@@ -13,7 +13,16 @@ public class RenderThread extends Thread
 	public static final int GENERATE_FACES = 0;
 	public static final int GENERATE_ALL_FACES = 1;
 	
-	public void run(int arg, Object... args)
+	int arg;
+	Object[] args;
+	
+	public RenderThread(int arg, Object... args)
+	{
+		this.arg = arg;
+		this.args = args;
+	}
+	
+	public void run()
 	{
 		if (arg == GENERATE_FACES) generateFaces((Integer) args[0], (Island) args[1]);
 		else if (arg == GENERATE_ALL_FACES) generateAllFaces();

@@ -40,7 +40,7 @@ public class Map
 	
 	public void startMap()
 	{
-		new RenderThread().run(RenderThread.GENERATE_ALL_FACES);
+		new RenderThread(RenderThread.GENERATE_ALL_FACES).start();
 		for (Island i : islands)
 		{
 			i.calculateWeight();
