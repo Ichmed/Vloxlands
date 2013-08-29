@@ -7,7 +7,9 @@ public class CFG
 	public static final int PHASE = 0;
 	// -- debug -- //
 	public static boolean DEBUG = true;
-	public static boolean INTERNET;
+	public static boolean INTERNET;	
+	// -- options -- //
+	public static boolean LIGHTING = false;
 	
 	public static void p(Object p)
 	{
