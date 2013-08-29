@@ -28,7 +28,7 @@ public class VoxelFace
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
 		
-		if (dir != Direction.WEST && dir != Direction.EAST) rotate();
+//		if (dir != Direction.WEST && dir != Direction.EAST) rotate();
 	}
 	
 	private void rotate()
@@ -69,12 +69,12 @@ public class VoxelFace
 			
 			glTranslatef(pos.x, pos.y, pos.z);
 			
-			// Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
-			// glTranslatef(0.5f, 0.5f, 0.5f);
-			// glRotatef(v.x, 1, 0, 0);
-//			 glRotatef(180, 1, 0, 1);
-			// glRotatef(v.z, 0, 0, 1);
-			// glTranslatef(-0.5f, -0.5f, -0.5f);
+			 Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
+			 glTranslatef(0.5f, 0.5f, 0.5f);
+			 glRotatef(v.x, 1, 0, 0);
+			 glRotatef(v.y, 0, 1, 0);
+			 glRotatef(v.z, 0, 0, 1);
+			 glTranslatef(-0.5f, -0.5f, -0.5f);
 			glBegin(GL_QUADS);
 			{
 				

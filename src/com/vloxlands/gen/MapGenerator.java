@@ -16,7 +16,7 @@ public class MapGenerator
 			Island island = new Island();
 			island.setVoxel(128,128,128, Voxel.STONE.getId());
 			map.addIsland(island);
-			//map.addIsland(IslandGenerator.generateIsland());
+			map.addIsland(IslandGenerator.generateIsland());
 		}
 		return map;
 	}
