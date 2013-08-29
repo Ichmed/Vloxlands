@@ -68,7 +68,7 @@ public class MathHelper
 			s += (int) Math.round(point.x * 300 + 200) + "," + (int) Math.round(point.y * 300 + 200) + " ";
 		}
 		s += "\" />";
-		s += "<rect x=200 y=200 width=300 height=300 stroke='blue'></rect>";
+		s += "<rect x='200' y='200' width='300' height='300' stroke='blue' fill='none'></rect>";
 		
 		s += "</svg>";
 		

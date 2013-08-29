@@ -11,7 +11,7 @@ public class MapGenerator
 		
 		for (int i = 0; i < islands; i++)
 		{
-			map.addIsland(IslandGenerator.generatePerfectIsland());
+			map.addIsland(IslandGenerator.generateIsland());
 		}
 		return map;
 	}

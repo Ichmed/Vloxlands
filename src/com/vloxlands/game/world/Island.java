@@ -2,7 +2,7 @@ package com.vloxlands.game.world;
 
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -39,6 +39,23 @@ public class Island
 				}
 			}
 		}
+	}
+	
+	@Override
+	public Island clone()
+	{
+		Island island = new Island();
+		for (int i = 0; i < MAXSIZE; i++) {
+			for (int j = 0; j < MAXSIZE; j++) {
+				island.voxels[i][j] = Arrays.copyOf(voxels[i][j], MAXSIZE);
+			}
+		}
+		for (int i = 0; i < MAXSIZE; i++) {
+			for (int j = 0; j < MAXSIZE; j++) {
+				island.voxelMetadata[i][j] = Arrays.copyOf(voxelMetadata[i][j], MAXSIZE);
+			}
+		}
+		return island;
 	}
 	
 	public void onTick()
