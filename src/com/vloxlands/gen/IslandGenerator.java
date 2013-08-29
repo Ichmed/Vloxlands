@@ -28,8 +28,8 @@ public class IslandGenerator
 	public static final boolean OVR_R = false;
 	
 	
-	public static final float[] ISLAND_BEZIER = new float[] { 0.6f, 0.4f, 0.7f, 0.5f, 0.8f, 0.5f, 1, 0.3f };
-	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 1f, 0.5f, 0.5f, 0, 0, 0 };
+	public static final float[] ISLAND_BEZIER = new float[] { 1, 0.6f, 0.3f, 1, 0.7f, 0.4f, 0, 0.5f };
+	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0 };
 	
 	public static final float MIN_VEIN_DISTANCE = 30;
 	public static final Voxel[] CRYSTALS = { Voxel.STRONG_CRYSTAL, Voxel.MEDIUM_CRYSTAL, Voxel.WEAK_CRYSTAL };
@@ -48,9 +48,7 @@ public class IslandGenerator
 		
 		Island m = mergeIslandData(L, R, OVR_L);
 		
-		
 		generateCrystals(m, Island.MAXSIZE / 2);
-		
 		m.grassify();
 		
 		CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
@@ -74,7 +72,7 @@ public class IslandGenerator
 		generateBezier(island, ISLAND_BEZIER, x, z, radius, y, topLayers, createRatio(new byte[] { Voxel.DIRT.getId(), Voxel.STONE.getId() }, new int[] { 10, 1 }), true);
 		
 		// -- Spikes -- //
-		for (int i = 0; i < radius * 0.8f; i++)
+		for (int i = 0; i < radius * 4; i++)
 		{
 			int MAXRAD = (int) ((radius * 0.3f) + 2);
 			int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
