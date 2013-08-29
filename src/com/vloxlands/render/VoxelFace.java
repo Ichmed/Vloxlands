@@ -2,11 +2,15 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.nio.FloatBuffer;
+
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.Direction;
+import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
 public class VoxelFace
@@ -22,6 +26,29 @@ public class VoxelFace
 		this.dir = dir;
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
+		
+		rotate();
+	}
+	
+	private void rotate()
+	{
+		float c = Vector3f.dot(Direction.EAST.dir, dir.dir);
+		
+		Vector3f axis = Vector3f.cross(Direction.EAST.dir, dir.dir, null);
+		float s = (float) Math.sqrt(1 - Math.pow(c, 2));
+		float C = 1 - c;
+		
+		Matrix3f m = new Matrix3f();
+		m.loadTranspose(FloatBuffer.wrap(new float[] { //
+		axis.x * axis.x * C + c /*    */, axis.x * axis.y * C - axis.z * s /*   */, axis.x * axis.z * C + axis.y * s, //
+		axis.y * axis.x * C + axis.z * s, axis.y * axis.y * C + c /*            */, axis.y * axis.z * C - axis.x * s, //
+		axis.z * axis.x * C - axis.y * s, axis.z * axis.y * C + axis.x * s /*   */, axis.z * axis.z * C + c //
+		}));
+		
+		tl = MathHelper.vector3fDotMatrix3f(tl, m);
+		tr = MathHelper.vector3fDotMatrix3f(tr, m);
+		bl = MathHelper.vector3fDotMatrix3f(bl, m);
+		br = MathHelper.vector3fDotMatrix3f(br, m);
 	}
 	
 	public void render()
@@ -38,12 +65,13 @@ public class VoxelFace
 			glEnable(GL_BLEND);
 			
 			glTranslatef(pos.x, pos.y, pos.z);
-			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
-			glTranslatef(0.5f, 0.5f, 0.5f);
-			glRotatef(v.x, 1, 0, 0);
-			glRotatef(v.y, 0, 1, 0);
-			glRotatef(v.z, 0, 0, 1);
-			glTranslatef(-0.5f, -0.5f, -0.5f);
+			
+//			 Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
+//			 glTranslatef(0.5f, 0.5f, 0.5f);
+//			 glRotatef(v.x, 1, 0, 0);
+//			 glRotatef(v.y, 0, 1, 0);
+//			 glRotatef(v.z, 0, 0, 1);
+//			 glTranslatef(-0.5f, -0.5f, -0.5f);
 			
 			glBegin(GL_QUADS);
 			{

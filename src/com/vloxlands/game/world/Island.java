@@ -3,10 +3,8 @@ package com.vloxlands.game.world;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.IslandRenderer;
@@ -19,7 +17,7 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	
-	public IslandRenderer renderer = new IslandRenderer();
+	public IslandRenderer renderer = new IslandRenderer(this);
 	
 	Vector3f pos;
 	

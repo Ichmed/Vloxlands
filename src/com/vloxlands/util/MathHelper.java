@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -88,20 +88,12 @@ public class MathHelper
 		return v;
 	}
 	
-	public static Vector3f rotateVector3f(Vector3f npos, Vector3f nrot, float rotation)
+	public static Vector3f vector3fDotMatrix3f(Vector3f v, Matrix3f m)
 	{
-		Matrix4f matrix = new Matrix4f();
-		
-		Vector3f pos = new Vector3f(npos);
-		
-		matrix.m03 = pos.x;
-		matrix.m13 = pos.y;
-		matrix.m23 = pos.z;
-		
-		Vector3f rot = new Vector3f(nrot);
-		
-		Matrix4f.rotate((float) Math.toRadians(rotation), rot, matrix, matrix);
-		
-		return new Vector3f(matrix.m03, matrix.m13, matrix.m23);
+		return new Vector3f( //
+		m.m00 * v.x + m.m01 * v.y + m.m02 * v.z, //
+		m.m10 * v.x + m.m11 * v.y + m.m12 * v.z, //
+		m.m20 * v.x + m.m21 * v.y + m.m22 * v.z //
+		);
 	}
 }
