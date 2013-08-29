@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.render.IslandRenderer;
 import com.vloxlands.render.VoxelFace;
 
 public class Island
@@ -18,8 +19,7 @@ public class Island
 	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
 	
-	public HashMap<Vector4f, VoxelFace> faces = new HashMap<>();
-	public HashMap<Vector4f, VoxelFace> transparentFaces = new HashMap<>();
+	public IslandRenderer renderer = new IslandRenderer();
 	
 	Vector3f pos;
 	
@@ -185,9 +185,9 @@ public class Island
 	public void render()
 	{
 		glTranslatef(pos.x, pos.y, pos.z);
-		for (VoxelFace f : faces.values())
+		for (VoxelFace f : this.renderer.faces.values())
 			f.render();
-		for (VoxelFace f : transparentFaces.values())
+		for (VoxelFace f : this.renderer.transparentFaces.values())
 			f.render();
 	}
 	

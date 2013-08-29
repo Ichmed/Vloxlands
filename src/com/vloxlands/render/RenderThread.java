@@ -54,8 +54,8 @@ public class RenderThread extends Thread
 						if (!w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
-							if (v.isOpaque()) i.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
-							else i.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
+							if (v.isOpaque()) i.renderer.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
+							else i.renderer.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
 						}
 					}
 				}
@@ -82,8 +82,8 @@ public class RenderThread extends Thread
 							if (!w.isOpaque() && !(w == v))
 							{
 								VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), v);
-								if (v.isOpaque()) i.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
-								else i.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
+								if (v.isOpaque()) i.renderer.faces.put(new Vector4f(x, y, z, d.ordinal()), f);
+								else i.renderer.transparentFaces.put(new Vector4f(x, y, z, d.ordinal()), f);
 							}
 						}
 					}
