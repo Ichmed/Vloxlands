@@ -29,7 +29,7 @@ public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	
-	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition;
+	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition = new HashMap<>();
 	
 	// public static HashMap<String, Model> models = new HashMap<>();
 	
