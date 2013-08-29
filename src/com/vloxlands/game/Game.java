@@ -51,7 +51,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		ShaderLoader.useProgram("graphics/shaders/", "default");
+//		ShaderLoader.useProgram("graphics/shaders/", "default");
 		RenderAssistant.enable(GL_LIGHTING);
 		
 		moveCamera();
