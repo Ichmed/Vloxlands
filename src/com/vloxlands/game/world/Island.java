@@ -1,13 +1,14 @@
 package com.vloxlands.game.world;
 
-import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.*;
 
+import java.nio.IntBuffer;
 import java.util.Arrays;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.render.ChunkRenderer;
 
 public class Island
 {
@@ -17,10 +18,8 @@ public class Island
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	
-	/**
-	 * Holds the three VBO handles for each chunk.
-	 */
-	public int[][] chunks = new int[(int) Math.pow(SIZE / CHUNKSIZE, 3)][3];
+	public int chunk0ID;
+	public IntBuffer chunks = BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3));
 	
 	Vector3f pos;
 	
@@ -186,10 +185,8 @@ public class Island
 	public void render()
 	{
 		glTranslatef(pos.x, pos.y, pos.z);
-		for (int i = 0; i < chunks.length; i++)
-		{
-			ChunkRenderer.renderChunk(i, this);
-		}		
+		glListBase(chunk0ID);
+		glCallLists(chunks);
 	}
 	
 	public Vector3f getPos()
