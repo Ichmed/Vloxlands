@@ -32,7 +32,7 @@ public class Vloxlands
 		
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 		
-		Game.initGame();
+		
 		try
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
@@ -41,6 +41,8 @@ public class Vloxlands
 			Display.setTitle("Vloxlands");
 			Display.create();
 			Game.initGLSettings();
+
+			Game.initGame();
 			Game.currentGame.setScene(new Scene_Mainmenu());
 			
 			while (!Display.isCloseRequested())

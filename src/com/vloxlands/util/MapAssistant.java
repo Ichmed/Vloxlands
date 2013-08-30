@@ -87,7 +87,7 @@ public class MapAssistant
 	
 	public static int[] get3DIndex(int i)
 	{
-		return new int[] { (int) (i / (float) Math.pow(Island.MAXSIZE, 2)), (int) ((i / (float) Island.MAXSIZE) % Island.MAXSIZE), (i % Island.MAXSIZE) };
+		return new int[] { (int) (i / (float) Math.pow(Island.SIZE, 2)), (int) ((i / (float) Island.SIZE) % Island.SIZE), (i % Island.SIZE) };
 	}
 	
 	private static void saveIsland(Island island, OutputStream os) throws Exception

@@ -40,12 +40,12 @@ public class IslandGenerator
 		
 		int radius = getRandomRadius(ISLAND_MIDDLE);
 		
-		Island L = generatePerfectIsland(128, Island.MAXSIZE / 2 + 4, 128, radius);
-		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.MAXSIZE / 2, 128, radius);
+		Island L = generatePerfectIsland(128, Island.SIZE / 2 + 4, 128, radius);
+		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		
 		Island m = mergeIslandData(L, R, OVR_L);
 		
-		generateCrystals(m, Island.MAXSIZE / 2);
+		generateCrystals(m, Island.SIZE / 2);
 		m.grassify();
 		
 		CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
@@ -68,7 +68,7 @@ public class IslandGenerator
 		// -- Spikes -- //
 		for (int i = 0; i < radius; i++)
 		{
-			int MAXRAD = (int) ((radius * 0.3f) + 2);
+			int MAXRAD = (int) ((radius * 0.3f) + 5);
 			int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
 			
 			Vector2f highest = getHighestBezierValue(ISLAND_BEZIER);
@@ -76,14 +76,14 @@ public class IslandGenerator
 			int radiusAt0 = (int) (highest.y * radius);
 			
 			Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
-			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.4f);
+			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
 			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.STONE.getId());
 			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.STONE.getId(), Voxel.DIRT.getId() }, new int[] { 5, 1 }), false);
 		}
 		
-		for (int i = 0; i < Island.MAXSIZE; i++) // x axis
+		for (int i = 0; i < Island.SIZE; i++) // x axis
 		{
-			for (int j = 0; j < Island.MAXSIZE; j++) // z axis
+			for (int j = 0; j < Island.SIZE; j++) // z axis
 			{
 				if (island.getVoxelId(i, y, j) == Voxel.STONE.getId()) island.setVoxel(i, y, j, Voxel.DIRT.getId());
 			}
@@ -231,7 +231,7 @@ public class IslandGenerator
 		Vector3f v = new Vector3f();
 		do
 		{
-			v = new Vector3f((int) Math.round(Math.random() * Island.MAXSIZE), (int) Math.round(Math.random() * (Island.MAXSIZE - y)), (int) Math.round(Math.random() * Island.MAXSIZE));
+			v = new Vector3f((int) Math.round(Math.random() * Island.SIZE), (int) Math.round(Math.random() * (Island.SIZE - y)), (int) Math.round(Math.random() * Island.SIZE));
 		}
 		while (!naturalVoxels.contains((Byte) island.getVoxelId((int) v.x, (int) v.y, (int) v.z))/* || getDistanceToClosesetVein(v) < MIN_VEIN_DISTANCE */);
 		
@@ -253,9 +253,9 @@ public class IslandGenerator
 	private static void fillHorizontalCircle(Island island, int x, int y, int z, float radius, byte[] b, boolean force)
 	{
 		Vector2f center = new Vector2f(x, z);
-		for (int i = 0; i < Island.MAXSIZE; i++) // x axis
+		for (int i = 0; i < Island.SIZE; i++) // x axis
 		{
-			for (int j = 0; j < Island.MAXSIZE; j++) // z axis
+			for (int j = 0; j < Island.SIZE; j++) // z axis
 			{
 				Vector2f distance = Vector2f.sub(new Vector2f(i, j), center, null);
 				if (distance.length() < radius)
@@ -274,11 +274,11 @@ public class IslandGenerator
 		Island island = (rule) ? L.clone() : R.clone();
 		
 		Island ovr = (rule) ? R : L;
-		for (int x = 0; x < Island.MAXSIZE; x++)
+		for (int x = 0; x < Island.SIZE; x++)
 		{
-			for (int y = 0; y < Island.MAXSIZE; y++)
+			for (int y = 0; y < Island.SIZE; y++)
 			{
-				for (int z = 0; z < Island.MAXSIZE; z++)
+				for (int z = 0; z < Island.SIZE; z++)
 				{
 					if (ovr.getVoxelId(x, y, z) == Voxel.AIR.getId()) continue;
 					

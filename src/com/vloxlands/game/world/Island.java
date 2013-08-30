@@ -7,17 +7,20 @@ import java.util.Arrays;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.render.IslandRenderer;
-import com.vloxlands.render.VoxelFace;
+import com.vloxlands.render.ChunkRenderer;
 
 public class Island
 {
-	public static final int MAXSIZE = 256;
+	public static final int SIZE = 256;
+	public static final int CHUNKSIZE = 64;
 	
-	byte[][][] voxels = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
-	byte[][][] voxelMetadata = new byte[MAXSIZE][MAXSIZE][MAXSIZE];
+	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
+	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	
-	public IslandRenderer renderer = new IslandRenderer(this);
+	/**
+	 * Holds the three VBO handles for each chunk.
+	 */
+	public int[][] chunks = new int[(int) Math.pow(SIZE / CHUNKSIZE, 3)][3];
 	
 	Vector3f pos;
 	
@@ -26,11 +29,11 @@ public class Island
 	public Island()
 	{
 		pos = new Vector3f(0, 0, 0);
-		for (int i = 0; i < MAXSIZE; i++)
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < MAXSIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				for (int k = 0; k < MAXSIZE; k++)
+				for (int k = 0; k < SIZE; k++)
 				{
 					voxels[i][j][k] = Voxel.AIR.getId();
 					voxelMetadata[i][j][k] = -128;
@@ -43,18 +46,18 @@ public class Island
 	public Island clone()
 	{
 		Island island = new Island();
-		for (int i = 0; i < MAXSIZE; i++)
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < MAXSIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				island.voxels[i][j] = Arrays.copyOf(voxels[i][j], MAXSIZE);
+				island.voxels[i][j] = Arrays.copyOf(voxels[i][j], SIZE);
 			}
 		}
-		for (int i = 0; i < MAXSIZE; i++)
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < MAXSIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				island.voxelMetadata[i][j] = Arrays.copyOf(voxelMetadata[i][j], MAXSIZE);
+				island.voxelMetadata[i][j] = Arrays.copyOf(voxelMetadata[i][j], SIZE);
 			}
 		}
 		return island;
@@ -121,7 +124,7 @@ public class Island
 	
 	public byte getVoxelId(int x, int y, int z)
 	{
-		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return 0;
+		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return 0;
 		return voxels[x][y][z];
 	}
 	
@@ -132,7 +135,7 @@ public class Island
 	
 	public void setVoxel(int x, int y, int z, byte id)
 	{
-		if (x >= Island.MAXSIZE || y >= Island.MAXSIZE || z >= Island.MAXSIZE || x < 0 || y < 0 || z < 0) return;
+		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return;
 		
 		voxels[x][y][z] = id;
 	}
@@ -150,14 +153,14 @@ public class Island
 	
 	public byte[] getVoxels()
 	{
-		byte[] bytes = new byte[(int) Math.pow(MAXSIZE, 3)];
-		for (int i = 0; i < MAXSIZE; i++)
+		byte[] bytes = new byte[(int) Math.pow(SIZE, 3)];
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < MAXSIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				for (int k = 0; k < MAXSIZE; k++)
+				for (int k = 0; k < SIZE; k++)
 				{
-					bytes[(i * MAXSIZE + j) * MAXSIZE + k] = voxels[i][j][k];
+					bytes[(i * SIZE + j) * SIZE + k] = voxels[i][j][k];
 				}
 			}
 		}
@@ -166,14 +169,14 @@ public class Island
 	
 	public byte[] getVoxelMetadatas()
 	{
-		byte[] bytes = new byte[(int) Math.pow(MAXSIZE, 3)];
-		for (int i = 0; i < MAXSIZE; i++)
+		byte[] bytes = new byte[(int) Math.pow(SIZE, 3)];
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < MAXSIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				for (int k = 0; k < MAXSIZE; k++)
+				for (int k = 0; k < SIZE; k++)
 				{
-					bytes[(i * MAXSIZE + j) * MAXSIZE + k] = voxelMetadata[i][j][k];
+					bytes[(i * SIZE + j) * SIZE + k] = voxelMetadata[i][j][k];
 				}
 			}
 		}
@@ -183,10 +186,10 @@ public class Island
 	public void render()
 	{
 		glTranslatef(pos.x, pos.y, pos.z);
-		for (VoxelFace f : this.renderer.faces.values())
-			f.render();
-		for (VoxelFace f : this.renderer.transparentFaces.values())
-			f.render();
+		for (int i = 0; i < chunks.length; i++)
+		{
+			ChunkRenderer.renderChunk(i, this);
+		}		
 	}
 	
 	public Vector3f getPos()
@@ -202,11 +205,11 @@ public class Island
 	public int grassify()
 	{
 		int grassed = 0;
-		for (int i = 0; i < Island.MAXSIZE; i++)
+		for (int i = 0; i < Island.SIZE; i++)
 		{
-			for (int j = 0; j < Island.MAXSIZE; j++)
+			for (int j = 0; j < Island.SIZE; j++)
 			{
-				for (int k = 0; k < Island.MAXSIZE; k++)
+				for (int k = 0; k < Island.SIZE; k++)
 				{
 					if (getVoxelId(i, j, k) == Voxel.DIRT.getId())
 					{

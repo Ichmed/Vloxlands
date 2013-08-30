@@ -24,7 +24,6 @@ import com.vloxlands.util.RenderAssistant;
 
 public class Game
 {
-	public static final int CHUNK_SIZE = 64;
 	public static Game currentGame;
 	public static Map currentMap;
 	
@@ -161,7 +160,7 @@ public class Game
 		currentGame = new Game();
 		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();
-		currentGame.camera.setPosition(128.5f, 160, 128.5f);
+		currentGame.camera.setPosition(128.5f, 130, 128.5f);
 		currentGame.camera.setRotation(90, 0, 0);
 	}
 	

@@ -2,9 +2,7 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.util.vector.Matrix3f;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
@@ -18,6 +16,8 @@ public class VoxelFace
 	Vector3f pos;
 	int textureIndex;
 	Vector3f tl = new Vector3f(0, 1, 0), tr = new Vector3f(1, 1, 0), bl = new Vector3f(0, 0, 0), br = new Vector3f(1, 0, 0);
+	Vector3f[] verts;
+	Vector2f[] texVerts;
 	
 	public VoxelFace(Direction dir, Vector3f pos, Voxel v)
 	{
@@ -26,39 +26,84 @@ public class VoxelFace
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
 		
-		rotate();
+		place();
 	}
 	
-	public void rotate()
+	public void place()
 	{
-		Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
+		// -- vertices -- //
+		verts = new Vector3f[] { new Vector3f(bl), new Vector3f(br), new Vector3f(tr), new Vector3f(tl) };
+		switch (dir)
+		{
+			case WEST:
+			{
+				verts[3].z = 1;
+				verts[2].z = 1;
+				verts[0].z = 1;
+				verts[1].z = 1;
+				break;
+			}
+			case NORTH:
+			{
+				verts[3].z = 1;
+				verts[3].x = 1;
+				
+				verts[0].z = 1;
+				verts[0].x = 1;
+				break;
+			}
+			case SOUTH:
+			{
+				verts[3].z = 1;
+				verts[2].x = 0;
+				
+				verts[0].z = 1;
+				verts[1].x = 0;
+				break;
+			}
+			
+			case UP:
+			{
+				verts[3].z = 1;
+				verts[2].z = 1;
+				
+				verts[0].y = 1;
+				verts[1].y = 1;
+				break;
+			}
+			case DOWN:
+			{
+				verts[3].z = 1;
+				verts[3].y = 0;
+				verts[2].z = 1;
+				verts[2].y = 0;
+				break;
+			}
+			default:
+				break;
+		}
+		verts[0].translate(pos.x, pos.y, pos.z);
+		verts[1].translate(pos.x, pos.y, pos.z);
+		verts[2].translate(pos.x, pos.y, pos.z);
+		verts[3].translate(pos.x, pos.y, pos.z);
 		
-		Matrix3f rotX = new Matrix3f();
-		rotX.loadTranspose(FloatBuffer.wrap(new float[] { 1, 0, 0, 0, (float) Math.cos(v.x), (float) -Math.sin(v.x), 0, (float) Math.sin(v.x), (float) Math.cos(v.x) }));
+		// -- texture vertices -- //
+		int texX = textureIndex % 32;
+		int texY = textureIndex / 32;
 		
-		Matrix3f rotY = new Matrix3f();
-		rotY.loadTranspose(FloatBuffer.wrap(new float[] { (float) Math.cos(v.y), 0, (float) Math.sin(v.y), 0, 1, 0, (float) -Math.sin(v.y), 0, (float) Math.cos(v.y) }));
-		
-		Matrix3f rotZ = new Matrix3f();
-		rotZ.loadTranspose(FloatBuffer.wrap(new float[] { (float) Math.cos(v.z), (float) -Math.sin(v.z), 0, (float) Math.sin(v.z), (float) Math.cos(v.z), 0, 0, 0, 1 }));
-		
-		
+		float squareSize = 0.03125f;
+		texVerts = new Vector2f[] { new Vector2f(texX * squareSize, texY * squareSize), new Vector2f((texX + 1) * squareSize, texY * squareSize), new Vector2f((texX + 1) * squareSize, (texY + 1) * squareSize), new Vector2f(texX * squareSize, (texY + 1) * squareSize) };
 	}
 	
 	public void render()
 	{
-		int texX = textureIndex % 32;
-		int texY = textureIndex / 32;
-		
-		double squareSize = 0.03125d;
-		
 		RenderAssistant.bindTexture("graphics/textures/voxelTextures.png");
 		
 		glPushMatrix();
 		{
 			glEnable(GL_BLEND);
 			
-			glTranslatef(pos.x, pos.y, pos.z);
+			// glTranslatef(pos.x, pos.y, pos.z);
 			
 			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
 			glTranslatef(0.5f, 0.5f, 0.5f);
@@ -68,20 +113,19 @@ public class VoxelFace
 			glTranslatef(-0.5f, -0.5f, -0.5f);
 			glBegin(GL_QUADS);
 			{
-				
-				glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+				glTexCoord2f(texVerts[3].x, texVerts[3].y);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
-				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+				glTexCoord2f(texVerts[2].x, texVerts[2].y);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
-				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+				glTexCoord2f(texVerts[1].x, texVerts[1].y);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
-				glTexCoord2d(texX * squareSize, texY * squareSize);
+				glTexCoord2f(texVerts[0].x, texVerts[0].y);
 				glNormal3d(0, 0, -1);
 				glVertex3f(bl.x, bl.y, bl.z);
 			}

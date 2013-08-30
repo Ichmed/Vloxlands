@@ -1,7 +1,5 @@
 package com.vloxlands.gen;
 
-import com.vloxlands.game.voxel.Voxel;
-import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 
 public class MapGenerator
@@ -13,9 +11,9 @@ public class MapGenerator
 		
 		for (int i = 0; i < islands; i++)
 		{
-			Island island = new Island();
-			island.setVoxel(128,128,128, Voxel.STONE.getId());
-			map.addIsland(island);
+//			Island island = new Island();
+//			island.setVoxel(128,128,128, Voxel.STONE.getId());
+//			map.addIsland(island);
 			map.addIsland(IslandGenerator.generateIsland());
 		}
 		return map;

@@ -1,12 +1,12 @@
 package com.vloxlands.game.world;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import com.vloxlands.game.entity.Entity;
-import com.vloxlands.render.RenderThread;
+import com.vloxlands.render.ChunkRenderer;
 
 public class Map
 {
@@ -22,9 +22,9 @@ public class Map
 	{
 		for (Island i : islands)
 		{
-			GL11.glPushMatrix();
+			glPushMatrix();
 			i.render();
-			GL11.glPopMatrix();			
+			glPopMatrix();			
 		}
 	}
 	
@@ -46,9 +46,9 @@ public class Map
 	
 	public void startMap()
 	{
-		new RenderThread(RenderThread.GENERATE_ALL_FACES).start();
 		for (Island i : islands)
 		{
+			ChunkRenderer.initChunks(i);
 			i.calculateWeight();
 			i.calculateUplift();
 		}
