@@ -37,27 +37,34 @@ public class VoxelFace
 		{
 			case WEST:
 			{
-				verts[3].z = 1;
-				verts[2].z = 1;
 				verts[0].z = 1;
+				verts[0].y = 1;
+				
 				verts[1].z = 1;
+				verts[1].y = 1;
+				
+				verts[2].z = 1;
+				verts[2].y = 0;
+				
+				verts[3].z = 1;
+				verts[3].y = 0;
 				break;
 			}
 			case NORTH:
 			{
-				verts[3].z = 1;
-				verts[3].x = 1;
+				verts[1].z = 1;
+				verts[2].z = 1;
 				
-				verts[0].z = 1;
+				verts[3].x = 1;
 				verts[0].x = 1;
 				break;
 			}
 			case SOUTH:
 			{
 				verts[3].z = 1;
-				verts[2].x = 0;
-				
 				verts[0].z = 1;
+				
+				verts[2].x = 0;
 				verts[1].x = 0;
 				break;
 			}
@@ -73,9 +80,10 @@ public class VoxelFace
 			}
 			case DOWN:
 			{
-				verts[3].z = 1;
+				verts[0].z = 1;
+				verts[1].z = 1;
+				
 				verts[3].y = 0;
-				verts[2].z = 1;
 				verts[2].y = 0;
 				break;
 			}

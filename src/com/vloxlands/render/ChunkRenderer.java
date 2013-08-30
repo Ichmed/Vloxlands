@@ -63,7 +63,6 @@ public class ChunkRenderer
 		int cy = (index / cs) % cs;
 		int cz = (index % cs);
 		
-		glPushMatrix();
 		ArrayList<VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		int faces = faceLists[0].size() + faceLists[1].size();
 		
@@ -125,13 +124,10 @@ public class ChunkRenderer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		island.chunks[index] = new int[] { vboV, vboN, vboT };
-		
-		glPopMatrix();
 	}
 	
 	public static void renderChunk(int index, Island island)
 	{
-//		glDisable(GL_CULL_FACE);
 		RenderAssistant.bindTexture("graphics/textures/voxelTextures.png");
 		
 		glBindBuffer(GL_ARRAY_BUFFER, island.chunks[index][0]);
@@ -139,19 +135,17 @@ public class ChunkRenderer
 		
 		glBindBuffer(GL_ARRAY_BUFFER, island.chunks[index][1]);
 		glNormalPointer(GL_FLOAT, 0, 0);
-	
+		
 		glBindBuffer(GL_ARRAY_BUFFER, island.chunks[index][2]);
 		glTexCoordPointer(2, GL_FLOAT, 0, 0);
 		
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDrawArrays(GL_LINES, 0, 4);
+		glDrawArrays(GL_QUADS, 0, 4);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_VERTEX_ARRAY);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	
 	public static void initChunks(Island island)
