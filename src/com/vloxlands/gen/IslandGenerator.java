@@ -32,7 +32,7 @@ public class IslandGenerator
 	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0 };
 	
 	public static final float MIN_VEIN_DISTANCE = 30;
-	public static final Voxel[] CRYSTALS = { Voxel.STRONG_CRYSTAL, Voxel.MEDIUM_CRYSTAL, Voxel.WEAK_CRYSTAL };
+	public static final Voxel[] CRYSTALS = { Voxel.get("STRONG_CRYSTAL"), Voxel.get("MEDIUM_CRYSTAL"), Voxel.get("WEAK_CRYSTAL") };
 	
 	public static Island generateIsland()
 	{
@@ -40,11 +40,10 @@ public class IslandGenerator
 		
 		int radius = getRandomRadius(ISLAND_MEDIUM);
 		
-		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius + 12);
+		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
 		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		
 		Island m = mergeIslandData(L, R, OVR_L);
-		
 		generateCrystals(m, Island.SIZE / 2);
 		m.grassify();
 		
@@ -63,7 +62,7 @@ public class IslandGenerator
 		Island island = new Island();
 		
 		// -- top Layers -- //
-		generateBezier(island, ISLAND_BEZIER, x, z, radius, y, topLayers, createRatio(new byte[] { Voxel.DIRT.getId(), Voxel.STONE.getId() }, new int[] { 10, 1 }), true);
+		generateBezier(island, ISLAND_BEZIER, x, z, radius, y, topLayers, createRatio(new byte[] { Voxel.get("DIRT").getId(), Voxel.get("STONE").getId() }, new int[] { 10, 1 }), true);
 		
 		// -- Spikes -- //
 		for (int i = 0; i < radius; i++)
@@ -77,15 +76,15 @@ public class IslandGenerator
 			
 			Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
 			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
-			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.STONE.getId());
-			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.STONE.getId(), Voxel.DIRT.getId() }, new int[] { 5, 1 }), false);
+			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.get("STONE").getId());
+			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
 		}
 		
 		for (int i = 0; i < Island.SIZE; i++) // x axis
 		{
 			for (int j = 0; j < Island.SIZE; j++) // z axis
 			{
-				if (island.getVoxelId(i, y, j) == Voxel.STONE.getId()) island.setVoxel(i, y, j, Voxel.DIRT.getId());
+				if (island.getVoxelId(i, y, j) == Voxel.get("STONE").getId()) island.setVoxel(i, y, j, Voxel.get("DIRT").getId());
 			}
 		}
 		
@@ -135,15 +134,16 @@ public class IslandGenerator
 		while (weightNeededToUplift > 100)
 		{
 			int index = (int) (Math.random() * CRYSTALS.length);
-			weightNeededToUplift -= createCrystalVein(island, index, y);
+			weightNeededToUplift -= createCrystalVein(island, index, y, weightNeededToUplift);
 		}
-		int[] amounts = new int[CRYSTALS.length];
 		
+		int[] amounts = new int[CRYSTALS.length];
 		for (int i = 0; i < amounts.length; i++)
 		{
-			amounts[i] = (int) (weightNeededToUplift / CRYSTALS[i].getUplift());
+			amounts[i] = (int) (weightNeededToUplift / (float) CRYSTALS[i].getUplift());
 			weightNeededToUplift %= CRYSTALS[i].getUplift();
 		}
+		
 		placeCrystals(island, amounts, y);
 		
 		island.calculateWeight();
@@ -167,7 +167,7 @@ public class IslandGenerator
 	/**
 	 * @return uplifted
 	 */
-	private static float createCrystalVein(Island island, int index, int y)
+	private static float createCrystalVein(Island island, int index, int y, float maximum)
 	{
 		int type = 0;// (int) (Math.random() * 3);
 		int width = 0, height = 0, depth = 0;
@@ -192,8 +192,10 @@ public class IslandGenerator
 						{
 							if (Math.random() * maxDistance > Vector3f.sub(new Vector3f(i, j, k), c, null).length())
 							{
+								if (uplifted + CRYSTALS[index].getUplift() >= maximum) return uplifted;
+								
 								uplifted += CRYSTALS[index].getUplift();
-								if (island.getVoxelId(i, j, k) != Voxel.AIR.getId()) uplifted += Voxel.getVoxelForId(island.getVoxelId(i, j, k)).getWeight();
+								if (island.getVoxelId(i, j, k) != Voxel.get("AIR").getId()) uplifted += Voxel.getVoxelForId(island.getVoxelId(i, j, k)).getWeight();
 								
 								island.setVoxel(i, j, k, CRYSTALS[index].getId());
 							}
@@ -225,9 +227,8 @@ public class IslandGenerator
 	private static Vector3f pickRandomNaturalVoxel(Island island, int y)
 	{
 		ArrayList<Byte> naturalVoxels = new ArrayList<>();
-		naturalVoxels.add(Voxel.STONE.getId());
-		naturalVoxels.add(Voxel.DIRT.getId());
-		
+		naturalVoxels.add(Voxel.get("STONE").getId());
+		naturalVoxels.add(Voxel.get("DIRT").getId());
 		Vector3f v = new Vector3f();
 		do
 		{
@@ -260,7 +261,7 @@ public class IslandGenerator
 				Vector2f distance = Vector2f.sub(new Vector2f(i, j), center, null);
 				if (distance.length() < radius)
 				{
-					if (force || (!force && island.getVoxelId(i, y, j) == Voxel.AIR.getId()))
+					if (force || (!force && island.getVoxelId(i, y, j) == Voxel.get("AIR").getId()))
 					{
 						island.setVoxel(i, y, j, b[(int) (Math.random() * b.length)]);
 					}
@@ -280,7 +281,7 @@ public class IslandGenerator
 			{
 				for (int z = 0; z < Island.SIZE; z++)
 				{
-					if (ovr.getVoxelId(x, y, z) == Voxel.AIR.getId()) continue;
+					if (ovr.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
 					
 					island.setVoxel(x, y, z, ovr.getVoxelId(x, y, z));
 				}

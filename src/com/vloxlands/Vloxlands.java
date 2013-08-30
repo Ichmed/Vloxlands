@@ -17,7 +17,7 @@ import de.dakror.universion.UniVersion;
 public class Vloxlands
 {
 	public static void main(String[] args)
-	{
+	{		
 		CFG.INTERNET = Assistant.isInternetReachable();
 		
 		// -- UniVersion & Reporter initialization -- //
@@ -29,7 +29,7 @@ public class Vloxlands
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
-		
+
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 		
 		

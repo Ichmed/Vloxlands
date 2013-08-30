@@ -59,10 +59,14 @@ public class RenderAssistant
 	public static void bindTextureRegion(String path, int x, int y, int width, int height)
 	{
 		TextureRegion tr = new TextureRegion(path, x, y, width, height);
-		
 		Texture t = textureRegions.get(tr);
+		CFG.p(tr);
+		CFG.p(textureRegions.keySet());
 		
-		if (t != null) t.bind();
+		
+		if (t != null) {
+			t.bind();
+		}
 		else
 		{
 			Texture tex = tr.loadTexture();

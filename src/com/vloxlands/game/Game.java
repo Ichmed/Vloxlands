@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 
 import com.vloxlands.game.util.Camera;
+import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.render.model.Model;
@@ -157,6 +158,7 @@ public class Game
 	
 	public static void initGame()
 	{
+		Voxel.loadVoxels();
 		currentGame = new Game();
 		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();

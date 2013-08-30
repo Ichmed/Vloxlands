@@ -1,16 +1,12 @@
 package com.vloxlands.game.voxel;
 
+import java.util.HashMap;
+
+import com.vloxlands.util.CSVReader;
+
 public class Voxel
 {
-	public static final Voxel AIR = new Voxel(0).setName("Air").setTextureIndex(cTI(0, 0)).setOpaque(false).setWeight(0);
-	public static final Voxel STONE = new Voxel(-127).setName("Stone").setTextureIndex(cTI(1, 0)).setSmoothness(0.1f);
-	public static final Voxel DIRT = new Voxel(-126).setName("Dirt").setTextureIndex(cTI(2, 1)).setSmoothness(0.3f);
-	public static final Voxel WEAK_CRYSTAL = new Voxel(-125).setName("Weak Crystal").setTextureIndex(cTI(3, 0)).setOpaque(false).setWeight(0).setUplift(1).setBrightness(0.2f);
-	public static final Voxel MEDIUM_CRYSTAL = new Voxel(-124).setName("Medium Crystal").setTextureIndex(cTI(3, 1)).setOpaque(false).setWeight(0).setUplift(5).setBrightness(0.5f);
-	public static final Voxel STRONG_CRYSTAL = new Voxel(-123).setName("Strong Crystal").setTextureIndex(cTI(3, 2)).setOpaque(false).setWeight(0).setUplift(20).setBrightness(0.7f);
-	public static final Voxel GRASS = new Voxel(-122).setName("Grass").setTextureIndex(cTI(2, 0)).setSmoothness(0.5f);
-	public static final Voxel COAL_ORE = new Voxel(-122).setName("Coal Ore").setTextureIndex(cTI(5, 0)).setSmoothness(0.5f);
-	public static final Voxel IRON_ORE = new Voxel(-122).setName("Iron Ore").setTextureIndex(cTI(5, 1)).setSmoothness(0.5f);
+	private static HashMap<String, Voxel> voxels = new HashMap<>();
 	
 	private static Voxel[] voxelList = new Voxel[256];
 	
@@ -167,8 +163,80 @@ public class Voxel
 		return this;
 	}
 	
-	public static int cTI(int x, int y)
+	public String toString()
 	{
-		return y * 32 + x;
+		return getClass().getName() + "." + name.toUpperCase().replace(" ", "_");
+	}
+	
+	public static Voxel get(String name)
+	{
+		return voxels.get(name);
+	}
+	
+	public static void loadVoxels()
+	{
+		CSVReader csv = new CSVReader("data/voxels.csv");
+		String[] categories = csv.readRow();
+		String[] defaults = csv.readRow();
+		String cell;
+		Voxel voxel = null;
+		while ((cell = csv.readNext()) != null)
+		{
+			if (csv.getIndex() == 0)
+			{
+				if (voxel != null)
+				{
+					voxels.put(voxel.getName().toUpperCase().replace(" ", "_"), voxel);
+				}
+				voxel = new Voxel(Integer.parseInt(cell) - 128);
+			}
+			
+			switch (categories[csv.getIndex()])
+			{
+				case "Texture(x*y)":
+				{
+					if (cell.length() > 0) voxel.setTextureIndex(Integer.parseInt(cell.split("\\*")[1]) * 32 + Integer.parseInt(cell.split("\\*")[0]));
+					else voxel.setTextureIndex(Integer.parseInt(defaults[csv.getIndex()].split("\\*")[1]) * 32 + Integer.parseInt(defaults[csv.getIndex()].split("\\*")[0]));
+					break;
+				}
+				
+				// -- Strings -- //
+				case "Name":
+				{
+					if (cell.length() > 0) voxel.setName(cell);
+					else voxel.setName(defaults[csv.getIndex()]);
+					break;
+				}
+				
+				// -- booleans -- //
+				case "Opaque":
+				{
+					if (cell.length() > 0) voxel.setOpaque(cell.equals("1"));
+					else voxel.setOpaque(defaults[csv.getIndex()].equals("1"));
+					break;
+				}
+				
+				// -- floats -- //
+				case "Weight":
+				case "Uplift":
+				case "Brightness":
+				case "Smoothness":
+				{
+					try
+					{
+						if (cell.length() > 0) voxel.getClass().getMethod("set" + categories[csv.getIndex()], Float.TYPE).invoke(voxel, Float.parseFloat(cell));
+						else voxel.getClass().getMethod("set" + categories[csv.getIndex()], Float.TYPE).invoke(voxel, Float.parseFloat(defaults[csv.getIndex()]));
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+					
+					break;
+				}
+			}
+		}
+		
+		voxels.put(voxel.getName().toUpperCase().replace(" ", "_"), voxel);
 	}
 }

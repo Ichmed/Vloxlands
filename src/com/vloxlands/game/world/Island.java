@@ -13,7 +13,7 @@ import com.vloxlands.game.voxel.Voxel;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 64;
+	public static final int CHUNKSIZE = 256;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
@@ -34,7 +34,7 @@ public class Island
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					voxels[i][j][k] = Voxel.AIR.getId();
+					voxels[i][j][k] = Voxel.get("AIR").getId();
 					voxelMetadata[i][j][k] = -128;
 				}
 			}
@@ -116,7 +116,7 @@ public class Island
 	public void removeVoxel(int x, int y, int z)
 	{
 		Voxel v = Voxel.getVoxelForId(getVoxelId(x, y, z));
-		setVoxel(x, y, z, Voxel.AIR.getId());
+		setVoxel(x, y, z, Voxel.get("AIR").getId());
 		weight -= v.getWeight();
 		uplift -= v.getUplift();
 	}
@@ -208,12 +208,12 @@ public class Island
 			{
 				for (int k = 0; k < Island.SIZE; k++)
 				{
-					if (getVoxelId(i, j, k) == Voxel.DIRT.getId())
+					if (getVoxelId(i, j, k) == Voxel.get("DIRT").getId())
 					{
-						if (getVoxelId(i, j + 1, k) == Voxel.AIR.getId())
+						if (getVoxelId(i, j + 1, k) == Voxel.get("AIR").getId())
 						{
 							grassed++;
-							setVoxel(i, j, k, Voxel.GRASS.getId());
+							setVoxel(i, j, k, Voxel.get("GRASS").getId());
 						}
 					}
 				}
