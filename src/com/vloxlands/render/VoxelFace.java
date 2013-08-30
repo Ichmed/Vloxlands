@@ -29,9 +29,9 @@ public class VoxelFace
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
 		
-		double squareSize = 0.03125d;
+		int s = 16;
 		
-		RenderAssistant.bindTexture("graphics/textures/voxelTextures.png");
+		RenderAssistant.bindTextureRegion("graphics/textures/voxelTextures.png", texX * s, texY * s, s, s);
 		
 		glPushMatrix();
 		{
@@ -45,21 +45,23 @@ public class VoxelFace
 			glRotatef(v.y, 0, 1, 0);
 			glRotatef(v.z, 0, 0, 1);
 			glTranslatef(-0.5f, -0.5f, -0.5f);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBegin(GL_QUADS);
 			{
-				glTexCoord2d(texX * squareSize, (texY + 1) * squareSize);
+				glTexCoord2d(0, 1);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
-				glTexCoord2d((texX + 1) * squareSize, (texY + 1) * squareSize);
+				glTexCoord2d(1, 1);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
-				glTexCoord2d((texX + 1) * squareSize, texY * squareSize);
+				glTexCoord2d(1, 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
-				glTexCoord2d(texX * squareSize, texY * squareSize);
+				glTexCoord2d(0, 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(bl.x, bl.y, bl.z);
 			}

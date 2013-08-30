@@ -56,6 +56,6 @@ public class Map
 	
 	public static float calculateUplift(float height)
 	{
-		return ((1 - (height / MAXHEIGHT)) * 2) + 0.1f;
+		return ((1 - (height / MAXHEIGHT)) * 4) + 0.1f;
 	}
 }

@@ -15,7 +15,7 @@ import com.vloxlands.util.MathHelper;
 public class IslandGenerator
 {
 	public static final int ISLAND_SMALL = 16;
-	public static final int ISLAND_MIDDLE = 32;
+	public static final int ISLAND_MEDIUM = 32;
 	public static final int ISLAND_BIG = 64;
 	
 	/**
@@ -38,9 +38,9 @@ public class IslandGenerator
 	{
 		long time = System.currentTimeMillis();
 		
-		int radius = getRandomRadius(ISLAND_MIDDLE);
+		int radius = getRandomRadius(ISLAND_MEDIUM);
 		
-		Island L = generatePerfectIsland(128, Island.SIZE / 2 + 4, 128, radius);
+		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius + 12);
 		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		
 		Island m = mergeIslandData(L, R, OVR_L);
@@ -57,7 +57,7 @@ public class IslandGenerator
 	 */
 	public static Island generatePerfectIsland(int x, int y, int z, int size)
 	{
-		int radius = ((size == ISLAND_SMALL || size == ISLAND_MIDDLE || size == ISLAND_BIG) ? getRandomRadius(size) : size);
+		int radius = ((size == ISLAND_SMALL || size == ISLAND_MEDIUM || size == ISLAND_BIG) ? getRandomRadius(size) : size);
 		int topLayers = (int) (((float) Math.random() * 3 + 3) + radius / 8.0f);
 		
 		Island island = new Island();

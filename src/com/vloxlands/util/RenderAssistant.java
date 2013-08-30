@@ -27,28 +27,47 @@ import com.vloxlands.settings.CFG;
 
 public class RenderAssistant
 {
-	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
+	private static HashMap<String, Texture> textures = new HashMap<>();
+	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
 	
 	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition = new HashMap<>();
 	
 	// public static HashMap<String, Model> models = new HashMap<>();
 	
-	public static boolean bindTexture(String path)
+	public static void storeTexture(String path)
+	{
+		Texture t = loadTexture(path);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		textures.put(path, t);
+	}
+	
+	public static void bindTexture(String path)
 	{
 		Texture t = textures.get(path);
-		if (t != null)
-		{
-			t.bind();
-			return true;
-		}
+		if (t != null) t.bind();// glBindTexture(GL_TEXTURE_2D, t.getTextureID());
 		else
 		{
 			t = loadTexture(path);
-			t.bind();
+			t.bind();// glBindTexture(GL_TEXTURE_2D, t.getTextureID());
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			textures.put(path, t);
-			return true;
+		}
+	}
+	
+	public static void bindTextureRegion(String path, int x, int y, int width, int height)
+	{
+		TextureRegion tr = new TextureRegion(path, x, y, width, height);
+		
+		Texture t = textureRegions.get(tr);
+		
+		if (t != null) t.bind();
+		else
+		{
+			Texture tex = tr.loadTexture();
+			textureRegions.put(tr, tex);
+			tex.bind();
 		}
 	}
 	
@@ -138,7 +157,6 @@ public class RenderAssistant
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		FontAssistant.getFont(f).drawString(x, y, text, color);
 		glDisable(GL_BLEND);
-		glDisable(GL_TEXTURE_2D);
 	}
 	
 	public static void set2DRenderMode(boolean t)
@@ -191,11 +209,9 @@ public class RenderAssistant
 	public static int getUniformLocation(String name)
 	{
 		CFG.p(ShaderLoader.getCurrentProgram());
-		HashMap<String, Integer> h = uniformPosition
-				.get((Integer)ShaderLoader
-						.getCurrentProgram());
-		if(h == null) h = new HashMap<>();
-		if(h.get(name) == null) h.put(name, GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name));
+		HashMap<String, Integer> h = uniformPosition.get((Integer) ShaderLoader.getCurrentProgram());
+		if (h == null) h = new HashMap<>();
+		if (h.get(name) == null) h.put(name, GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name));
 		return (int) h.get(name);
 		
 	}
