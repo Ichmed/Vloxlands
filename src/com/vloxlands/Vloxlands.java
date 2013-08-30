@@ -11,6 +11,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.scene.Scene_Mainmenu;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Assistant;
+import com.vloxlands.util.Direction;
 
 import de.dakror.universion.UniVersion;
 
@@ -31,6 +32,8 @@ public class Vloxlands
 		}
 		
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
+		
+//		Direction.get90DegreeDiretions(Direction.UP);
 		
 		
 		try

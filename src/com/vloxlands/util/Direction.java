@@ -1,5 +1,8 @@
 package com.vloxlands.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.lwjgl.util.vector.Vector3f;
 
 public enum Direction
@@ -29,5 +32,13 @@ public enum Direction
 	public static Vector3f getNeededRotation(Direction a, Direction b)
 	{
 		return new Vector3f(b.rot.x - a.rot.x, b.rot.y - a.rot.y, b.rot.z - a.rot.z);
+	}
+	
+	public static List<Direction> get90DegreeDiretions(Direction d)
+	{
+		List<Direction> l = new ArrayList<>();
+		for(Direction e : Direction.values()) if(e.ordinal() != d.ordinal() && e.ordinal() != (d.ordinal() + 3) % 6) l.add(e);
+		System.out.println(l);
+		return l;
 	}
 }
