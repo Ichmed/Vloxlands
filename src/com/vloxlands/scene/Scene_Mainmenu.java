@@ -8,7 +8,6 @@ import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.TextButton;
-import com.vloxlands.util.GUIAssistant;
 
 public class Scene_Mainmenu extends Scene
 {

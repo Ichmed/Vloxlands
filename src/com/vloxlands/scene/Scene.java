@@ -8,8 +8,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.settings.CFG;
-import com.vloxlands.ui.Component;
 import com.vloxlands.ui.IClickableGui;
 import com.vloxlands.ui.IGuiElement;
 

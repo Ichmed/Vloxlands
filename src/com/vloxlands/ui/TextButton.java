@@ -2,13 +2,11 @@ package com.vloxlands.ui;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.awt.Dimension;
 import java.awt.Font;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.Color;
 
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 

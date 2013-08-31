@@ -4,7 +4,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.settings.CFG;
 
 public class Scene_Game extends Scene
 {
