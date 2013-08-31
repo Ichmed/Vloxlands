@@ -18,7 +18,7 @@ public class TextButton extends Component
 	
 	public TextButton(int x, int y, String title)
 	{
-		super(x, y, 290, 85);
+		super(x, y, 280, 60);
 		this.title = title;
 		state = 0;
 	}
@@ -38,16 +38,21 @@ public class TextButton extends Component
 	{
 		RenderAssistant.disable(GL_LIGHTING);
 		glEnable(GL_BLEND);
+		glColor3f(1, 1, 1);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		RenderAssistant.bindTexture(texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		RenderAssistant.renderRect(x, y - 10, width, height, 12 / 1024.0f, 124 / 666.0f, 288 / 1024.0f, 59 / 666.0f);
-		glDisable(GL_BLEND);
+		int texX = 12;
+		int texY = 73;
+		if (state == 1) texY = 124;
+		if (state == 2) texY = 175;
 		
+		RenderAssistant.renderRect(x, y, width, 85, texX / 1024.0f, texY / 666.0f, 288 / 1024.0f, 59 / 666.0f);
+		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
+		RenderAssistant.renderText(x + mx, y + 85 / 4f, title, Color.white, font);
 	}
 	
 	@Override

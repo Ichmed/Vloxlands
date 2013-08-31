@@ -13,13 +13,13 @@ import com.vloxlands.game.voxel.Voxel;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 32;
+	public static final int CHUNKSIZE = 8;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	
 	public int chunk0ID;
-	public IntBuffer chunks = BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3));
+	public IntBuffer[] chunks = new IntBuffer[] { BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3)), BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3)) };
 	
 	Vector3f pos;
 	
@@ -186,7 +186,10 @@ public class Island
 	{
 		glTranslatef(pos.x, pos.y, pos.z);
 		glListBase(chunk0ID);
-		glCallLists(chunks);
+		glCallLists(chunks[0]);
+		
+		glListBase(chunk0ID + chunks[0].capacity());
+		glCallLists(chunks[1]);
 	}
 	
 	public Vector3f getPos()

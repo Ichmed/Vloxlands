@@ -149,16 +149,16 @@ public class RenderAssistant
 			GL11.glBegin(GL11.GL_QUADS);
 			{
 				GL11.glTexCoord2d(texPosX, texPosY + texSizeY);
-				GL11.glVertex2f(posX, posY);
+				GL11.glVertex2f(posX, posY + sizeY);
 				
 				GL11.glTexCoord2d(texPosX + texSizeX, texPosY + texSizeY);
-				GL11.glVertex2f(posX + sizeX, posY);
-				
-				GL11.glTexCoord2d(texPosX + texSizeX, texPosY);
 				GL11.glVertex2f(posX + sizeX, posY + sizeY);
 				
+				GL11.glTexCoord2d(texPosX + texSizeX, texPosY);
+				GL11.glVertex2f(posX + sizeX, posY);
+				
 				GL11.glTexCoord2d(texPosX, texPosY);
-				GL11.glVertex2f(posX, posY + sizeY);
+				GL11.glVertex2f(posX, posY);
 			}
 			GL11.glEnd();
 		}
@@ -169,8 +169,6 @@ public class RenderAssistant
 	public static void renderText(float x, float y, String text, Color color, Font f)
 	{
 		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		FontAssistant.getFont(f).drawString(x, y, text, color);
 		glDisable(GL_BLEND);
 	}

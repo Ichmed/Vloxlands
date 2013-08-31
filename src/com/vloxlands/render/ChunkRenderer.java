@@ -16,39 +16,43 @@ public class ChunkRenderer
 	public static void renderChunk(int listIndex, int index, Island island)
 	{
 		int cs = Island.SIZE / Island.CHUNKSIZE;
-		int cx = (index / (cs * cs));
-		int cy = (index / cs) % cs;
-		int cz = (index % cs);
+		int cx = index / (cs * cs);
+		int cy = index / cs % cs;
+		int cz = index % cs;
 		
-		// CFG.b("index", index, "cx", cx, "cy", cy, "cz", cz);
-		glPushMatrix();
-		glNewList(listIndex, GL_COMPILE);
 		ArrayList<VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
+		glPushMatrix();
+		glNewList(listIndex, GL_COMPILE);
 		for (int i = 0; i < faceLists[0].size(); i++)
 		{
 			faceLists[0].get(i).render();
 		}
+		glEndList();
+		glPopMatrix();
 		
+		glPushMatrix();
+		glNewList(listIndex + 1, GL_COMPILE);
 		for (int i = 0; i < faceLists[1].size(); i++)
 		{
 			faceLists[1].get(i).render();
 		}
-		
 		glEndList();
 		glPopMatrix();
 	}
 	
 	public static void initChunks(Island island)
 	{
-		island.chunk0ID = glGenLists(island.chunks.capacity());
-		for (int i = 0; i < island.chunks.capacity(); i++)
+		island.chunk0ID = glGenLists(island.chunks[0].capacity() * 2);
+		for (int i = 0; i < island.chunks[0].capacity(); i++)
 		{
-			renderChunk(island.chunk0ID + i, i, island);
-			island.chunks.put(i);
+			renderChunk(island.chunk0ID + i * 2, i, island);
+			island.chunks[0].put(i);
+			island.chunks[1].put(i);
 		}
 		
-		island.chunks.flip();
+		island.chunks[0].flip();
+		island.chunks[1].flip();
 		CFG.p("[ChunkRenderer]: Initialized chunks on Island " + island);
 	}
 	
@@ -63,9 +67,9 @@ public class ChunkRenderer
 			{
 				for (int z = 0; z < Island.CHUNKSIZE; z++)
 				{
-					int posX = (cx * Island.CHUNKSIZE) + x;
-					int posY = (cy * Island.CHUNKSIZE) + y;
-					int posZ = (cz * Island.CHUNKSIZE) + z;
+					int posX = cx * Island.CHUNKSIZE + x;
+					int posY = cy * Island.CHUNKSIZE + y;
+					int posZ = cz * Island.CHUNKSIZE + z;
 					
 					if (i.getVoxelId(posX, posY, posZ) == Voxel.get("AIR").getId()) continue;
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
