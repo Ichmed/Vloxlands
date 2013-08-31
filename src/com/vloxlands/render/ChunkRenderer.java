@@ -97,6 +97,8 @@ public class ChunkRenderer
 		long time = System.currentTimeMillis();
 		for (Direction d : Direction.values())
 		{
+			if (d.dir.x != 0) continue;
+			
 			// greedy-mode along Z - axis
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
 			{

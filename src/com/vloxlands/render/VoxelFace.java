@@ -2,6 +2,8 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.util.Arrays;
+
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
@@ -128,15 +130,19 @@ public class VoxelFace
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBegin(GL_QUADS);
 			{
-				glTexCoord2d(0, sizeY);
+				int[] ints = new int[] { sizeX, sizeY, sizeZ };
+				Arrays.sort(ints);
+				int vertical = (dir == Direction.UP || dir == Direction.DOWN) ? 0 : 1;
+				
+				glTexCoord2d(0, ints[2 - vertical]);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
-				glTexCoord2d(Math.max(sizeX, sizeZ), sizeY);
+				glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
-				glTexCoord2d(Math.max(sizeX, sizeZ), 0);
+				glTexCoord2d(ints[1 + vertical], 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
