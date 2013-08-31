@@ -1,23 +1,32 @@
 package com.vloxlands.ui;
 
+import java.awt.Font;
+
 import org.newdawn.slick.Color;
 
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class Label extends Component
+public class Label implements IGuiElement
 {
 	String title;
+	String texture;
+	int x, y, width, height;
+	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
+	private boolean isVisible = true;
 	
 	public Label(int x, int y, int width, int height, String title)
 	{
-		super(x, y, width, height);
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
 		this.title = title;
 		texture = null;
 	}
 	
 	@Override
-	public void draw()
+	public void render()
 	{
 		RenderAssistant.bindTexture(texture);
 		RenderAssistant.renderRect(x, y, width, height);
@@ -35,5 +44,21 @@ public class Label extends Component
 	public void setTitle(String title)
 	{
 		this.title = title;
+	}
+
+	@Override
+	public boolean shouldRender()
+	{
+		return this.isVisible;
+	}
+
+	public void setVisible(boolean b)
+	{
+		this.isVisible = b;
+	}
+
+	public void setTexture(String t)
+	{
+		this.texture = t;
 	}
 }

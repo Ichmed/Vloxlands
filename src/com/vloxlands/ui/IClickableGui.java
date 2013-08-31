@@ -1,6 +1,6 @@
 package com.vloxlands.ui;
 
-import java.awt.Dimension;
+import org.lwjgl.util.vector.Vector2f;
 
 public interface IClickableGui extends IGuiElement
 {
@@ -8,7 +8,7 @@ public interface IClickableGui extends IGuiElement
 	
 	void handleMouse(int posX, int posY, int flag);
 	
-	Dimension getPos();
-
-	Dimension getSize();
+	Vector2f getPos();
+	
+	Vector2f getSize();
 }

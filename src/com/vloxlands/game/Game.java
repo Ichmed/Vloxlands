@@ -61,7 +61,7 @@ public class Game
 		
 		moveCamera();
 		
-		GUIAssistant.handleMouse();
+//		GUIAssistant.handleMouse();
 		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		
@@ -92,9 +92,9 @@ public class Game
 		}
 		glPopMatrix();
 		
-		if (scene != null) scene.update();
 		
 		RenderAssistant.set2DRenderMode(true);
+		if (scene != null) scene.update();
 		
 		GUIAssistant.renderComponents();
 		

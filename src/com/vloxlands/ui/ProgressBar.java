@@ -2,26 +2,36 @@ package com.vloxlands.ui;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.Font;
+
 import org.newdawn.slick.Color;
 
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class ProgressBar extends Component
+public class ProgressBar implements IGuiElement
 {
 	float value;
 	boolean showPercentage;
+	private boolean isVisible;
+	String texture;
+	int x, y, width, height;
+	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
+	
 	
 	public ProgressBar(int x, int y, int width, float value, boolean showPercentage)
 	{
-		super(x - width / 2, y, width, 39);
+		this.x = x - (width / 2);
+		this.y = y;
+		this.width = width;
+		this.height = 39;
 		this.value = 0;
 		this.showPercentage = showPercentage;
 		font = font.deriveFont(20f);
 	}
 	
 	@Override
-	public void draw()
+	public void render()
 	{
 		glEnable(GL_BLEND);
 		RenderAssistant.bindTexture("graphics/textures/ui/progressBar.png");
@@ -53,5 +63,16 @@ public class ProgressBar extends Component
 	public void setValue(float value)
 	{
 		this.value = value;
+	}
+
+	@Override
+	public boolean shouldRender()
+	{
+		return this.isVisible;
+	}
+
+	public void setVisible(boolean b)
+	{
+		this.isVisible = b;
 	}
 }
