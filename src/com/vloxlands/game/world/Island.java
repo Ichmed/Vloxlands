@@ -13,7 +13,7 @@ import com.vloxlands.game.voxel.Voxel;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 8;
+	public static final int CHUNKSIZE = 256;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
@@ -64,7 +64,7 @@ public class Island
 	
 	public void onTick()
 	{
-		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance, 0);
+		// pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance, 0);
 	}
 	
 	public void calculateWeight()
@@ -184,6 +184,7 @@ public class Island
 	
 	public void render()
 	{
+		glDisable(GL_CULL_FACE);
 		glTranslatef(pos.x, pos.y, pos.z);
 		glListBase(chunk0ID);
 		glCallLists(chunks[0]);

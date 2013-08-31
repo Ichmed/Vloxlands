@@ -23,18 +23,21 @@ public class ChunkRenderer
 		
 		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		// genereateGreedyMesh(cx, cy, cz, faceLists[0]);
+		HashMap<ArrayList<Integer>, VoxelFace> greedy0 = genereateGreedyMesh(cx, cy, cz, faceLists[0]);
+		HashMap<ArrayList<Integer>, VoxelFace> greedy1 = genereateGreedyMesh(cx, cy, cz, faceLists[1]);
+		if (greedy0.size() > 0) CFG.p(greedy0.size());
+		
 		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
-		for (VoxelFace v : faceLists[0].values())
+		for (VoxelFace v : greedy0.values())
 			v.render();
 		glEndList();
 		glPopMatrix();
 		
 		glPushMatrix();
 		glNewList(listIndex + 1, GL_COMPILE);
-		for (VoxelFace v : faceLists[1].values())
+		for (VoxelFace v : greedy1.values())
 			v.render();
 		glEndList();
 		glPopMatrix();
@@ -56,7 +59,7 @@ public class ChunkRenderer
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected static HashMap<ArrayList<Integer>, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
+	private static HashMap<ArrayList<Integer>, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
 	{
 		HashMap<ArrayList<Integer>, VoxelFace> faces = new HashMap<>();
 		HashMap<ArrayList<Integer>, VoxelFace> transparentFaces = new HashMap<>();
@@ -77,7 +80,7 @@ public class ChunkRenderer
 						Voxel w = Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z));
 						if (!w.isOpaque() && !(w == v))
 						{
-							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v);
+							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v.getTextureIndex());
 							if (v.isOpaque()) faces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
 							else transparentFaces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
 						}
@@ -88,34 +91,65 @@ public class ChunkRenderer
 		return new HashMap[] { faces, transparentFaces };
 	}
 	
-	// protected static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
-	// {
-	// for (Direction d : Direction.values())
-	// {
-	// // ArrayList<VoxelFace> stripes = new Array
-	// for (int x = 0; x < Island.CHUNKSIZE; x++)
-	// {
-	// for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
-	// {
-	// for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
-	// {
-	// for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
-	// {
-	//
-	// }
-	// }
-	// }
-	// }
-	// }
-	// }
+	private static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
+	{
+		HashMap<ArrayList<Integer>, VoxelFace> strips = new HashMap<>();
+		long time = System.currentTimeMillis();
+		for (Direction d : Direction.values())
+		{
+			// greedy-mode along Z - axis
+			for (int y = 0; y < Island.CHUNKSIZE; y++)
+			{
+				for (int x = 0; x < Island.CHUNKSIZE; x++)
+				{
+					VoxelFace activeStrip = null;
+					for (int z = 0; z < Island.CHUNKSIZE; z++)
+					{
+						if (activeStrip != null)
+						{
+							if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
+							{
+								strips.put(getVoxelFaceKey(activeStrip), activeStrip);
+								activeStrip = null;
+							}
+							else if (originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex == activeStrip.textureIndex)
+							{
+								activeStrip.increaseSize(0, 0, 1);
+							}
+						}
+						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
+						{
+							activeStrip = new VoxelFace(d, new Vector3f(x, y, z), originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex);
+						}
+					}
+					
+					if (activeStrip != null) strips.put(getVoxelFaceKey(activeStrip), activeStrip);
+				}
+			}
+		}
+		
+		CFG.p("[ChunkRenderer]: Greedy meshing took " + (System.currentTimeMillis() - time) + "ms");
+		
+		return strips;
+	}
 	
-	protected static ArrayList<Integer> getVoxelFaceKey(int x, int y, int z, int d)
+	private static ArrayList<Integer> getVoxelFaceKey(int x, int y, int z, int d)
 	{
 		ArrayList<Integer> l = new ArrayList<Integer>();
 		l.add(x);
 		l.add(y);
 		l.add(z);
 		l.add(d);
+		return l;
+	}
+	
+	private static ArrayList<Integer> getVoxelFaceKey(VoxelFace face)
+	{
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		l.add((int) face.pos.x);
+		l.add((int) face.pos.y);
+		l.add((int) face.pos.x);
+		l.add(face.dir.ordinal());
 		return l;
 	}
 }

@@ -56,6 +56,19 @@ public class IslandGenerator extends Thread
 	{
 		// long time = System.currentTimeMillis();
 		
+		// Island s = new Island();
+		// for (int i = 110; i < 120; i++)
+		// {
+		// for (int j = 110; j < 120; j++)
+		// {
+		// for (int k = 110; k < 120; k++)
+		// {
+		// s.setVoxel(i, j, k, Voxel.get("STONE").getId());
+		// }
+		// }
+		// }
+		// return s;
+		
 		int radius = getRandomRadius(ISLAND_SMALL);
 		
 		quotient = (radius + 2) * 2 + 1;
@@ -66,8 +79,6 @@ public class IslandGenerator extends Thread
 		Island m = mergeIslandData(L, R, OVR_L);
 		generateCrystals(m, Island.SIZE / 2);
 		m.grassify();
-		
-		// CFG.p("[IslandGenerator]: Generation took " + (System.currentTimeMillis() - time) + "ms");
 		return m;
 	}
 	

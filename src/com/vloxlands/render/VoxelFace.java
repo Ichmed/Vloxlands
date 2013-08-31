@@ -5,7 +5,6 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.RenderAssistant;
 
@@ -16,21 +15,99 @@ public class VoxelFace
 	int textureIndex;
 	Vector3f tl, tr, bl, br;
 	
-	public VoxelFace(Direction dir, Vector3f pos, Voxel v)
+	int sizeX, sizeY, sizeZ;
+	
+	public VoxelFace(Direction dir, Vector3f pos, int texInd)
 	{
-		this(dir, pos, v, 1, 1);
+		this(dir, pos, texInd, 1, 1, 1);
 	}
 	
-	public VoxelFace(Direction dir, Vector3f pos, Voxel v, float sizeX, float sizeY)
+	public VoxelFace(Direction dir, Vector3f pos, int texInd, int sizeX, int sizeY, int sizeZ)
 	{
 		super();
 		this.dir = dir;
 		this.pos = pos;
-		this.textureIndex = v.getTextureIndex();
+		textureIndex = texInd;
+		setSize(sizeX, sizeY, sizeZ);
+	}
+	
+	public void setSize(int sizeX, int sizeY, int sizeZ)
+	{
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.sizeZ = sizeZ;
+		
+		updateVertices();
+	}
+	
+	public void updateVertices()
+	{
 		tl = new Vector3f(0, sizeY, 0);
 		tr = new Vector3f(sizeX, sizeY, 0);
 		bl = new Vector3f(0, 0, 0);
 		br = new Vector3f(sizeX, 0, 0);
+		switch (dir)
+		{
+			case NORTH:
+			{
+				tl.x = sizeX;
+				bl.x = sizeX;
+				
+				tr.z = sizeZ;
+				br.z = sizeZ;
+				
+				break;
+			}
+			case SOUTH:
+			{
+				tl.z = sizeZ;
+				bl.z = sizeZ;
+				
+				tr.x = 0;
+				br.x = 0;
+				
+				break;
+			}
+			case WEST:
+			{
+				tl.z = sizeZ;
+				bl.z = sizeZ;
+				tr.z = sizeZ;
+				br.z = sizeZ;
+				
+				tl.y = 0;
+				bl.y = 0;
+				tr.y = sizeY;
+				br.y = sizeY;
+				
+				break;
+			}
+			case UP:
+			{
+				tl.z = sizeZ;
+				tr.z = sizeZ;
+				
+				bl.y = sizeY;
+				br.y = sizeY;
+				break;
+			}
+			case DOWN:
+			{
+				tl.y = 0;
+				tr.y = 0;
+				
+				bl.z = sizeZ;
+				br.z = sizeZ;
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	
+	public void increaseSize(int sizeX, int sizeY, int sizeZ)
+	{
+		setSize(this.sizeX + sizeX, this.sizeY + sizeY, this.sizeZ + sizeZ);
 	}
 	
 	public void render()
@@ -47,26 +124,19 @@ public class VoxelFace
 			glEnable(GL_BLEND);
 			
 			glTranslatef(pos.x, pos.y, pos.z);
-			
-			Vector3f v = Direction.getNeededRotation(Direction.EAST, dir);
-			glTranslatef(0.5f, 0.5f, 0.5f);
-			glRotatef(v.x, 1, 0, 0);
-			glRotatef(v.y, 0, 1, 0);
-			glRotatef(v.z, 0, 0, 1);
-			glTranslatef(-0.5f, -0.5f, -0.5f);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBegin(GL_QUADS);
 			{
-				glTexCoord2d(0, 1);
+				glTexCoord2d(0, sizeY);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
-				glTexCoord2d(1, 1);
+				glTexCoord2d(Math.max(sizeX, sizeZ), sizeY);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
-				glTexCoord2d(1, 0);
+				glTexCoord2d(Math.max(sizeX, sizeZ), 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
@@ -76,11 +146,11 @@ public class VoxelFace
 			}
 			glEnd();
 		}
-		glPopMatrix();		
+		glPopMatrix();
 	}
 	
 	public double getDistanceToCamera()
 	{
-		return Vector3f.sub(Game.currentGame.camera.position, this.pos, null).length();
+		return Vector3f.sub(Game.currentGame.camera.position, pos, null).length();
 	}
 }
