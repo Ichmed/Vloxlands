@@ -33,7 +33,7 @@ public class Voxel
 	
 	public static Voxel getVoxelForId(byte id)
 	{
-		return voxelList[(int) id + 128];
+		return voxelList[id + 128];
 	}
 	
 	public synchronized static Voxel getVoxelForId(int id)
@@ -71,14 +71,14 @@ public class Voxel
 	
 	public Voxel setName(String s)
 	{
-		if (this.name.equals("NA")) this.name = s;
-		else System.err.println("[Voxel] [" + this.name + "] already has a name");
+		if (name.equals("NA")) name = s;
+		else System.err.println("[Voxel] [" + name + "] already has a name");
 		return this;
 	}
 	
 	public String getName()
 	{
-		return this.name;
+		return name;
 	}
 	
 	public int getIdForName(String name)
@@ -94,7 +94,7 @@ public class Voxel
 	
 	public Voxel setTextureIndex(int i)
 	{
-		this.textureIndex = i;
+		textureIndex = i;
 		return this;
 	}
 	
@@ -105,7 +105,7 @@ public class Voxel
 	
 	public Voxel setOpaque(boolean b)
 	{
-		this.opaque = b;
+		opaque = b;
 		return this;
 	}
 	
@@ -121,7 +121,7 @@ public class Voxel
 	
 	public Voxel setSmoothness(float smooth)
 	{
-		this.smoothness = smooth;
+		smoothness = smooth;
 		return this;
 	}
 	
@@ -163,6 +163,7 @@ public class Voxel
 		return this;
 	}
 	
+	@Override
 	public String toString()
 	{
 		return getClass().getName() + "." + name.toUpperCase().replace(" ", "_");
@@ -175,7 +176,7 @@ public class Voxel
 	
 	public static void loadVoxels()
 	{
-		CSVReader csv = new CSVReader("data/voxels.csv");
+		CSVReader csv = new CSVReader("/data/voxels.csv");
 		String[] categories = csv.readRow();
 		String[] defaults = csv.readRow();
 		String cell;

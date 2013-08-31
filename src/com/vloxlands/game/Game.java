@@ -35,7 +35,7 @@ public class Game
 	public int frames = 21;
 	boolean showFPS = false;
 	
-	Model m = ModelLoader.loadModel("graphics/models/crystal.obj");
+	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
 	Scene scene;
 	
@@ -53,7 +53,7 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		ShaderLoader.useProgram("graphics/shaders/", "default");
+		ShaderLoader.useProgram("/graphics/shaders/", "default");
 		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
 		
@@ -61,7 +61,7 @@ public class Game
 		
 		moveCamera();
 		
-//		GUIAssistant.handleMouse();
+		// GUIAssistant.handleMouse();
 		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		

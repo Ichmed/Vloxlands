@@ -3,10 +3,6 @@ package com.vloxlands.util;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -119,14 +115,11 @@ public class RenderAssistant
 	{
 		try
 		{
-			return TextureLoader.getTexture(".png", new FileInputStream(new File(path)));
+			return TextureLoader.getTexture(".png", RenderAssistant.class.getResourceAsStream(path));
 		}
-		catch (FileNotFoundException e)
+		catch (Exception e)
 		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
+			CFG.p(path);
 			e.printStackTrace();
 		}
 		return null;

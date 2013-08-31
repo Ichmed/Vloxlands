@@ -1,7 +1,6 @@
 package com.vloxlands;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.Display;
@@ -39,7 +38,7 @@ public class Vloxlands
 		{
 			Display.setDisplayMode(Display.getDesktopDisplayMode());
 			Display.setDisplayMode(new DisplayMode(1080, 720));
-			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(new FileInputStream(new File("graphics/logo/logo16.png"))), Assistant.loadImage(new FileInputStream(new File("graphics/logo/logo32.png"))) });
+			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			// Display.setInitialBackground(0.5f, 0.8f, 0.85f);
 			Display.create();

@@ -20,13 +20,13 @@ public class Scene_Game extends Scene
 	@Override
 	public void handleMouseWorld(int x, int y, int flag)
 	{
-		super.handleMouseWorld(x, y, flag);		
+		super.handleMouseWorld(x, y, flag);
 		if (Mouse.isButtonDown(1))
 		{
 			Mouse.setGrabbed(true);
 			if (Mouse.isButtonDown(1)) Game.currentGame.rotateCamera();
 			else Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 		}
-		else Mouse.setGrabbed(false);		
+		else Mouse.setGrabbed(false);
 	}
 }

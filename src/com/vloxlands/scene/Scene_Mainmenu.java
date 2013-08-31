@@ -17,12 +17,12 @@ public class Scene_Mainmenu extends Scene
 	public void init()
 	{
 		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
-		bg.setTexture("graphics/textures/ui/paper.png");
+		bg.setTexture("/graphics/textures/ui/paper.png");
 		content.add(bg);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Spiel starten");
 		b.setClickEvent(new IClickEvent()
-		{			
+		{
 			@Override
 			public void onClick()
 			{
@@ -40,7 +40,7 @@ public class Scene_Mainmenu extends Scene
 		
 		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, "Spiel beenden");
 		b.setClickEvent(new IClickEvent()
-		{			
+		{
 			@Override
 			public void onClick()
 			{

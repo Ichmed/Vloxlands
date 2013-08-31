@@ -37,7 +37,8 @@ public enum Direction
 	public static List<Direction> get90DegreeDiretions(Direction d)
 	{
 		List<Direction> l = new ArrayList<>();
-		for(Direction e : Direction.values()) if(e.ordinal() != d.ordinal() && e.ordinal() != (d.ordinal() + 3) % 6) l.add(e);
+		for (Direction e : Direction.values())
+			if (e.ordinal() != d.ordinal() && e.ordinal() != (d.ordinal() + 3) % 6) l.add(e);
 		System.out.println(l);
 		return l;
 	}

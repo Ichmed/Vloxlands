@@ -1,9 +1,8 @@
 package com.vloxlands.render.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector2f;
@@ -26,8 +25,7 @@ public class OBJLoader
 	 */
 	public static Model loadModel(String path) throws IOException
 	{
-		File OBJFile = new File(path);
-		BufferedReader reader = new BufferedReader(new FileReader(OBJFile));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(OBJLoader.class.getResourceAsStream(path)));
 		Model m = new Model();
 		String line;
 		
@@ -112,8 +110,7 @@ public class OBJLoader
 	{
 		model.usesMaterials = true;
 		
-		File materialsFile = new File(path + file);
-		BufferedReader reader = new BufferedReader(new FileReader(materialsFile));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(OBJLoader.class.getResourceAsStream(path + file)));
 		
 		Material m = null;
 		String line;

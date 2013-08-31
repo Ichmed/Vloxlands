@@ -14,7 +14,7 @@ public class TextButton implements IClickableGui
 {
 	String title;
 	IClickEvent clickEvent;
-	String texture = "graphics/textures/ui/gui.png";
+	String texture = "/graphics/textures/ui/gui.png";
 	boolean isActive = true;
 	
 	int x, y, width, height;
@@ -28,8 +28,8 @@ public class TextButton implements IClickableGui
 	{
 		this.x = x - 144;
 		this.y = y;
-		this.width = 288;
-		this.height = 59;
+		width = 288;
+		height = 59;
 		this.title = title;
 	}
 	
@@ -46,7 +46,7 @@ public class TextButton implements IClickableGui
 		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, (this.isActive ? Color.white : Color.gray), font);
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, (isActive ? Color.white : Color.gray), font);
 		glColor3f(1, 1, 1);
 	}
 	
@@ -70,9 +70,9 @@ public class TextButton implements IClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
-		if (!this.isActive) return;
+		if (!isActive) return;
 		if ((flag & 1) != 0) texY = 202;
-		else if ((flag & 2) != 0) this.clickEvent.onClick();
+		else if ((flag & 2) != 0) clickEvent.onClick();
 		else texY = 280;
 	}
 	
@@ -90,23 +90,23 @@ public class TextButton implements IClickableGui
 	
 	public void setClickEvent(IClickEvent i)
 	{
-		this.clickEvent = i;
+		clickEvent = i;
 	}
 	
 	@Override
 	public boolean shouldRender()
 	{
-		return this.isVisible;
+		return isVisible;
 	}
 	
 	public void setVisible(boolean b)
 	{
-		this.isVisible = b;
+		isVisible = b;
 	}
 	
 	@Override
 	public void setActive(boolean b)
 	{
-		this.isActive = b;
+		isActive = b;
 	}
 }

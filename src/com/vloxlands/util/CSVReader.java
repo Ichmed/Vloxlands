@@ -1,9 +1,8 @@
 package com.vloxlands.util;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class CSVReader
@@ -22,7 +21,7 @@ public class CSVReader
 		
 		try
 		{
-			br = new BufferedReader(new FileReader(new File(path)));
+			br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
 			loadSeparator();
 			index = 0;
 		}
@@ -39,7 +38,7 @@ public class CSVReader
 		else
 		{
 			sep = ";";
-			br = new BufferedReader(new FileReader(new File(path)));
+			br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
 		}
 	}
 	

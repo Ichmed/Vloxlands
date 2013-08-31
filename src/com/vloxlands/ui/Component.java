@@ -34,7 +34,7 @@ public abstract class Component
 		visible = true;
 		enabled = true;
 		state = 0;
-		texture = "graphics/textures/ui/gui.png";
+		texture = "ui/gui.png";
 	}
 	
 	public void draw()

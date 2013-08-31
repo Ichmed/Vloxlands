@@ -23,21 +23,24 @@ public class ChunkRenderer
 		
 		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		HashMap<ArrayList<Integer>, VoxelFace> greedy0 = genereateGreedyMesh(cx, cy, cz, faceLists[0]);
-		HashMap<ArrayList<Integer>, VoxelFace> greedy1 = genereateGreedyMesh(cx, cy, cz, faceLists[1]);
-		if (greedy0.size() > 0) CFG.p(greedy0.size());
-		
+		// HashMap<ArrayList<Integer>, VoxelFace> greedy0 = genereateGreedyMesh(cx, cy, cz, faceLists[0]);
+		// HashMap<ArrayList<Integer>, VoxelFace> greedy1 = genereateGreedyMesh(cx, cy, cz, faceLists[1]);
+		// if (greedy0.size() > 0) CFG.p(greedy0.size());
 		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
-		for (VoxelFace v : greedy0.values())
+		// for (VoxelFace v : greedy0.values())
+		// v.render();
+		for (VoxelFace v : faceLists[0].values())
 			v.render();
 		glEndList();
 		glPopMatrix();
 		
 		glPushMatrix();
 		glNewList(listIndex + 1, GL_COMPILE);
-		for (VoxelFace v : greedy1.values())
+		// for (VoxelFace v : greedy1.values())
+		// v.render();
+		for (VoxelFace v : faceLists[1].values())
 			v.render();
 		glEndList();
 		glPopMatrix();
@@ -97,7 +100,7 @@ public class ChunkRenderer
 		long time = System.currentTimeMillis();
 		for (Direction d : Direction.values())
 		{
-			if (d.dir.x != 0) continue;
+			// if (d.dir.x != 0) continue;
 			
 			// greedy-mode along Z - axis
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
@@ -117,6 +120,11 @@ public class ChunkRenderer
 							else if (originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex == activeStrip.textureIndex)
 							{
 								activeStrip.increaseSize(0, 0, 1);
+							}
+							else
+							{
+								strips.put(getVoxelFaceKey(activeStrip), activeStrip);
+								activeStrip = null;
 							}
 						}
 						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))

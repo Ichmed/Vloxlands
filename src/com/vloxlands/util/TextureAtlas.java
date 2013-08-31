@@ -19,7 +19,7 @@ public class TextureAtlas
 	{
 		try
 		{
-			BufferedImage bi = ImageIO.read(new File(path));
+			BufferedImage bi = ImageIO.read(new File("src/" + path));
 			tiles = new Texture[bi.getWidth() / cw][bi.getHeight() / ch];
 			for (int i = 0; i < bi.getWidth() / cw; i++)
 			{

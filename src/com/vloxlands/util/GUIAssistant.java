@@ -3,10 +3,6 @@ package com.vloxlands.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-
-import com.vloxlands.game.Game;
 import com.vloxlands.ui.Component;
 
 public class GUIAssistant

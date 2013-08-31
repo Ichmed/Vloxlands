@@ -4,8 +4,8 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 public class ShaderLoader
@@ -25,7 +25,7 @@ public class ShaderLoader
 		
 		try
 		{
-			BufferedReader reader = new BufferedReader(new FileReader(path + vertexName + ".vert"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderLoader.class.getResourceAsStream(path + vertexName + ".vert")));
 			String line;
 			while ((line = reader.readLine()) != null)
 				vertexSource.append(line).append('\n');
@@ -38,7 +38,7 @@ public class ShaderLoader
 		
 		try
 		{
-			BufferedReader reader = new BufferedReader(new FileReader(path + fragmentName + ".frag"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderLoader.class.getResourceAsStream(path + fragmentName + ".frag")));
 			String line;
 			while ((line = reader.readLine()) != null)
 				fragmentSource.append(line).append("\n");
@@ -103,6 +103,6 @@ public class ShaderLoader
 	public static int getCurrentProgram()
 	{
 		if (programs.get(currentProgramName) == null) return -1;
-		return (int) programs.get(currentProgramName);
+		return programs.get(currentProgramName);
 	}
 }

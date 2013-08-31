@@ -24,7 +24,7 @@ public class ProgressBar implements IGuiElement
 		this.x = x - (width / 2);
 		this.y = y;
 		this.width = width;
-		this.height = 39;
+		height = 39;
 		this.value = 0;
 		this.showPercentage = showPercentage;
 		font = font.deriveFont(20f);
@@ -34,10 +34,10 @@ public class ProgressBar implements IGuiElement
 	public void render()
 	{
 		glEnable(GL_BLEND);
-		RenderAssistant.bindTexture("graphics/textures/ui/progressBar.png");
+		RenderAssistant.bindTexture("/graphics/textures/ui/progressBar.png");
 		RenderAssistant.renderRect(x + 7, y + 8, value * (width - 14), 24, 0, 0, value, 1);
 		
-		RenderAssistant.bindTexture("graphics/textures/ui/gui.png");
+		RenderAssistant.bindTexture("/graphics/textures/ui/gui.png");
 		RenderAssistant.renderRect(x, y, 18, 39, 793 / 1024.0f, 548 / 1024.0f, 18 / 1024.0f, 39 / 1024.0f);
 		for (int i = 0; i < (width - 36) / 129; i++)
 			RenderAssistant.renderRect(x + 18 + i * 129, y, 129, 39, 831 / 1024.0f, 548 / 1024.0f, 129 / 1024.0f, 39 / 1024.0f);
@@ -64,15 +64,15 @@ public class ProgressBar implements IGuiElement
 	{
 		this.value = value;
 	}
-
+	
 	@Override
 	public boolean shouldRender()
 	{
-		return this.isVisible;
+		return isVisible;
 	}
-
+	
 	public void setVisible(boolean b)
 	{
-		this.isVisible = b;
+		isVisible = b;
 	}
 }

@@ -45,18 +45,18 @@ public class Label implements IGuiElement
 	{
 		this.title = title;
 	}
-
+	
 	@Override
 	public boolean shouldRender()
 	{
 		return this.isVisible;
 	}
-
+	
 	public void setVisible(boolean b)
 	{
 		this.isVisible = b;
 	}
-
+	
 	public void setTexture(String t)
 	{
 		this.texture = t;
