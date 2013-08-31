@@ -8,6 +8,8 @@ public interface IClickableGui extends IGuiElement
 	
 	void handleMouse(int posX, int posY, int flag);
 	
+	void setActive(boolean b);
+	
 	Vector2f getPos();
 	
 	Vector2f getSize();

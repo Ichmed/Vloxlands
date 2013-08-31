@@ -98,4 +98,13 @@ public abstract class Scene
 	
 	protected void handleMouseWorld(int x, int y, int flag)
 	{}
+	
+	protected void lockScene()
+	{
+		for (IGuiElement i : content)
+			if (i instanceof IClickableGui)
+			{
+				((IClickableGui) i).setActive(false);
+			}
+	}
 }

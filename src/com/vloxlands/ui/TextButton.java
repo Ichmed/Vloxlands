@@ -15,6 +15,7 @@ public class TextButton implements IClickableGui
 	String title;
 	IClickEvent clickEvent;
 	String texture = "graphics/textures/ui/gui.png";
+	boolean isActive = true;
 	
 	int x, y, width, height;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
@@ -57,27 +58,29 @@ public class TextButton implements IClickableGui
 	{
 		this.title = title;
 	}
-
+	
 	@Override
 	public void onTick()
 	{
-		texY = 124;
+		if (!isActive) texY = 358;
+		else texY = 124;
 	}
-
+	
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
+		if (!this.isActive) return;
 		if ((flag & 1) != 0) texY = 202;
 		else if ((flag & 2) != 0) this.clickEvent.onClick();
 		else texY = 280;
 	}
-
+	
 	@Override
 	public Vector2f getPos()
 	{
 		return new Vector2f(x, y);
 	}
-
+	
 	@Override
 	public Vector2f getSize()
 	{
@@ -88,15 +91,21 @@ public class TextButton implements IClickableGui
 	{
 		this.clickEvent = i;
 	}
-
+	
 	@Override
 	public boolean shouldRender()
 	{
 		return this.isVisible;
 	}
-
+	
 	public void setVisible(boolean b)
 	{
 		this.isVisible = b;
+	}
+	
+	@Override
+	public void setActive(boolean b)
+	{
+		this.isActive = b;
 	}
 }

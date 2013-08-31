@@ -29,6 +29,7 @@ public class Scene_Mainmenu extends Scene
 				Game.currentMap.islandGenerator = new IslandGenerator();
 				progress.setValue(0);
 				progress.setVisible(true);
+				lockScene();
 			}
 		});
 		content.add(b);
