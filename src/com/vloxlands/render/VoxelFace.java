@@ -14,14 +14,23 @@ public class VoxelFace
 	Direction dir;
 	Vector3f pos;
 	int textureIndex;
-	Vector3f tl = new Vector3f(0, 1, 0), tr = new Vector3f(1, 1, 0), bl = new Vector3f(0, 0, 0), br = new Vector3f(1, 0, 0);
+	Vector3f tl, tr, bl, br;
 	
 	public VoxelFace(Direction dir, Vector3f pos, Voxel v)
+	{
+		this(dir, pos, v, 1, 1);
+	}
+	
+	public VoxelFace(Direction dir, Vector3f pos, Voxel v, float sizeX, float sizeY)
 	{
 		super();
 		this.dir = dir;
 		this.pos = pos;
 		this.textureIndex = v.getTextureIndex();
+		tl = new Vector3f(0, sizeY, 0);
+		tr = new Vector3f(sizeX, sizeY, 0);
+		bl = new Vector3f(0, 0, 0);
+		br = new Vector3f(sizeX, 0, 0);
 	}
 	
 	public void render()
