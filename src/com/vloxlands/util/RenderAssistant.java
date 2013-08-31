@@ -29,6 +29,7 @@ import com.vloxlands.settings.CFG;
 public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<>();
+	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
 	private static HashMap<String, TextureAtlas> textureAtlases = new HashMap<>();
 	
 	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition = new HashMap<>();
@@ -43,6 +44,23 @@ public class RenderAssistant
 		textures.put(path, t);
 	}
 	
+	public static void bindTextureRegion(String path, int x, int y, int width, int height)
+	{
+		TextureRegion tr = new TextureRegion(path, x, y, width, height);
+		Texture t = textureRegions.get(tr);
+		
+		if (t != null)
+		{
+			t.bind();
+		}
+		else
+		{
+			Texture tex = tr.loadTexture();
+			textureRegions.put(tr, tex);
+			tex.bind();
+		}
+	}
+	
 	public static void storeTextureAtlas(String path, int cw, int ch)
 	{
 		if (!textureAtlases.containsKey(path)) textureAtlases.put(path, new TextureAtlas(path, cw, ch));
@@ -52,7 +70,7 @@ public class RenderAssistant
 	public static void bindTextureAtlasTile(String path, int x, int y)
 	{
 		if (!textureAtlases.containsKey(path)) throw new NoSuchElementException(" texture atlas " + path);
-		else textureAtlases.get(path).getTile(x, y).bind();	
+		else textureAtlases.get(path).getTile(x, y).bind();
 	}
 	
 	public static void bindTexture(String path)
@@ -207,10 +225,10 @@ public class RenderAssistant
 	public static int getUniformLocation(String name)
 	{
 		CFG.p(ShaderLoader.getCurrentProgram());
-		HashMap<String, Integer> h = uniformPosition.get((Integer) ShaderLoader.getCurrentProgram());
+		HashMap<String, Integer> h = uniformPosition.get(ShaderLoader.getCurrentProgram());
 		if (h == null) h = new HashMap<>();
 		if (h.get(name) == null) h.put(name, GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), name));
-		return (int) h.get(name);
+		return h.get(name);
 		
 	}
 	

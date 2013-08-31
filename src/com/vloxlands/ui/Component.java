@@ -14,6 +14,7 @@ public abstract class Component
 	String texture;
 	
 	boolean visible;
+	boolean enabled;
 	
 	public Font font;
 	
@@ -23,10 +24,11 @@ public abstract class Component
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
+		font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 		
 		visible = true;
-		texture = null;
+		enabled = true;
+		texture = "graphics/textures/ui/gui.png";
 	}
 	
 	public void draw()
@@ -74,16 +76,6 @@ public abstract class Component
 		this.height = height;
 	}
 	
-	public String getTexture()
-	{
-		return texture;
-	}
-	
-	public void setTexture(String texture)
-	{
-		this.texture = texture;
-	}
-	
 	public boolean isVisible()
 	{
 		return visible;
@@ -92,5 +84,15 @@ public abstract class Component
 	public void setVisible(boolean visible)
 	{
 		this.visible = visible;
+	}
+	
+	public boolean isEnabled()
+	{
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
 	}
 }

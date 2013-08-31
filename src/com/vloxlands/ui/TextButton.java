@@ -7,7 +7,7 @@ import org.newdawn.slick.Color;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class Button extends Component
+public class TextButton extends Component
 {
 	String title;
 	
@@ -16,11 +16,11 @@ public class Button extends Component
 	 */
 	int state;
 	
-	public Button(int x, int y, int width, int height, String title)
+	public TextButton(int x, int y, String title)
 	{
-		super(x, y, width, height);
+		super(x, y, 290, 85);
 		this.title = title;
-		this.state = 0;
+		state = 0;
 	}
 	
 	public void setState(int s)
@@ -37,12 +37,12 @@ public class Button extends Component
 	public void draw()
 	{
 		RenderAssistant.disable(GL_LIGHTING);
-		RenderAssistant.bindTexture("graphics/textures/ui/button.png");
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		if (state != 1) RenderAssistant.glColorHex("222222", 0.6f);
-		else RenderAssistant.glColorHex("ff9933", 0.6f);
-		RenderAssistant.renderRect(x, y, width, height);
+		RenderAssistant.bindTexture(texture);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		RenderAssistant.renderRect(x, y - 10, width, height, 12 / 1024.0f, 124 / 666.0f, 288 / 1024.0f, 59 / 666.0f);
 		glDisable(GL_BLEND);
 		
 		int tx = FontAssistant.getFont(font).getWidth(title);
