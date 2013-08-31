@@ -38,7 +38,7 @@ public class IslandGenerator
 	{
 		long time = System.currentTimeMillis();
 		
-		int radius = getRandomRadius(ISLAND_MEDIUM);
+		int radius = getRandomRadius(ISLAND_SMALL);
 		
 		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
 		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);

@@ -29,9 +29,9 @@ public class VoxelFace
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
 		
-		int s = 16;
-		
-		RenderAssistant.bindTextureRegion("graphics/textures/voxelTextures.png", texX * s, texY * s, s, s);
+		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		
 		glPushMatrix();
 		{
@@ -67,7 +67,7 @@ public class VoxelFace
 			}
 			glEnd();
 		}
-		glPopMatrix();
+		glPopMatrix();		
 	}
 	
 	public double getDistanceToCamera()

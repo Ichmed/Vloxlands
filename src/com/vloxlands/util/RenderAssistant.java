@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
@@ -28,7 +29,7 @@ import com.vloxlands.settings.CFG;
 public class RenderAssistant
 {
 	private static HashMap<String, Texture> textures = new HashMap<>();
-	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
+	private static HashMap<String, TextureAtlas> textureAtlases = new HashMap<>();
 	
 	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition = new HashMap<>();
 	
@@ -42,6 +43,18 @@ public class RenderAssistant
 		textures.put(path, t);
 	}
 	
+	public static void storeTextureAtlas(String path, int cw, int ch)
+	{
+		if (!textureAtlases.containsKey(path)) textureAtlases.put(path, new TextureAtlas(path, cw, ch));
+		
+	}
+	
+	public static void bindTextureAtlasTile(String path, int x, int y)
+	{
+		if (!textureAtlases.containsKey(path)) throw new NoSuchElementException(" texture atlas " + path);
+		else textureAtlases.get(path).getTile(x, y).bind();	
+	}
+	
 	public static void bindTexture(String path)
 	{
 		Texture t = textures.get(path);
@@ -53,25 +66,6 @@ public class RenderAssistant
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			textures.put(path, t);
-		}
-	}
-	
-	public static void bindTextureRegion(String path, int x, int y, int width, int height)
-	{
-		TextureRegion tr = new TextureRegion(path, x, y, width, height);
-		Texture t = textureRegions.get(tr);
-		CFG.p(tr);
-		CFG.p(textureRegions.keySet());
-		
-		
-		if (t != null) {
-			t.bind();
-		}
-		else
-		{
-			Texture tex = tr.loadTexture();
-			textureRegions.put(tr, tex);
-			tex.bind();
 		}
 	}
 	

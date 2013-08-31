@@ -52,11 +52,10 @@ public class Game
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
-		
 		ShaderLoader.useProgram("graphics/shaders/", "default");
-		if(CFG.LIGHTING)RenderAssistant.enable(GL_LIGHTING);
+		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
-
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
@@ -94,7 +93,7 @@ public class Game
 		}
 		glPopMatrix();
 		
-
+		
 		glPushMatrix();
 		{
 			glTranslated(128, 160, 128);
@@ -145,7 +144,7 @@ public class Game
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
 		else cameraSpeed = 0.1f;
-
+		
 		
 		currentMap.onTick();
 		
@@ -159,6 +158,7 @@ public class Game
 	public static void initGame()
 	{
 		Voxel.loadVoxels();
+		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentMap = MapGenerator.generateRandomMap();
 		currentMap.startMap();

@@ -13,7 +13,7 @@ import com.vloxlands.game.voxel.Voxel;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 256;
+	public static final int CHUNKSIZE = 32;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];

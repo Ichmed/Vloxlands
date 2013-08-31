@@ -24,11 +24,12 @@ public class ChunkRenderer
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
 		ArrayList<VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
-		// CFG.p("faces in this chunk: " + faces);
+		
 		for (int i = 0; i < faceLists[0].size(); i++)
 		{
 			faceLists[0].get(i).render();
 		}
+		
 		for (int i = 0; i < faceLists[1].size(); i++)
 		{
 			faceLists[1].get(i).render();
@@ -47,7 +48,6 @@ public class ChunkRenderer
 			island.chunks.put(i);
 		}
 		
-		
 		island.chunks.flip();
 		CFG.p("[ChunkRenderer]: Initialized chunks on Island " + island);
 	}
@@ -57,7 +57,6 @@ public class ChunkRenderer
 	{
 		ArrayList<VoxelFace> faces = new ArrayList<>();
 		ArrayList<VoxelFace> transparentFaces = new ArrayList<>();
-		
 		for (int x = 0; x < Island.CHUNKSIZE; x++)
 		{
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
@@ -68,8 +67,7 @@ public class ChunkRenderer
 					int posY = (cy * Island.CHUNKSIZE) + y;
 					int posZ = (cz * Island.CHUNKSIZE) + z;
 					
-					if (i.getVoxelId(posX, posY, posZ) == 0) continue;
-					
+					if (i.getVoxelId(posX, posY, posZ) == Voxel.get("AIR").getId()) continue;
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
 					for (Direction d : Direction.values())
 					{
@@ -84,7 +82,6 @@ public class ChunkRenderer
 				}
 			}
 		}
-		
 		return new ArrayList[] { faces, transparentFaces };
 	}
 }
