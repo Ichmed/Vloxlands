@@ -2,12 +2,10 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
@@ -25,7 +23,7 @@ public class ChunkRenderer
 		
 		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		genereateGreedyMesh(cx, cy, cz, faceLists[0]);
+		// genereateGreedyMesh(cx, cy, cz, faceLists[0]);
 		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
@@ -90,53 +88,26 @@ public class ChunkRenderer
 		return new HashMap[] { faces, transparentFaces };
 	}
 	
-	protected static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
-	{
-		for (Direction d : Direction.values())
-		{
-			for (int x = 0; x < Island.CHUNKSIZE; x++)
-			{
-				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
-				{
-					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
-					{
-						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
-						{
-							
-						}
-					}
-				}
-			}
-			
-			for (int y = 0; y < Island.CHUNKSIZE; y++)
-			{				
-				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
-				{
-					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
-					{
-						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
-						{	
-							
-						}
-					}
-				}
-			}
-			
-			for (int z = 0; z < Island.CHUNKSIZE; z++)
-			{				
-				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
-				{
-					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
-					{
-						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
-						{	
-							
-						}
-					}
-				}
-			}
-		}
-	}
+	// protected static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
+	// {
+	// for (Direction d : Direction.values())
+	// {
+	// // ArrayList<VoxelFace> stripes = new Array
+	// for (int x = 0; x < Island.CHUNKSIZE; x++)
+	// {
+	// for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
+	// {
+	// for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
+	// {
+	// for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
+	// {
+	//
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
 	
 	protected static ArrayList<Integer> getVoxelFaceKey(int x, int y, int z, int d)
 	{

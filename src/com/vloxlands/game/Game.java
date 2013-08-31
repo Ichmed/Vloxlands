@@ -12,7 +12,6 @@ import org.newdawn.slick.Color;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
-import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
@@ -60,19 +59,9 @@ public class Game
 		
 		moveCamera();
 		
-		Mouse.next();
-		int p = Mouse.getEventButton();
+		GUIAssistant.handleMouse();
 		
-		if (Mouse.isButtonDown(1))
-		{
-			Mouse.setGrabbed(true);
-			if (p != 1) rotateCamera();
-			else Mouse.setCursorPosition((Display.getWidth() / 2), (Display.getHeight() / 2));
-		}
-		else Mouse.setGrabbed(false);
-		
-		
-		gluPerspective((float) 50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
+		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
@@ -101,8 +90,6 @@ public class Game
 		}
 		glPopMatrix();
 		
-		GUIAssistant.handleMouse();
-		
 		if (scene != null) scene.update();
 		
 		RenderAssistant.set2DRenderMode(true);
@@ -124,7 +111,7 @@ public class Game
 			lightPos.x = camera.position.x;
 			lightPos.y = camera.position.y;
 			lightPos.z = camera.position.z;
-			RenderAssistant.setUniform3f("lightPosition", this.lightPos);
+			RenderAssistant.setUniform3f("lightPosition", lightPos);
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
@@ -160,8 +147,7 @@ public class Game
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
-		currentMap = MapGenerator.generateRandomMap();
-		currentMap.startMap();
+		currentMap = new Map();
 		currentGame.camera.setPosition(128.5f, 130, 128.5f);
 		currentGame.camera.setRotation(90, 0, 0);
 	}
@@ -247,11 +233,11 @@ public class Game
 	
 	public void rotateCamera()
 	{
-		float x = ((Mouse.getY() - (Display.getHeight() / 2)) / (float) Display.getHeight()) * cameraRotationSpeed;
-		float y = ((Mouse.getX() - (Display.getWidth() / 2)) / (float) Display.getWidth()) * cameraRotationSpeed;
+		float x = (Mouse.getY() - Display.getHeight() / 2) / (float) Display.getHeight() * cameraRotationSpeed;
+		float y = (Mouse.getX() - Display.getWidth() / 2) / (float) Display.getWidth() * cameraRotationSpeed;
 		
 		camera.rotate(-x, y, 0);
 		
-		Mouse.setCursorPosition((Display.getWidth() / 2), (Display.getHeight() / 2));
+		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 	}
 }

@@ -16,6 +16,11 @@ public abstract class Component
 	boolean visible;
 	boolean enabled;
 	
+	/**
+	 * 0 = unselected 1 = hovered 2 = active
+	 */
+	int state;
+	
 	public Font font;
 	
 	public Component(int x, int y, int width, int height)
@@ -28,13 +33,19 @@ public abstract class Component
 		
 		visible = true;
 		enabled = true;
+		state = 0;
 		texture = "graphics/textures/ui/gui.png";
 	}
 	
 	public void draw()
 	{}
 	
-	public abstract void mouseEvent(int posX, int posY, byte b, boolean c);
+	public void mouseEvent(int posX, int posY, byte b, boolean c)
+	{
+		if (!c) state = 0;
+		else if ((b & 1) == 1) state = 2;
+		else state = 1;
+	}
 	
 	public int getX()
 	{
@@ -94,5 +105,15 @@ public abstract class Component
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
+	}
+	
+	public void setState(int s)
+	{
+		state = s;
+	}
+	
+	public int getState()
+	{
+		return state;
 	}
 }

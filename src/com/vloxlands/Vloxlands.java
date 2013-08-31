@@ -11,14 +11,13 @@ import com.vloxlands.game.Game;
 import com.vloxlands.scene.Scene_Mainmenu;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Assistant;
-import com.vloxlands.util.Direction;
 
 import de.dakror.universion.UniVersion;
 
 public class Vloxlands
 {
 	public static void main(String[] args)
-	{		
+	{
 		CFG.INTERNET = Assistant.isInternetReachable();
 		
 		// -- UniVersion & Reporter initialization -- //
@@ -30,10 +29,10 @@ public class Vloxlands
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
-
+		
 		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
 		
-//		Direction.get90DegreeDiretions(Direction.UP);
+		// Direction.get90DegreeDiretions(Direction.UP);
 		
 		
 		try
@@ -45,7 +44,7 @@ public class Vloxlands
 			Display.setInitialBackground(0.5f, 0.8f, 0.85f);
 			Display.create();
 			Game.initGLSettings();
-
+			
 			Game.initGame();
 			Game.currentGame.setScene(new Scene_Mainmenu());
 			

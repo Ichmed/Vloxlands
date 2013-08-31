@@ -11,26 +11,10 @@ public class TextButton extends Component
 {
 	String title;
 	
-	/**
-	 * 0 = unselected 1 = hovered 2 = active
-	 */
-	int state;
-	
 	public TextButton(int x, int y, String title)
 	{
 		super(x - 145, y, 290, 60);
 		this.title = title;
-		state = 0;
-	}
-	
-	public void setState(int s)
-	{
-		state = s;
-	}
-	
-	public int getState()
-	{
-		return state;
 	}
 	
 	@Override
@@ -53,14 +37,6 @@ public class TextButton extends Component
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
 		RenderAssistant.renderText(x + mx, y + 85 / 4f, title, Color.white, font);
-	}
-	
-	@Override
-	public void mouseEvent(int posX, int posY, byte b, boolean c)
-	{
-		if (!c) state = 0;
-		else if ((b & 1) == 1) state = 2;
-		else state = 1;
 	}
 	
 	public String getTitle()

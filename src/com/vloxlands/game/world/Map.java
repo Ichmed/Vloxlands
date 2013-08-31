@@ -6,12 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vloxlands.game.entity.Entity;
+import com.vloxlands.gen.IslandGenerator;
 import com.vloxlands.render.ChunkRenderer;
 
 public class Map
 {
 	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
+	
+	public IslandGenerator islandGenerator;
 	
 	public static final int MAXHEIGHT = 512;
 	
@@ -24,12 +27,22 @@ public class Map
 		{
 			glPushMatrix();
 			i.render();
-			glPopMatrix();			
+			glPopMatrix();
 		}
 	}
 	
 	public void onTick()
 	{
+		if (islandGenerator != null)
+		{
+			if (islandGenerator.finishedIsland != null)
+			{
+				addIsland(islandGenerator.finishedIsland);
+				islandGenerator = null;
+			}
+			
+		}
+		
 		for (Island i : islands)
 			i.onTick();
 	}
@@ -42,20 +55,13 @@ public class Map
 	public void addIsland(Island i)
 	{
 		islands.add(i);
-	}
-	
-	public void startMap()
-	{
-		for (Island i : islands)
-		{
-			ChunkRenderer.initChunks(i);
-			i.calculateWeight();
-			i.calculateUplift();
-		}
+		ChunkRenderer.initChunks(i);
+		i.calculateWeight();
+		i.calculateUplift();
 	}
 	
 	public static float calculateUplift(float height)
 	{
-		return ((1 - (height / MAXHEIGHT)) * 4) + 0.1f;
+		return (1 - height / MAXHEIGHT) * 4 + 0.1f;
 	}
 }

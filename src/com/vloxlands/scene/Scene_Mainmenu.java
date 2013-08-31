@@ -4,6 +4,8 @@ import java.awt.Font;
 
 import org.lwjgl.opengl.Display;
 
+import com.vloxlands.game.Game;
+import com.vloxlands.gen.IslandGenerator;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.GUIAssistant;
@@ -31,7 +33,12 @@ public class Scene_Mainmenu implements Scene
 	@Override
 	public void update()
 	{
+		if (start.getState() == 2)
+		{
+			Game.currentMap.islandGenerator = new IslandGenerator();
+			start.setState(0);
+		}
+		
 		if (quit.getState() == 2) System.exit(0);
 	}
-	
 }

@@ -11,10 +11,10 @@ public class MapGenerator
 		
 		for (int i = 0; i < islands; i++)
 		{
-//			Island island = new Island();
-//			island.setVoxel(128,128,128, Voxel.get("STONE").getId());
-//			map.addIsland(island);
-			map.addIsland(IslandGenerator.generateIsland());
+			// Island island = new Island();
+			// island.setVoxel(128,128,128, Voxel.get("STONE").getId());
+			// map.addIsland(island);
+			// map.addIsland(IslandGenerator.generateIsland());
 		}
 		return map;
 	}
