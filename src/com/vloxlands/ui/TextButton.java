@@ -46,7 +46,8 @@ public class TextButton implements IClickableGui
 		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, Color.white, font);
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, (this.isActive ? Color.white : Color.gray), font);
+		glColor3f(1, 1, 1);
 	}
 	
 	public String getTitle()
