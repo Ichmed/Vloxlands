@@ -10,6 +10,7 @@ import com.vloxlands.util.RenderAssistant;
 public class TextButton extends Component
 {
 	String title;
+	IClickEvent clickEvent;
 	
 	public TextButton(int x, int y, String title)
 	{
