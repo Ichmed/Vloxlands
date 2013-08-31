@@ -2,9 +2,12 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
@@ -20,23 +23,21 @@ public class ChunkRenderer
 		int cy = index / cs % cs;
 		int cz = index % cs;
 		
-		ArrayList<VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
+		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
+		
+		genereateGreedyMesh(cx, cy, cz, faceLists[0]);
 		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
-		for (int i = 0; i < faceLists[0].size(); i++)
-		{
-			faceLists[0].get(i).render();
-		}
+		for (VoxelFace v : faceLists[0].values())
+			v.render();
 		glEndList();
 		glPopMatrix();
 		
 		glPushMatrix();
 		glNewList(listIndex + 1, GL_COMPILE);
-		for (int i = 0; i < faceLists[1].size(); i++)
-		{
-			faceLists[1].get(i).render();
-		}
+		for (VoxelFace v : faceLists[1].values())
+			v.render();
 		glEndList();
 		glPopMatrix();
 	}
@@ -57,10 +58,10 @@ public class ChunkRenderer
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected static ArrayList<VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
+	protected static HashMap<ArrayList<Integer>, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
 	{
-		ArrayList<VoxelFace> faces = new ArrayList<>();
-		ArrayList<VoxelFace> transparentFaces = new ArrayList<>();
+		HashMap<ArrayList<Integer>, VoxelFace> faces = new HashMap<>();
+		HashMap<ArrayList<Integer>, VoxelFace> transparentFaces = new HashMap<>();
 		for (int x = 0; x < Island.CHUNKSIZE; x++)
 		{
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
@@ -79,13 +80,71 @@ public class ChunkRenderer
 						if (!w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v);
-							if (v.isOpaque()) faces.add(f);
-							else transparentFaces.add(f);
+							if (v.isOpaque()) faces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
+							else transparentFaces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
 						}
 					}
 				}
 			}
 		}
-		return new ArrayList[] { faces, transparentFaces };
+		return new HashMap[] { faces, transparentFaces };
+	}
+	
+	protected static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
+	{
+		for (Direction d : Direction.values())
+		{
+			for (int x = 0; x < Island.CHUNKSIZE; x++)
+			{
+				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
+				{
+					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
+					{
+						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
+						{
+							
+						}
+					}
+				}
+			}
+			
+			for (int y = 0; y < Island.CHUNKSIZE; y++)
+			{				
+				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
+				{
+					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
+					{
+						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
+						{	
+							
+						}
+					}
+				}
+			}
+			
+			for (int z = 0; z < Island.CHUNKSIZE; z++)
+			{				
+				for (int x1 = 0; x1 < Island.CHUNKSIZE; x1++)
+				{
+					for (int y1 = 0; y1 < Island.CHUNKSIZE; y1++)
+					{
+						for (int z1 = 0; z1 < Island.CHUNKSIZE; z1++)
+						{	
+							
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	protected static ArrayList<Integer> getVoxelFaceKey(int x, int y, int z, int d)
+	{
+		ArrayList<Integer> l = new ArrayList<Integer>();
+		l.add(x);
+		l.add(y);
+		l.add(z);
+		l.add(d);
+		return l;
 	}
 }
