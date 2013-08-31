@@ -18,10 +18,10 @@ public class Scene_Mainmenu implements Scene
 	@Override
 	public void init()
 	{
-		start = new TextButton(Display.getWidth() / 2 - 110, Display.getHeight() / 2 - 80, "Spiel starten");
+		start = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Spiel starten");
 		GUIAssistant.addComponent(start);
 		
-		quit = new TextButton(Display.getWidth() / 2 - 110, Display.getHeight() / 2 + 20, "Spiel beenden");
+		quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, "Spiel beenden");
 		GUIAssistant.addComponent(quit);
 		Label version = new Label(0, Display.getHeight() - 20, -1, -1, UniVersion.prettyVersion());
 		version.font = version.font.deriveFont(Font.PLAIN, 20f);

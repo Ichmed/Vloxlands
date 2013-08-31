@@ -18,7 +18,7 @@ public class TextButton extends Component
 	
 	public TextButton(int x, int y, String title)
 	{
-		super(x, y, 280, 60);
+		super(x - 145, y, 290, 60);
 		this.title = title;
 		state = 0;
 	}
