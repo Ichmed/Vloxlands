@@ -45,8 +45,8 @@ public class TextButton extends Component
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		int texX = 12;
 		int texY = 73;
-		if (state == 1) texY = 124;
-		if (state == 2) texY = 175;
+		if (state == 2) texY = 124;
+		if (state == 1) texY = 175;
 		
 		RenderAssistant.renderRect(x, y, width, 85, texX / 1024.0f, texY / 666.0f, 288 / 1024.0f, 59 / 666.0f);
 		glDisable(GL_BLEND);
