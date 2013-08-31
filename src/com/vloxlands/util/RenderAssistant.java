@@ -75,6 +75,8 @@ public class RenderAssistant
 	
 	public static void bindTexture(String path)
 	{
+		if (path == null) return;
+		
 		Texture t = textures.get(path);
 		if (t != null) t.bind();// glBindTexture(GL_TEXTURE_2D, t.getTextureID());
 		else

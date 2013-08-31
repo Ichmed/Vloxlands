@@ -22,6 +22,8 @@ import com.vloxlands.util.GUIAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
+import de.dakror.universion.UniVersion;
+
 public class Game
 {
 	public static Game currentGame;
@@ -103,6 +105,8 @@ public class Game
 		}
 		
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
+		
+		RenderAssistant.renderText(0, Display.getHeight() - 20, UniVersion.prettyVersion(), Color.white, FontAssistant.GAMEFONT.deriveFont(20f));
 		
 		RenderAssistant.set2DRenderMode(false);
 		

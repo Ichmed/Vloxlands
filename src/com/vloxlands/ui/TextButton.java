@@ -25,8 +25,6 @@ public class TextButton extends Component
 		glColor3f(1, 1, 1);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		RenderAssistant.bindTexture(texture);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		int texX = 12;
 		int texY = 124;
 		if (state == 1) texY = 280;

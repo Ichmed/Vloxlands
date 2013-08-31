@@ -1,7 +1,5 @@
 package com.vloxlands.scene;
 
-import java.awt.Font;
-
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
@@ -10,8 +8,6 @@ import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.GUIAssistant;
-
-import de.dakror.universion.UniVersion;
 
 public class Scene_Mainmenu implements Scene
 {
@@ -22,23 +18,26 @@ public class Scene_Mainmenu implements Scene
 	@Override
 	public void init()
 	{
+		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
+		bg.setTexture("graphics/textures/ui/paper.png");
+		GUIAssistant.addComponent(bg);
+		
 		start = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Spiel starten");
 		GUIAssistant.addComponent(start);
 		
-		progress = new ProgressBar(Display.getWidth() / 2, 80, 280, 0);
+		progress = new ProgressBar(Display.getWidth() / 2, 80, 280, 0, true);
 		progress.setVisible(false);
 		GUIAssistant.addComponent(progress);
 		
 		quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, "Spiel beenden");
 		GUIAssistant.addComponent(quit);
-		Label version = new Label(0, Display.getHeight() - 20, -1, -1, UniVersion.prettyVersion());
-		version.font = version.font.deriveFont(Font.PLAIN, 20f);
-		GUIAssistant.addComponent(version);
 	}
 	
 	@Override
 	public void update()
 	{
+		if (Game.currentMap.islands.size() > 0) Game.currentGame.setScene(new Scene_Game());
+		
 		if (Game.currentMap.islandGenerator != null) progress.setValue(Game.currentMap.islandGenerator.progress);
 		else progress.setVisible(false);
 		

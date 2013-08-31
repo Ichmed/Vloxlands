@@ -116,4 +116,14 @@ public abstract class Component
 	{
 		return state;
 	}
+	
+	public String getTexture()
+	{
+		return texture;
+	}
+	
+	public void setTexture(String texture)
+	{
+		this.texture = texture;
+	}
 }

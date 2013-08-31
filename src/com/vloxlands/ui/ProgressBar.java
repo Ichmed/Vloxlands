@@ -2,16 +2,22 @@ package com.vloxlands.ui;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.newdawn.slick.Color;
+
+import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 public class ProgressBar extends Component
 {
 	float value;
+	boolean showPercentage;
 	
-	public ProgressBar(int x, int y, int width, float value)
+	public ProgressBar(int x, int y, int width, float value, boolean showPercentage)
 	{
 		super(x - width / 2, y, width, 39);
 		this.value = 0;
+		this.showPercentage = showPercentage;
+		font = font.deriveFont(20f);
 	}
 	
 	@Override
@@ -30,6 +36,13 @@ public class ProgressBar extends Component
 		glDisable(GL_SCISSOR_TEST);
 		RenderAssistant.renderRect(x + width - 18, y, 18, 39, 980 / 1024.0f, 548 / 1024.0f, 18 / 1024.0f, 39 / 1024.0f);
 		glDisable(GL_BLEND);
+		
+		if (showPercentage)
+		{
+			int tx = FontAssistant.getFont(font).getWidth(((int) (value * 100)) + "%");
+			int mx = width / 2 - tx / 2;
+			RenderAssistant.renderText(x + mx, y + height / 4f, ((int) (value * 100)) + "%", Color.white, font);
+		}
 	}
 	
 	public float getValue()

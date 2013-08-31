@@ -13,19 +13,19 @@ public class Label extends Component
 	{
 		super(x, y, width, height);
 		this.title = title;
+		texture = null;
 	}
 	
 	@Override
 	public void draw()
 	{
+		RenderAssistant.bindTexture(texture);
+		RenderAssistant.renderRect(x, y, width, height);
+		
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
 		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, Color.white, font);
 	}
-	
-	@Override
-	public void mouseEvent(int posX, int posY, byte b, boolean c)
-	{}
 	
 	public String getTitle()
 	{
