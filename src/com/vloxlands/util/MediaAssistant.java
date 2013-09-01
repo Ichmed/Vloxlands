@@ -10,6 +10,7 @@ public class MediaAssistant
 	{
 		try
 		{
+			new File(CFG.DIR, folder).mkdirs();
 			boolean need = !Assistant.getFolderChecksum(new File(CFG.DIR, folder)).equals(CFG.class.getField(folder.toUpperCase() + "_CS").get(null));
 			return need;
 		}
