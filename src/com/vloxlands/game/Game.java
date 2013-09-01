@@ -60,8 +60,6 @@ public class Game
 		
 		moveCamera();
 		
-		// GUIAssistant.handleMouse();
-		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
@@ -186,8 +184,8 @@ public class Game
 		glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_DIFFUSE);
-		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
-		
+		glMaterialf(GL_FRONT, GL_SHININESS, 100f);		
+				
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
 		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
