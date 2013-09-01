@@ -110,6 +110,10 @@ public class ChunkRenderer
 					VoxelFace activeStrip = null;
 					for (int z = 0; z < Island.CHUNKSIZE; z++)
 					{
+						int posY = cy * Island.CHUNKSIZE + y;
+						int posX = cx * Island.CHUNKSIZE + x;
+						int posZ = cz * Island.CHUNKSIZE + z;
+						
 						if (activeStrip != null)
 						{
 							if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
@@ -129,7 +133,7 @@ public class ChunkRenderer
 						}
 						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
 						{
-							activeStrip = new VoxelFace(d, new Vector3f(x, y, z), originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex);
+							activeStrip = new VoxelFace(d, new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex);
 						}
 					}
 					

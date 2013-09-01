@@ -77,10 +77,10 @@ public class VoxelFace
 				tr.z = sizeZ;
 				br.z = sizeZ;
 				
-				tl.y = 0;
-				bl.y = 0;
-				tr.y = sizeY;
-				br.y = sizeY;
+				tl.x = sizeX;
+				bl.x = sizeX;
+				tr.x = 0;
+				br.x = 0;
 				
 				break;
 			}
@@ -117,6 +117,7 @@ public class VoxelFace
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
 		
+		glEnable(GL_CULL_FACE);
 		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
