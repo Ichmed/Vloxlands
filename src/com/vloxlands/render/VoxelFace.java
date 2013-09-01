@@ -119,13 +119,13 @@ public class VoxelFace
 		
 		glEnable(GL_CULL_FACE);
 		// glBindTexture(GL_TEXTURE_2D, 0);
-		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 10, 10);
+		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glPushMatrix();
 		{
 			glEnable(GL_BLEND);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glTranslatef(pos.x, pos.y, pos.z);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -153,7 +153,7 @@ public class VoxelFace
 			}
 			glEnd();
 			
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		glPopMatrix();
 	}
