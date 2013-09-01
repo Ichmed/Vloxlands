@@ -63,9 +63,43 @@ public class Game
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
-		glRotated(camera.getRotation().z, 0f, 0f, 1f);
+		glRotated(camera.getRotation().z, 0f, 0f, 1f);		
 		
 		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
+		
+		glPushMatrix();
+		{
+			glTranslatef(128, 130, 128);
+			glLineWidth(10);
+			glColor3d(1, 0, 0);
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(2, 0, 0);
+			}
+			glEnd();
+			
+			glColor3d(0, 1, 0);
+			
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(0, 2, 0);
+			}
+			glEnd();
+			
+			glColor3d(0, 0, 1);
+			
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(0, 0, 2);
+			}
+			glEnd();
+			
+			glColor3d(1, 1, 1);
+		}
+		glPopMatrix();
 		
 		glPushMatrix();
 		{

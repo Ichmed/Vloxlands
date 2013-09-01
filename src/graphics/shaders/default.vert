@@ -11,7 +11,7 @@ void main()
 	{
 		vec3 vertexPosition = (gl_ModelViewMatrix * gl_Vertex).xyz;
 		
-		vec3 lightDirection = normalize(lightPosition.xyz - vertexPosition);    
+		vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);    
  		vec3 surfaceNormal = (gl_NormalMatrix * gl_Normal).xyz;
     
 		float diffuseLightIntensity = max(0.0, dot(surfaceNormal, lightDirection));
