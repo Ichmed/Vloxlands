@@ -23,16 +23,15 @@ public class ChunkRenderer
 		
 		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		// HashMap<ArrayList<Integer>, VoxelFace> greedy0 = genereateGreedyMesh(cx, cy, cz, faceLists[0]);
+		HashMap<ArrayList<Integer>, VoxelFace> greedy0 = generateGreedyMesh(cx, cy, cz, faceLists[0]);
 		// HashMap<ArrayList<Integer>, VoxelFace> greedy1 = genereateGreedyMesh(cx, cy, cz, faceLists[1]);
-		// if (greedy0.size() > 0) CFG.p(greedy0.size());
-		
+		if (greedy0.size() > 0) CFG.p(greedy0.size());
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
-		// for (VoxelFace v : greedy0.values())
-		// v.render();
-		for (VoxelFace v : faceLists[0].values())
+		for (VoxelFace v : greedy0.values())
 			v.render();
+		// for (VoxelFace v : faceLists[0].values())
+		// v.render();
 		glEndList();
 		glPopMatrix();
 		
@@ -94,55 +93,106 @@ public class ChunkRenderer
 		return new HashMap[] { faces, transparentFaces };
 	}
 	
-	private static HashMap<ArrayList<Integer>, VoxelFace> genereateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
+	private static HashMap<ArrayList<Integer>, VoxelFace> generateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
 	{
 		HashMap<ArrayList<Integer>, VoxelFace> strips = new HashMap<>();
 		long time = System.currentTimeMillis();
-		for (Direction d : Direction.values())
+		
+		if (originalMap.size() == 0) return originalMap;
+		
+		// if (d.dir.x != 0) continue;
+		
+		// greedy-mode along Z - axis
+		for (int x = 0; x < Island.CHUNKSIZE; x++)
 		{
-			// if (d.dir.x != 0) continue;
-			
-			// greedy-mode along Z - axis
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
 			{
-				for (int x = 0; x < Island.CHUNKSIZE; x++)
+				VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
+				for (int z = 0; z < Island.CHUNKSIZE; z++)
 				{
-					VoxelFace activeStrip = null;
-					for (int z = 0; z < Island.CHUNKSIZE; z++)
+					for (int i = 0; i < activeStrips.length; i++)
 					{
 						int posY = cy * Island.CHUNKSIZE + y;
 						int posX = cx * Island.CHUNKSIZE + x;
 						int posZ = cz * Island.CHUNKSIZE + z;
 						
-						if (activeStrip != null)
+						if (activeStrips[i] != null)
 						{
-							if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
+							if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
 							{
-								strips.put(getVoxelFaceKey(activeStrip), activeStrip);
-								activeStrip = null;
+								strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+								activeStrips[i] = null;
 							}
-							else if (originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex == activeStrip.textureIndex)
+							else if (originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex == activeStrips[i].textureIndex)
 							{
-								activeStrip.increaseSize(0, 0, 1);
+								activeStrips[i].increaseSize(0, 0, 1);
 							}
 							else
 							{
-								strips.put(getVoxelFaceKey(activeStrip), activeStrip);
-								activeStrip = null;
+								strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+								activeStrips[i] = null;
 							}
 						}
-						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, d.ordinal())))
+						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
 						{
-							activeStrip = new VoxelFace(d, new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, d.ordinal())).textureIndex);
+							activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex);
 						}
 					}
-					
-					if (activeStrip != null) strips.put(getVoxelFaceKey(activeStrip), activeStrip);
+					for (int i = 0; i < activeStrips.length; i++)
+						if (activeStrips[i] != null) strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
 				}
 			}
 		}
 		
-		CFG.p("[ChunkRenderer]: Greedy meshing took " + (System.currentTimeMillis() - time) + "ms");
+		
+		
+		// greedy-mode along Y - axis
+		
+		for (int y = 0; y < Island.CHUNKSIZE; y++)
+		{
+			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
+			for (int x = 0; x < Island.CHUNKSIZE; x++)
+			{
+				// for (int z = 0; z < Island.CHUNKSIZE; z++)
+				// {
+				for (int i = 0; i < activeStrips.length; i++)
+				{
+					int z = 120;
+					int posY = cy * Island.CHUNKSIZE + y;
+					int posX = cx * Island.CHUNKSIZE + x;
+					int posZ = cz * Island.CHUNKSIZE + z;
+					if (activeStrips[i] != null)
+					{
+						if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
+						{
+							strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+							activeStrips[i] = null;
+						}
+						else if (originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex == activeStrips[i].textureIndex && activeStrips[i].sizeZ == originalMap.get(getVoxelFaceKey(x, y, z, i)).sizeZ)
+						{
+							activeStrips[i].increaseSize(1, 0, 0);
+						}
+						else
+						{
+							strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+							activeStrips[i] = null;
+						}
+					}
+					else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
+					{
+						CFG.p("new at: " + getVoxelFaceKey(x, y, z, i));
+						activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex);
+					}
+				}
+			}
+			for (int i = 0; i < activeStrips.length; i++)
+				if (activeStrips[i] != null) strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+		}
+		
+		
+		
+		
+		// CFG.p("[ChunkRenderer]: Greedy meshing took " + (System.currentTimeMillis() - time) + "ms");
 		
 		return strips;
 	}
