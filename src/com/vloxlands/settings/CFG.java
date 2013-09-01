@@ -3,7 +3,7 @@ package com.vloxlands.settings;
 public class CFG
 {
 	// -- UniVersion -- //
-	public static final int VERSION = 2013082609;
+	public static final int VERSION = 2013090102;
 	public static final int PHASE = 0;
 	// -- debug -- //
 	public static boolean DEBUG = true;
