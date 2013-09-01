@@ -10,8 +10,6 @@ import com.vloxlands.util.RenderAssistant;
 public class Label extends IGuiElement
 {
 	String title;
-	String texture;
-	int x, y, width, height;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	public Label(int x, int y, int width, int height, String title)
@@ -21,7 +19,6 @@ public class Label extends IGuiElement
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		texture = null;
 	}
 	
 	@Override
@@ -43,10 +40,5 @@ public class Label extends IGuiElement
 	public void setTitle(String title)
 	{
 		this.title = title;
-	}
-	
-	public void setTexture(String t)
-	{
-		texture = t;
 	}
 }

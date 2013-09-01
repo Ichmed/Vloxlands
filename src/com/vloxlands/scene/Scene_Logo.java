@@ -2,17 +2,27 @@ package com.vloxlands.scene;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.ui.Label;
+import com.vloxlands.ui.ProgressBar;
+import com.vloxlands.util.MediaAssistant;
+import com.vloxlands.util.ZipAssistant;
 
 
 public class Scene_Logo extends Scene
 {
+	ProgressBar download;
 	float alpha;
 	boolean update;
+	ZipAssistant downloader;
 	
 	@Override
 	public void init()
@@ -28,10 +38,26 @@ public class Scene_Logo extends Scene
 		
 		alpha = 0;
 		if (CFG.INTERNET)
-		{	
-			
+		{
+			try
+			{
+				downloader = new ZipAssistant();
+				if (MediaAssistant.needMediaUpdate("natives")) downloader.addDownload(new URL("http://dakror.de/vloxlands/GAMECONTENT/natives.zip"), new File(CFG.DIR, "natives"), true);
+				
+				if (downloader.hasDownloads())
+				{
+					download = new ProgressBar(Display.getWidth() / 2, Display.getHeight() - 40, Display.getWidth() - 40, 0, true);
+					content.add(download);
+					downloader.start();
+					update = true;
+				}
+			}
+			catch (MalformedURLException e)
+			{
+				e.printStackTrace();
+			}
 		}
-		update = false;
+		else update = false;
 	}
 	
 	@Override
@@ -50,6 +76,15 @@ public class Scene_Logo extends Scene
 		super.update();
 		glDisable(GL_BLEND);
 		alpha += 0.05f;
-		if (alpha >= Math.PI * 4) Game.currentGame.setScene(new Scene_Mainmenu());
+		if (!update)
+		{
+			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new Scene_Mainmenu());
+		}
+		else
+		{
+			download.setValue(downloader.progress / (float) downloader.fullsize);
+			// download.title = Assistant.formatBinarySize(downloader.progress, 2) + " / " + Assistant.formatBinarySize(downloader.fullsize, 2) + " @ " + Assistant.formatBinarySize(downloader.speed, 2) + "/s"; // want that?
+			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new Scene_Mainmenu());
+		}
 	}
 }

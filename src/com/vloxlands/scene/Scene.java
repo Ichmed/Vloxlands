@@ -104,7 +104,7 @@ public abstract class Scene
 		for (IGuiElement i : content)
 			if (i instanceof IClickableGui)
 			{
-				((IClickableGui) i).setActive(false);
+				((IClickableGui) i).setEnabled(false);
 			}
 	}
 }

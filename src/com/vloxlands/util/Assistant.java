@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 
 import org.newdawn.slick.opengl.PNGDecoder;
@@ -91,5 +92,28 @@ public class Assistant
 			else length += getFolderSize(file);
 		}
 		return length;
+	}
+	
+	public static void deleteFolder(File folder)
+	{
+		for (File f : folder.listFiles())
+		{
+			if (f.isDirectory()) deleteFolder(f);
+			f.delete();
+		}
+	}
+	
+	public static String formatBinarySize(long size, int digits)
+	{
+		final String[] levels = { "", "K", "M", "G", "T" };
+		for (int i = levels.length - 1; i > -1; i--)
+			if (size > (long) Math.pow(1024, i))
+			{
+				DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(digits);
+				df.setMinimumFractionDigits(digits);
+				return df.format(size / Math.pow(1024, i)) + levels[i] + "B";
+			}
+		return null;
 	}
 }

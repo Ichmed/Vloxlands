@@ -8,43 +8,74 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ZipAssistant extends Thread
 {
-	public String state;
-	public int fullsize;
-	public int downloaded;
-	public URL url;
-	private File targetDir;
 	public static final byte[] BUFFER = new byte[0xFFFF];
 	
-	public ZipAssistant(URL url, File targetDir)
+	public int progress;
+	public int fullsize;
+	public int speed;
+	private long time;
+	public String state;
+	ArrayList<URL> urls = new ArrayList<>();
+	ArrayList<File> dests = new ArrayList<>();
+	
+	public ZipAssistant()
 	{
-		this.url = url;
-		this.targetDir = targetDir;
+		progress = 0;
+		fullsize = 0;
 	}
 	
+	public void addDownload(URL url, File dest, boolean kill)
+	{
+		if (kill) Assistant.deleteFolder(dest);
+		urls.add(url);
+		dests.add(dest);
+		dest.mkdirs();
+	}
+	
+	public boolean hasDownloads()
+	{
+		return dests.size() > 0;
+	}
+	
+	@Override
 	public void run()
 	{
-		this.state = "Herunterladen";
-		if (!this.targetDir.exists())
-		{
-			this.targetDir.mkdirs();
-		}
 		try
 		{
-			this.fullsize = this.url.openConnection().getContentLength();
-			InputStream in = new BufferedInputStream(this.url.openStream(), 1024);
-			File zip = File.createTempFile("arc", ".zip", this.targetDir);
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(zip));
-			copyInputStream(in, out);
-			out.close();
-			unzip(zip, this.targetDir).delete();
+			state = "Herunterladen";
+			for (URL u : urls)
+				fullsize += u.openConnection().getContentLength();
+			
+			time = System.currentTimeMillis();
+			
+			for (int i = 0; i < dests.size(); i++)
+			{
+				InputStream in = new BufferedInputStream(urls.get(i).openStream(), 1024);
+				File zip = new File(dests.get(i), "download.zip");
+				zip.createNewFile();
+				OutputStream out = new BufferedOutputStream(new FileOutputStream(zip));
+				copyInputStream(in, out);
+				out.close();
+			}
+			
+			
+			state = "Entpacken";
+			for (File f : dests)
+			{
+				unzip(new File(f, "download.zip"), f);
+				new File(f, "download.zip").delete();
+			}
+			
+			state = "Fertig";
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -52,16 +83,10 @@ public class ZipAssistant extends Thread
 	
 	public File unzip(File zip, File dest)
 	{
-		this.state = "Entpacken";
+		
 		try
 		{
 			ZipFile zipFile = new ZipFile(zip);
-			this.downloaded = 0;
-			this.fullsize = 0;
-			for (ZipEntry entry : Collections.list(zipFile.entries()))
-			{
-				if (!entry.isDirectory()) this.fullsize += entry.getSize();
-			}
 			for (ZipEntry entry : Collections.list(zipFile.entries()))
 			{
 				extractEntry(zipFile, entry, dest.getPath().replace("\\", "/"));
@@ -72,7 +97,6 @@ public class ZipAssistant extends Thread
 		{
 			e.printStackTrace();
 		}
-		this.state = "Fertig";
 		return zip;
 	}
 	
@@ -91,7 +115,6 @@ public class ZipAssistant extends Thread
 				os = new FileOutputStream(file);
 				for (int len; (len = is.read(BUFFER)) != -1;)
 				{
-					this.downloaded += len;
 					os.write(BUFFER, 0, len);
 				}
 			}
@@ -110,7 +133,8 @@ public class ZipAssistant extends Thread
 		while (len >= 0)
 		{
 			out.write(buffer, 0, len);
-			this.downloaded += len;
+			progress += len;
+			speed = (int) (progress / ((System.currentTimeMillis() - time) / 1000f));
 			len = in.read(buffer);
 		}
 		in.close();
