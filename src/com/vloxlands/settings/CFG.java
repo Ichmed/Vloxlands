@@ -1,5 +1,7 @@
 package com.vloxlands.settings;
 
+import java.io.File;
+
 public class CFG
 {
 	// -- UniVersion -- //
@@ -10,6 +12,14 @@ public class CFG
 	public static boolean INTERNET;
 	// -- options -- //
 	public static boolean LIGHTING = false;
+	public static boolean FULLSCREEN = false;
+	
+	public static final File DIR = new File(System.clearProperty("user.home") + "/.dakror/Vloxlands");
+	
+	static
+	{
+		DIR.mkdir();
+	}
 	
 	public static void p(Object p)
 	{

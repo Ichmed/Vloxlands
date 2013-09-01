@@ -18,7 +18,6 @@ import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
-import com.vloxlands.util.GUIAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
 
@@ -94,9 +93,8 @@ public class Game
 		
 		
 		RenderAssistant.set2DRenderMode(true);
-		if (scene != null) scene.update();
 		
-		GUIAssistant.renderComponents();
+		if (scene != null) scene.update();
 		
 		while (Keyboard.next())
 		{
@@ -158,8 +156,6 @@ public class Game
 	
 	public void setScene(Scene s)
 	{
-		GUIAssistant.clearComponents();
-		
 		scene = s;
 		scene.init();
 	}

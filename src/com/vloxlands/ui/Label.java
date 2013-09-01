@@ -30,7 +30,6 @@ public class Label implements IGuiElement
 	{
 		RenderAssistant.bindTexture(texture);
 		RenderAssistant.renderRect(x, y, width, height);
-		
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
 		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, Color.white, font);
@@ -49,16 +48,16 @@ public class Label implements IGuiElement
 	@Override
 	public boolean shouldRender()
 	{
-		return this.isVisible;
+		return isVisible;
 	}
 	
 	public void setVisible(boolean b)
 	{
-		this.isVisible = b;
+		isVisible = b;
 	}
 	
 	public void setTexture(String t)
 	{
-		this.texture = t;
+		texture = t;
 	}
 }
