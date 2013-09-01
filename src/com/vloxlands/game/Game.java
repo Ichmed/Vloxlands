@@ -40,6 +40,7 @@ public class Game
 	public float cameraSpeed = 0.1f;
 	public int cameraRotationSpeed = 180;
 	private Vector3f lightPos = new Vector3f();
+	private Vector3f directionalArrowsPos = new Vector3f();
 	
 	public void gameLoop()
 	{
@@ -67,39 +68,7 @@ public class Game
 		
 		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
 		
-		glPushMatrix();
-		{
-			glTranslatef(128, 130, 128);
-			glLineWidth(10);
-			glColor3d(1, 0, 0);
-			glBegin(GL_LINES);
-			{
-				glVertex3d(0, 0, 0);
-				glVertex3d(2, 0, 0);
-			}
-			glEnd();
-			
-			glColor3d(0, 1, 0);
-			
-			glBegin(GL_LINES);
-			{
-				glVertex3d(0, 0, 0);
-				glVertex3d(0, 2, 0);
-			}
-			glEnd();
-			
-			glColor3d(0, 0, 1);
-			
-			glBegin(GL_LINES);
-			{
-				glVertex3d(0, 0, 0);
-				glVertex3d(0, 0, 2);
-			}
-			glEnd();
-			
-			glColor3d(1, 1, 1);
-		}
-		glPopMatrix();
+		if(CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
 		glPushMatrix();
 		{
@@ -134,6 +103,12 @@ public class Game
 		{
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
+			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
+			if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
+			{
+				CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;
+				this.directionalArrowsPos = new Vector3f(this.camera.getPosition());
+			}
 		}
 		
 		glColor4f(1, 1, 1, 1);
@@ -274,5 +249,42 @@ public class Game
 		camera.rotate(-x, y, 0);
 		
 		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+	}
+	
+	public void renderDirectionalArrows()
+	{
+		glPushMatrix();
+		{
+			glTranslatef(this.directionalArrowsPos.x, this.directionalArrowsPos.y, this.directionalArrowsPos.z);
+			glLineWidth(10);
+			glColor3d(1, 0, 0);
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(2, 0, 0);
+			}
+			glEnd();
+			
+			glColor3d(0, 1, 0);
+			
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(0, 2, 0);
+			}
+			glEnd();
+			
+			glColor3d(0, 0, 1);
+			
+			glBegin(GL_LINES);
+			{
+				glVertex3d(0, 0, 0);
+				glVertex3d(0, 0, 2);
+			}
+			glEnd();
+			
+			glColor3d(1, 1, 1);
+		}
+		glPopMatrix();
 	}
 }

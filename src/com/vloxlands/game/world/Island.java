@@ -9,11 +9,12 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.settings.CFG;
 
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 64;
+	public static final int CHUNKSIZE = 16;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
@@ -191,6 +192,39 @@ public class Island
 		
 		glListBase(chunk0ID + chunks[0].capacity());
 		glCallLists(chunks[1]);
+		
+		
+		if(CFG.SHOW_CHUNK_BOUNDRIES)
+		{
+			for (int x = 0; x < Island.SIZE; x += Island.CHUNKSIZE)
+			{
+				for (int y = 0; y < Island.SIZE; y += Island.CHUNKSIZE)
+				{
+					for (int z = 0; z < Island.SIZE; z += Island.CHUNKSIZE)
+					{
+						glPushMatrix();
+						{
+							glTranslated(this.pos.x, this.pos.y, this.pos.z);
+							glLineWidth(1);
+							glColor3d(1, 0, 0);
+							glBegin(GL_LINES);
+							{
+								glVertex3d(x, y, z);
+								glVertex3d(x, y + Island.CHUNKSIZE, z);
+								glVertex3d(x, y, z);
+								glVertex3d(x, y, z + Island.CHUNKSIZE);
+								glVertex3d(x, y, z);
+								glVertex3d(x + Island.CHUNKSIZE, y, z);
+							}
+							glEnd();
+							glColor3d(1, 1, 1);
+							glLineWidth(1);
+						}
+						glPopMatrix();
+					}
+				}
+			}		
+		}
 	}
 	
 	public Vector3f getPos()
