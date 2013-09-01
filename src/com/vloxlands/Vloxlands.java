@@ -78,22 +78,8 @@ public class Vloxlands
 	
 	public static void enterFullscreen() throws LWJGLException
 	{
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		boolean found = false;
-		for (DisplayMode akt : fullscreenmodes)
-		{
-			if (akt.getWidth() == d.width && akt.getHeight() == d.height && akt.getFrequency() == 60)
-			{
-				Display.setDisplayModeAndFullscreen(akt);
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{
-			System.out.printf("can not find matching resolution - falling back to desktop resolution\n");
-			Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
-		}
+		Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+		Display.setVSyncEnabled(true);
 	}
 	
 	public static void leaveFullscreen() throws LWJGLException

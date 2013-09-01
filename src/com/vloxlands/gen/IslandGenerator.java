@@ -54,30 +54,36 @@ public class IslandGenerator extends Thread
 	
 	private Island generateIsland()
 	{
-		// Island s = new Island();
-		// for (int i = 120; i < 122; i++)
-		// {
-		// for (int j = 120; j < 121; j++)
-		// {
-		// for (int k = 120; k < 128; k++)
-		// {
-		// s.setVoxel(i, j, k, Voxel.get("STONE").getId());
-		// }
-		// }
-		// }
-		// return s;
+		Island s = new Island();
+		for (int i = 120; i < 122; i++)
+		{
+			for (int j = 120; j < 121; j++)
+			{
+				for (int k = 120; k < 128; k++)
+				{
+					s.setVoxel(i, j, k, Voxel.get("STONE").getId());
+				}
+			}
+		}
 		
-		int radius = getRandomRadius(ISLAND_SMALL);
+		s.setVoxel(121, 120, 122, Voxel.get("DIRT").getId());
+		s.setVoxel(121, 120, 124, Voxel.get("DIRT").getId());
+		s.setVoxel(121, 120, 127, Voxel.get("DIRT").getId());
+		s.setVoxel(119, 120, 119, Voxel.get("DIRT").getId());
 		
-		quotient = (radius + 2) * 2 + 1;
+		return s;
 		
-		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
-		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
-		
-		Island m = mergeIslandData(L, R, OVR_L);
-		generateCrystals(m, Island.SIZE / 2);
-		m.grassify();
-		return m;
+		// int radius = getRandomRadius(ISLAND_SMALL);
+		//
+		// quotient = (radius + 2) * 2 + 1;
+		//
+		// Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
+		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
+		//
+		// Island m = mergeIslandData(L, R, OVR_L);
+		// generateCrystals(m, Island.SIZE / 2);
+		// m.grassify();
+		// return m;
 	}
 	
 	private void updateProgress()

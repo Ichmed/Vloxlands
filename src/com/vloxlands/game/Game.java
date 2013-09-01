@@ -64,11 +64,11 @@ public class Game
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
-		glRotated(camera.getRotation().z, 0f, 0f, 1f);		
+		glRotated(camera.getRotation().z, 0f, 0f, 1f);
 		
 		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
 		
-		if(CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
+		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
 		glPushMatrix();
 		{
@@ -107,7 +107,7 @@ public class Game
 			if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 			{
 				CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;
-				this.directionalArrowsPos = new Vector3f(this.camera.getPosition());
+				directionalArrowsPos = new Vector3f(camera.getPosition());
 			}
 		}
 		
@@ -255,7 +255,7 @@ public class Game
 	{
 		glPushMatrix();
 		{
-			glTranslatef(this.directionalArrowsPos.x, this.directionalArrowsPos.y, this.directionalArrowsPos.z);
+			glTranslatef(directionalArrowsPos.x, directionalArrowsPos.y, directionalArrowsPos.z);
 			glLineWidth(10);
 			glColor3d(1, 0, 0);
 			glBegin(GL_LINES);
@@ -284,6 +284,7 @@ public class Game
 			glEnd();
 			
 			glColor3d(1, 1, 1);
+			glLineWidth(1);
 		}
 		glPopMatrix();
 	}

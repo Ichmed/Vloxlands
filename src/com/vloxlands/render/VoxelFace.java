@@ -117,9 +117,11 @@ public class VoxelFace
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
 		
-		glEnable(GL_CULL_FACE);
+		glDisable(GL_CULL_FACE);
 		// glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
+		// RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 10, 10/* texX, texY */);
+		// if (textureIndex == 33) RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 300, 10/* texX, texY */);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glPushMatrix();
@@ -153,9 +155,15 @@ public class VoxelFace
 			}
 			glEnd();
 			
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		glPopMatrix();
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "VoxelFace[pos=" + pos.toString() + ", DIR=" + dir + ", sizeX=" + sizeX + ", sizeY=" + sizeY + ", sizeZ=" + sizeZ + ", tl=" + tl + ", tr=" + tr + ", bl=" + bl + ", br" + br + "]";
 	}
 	
 	public double getDistanceToCamera()
