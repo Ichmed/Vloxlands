@@ -1,19 +1,18 @@
 package com.vloxlands.ui;
 
-import java.awt.Font;
+import static org.lwjgl.opengl.GL11.glColor3f;
 
-import org.newdawn.slick.Color;
+import java.awt.Font;
 
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class Label implements IGuiElement
+public class Label extends IGuiElement
 {
 	String title;
 	String texture;
 	int x, y, width, height;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
-	private boolean isVisible = true;
 	
 	public Label(int x, int y, int width, int height, String title)
 	{
@@ -32,7 +31,8 @@ public class Label implements IGuiElement
 		RenderAssistant.renderRect(x, y, width, height);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, Color.white, font);
+		glColor3f(1, 1, 1);
+		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, font);
 	}
 	
 	public String getTitle()
@@ -43,17 +43,6 @@ public class Label implements IGuiElement
 	public void setTitle(String title)
 	{
 		this.title = title;
-	}
-	
-	@Override
-	public boolean shouldRender()
-	{
-		return isVisible;
-	}
-	
-	public void setVisible(boolean b)
-	{
-		isVisible = b;
 	}
 	
 	public void setTexture(String t)

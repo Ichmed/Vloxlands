@@ -27,9 +27,9 @@ public abstract class Scene
 			{
 				((IClickableGui) i).onTick();
 			}
-		this.handleInput();
+		handleInput();
 		for (IGuiElement g : content)
-			if (g.shouldRender()) g.render();
+			if (g.isVisible()) g.render();
 	}
 	
 	public void handleInput()
@@ -63,7 +63,7 @@ public abstract class Scene
 	
 	protected boolean handleMouseGUI(int posX, int posY, int flag)
 	{
-		IClickableGui iG = this.getObjectUnderCursor();
+		IClickableGui iG = getObjectUnderCursor();
 		if (iG != null)
 		{
 			iG.handleMouse(posX - (int) iG.getPos().x, posY - (int) iG.getPos().y, flag);

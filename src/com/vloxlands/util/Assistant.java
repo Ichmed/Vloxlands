@@ -6,8 +6,13 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.newdawn.slick.opengl.PNGDecoder;
+
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 
 public class Assistant
 {
@@ -52,5 +57,39 @@ public class Assistant
 		}
 		catch (Exception e)
 		{}
+	}
+	
+	public static String getFolderChecksum(File folder)
+	{
+		if (!folder.exists()) return null;
+		String[] files = folder.list();
+		Arrays.sort(files);
+		String f = Arrays.toString(files) + getFolderSize(folder);
+		return MD5(f.getBytes());
+	}
+	
+	public static String MD5(byte[] b)
+	{
+		MessageDigest md = null;
+		try
+		{
+			md = MessageDigest.getInstance("MD5");
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			e.printStackTrace();
+		}
+		return HexBin.encode(md.digest(b));
+	}
+	
+	public static long getFolderSize(File directory)
+	{
+		long length = 0;
+		for (File file : directory.listFiles())
+		{
+			if (file.isFile()) length += file.length();
+			else length += getFolderSize(file);
+		}
+		return length;
 	}
 }

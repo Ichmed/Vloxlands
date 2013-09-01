@@ -5,12 +5,11 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Font;
 
 import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.Color;
 
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class TextButton implements IClickableGui
+public class TextButton extends IClickableGui
 {
 	String title;
 	IClickEvent clickEvent;
@@ -22,7 +21,6 @@ public class TextButton implements IClickableGui
 	
 	int texX = 12;
 	int texY = 124;
-	private boolean isVisible = true;
 	
 	public TextButton(int x, int y, String title)
 	{
@@ -46,7 +44,9 @@ public class TextButton implements IClickableGui
 		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		RenderAssistant.renderText(x + mx, y + height / 4f, title, (isActive ? Color.white : Color.gray), font);
+		if (isActive) glColor3f(1, 1, 1);
+		else glColor3f(0.5f, 0.5f, 0.5f);
+		RenderAssistant.renderText(x + mx, y + height / 4f, title, font);
 		glColor3f(1, 1, 1);
 	}
 	
@@ -91,17 +91,6 @@ public class TextButton implements IClickableGui
 	public void setClickEvent(IClickEvent i)
 	{
 		clickEvent = i;
-	}
-	
-	@Override
-	public boolean shouldRender()
-	{
-		return isVisible;
-	}
-	
-	public void setVisible(boolean b)
-	{
-		isVisible = b;
 	}
 	
 	@Override

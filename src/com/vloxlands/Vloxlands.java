@@ -12,7 +12,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.scene.Scene_Mainmenu;
+import com.vloxlands.scene.Scene_Logo;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Assistant;
 
@@ -62,7 +62,8 @@ public class Vloxlands
 			Game.initGLSettings();
 			
 			Game.initGame();
-			Game.currentGame.setScene(new Scene_Mainmenu());
+			// Game.currentGame.setScene(new Scene_Mainmenu());
+			Game.currentGame.setScene(new Scene_Logo());
 			
 			while (!Display.isCloseRequested())
 				Game.currentGame.gameLoop();

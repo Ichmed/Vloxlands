@@ -3,9 +3,11 @@ package com.vloxlands.util;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
+import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -161,10 +163,12 @@ public class RenderAssistant
 		
 	}
 	
-	public static void renderText(float x, float y, String text, Color color, Font f)
+	public static void renderText(float x, float y, String text, Font f)
 	{
 		glEnable(GL_BLEND);
-		FontAssistant.getFont(f).drawString(x, y, text, color);
+		FloatBuffer fb = BufferUtils.createFloatBuffer(16);
+		glGetFloat(GL_CURRENT_COLOR, fb);
+		FontAssistant.getFont(f).drawString(x, y, text, new Color(fb));
 		glDisable(GL_BLEND);
 	}
 	

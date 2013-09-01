@@ -2,15 +2,15 @@ package com.vloxlands.ui;
 
 import org.lwjgl.util.vector.Vector2f;
 
-public interface IClickableGui extends IGuiElement
+public abstract class IClickableGui extends IGuiElement
 {
-	void onTick();
+	public abstract void onTick();
 	
-	void handleMouse(int posX, int posY, int flag);
+	public abstract void handleMouse(int posX, int posY, int flag);
 	
-	void setActive(boolean b);
+	public abstract void setActive(boolean b);
 	
-	Vector2f getPos();
+	public abstract Vector2f getPos();
 	
-	Vector2f getSize();
+	public abstract Vector2f getSize();
 }

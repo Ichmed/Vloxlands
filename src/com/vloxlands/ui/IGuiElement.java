@@ -2,5 +2,5 @@ package com.vloxlands.ui;
 
 import com.vloxlands.render.IRendering;
 
-public interface IGuiElement extends IRendering
+public abstract class IGuiElement extends IRendering
 {}

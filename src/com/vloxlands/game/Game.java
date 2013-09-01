@@ -7,7 +7,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.Color;
 
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.voxel.Voxel;
@@ -92,17 +91,21 @@ public class Game
 		
 		RenderAssistant.set2DRenderMode(true);
 		
-		if (scene != null) scene.update();
-		
+		glPushMatrix();
+		{
+			if (scene != null) scene.update();
+		}
+		glPopMatrix();
 		while (Keyboard.next())
 		{
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 		}
 		
-		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", Color.white, FontAssistant.GAMEFONT.deriveFont(30f));
+		glColor4f(1, 1, 1, 1);
+		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", FontAssistant.GAMEFONT.deriveFont(30f));
 		
-		RenderAssistant.renderText(0, Display.getHeight() - 20, UniVersion.prettyVersion(), Color.white, FontAssistant.GAMEFONT.deriveFont(20f));
+		RenderAssistant.renderText(0, Display.getHeight() - 20, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
 		
 		RenderAssistant.set2DRenderMode(false);
 		
@@ -184,8 +187,8 @@ public class Game
 		glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_DIFFUSE);
-		glMaterialf(GL_FRONT, GL_SHININESS, 100f);		
-				
+		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
+		
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
 		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
