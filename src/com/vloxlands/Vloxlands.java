@@ -24,7 +24,7 @@ public class Vloxlands
 	
 	public static void main(String[] args)
 	{
-		CFG.INTERNET = Assistant.isInternetReachable();
+		CFG.INTERNET = false;// Assistant.isInternetReachable();
 		
 		try
 		{
@@ -86,7 +86,7 @@ public class Vloxlands
 	{
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		Display.setDisplayMode(new DisplayMode(d.width - 300, (int) (d.height - 300 * (d.height / (float) d.width))));
+		Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */720));
 		Display.setResizable(true);
 		Display.setFullscreen(false);
 	}

@@ -2,18 +2,20 @@ package com.vloxlands.render;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
+import com.vloxlands.render.VoxelFace.VoxelFaceKey;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 
 public class ChunkRenderer
 {
+	private static int prev, next;
+	
 	public static void renderChunk(int listIndex, int index, Island island)
 	{
 		int cs = Island.SIZE / Island.CHUNKSIZE;
@@ -21,32 +23,36 @@ public class ChunkRenderer
 		int cy = index / cs % cs;
 		int cz = index % cs;
 		
-		HashMap<ArrayList<Integer>, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
+		HashMap<VoxelFaceKey, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		HashMap<ArrayList<Integer>, VoxelFace> greedy0 = generateGreedyMesh(cx, cy, cz, faceLists[0]);
-		// HashMap<ArrayList<Integer>, VoxelFace> greedy1 = generateGreedyMesh(cx, cy, cz, faceLists[1]);
-		if (greedy0.size() > 0) CFG.p(greedy0.size());
+		prev += faceLists[0].size();
+		prev += faceLists[1].size();
+		
+		HashMap<VoxelFaceKey, VoxelFace> greedy0 = generateGreedyMesh(cx, cy, cz, faceLists[0]);
+		next += greedy0.size();
+		HashMap<VoxelFaceKey, VoxelFace> greedy1 = generateGreedyMesh(cx, cy, cz, faceLists[1]);
+		next += greedy1.size();
+		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
 		for (VoxelFace v : greedy0.values())
 			v.render();
-		// for (VoxelFace v : faceLists[0].values())
-		// v.render();
 		glEndList();
 		glPopMatrix();
 		
 		glPushMatrix();
 		glNewList(listIndex + 1, GL_COMPILE);
-		// for (VoxelFace v : greedy1.values())
-		// v.render();
-		// for (VoxelFace v : faceLists[1].values())
-		// v.render();
+		for (VoxelFace v : greedy1.values())
+			v.render();
 		glEndList();
 		glPopMatrix();
 	}
 	
 	public static void initChunks(Island island)
 	{
+		prev = 0;
+		next = 0;
+		
 		island.chunk0ID = glGenLists(island.chunks[0].capacity() * 2);
 		for (int i = 0; i < island.chunks[0].capacity(); i++)
 		{
@@ -57,14 +63,16 @@ public class ChunkRenderer
 		
 		island.chunks[0].flip();
 		island.chunks[1].flip();
-		CFG.p("[ChunkRenderer]: Initialized chunks on Island " + island);
+		
+		CFG.p(prev + " ->" + next);
+		// CFG.p("[ChunkRenderer]: Initialized chunks on Island " + island);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static HashMap<ArrayList<Integer>, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
+	private static HashMap<VoxelFaceKey, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
 	{
-		HashMap<ArrayList<Integer>, VoxelFace> faces = new HashMap<>();
-		HashMap<ArrayList<Integer>, VoxelFace> transparentFaces = new HashMap<>();
+		HashMap<VoxelFaceKey, VoxelFace> faces = new HashMap<>();
+		HashMap<VoxelFaceKey, VoxelFace> transparentFaces = new HashMap<>();
 		for (int x = 0; x < Island.CHUNKSIZE; x++)
 		{
 			for (int y = 0; y < Island.CHUNKSIZE; y++)
@@ -83,21 +91,26 @@ public class ChunkRenderer
 						if (!w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v.getTextureIndex());
-							if (v.isOpaque()) faces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
-							else transparentFaces.put(getVoxelFaceKey(x, y, z, d.ordinal()), f);
+							if (v.isOpaque()) faces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
+							else transparentFaces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
 						}
 					}
 				}
 			}
 		}
+		
+		
+		
 		return new HashMap[] { faces, transparentFaces };
 	}
 	
-	private static HashMap<ArrayList<Integer>, VoxelFace> generateGreedyMesh(int cx, int cy, int cz, HashMap<ArrayList<Integer>, VoxelFace> originalMap)
+	private static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(int cx, int cy, int cz, HashMap<VoxelFaceKey, VoxelFace> originalMap)
 	{
-		HashMap<ArrayList<Integer>, VoxelFace> strips = new HashMap<>();
+		HashMap<VoxelFaceKey, VoxelFace> strips0 = new HashMap<>();
 		
 		if (originalMap.size() == 0) return originalMap;
+		
+		// long time = System.currentTimeMillis();
 		
 		// greedy-mode along Z - axis
 		for (int x = 0; x < Island.CHUNKSIZE; x++)
@@ -109,124 +122,137 @@ public class ChunkRenderer
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
-						int posY = cy * Island.CHUNKSIZE + y;
+						
 						int posX = cx * Island.CHUNKSIZE + x;
+						int posY = cy * Island.CHUNKSIZE + y;
 						int posZ = cz * Island.CHUNKSIZE + z;
+						
+						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
+						VoxelFace val = originalMap.get(key);
 						
 						if (activeStrips[i] != null)
 						{
-							if (!originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
+							if (val == null)
 							{
-								CFG.p("reset: no field: " + getVoxelFaceKey(posX, posY, posZ, i));
-								strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+								strips0.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 								activeStrips[i] = null;
 							}
-							else if (originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex == activeStrips[i].textureIndex)
+							else if (val.textureIndex == activeStrips[i].textureIndex)
 							{
-								CFG.p("increase: " + getVoxelFaceKey(posX, posY, posZ, i));
 								activeStrips[i].increaseSize(0, 0, 1);
 							}
 							else
 							{
-								CFG.p("different: now: " + originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex + " <- tex, " + getVoxelFaceKey(posX, posY, posZ, i) + " saving: " + activeStrips[i]);
-								strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
-								
-								activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex);
+								strips0.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+								activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), val.textureIndex);
 							}
 						}
-						else if (originalMap.containsKey(getVoxelFaceKey(x, y, z, i)))
+						else if (val != null)
 						{
-							CFG.p("new: " + getVoxelFaceKey(posX, posY, posZ, i));
-							activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), originalMap.get(getVoxelFaceKey(x, y, z, i)).textureIndex);
+							activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), val.textureIndex);
 						}
 					}
 				}
 				for (int i = 0; i < activeStrips.length; i++)
-					if (activeStrips[i] != null) strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
+					if (activeStrips[i] != null) strips0.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 			}
 		}
 		
+		HashMap<VoxelFaceKey, VoxelFace> strips1 = new HashMap<>();
+		
 		// greedy-mode along X - axis
-		// for (int y = 0; y < Island.CHUNKSIZE; y++)
-		// {
-		// VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-		// for (int z = 0; z < Island.CHUNKSIZE; z++)
-		// {
-		// for (int x = 0; x < Island.CHUNKSIZE; x++)
-		// {
-		// for (int i = 0; i < activeStrips.length; i++)
-		// {
-		// int posY = cy * Island.CHUNKSIZE + y;
-		// int posX = cx * Island.CHUNKSIZE + x;
-		// int posZ = cz * Island.CHUNKSIZE + z;
-		//
-		// if (activeStrips[i] != null)
-		// {
-		// if (!strips.containsKey(getVoxelFaceKey(posX, posY, posZ, i)))
-		// {
-		// // CFG.p("no strip: " + getVoxelFaceKey(posX, posY, posZ, i));
-		// continue;
-		// }
-		//
-		// if (activeStrips[i].pos.z + activeStrips[i].sizeZ < posX)
-		// {
-		// CFG.p("cleared: " + getVoxelFaceKey(posX, posY, posZ, i) + " = no field");
-		// strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
-		// activeStrips[i] = null;
-		// }
-		// else if (strips.get(getVoxelFaceKey(posX, posY, posZ, i)).textureIndex == activeStrips[i].textureIndex && activeStrips[i].sizeZ == strips.get(getVoxelFaceKey(posX, posY, posZ, i)).sizeZ)
-		// {
-		// CFG.p("increased: " + getVoxelFaceKey(posX, posY, posZ, i));
-		// activeStrips[i].increaseSize(1, 0, 0);
-		// }
-		// else
-		// {
-		// CFG.p("cleared: " + getVoxelFaceKey(posX, posY, posZ, i) + " = no field");
-		// strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]);
-		// activeStrips[i] = null;
-		// }
-		// }
-		// else if (strips.containsKey(getVoxelFaceKey(posX, posY, posZ, i)))
-		// {
-		// CFG.p("new at: " + getVoxelFaceKey(posX, posY, posZ, i) + " = " + strips.get(getVoxelFaceKey(posX, posY, posZ, i)));
-		// activeStrips[i] = strips.get(getVoxelFaceKey(posX, posY, posZ, i));
-		// }
-		//
-		// }
-		// }
-		// }
-		// for (int i = 0; i < activeStrips.length; i++)
-		// {
-		// if (activeStrips[i] != null)
-		// {
-		// CFG.p("added forgotten one: " + activeStrips[i]);
-		// CFG.p("previous value: " + strips.put(getVoxelFaceKey(activeStrips[i]), activeStrips[i]));
-		// }
-		// }
-		// }
+		for (int y = 0; y < Island.CHUNKSIZE; y++)
+		{
+			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
+			for (int z = 0; z < Island.CHUNKSIZE; z++)
+			{
+				for (int x = 0; x < Island.CHUNKSIZE; x++)
+				{
+					for (int i = 0; i < activeStrips.length; i++)
+					{
+						int posX = cx * Island.CHUNKSIZE + x;
+						int posY = cy * Island.CHUNKSIZE + y;
+						int posZ = cz * Island.CHUNKSIZE + z;
+						
+						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
+						VoxelFace val = strips0.get(key);
+						
+						if (val != null)
+						{
+							if (activeStrips[i] == null)
+							{
+								activeStrips[i] = val;
+							}
+							else
+							{
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ)
+								{
+									activeStrips[i].increaseSize(1, 0, 0);
+								}
+								else
+								{
+									strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+									
+									activeStrips[i] = val;
+								}
+							}
+						}
+					}
+				}
+			}
+			for (int i = 0; i < activeStrips.length; i++)
+				if (activeStrips[i] != null) strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+		}
+		
+		HashMap<VoxelFaceKey, VoxelFace> strips2 = new HashMap<>();
+		
+		// greedy-mode along Y - axis
+		for (int x = 0; x < Island.CHUNKSIZE; x++)
+		{
+			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
+			for (int z = 0; z < Island.CHUNKSIZE; z++)
+			{
+				for (int y = 0; y < Island.CHUNKSIZE; y++)
+				{
+					for (int i = 0; i < activeStrips.length; i++)
+					{
+						int posX = cx * Island.CHUNKSIZE + x;
+						int posY = cy * Island.CHUNKSIZE + y;
+						int posZ = cz * Island.CHUNKSIZE + z;
+						
+						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
+						VoxelFace val = strips1.get(key);
+						
+						if (val != null)
+						{
+							if (activeStrips[i] == null)
+							{
+								activeStrips[i] = val;
+							}
+							else
+							{
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX)
+								{
+									activeStrips[i].increaseSize(0, 1, 0);
+								}
+								else
+								{
+									strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+									
+									activeStrips[i] = val;
+								}
+							}
+						}
+					}
+				}
+			}
+			for (int i = 0; i < activeStrips.length; i++)
+				if (activeStrips[i] != null) strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+		}
 		
 		// CFG.p("[ChunkRenderer]: Greedy meshing took " + (System.currentTimeMillis() - time) + "ms");
 		
-		return strips;
-	}
-	
-	private static ArrayList<Integer> getVoxelFaceKey(int x, int y, int z, int d)
-	{
-		ArrayList<Integer> l = new ArrayList<Integer>();
-		l.add(x);
-		l.add(y);
-		l.add(z);
-		l.add(d);
-		return l;
-	}
-	
-	private static ArrayList<Integer> getVoxelFaceKey(VoxelFace face)
-	{
-		ArrayList<Integer> l = new ArrayList<Integer>();
-		l.add((int) face.pos.x);
-		l.add((int) face.pos.y);
-		l.add((int) face.pos.x);
-		l.add(face.dir.ordinal());
-		return l;
+		// return originalMap;
+		return strips0;
 	}
 }

@@ -54,36 +54,41 @@ public class IslandGenerator extends Thread
 	
 	private Island generateIsland()
 	{
-		Island s = new Island();
-		for (int i = 120; i < 122; i++)
-		{
-			for (int j = 120; j < 121; j++)
-			{
-				for (int k = 120; k < 128; k++)
-				{
-					s.setVoxel(i, j, k, Voxel.get("STONE").getId());
-				}
-			}
-		}
-		
-		s.setVoxel(121, 120, 122, Voxel.get("DIRT").getId());
-		s.setVoxel(121, 120, 124, Voxel.get("DIRT").getId());
-		s.setVoxel(121, 120, 127, Voxel.get("DIRT").getId());
-		s.setVoxel(119, 120, 119, Voxel.get("DIRT").getId());
-		
-		return s;
-		
-		// int radius = getRandomRadius(ISLAND_SMALL);
+		// Island s = new Island();
+		// for (int i = 100; i < 130; i++)
+		// {
+		// for (int j = 100; j < 130; j++)
+		// {
+		// for (int k = 100; k < 130; k++)
+		// {
+		// s.setVoxel(i, j, k, Voxel.get("STONE").getId());
+		// }
+		// }
+		// }
+		// for (int i = 80; i < 110; i++)
+		// {
+		// for (int j = 112; j < 120; j++)
+		// {
+		// for (int k = 115; k < 120; k++)
+		// {
+		// s.setVoxel(i, j, k, Voxel.get("DIRT").getId());
+		// }
+		// }
+		// }
 		//
-		// quotient = (radius + 2) * 2 + 1;
-		//
-		// Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
+		// return s;
+		
+		int radius = getRandomRadius(ISLAND_SMALL);
+		
+		quotient = (radius + 2) * 2 + 1;
+		
+		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
 		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
-		//
+		
 		// Island m = mergeIslandData(L, R, OVR_L);
-		// generateCrystals(m, Island.SIZE / 2);
-		// m.grassify();
-		// return m;
+		// generateCrystals(L, Island.SIZE / 2);
+		// L.grassify();
+		return L;
 	}
 	
 	private void updateProgress()
@@ -109,34 +114,34 @@ public class IslandGenerator extends Thread
 		updateProgress();
 		
 		// -- Spikes -- //
-		for (int i = 0; i < radius; i++)
-		{
-			int MAXRAD = (int) (radius * 0.3f + 5);
-			int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
-			
-			Vector2f highest = getHighestBezierValue(ISLAND_BEZIER);
-			
-			int radiusAt0 = (int) (highest.y * radius);
-			
-			Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
-			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
-			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.get("STONE").getId());
-			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
-			updateProgress();
-		}
-		
-		for (int i = 0; i < Island.SIZE; i++) // x axis
-		{
-			for (int j = 0; j < Island.SIZE; j++) // z axis
-			{
-				if (island.getVoxelId(i, y, j) == Voxel.get("STONE").getId())
-				{
-					island.setVoxel(i, y, j, Voxel.get("DIRT").getId());
-				}
-				
-			}
-		}
-		updateProgress();
+		// for (int i = 0; i < radius; i++)
+		// {
+		// int MAXRAD = (int) (radius * 0.3f + 5);
+		// int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
+		//
+		// Vector2f highest = getHighestBezierValue(ISLAND_BEZIER);
+		//
+		// int radiusAt0 = (int) (highest.y * radius);
+		//
+		// Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
+		// int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
+		// island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.get("STONE").getId());
+		// generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
+		// updateProgress();
+		// }
+		//
+		// for (int i = 0; i < Island.SIZE; i++) // x axis
+		// {
+		// for (int j = 0; j < Island.SIZE; j++) // z axis
+		// {
+		// if (island.getVoxelId(i, y, j) == Voxel.get("STONE").getId())
+		// {
+		// island.setVoxel(i, y, j, Voxel.get("DIRT").getId());
+		// }
+		//
+		// }
+		// }
+		// updateProgress();
 		
 		return island;
 	}

@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
@@ -104,6 +105,12 @@ public class Game
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
+			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.initChunks(currentMap.islands.get(0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
+			{
+				CFG.SHOW_WIREFRAME = !CFG.SHOW_WIREFRAME;
+				ChunkRenderer.initChunks(currentMap.islands.get(0));
+			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 			{
 				CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.RenderAssistant;
 
@@ -117,17 +118,19 @@ public class VoxelFace
 		int texX = textureIndex % 32;
 		int texY = textureIndex / 32;
 		
-		glDisable(GL_CULL_FACE);
-		// glBindTexture(GL_TEXTURE_2D, 0);
-		RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
-		// RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 10, 10/* texX, texY */);
-		// if (textureIndex == 33) RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 300, 10/* texX, texY */);
+		glEnable(GL_CULL_FACE);
+		
+		if (CFG.SHOW_WIREFRAME) RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 10, 10);
+		else RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
+		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glPushMatrix();
 		{
 			glEnable(GL_BLEND);
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			
+			if (CFG.SHOW_WIREFRAME) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			
 			glTranslatef(pos.x, pos.y, pos.z);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -135,17 +138,21 @@ public class VoxelFace
 			{
 				int[] ints = new int[] { sizeX, sizeY, sizeZ };
 				Arrays.sort(ints);
-				int vertical = (dir == Direction.UP || dir == Direction.DOWN) ? 0 : 1;
+				boolean dirVertical = dir == Direction.UP || dir == Direction.DOWN;
+				int vertical = (dirVertical) ? 0 : 1 + ((sizeY > sizeX && sizeY > sizeZ) ? -1 : 0);
 				
-				glTexCoord2d(0, ints[2 - vertical]);
+				if ((dirVertical && sizeX > sizeZ)) glTexCoord2d(0, ints[1]);
+				else glTexCoord2d(0, ints[2 - vertical]);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
-				glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
+				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], ints[1]);
+				else glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
-				glTexCoord2d(ints[1 + vertical], 0);
+				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], 0);
+				else glTexCoord2d(ints[1 + vertical], 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
@@ -163,11 +170,62 @@ public class VoxelFace
 	@Override
 	public String toString()
 	{
-		return "VoxelFace[pos=" + pos.toString() + ", DIR=" + dir + ", sizeX=" + sizeX + ", sizeY=" + sizeY + ", sizeZ=" + sizeZ + ", tl=" + tl + ", tr=" + tr + ", bl=" + bl + ", br" + br + "]";
+		return "VoxelFace[pos=" + pos.toString() + ", DIR=" + dir + ", sizeX=" + sizeX + ", sizeY=" + sizeY + ", sizeZ=" + sizeZ + ", tl=" + tl + ", tr=" + tr + ", bl=" + bl + ", br=" + br + "]";
 	}
 	
 	public double getDistanceToCamera()
 	{
 		return Vector3f.sub(Game.currentGame.camera.position, pos, null).length();
+	}
+	
+	public static class VoxelFaceKey implements Comparable<VoxelFaceKey>
+	{
+		public int x, y, z, d;
+		
+		public VoxelFaceKey(int x, int y, int z, int d)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+			this.d = d;
+		}
+		
+		public VoxelFaceKey(VoxelFace vf)
+		{
+			x = (int) vf.pos.x;
+			y = (int) vf.pos.y;
+			z = (int) vf.pos.z;
+			d = vf.dir.ordinal();
+		}
+		
+		@Override
+		public int hashCode()
+		{
+			return Integer.parseInt(x + "" + y + "" + z + "" + d);
+		}
+		
+		@Override
+		public boolean equals(Object o)
+		{
+			if (!(o instanceof VoxelFaceKey)) return false;
+			
+			return hashCode() == o.hashCode();
+		}
+		
+		@Override
+		public String toString()
+		{
+			return "[" + x + ", " + y + ", " + z + ", " + Direction.values()[d] + "]";
+		}
+		
+		@Override
+		public int compareTo(VoxelFaceKey o)
+		{
+			if (x != o.x) return x - o.x;
+			else if (y != o.x) return y - o.y;
+			else if (z != o.z) return z - o.z;
+			
+			return d - o.d;
+		}
 	}
 }

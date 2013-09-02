@@ -34,11 +34,15 @@ public abstract class Scene
 	
 	public void handleInput()
 	{
+		
 		if (Mouse.isButtonDown(1))
 		{
 			Mouse.setGrabbed(true);
-			if (Mouse.isButtonDown(1)) Game.currentGame.rotateCamera();
-			else Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+			if (Mouse.isButtonDown(1) && !wasButton1Down)
+			{
+				Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+			}
+			Game.currentGame.rotateCamera();
 		}
 		else Mouse.setGrabbed(false);
 		

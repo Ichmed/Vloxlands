@@ -14,7 +14,7 @@ import com.vloxlands.settings.CFG;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 16;
+	public static final int CHUNKSIZE = 32;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
@@ -185,7 +185,7 @@ public class Island
 	
 	public void render()
 	{
-		glDisable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 		glTranslatef(pos.x, pos.y, pos.z);
 		glListBase(chunk0ID);
 		glCallLists(chunks[0]);
@@ -193,8 +193,7 @@ public class Island
 		glListBase(chunk0ID + chunks[0].capacity());
 		glCallLists(chunks[1]);
 		
-		
-		if(CFG.SHOW_CHUNK_BOUNDRIES)
+		if (CFG.SHOW_CHUNK_BOUNDRIES)
 		{
 			for (int x = 0; x < Island.SIZE; x += Island.CHUNKSIZE)
 			{
@@ -204,7 +203,7 @@ public class Island
 					{
 						glPushMatrix();
 						{
-							glTranslated(this.pos.x, this.pos.y, this.pos.z);
+							glTranslated(pos.x, pos.y, pos.z);
 							glLineWidth(1);
 							glColor3d(1, 0, 0);
 							glBegin(GL_LINES);
@@ -223,7 +222,7 @@ public class Island
 						glPopMatrix();
 					}
 				}
-			}		
+			}
 		}
 	}
 	
