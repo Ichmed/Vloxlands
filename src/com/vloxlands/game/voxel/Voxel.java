@@ -207,7 +207,7 @@ public class Voxel
 			{
 				case "ID":
 				{
-					voxel.registerVoxel(Integer.valueOf(cell));
+					voxel.registerVoxel(Integer.valueOf(cell) - 128);
 				}
 				case "Texture(x*y)":
 				{
