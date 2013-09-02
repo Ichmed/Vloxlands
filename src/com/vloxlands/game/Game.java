@@ -45,7 +45,6 @@ public class Game
 	
 	public void gameLoop()
 	{
-		
 		if (start == 0) start = System.currentTimeMillis();
 		
 		glMatrixMode(GL_PROJECTION);
@@ -62,8 +61,6 @@ public class Game
 		moveCamera();
 		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
-		
-		// CFG.p(camera.getRotation());
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
@@ -157,6 +154,8 @@ public class Game
 		currentMap.onTick();
 		
 		Display.update();
+		if (Display.wasResized()) glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		
 		Display.sync(60);
 		
 		frames++;

@@ -43,7 +43,7 @@ public class Vloxlands
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
 		
-		System.setProperty("org.lwjgl.librarypath", new File("natives").getAbsolutePath());
+		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
 		
 		// Direction.get90DegreeDiretions(Direction.UP);
 		
