@@ -46,6 +46,7 @@ public class ChunkRenderer
 		long time = System.currentTimeMillis();
 		
 		island.chunk0ID = glGenLists(island.chunks[0].capacity() * 2);
+		
 		for (int i = 0; i < island.chunks[0].capacity(); i++)
 		{
 			renderChunk(island.chunk0ID + i * 2, i, island);
@@ -81,7 +82,7 @@ public class ChunkRenderer
 						Voxel w = Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z));
 						if (!w.isOpaque() && !(w == v))
 						{
-							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v.getTextureIndex());
+							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v.getTextureIndex(posX, posY, posZ, d.ordinal(), i.getMetadata(posX, posY, posZ)));
 							if (v.isOpaque()) faces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
 							else transparentFaces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
 						}
