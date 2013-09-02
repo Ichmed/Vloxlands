@@ -14,20 +14,30 @@ public class Spinner extends IClickableGui
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	int min, max, value, step;
+	boolean horizontal;
 	ArrowButton minus, plus;
 	
-	public Spinner(int x, int y, int width, int min, int max, int val, int step)
+	public Spinner(int x, int y, int size, int min, int max, int val, int step, boolean horizontal)
 	{
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		height = HEIGHT;
+		if (horizontal)
+		{
+			width = size;
+			height = HEIGHT;
+		}
+		else
+		{
+			width = HEIGHT;
+			height = size;
+		}
 		value = val;
 		this.min = min;
 		this.max = max;
 		this.step = step;
+		this.horizontal = horizontal;
 		
-		minus = new ArrowButton(x, y, ArrowButton.MINUS_HOR);
+		minus = new ArrowButton(x, y + ((horizontal) ? 0 : height - ArrowButton.HEIGHT), (horizontal) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
 		minus.setClickEvent(new IClickEvent()
 		{
 			
@@ -37,7 +47,7 @@ public class Spinner extends IClickableGui
 				value = (value >= Spinner.this.min + Spinner.this.step) ? value - Spinner.this.step : Spinner.this.min;
 			}
 		});
-		plus = new ArrowButton(x + width - ArrowButton.WIDTH, y, ArrowButton.PLUS_HOR);
+		plus = new ArrowButton(x + ((horizontal) ? width - ArrowButton.WIDTH : 0), y, (horizontal) ? ArrowButton.PLUS_HOR : ArrowButton.PLUS_VER);
 		plus.setClickEvent(new IClickEvent()
 		{
 			
@@ -74,11 +84,22 @@ public class Spinner extends IClickableGui
 		minus.render();
 		plus.render();
 		
-		int tx = FontAssistant.getFont(font).getWidth(value + "");
-		int mx = width / 2 - tx / 2;
 		if (enabled) glColor3f(1, 1, 1);
 		else glColor3f(0.5f, 0.5f, 0.5f);
-		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), value + "", font);
+		if (horizontal)
+		{
+			int tx = FontAssistant.getFont(font).getWidth(value + "");
+			int mx = width / 2 - tx / 2;
+			RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), value + "", font);
+		}
+		else
+		{
+			int tx = FontAssistant.getFont(font).getWidth(value + "");
+			int mx = width / 2 - tx / 2;
+			int ty = FontAssistant.getFont(font).getHeight(value + "");
+			int my = height / 2 - ty / 2;
+			RenderAssistant.renderText(x + mx / 2, y + ((width > -1) ? my : 0), value + "", font);
+		}
 	}
 	
 }
