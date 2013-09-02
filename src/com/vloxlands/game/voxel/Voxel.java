@@ -174,6 +174,11 @@ public class Voxel
 		return voxels.get(name);
 	}
 	
+	public int getTextureIndex(int x, int y, int z, int d, int meta)
+	{
+		return this.textureIndex;
+	}
+	
 	public static void loadVoxels()
 	{
 		CSVReader csv = new CSVReader("/data/voxels.csv");
