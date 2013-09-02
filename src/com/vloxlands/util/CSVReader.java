@@ -104,7 +104,7 @@ public class CSVReader
 			}
 			
 			lIndex = index;
-			return segments[index++];
+			return segments[index++].trim();
 		}
 		catch (Exception e)
 		{

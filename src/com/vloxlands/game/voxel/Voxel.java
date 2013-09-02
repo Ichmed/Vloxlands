@@ -2,7 +2,6 @@ package com.vloxlands.game.voxel;
 
 import java.util.HashMap;
 
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.CSVReader;
 
 public class Voxel
@@ -177,7 +176,7 @@ public class Voxel
 	
 	public int getTextureIndex(int x, int y, int z, int d, int meta)
 	{
-		return this.textureIndex;
+		return textureIndex;
 	}
 	
 	public static void loadVoxels()
@@ -191,10 +190,9 @@ public class Voxel
 		{
 			if (csv.getIndex() == 0)
 			{
-				
 				try
 				{
-					if(cell.length() > 0) voxel = (Voxel) Class.forName(cell).newInstance();
+					if (cell.length() > 0) voxel = (Voxel) Class.forName(cell).newInstance();
 					else voxel = new Voxel();
 				}
 				catch (Exception e)

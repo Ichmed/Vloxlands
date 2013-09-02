@@ -1,11 +1,11 @@
 ClassPath;ID;Texture(x*y);Name;Opaque;Weight;Uplift;Brightness;Smoothness
 com.vloxlands.game.voxel.Voxel;0;0*0;Default;1;1;0;0;0
-com.vloxlands.game.voxel.Voxel;128;0*0;Air;0;0;;;
-com.vloxlands.game.voxel.Voxel;1;1*0;Stone;;;;;0.1
-com.vloxlands.game.voxel.Voxel;2;2*2;Dirt;;;;;0.3
-com.vloxlands.game.voxel.Voxel;3;3*0;Weak Crystal;0;0;1;0.2;
-com.vloxlands.game.voxel.Voxel;4;3*1;Medium Crystal;0;0;5;0.5;
-com.vloxlands.game.voxel.Voxel;5;3*2;Strong Crystal;0;0;20;0.7;
-com.vloxlands.game.voxel.VoxelGrass;6;2*1;Grass;;;;;0.5
-com.vloxlands.game.voxel.Voxel;7;5*0;Iron Ore;;;;;0.1
-com.vloxlands.game.voxel.Voxel;9;5*1;Coal Ore;;;;;0.1
+;128;0*0;Air;0;0;;;
+;1;1*0;Stone;;;;;0.1
+;2;2*2;Dirt;;;;;0.3
+;3;3*0;Weak Crystal;0;0;1;0.2;
+;4;3*1;Medium Crystal;0;0;5;0.5;
+;5;3*2;Strong Crystal;0;0;20;0.7;
+com.vloxlands.game.voxel.VoxelGrass;6;2*0;Grass;;;;;0.5
+;7;5*0;Iron Ore;;;;;0.1
+;9;5*1;Coal Ore;;;;;0.1

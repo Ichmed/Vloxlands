@@ -157,22 +157,23 @@ public class VoxelFace
 				boolean dirVertical = dir == Direction.UP || dir == Direction.DOWN;
 				int vertical = (dirVertical) ? 0 : 1 + ((sizeY > sizeX && sizeY > sizeZ) ? -1 : 0);
 				
-				if ((dirVertical && sizeX > sizeZ)) glTexCoord2d(0, ints[1]);
-				else glTexCoord2d(0, ints[2 - vertical]);
+				glTexCoord2d(0, 0);
 				glNormal3d(0, 0, -1);
 				glVertex3f(tl.x, tl.y, tl.z);
-				
-				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], ints[1]);
-				else glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
-				glNormal3d(0, 0, -1);
-				glVertex3f(tr.x, tr.y, tr.z);
 				
 				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], 0);
 				else glTexCoord2d(ints[1 + vertical], 0);
 				glNormal3d(0, 0, -1);
+				glVertex3f(tr.x, tr.y, tr.z);
+				
+				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], ints[1]);
+				else glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
+				glNormal3d(0, 0, -1);
 				glVertex3f(br.x, br.y, br.z);
 				
-				glTexCoord2d(0, 0);
+				
+				if ((dirVertical && sizeX > sizeZ)) glTexCoord2d(0, ints[1]);
+				else glTexCoord2d(0, ints[2 - vertical]);
 				glNormal3d(0, 0, -1);
 				glVertex3f(bl.x, bl.y, bl.z);
 			}
