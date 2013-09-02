@@ -126,7 +126,9 @@ public class Game
 		glColor4f(1, 1, 1, 1);
 		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", FontAssistant.GAMEFONT.deriveFont(30f));
 		
-		RenderAssistant.renderText(0, Display.getHeight() - 20, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
+		glColor4f(0.8f, 0.8f, 0.8f, 1);
+		RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
+		glColor4f(1, 1, 1, 1);
 		
 		RenderAssistant.set2DRenderMode(false);
 		

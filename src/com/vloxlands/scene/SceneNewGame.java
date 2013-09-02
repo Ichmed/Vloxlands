@@ -60,11 +60,11 @@ public class SceneNewGame extends Scene
 			glEnable(GL_BLEND);
 			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 			glBindTexture(GL_TEXTURE_2D, 0);
-			RenderAssistant.renderRect(5, 120, Display.getWidth() / 5 * 3, Display.getHeight() / 5 * 4 - 100);
+			RenderAssistant.renderRect(5, 120, Display.getWidth() - TextButton.WIDTH - 100, Display.getHeight() - 250);
 			glColor4f(1, 1, 1, 1);
 			
 			glBindTexture(GL_TEXTURE_2D, RenderAssistant.textures.get("/graphics/textures/ui/gui.png").getTextureID());
-			RenderAssistant.renderOutline(0, 115, Display.getWidth() / 5 * 3 + 10, Display.getHeight() / 5 * 4 - 90, true);
+			RenderAssistant.renderOutline(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 240, true);
 			glDisable(GL_BLEND);
 		}
 		glPopMatrix();
