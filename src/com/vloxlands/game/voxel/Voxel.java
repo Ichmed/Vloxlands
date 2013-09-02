@@ -20,7 +20,7 @@ public class Voxel
 	private float uplift = 0;
 	private float brightness;
 	
-	public Voxel(int id)
+	public void registerVoxel(int id)
 	{
 		if (voxelList[id + 128] == null) voxelList[id + 128] = this;
 		else
@@ -29,6 +29,7 @@ public class Voxel
 			System.exit(1);
 		}
 		this.id = (byte) id;
+		voxels.put(this.getName().toUpperCase().replace(" ", "_"), this);
 	}
 	
 	public static Voxel getVoxelForId(byte id)
@@ -190,15 +191,24 @@ public class Voxel
 		{
 			if (csv.getIndex() == 0)
 			{
-				if (voxel != null)
+				
+				try
 				{
-					voxels.put(voxel.getName().toUpperCase().replace(" ", "_"), voxel);
+					if(cell.length() > 0) voxel = (Voxel) Class.forName(cell).newInstance();
+					else voxel = new Voxel();
 				}
-				voxel = new Voxel(Integer.parseInt(cell) - 128);
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 			
 			switch (categories[csv.getIndex()])
 			{
+				case "ID":
+				{
+					voxel.registerVoxel(Integer.valueOf(cell));
+				}
 				case "Texture(x*y)":
 				{
 					if (cell.length() > 0) voxel.setTextureIndex(Integer.parseInt(cell.split("\\*")[1]) * 32 + Integer.parseInt(cell.split("\\*")[0]));
