@@ -13,7 +13,6 @@ public class TextButton extends IClickableGui
 	public static final int HEIGHT = 59;
 	
 	String title;
-	IClickEvent clickEvent;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	int texX = 12;
@@ -38,7 +37,7 @@ public class TextButton extends IClickableGui
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		RenderAssistant.bindTexture(texture);
 		
-		RenderAssistant.renderRect(x, y, width, height, texX / 1024.0f, texY / 1024.0f, 288 / 1024.0f, 59 / 1024.0f);
+		RenderAssistant.renderRect(x, y, width, height, texX / 1024.0f, texY / 1024.0f, WIDTH / 1024.0f, HEIGHT / 1024.0f);
 		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
@@ -72,10 +71,5 @@ public class TextButton extends IClickableGui
 		if ((flag & 1) != 0) texY = 202;
 		else if ((flag & 2) != 0) clickEvent.onClick();
 		else texY = 280;
-	}
-	
-	public void setClickEvent(IClickEvent i)
-	{
-		clickEvent = i;
 	}
 }

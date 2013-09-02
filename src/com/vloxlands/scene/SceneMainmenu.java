@@ -5,17 +5,13 @@ import java.awt.Font;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.gen.IslandGenerator;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
-import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
 
 public class SceneMainmenu extends Scene
 {
-	ProgressBar progress;
-	
 	@Override
 	public void init()
 	{
@@ -31,17 +27,10 @@ public class SceneMainmenu extends Scene
 			@Override
 			public void onClick()
 			{
-				Game.currentMap.islandGenerator = new IslandGenerator();
-				progress.setValue(0);
-				progress.setVisible(true);
-				lockScene();
+				Game.currentGame.setScene(new SceneGenerateMap());
 			}
 		});
 		content.add(b);
-		
-		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 280, 0, true);
-		progress.setVisible(false);
-		content.add(progress);
 		
 		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, "Spiel beenden");
 		b.setClickEvent(new IClickEvent()
@@ -61,10 +50,5 @@ public class SceneMainmenu extends Scene
 		super.update();
 		
 		RenderAssistant.renderOutline(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 20 + TextButton.HEIGHT * 2, true);
-		
-		if (Game.currentMap.islands.size() > 0) Game.currentGame.setScene(new SceneGame());
-		
-		if (Game.currentMap.islandGenerator != null) progress.setValue(Game.currentMap.islandGenerator.progress);
-		else progress.setVisible(false);
 	}
 }

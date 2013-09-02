@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.ui.IClickableGui;
 import com.vloxlands.ui.IGuiElement;
@@ -57,7 +56,6 @@ public abstract class Scene
 		wasButton2Down = Mouse.isButtonDown(2);
 		
 		if (!handleMouseGUI(x, y, flag)) handleMouseWorld(x, y, flag);
-		
 	}
 	
 	protected boolean handleMouseGUI(int posX, int posY, int flag)
@@ -77,20 +75,7 @@ public abstract class Scene
 			if (i instanceof IClickableGui)
 			{
 				IClickableGui iG = (IClickableGui) i;
-				Vector2f pos = iG.getPos();
-				Vector2f size = iG.getSize();
-				
-				int x = Mouse.getX();
-				int y = Display.getHeight() - Mouse.getY();
-				
-				float startA, startB, endA, endB;
-				
-				startA = pos.x;
-				startB = pos.y;
-				endA = pos.x + size.x;
-				endB = pos.y + size.y;
-				
-				if (startA < x && endA >= x && startB < y && endB >= y) return iG;
+				if (iG.isUnderCursor()) return iG;
 			}
 		return null;
 	}
