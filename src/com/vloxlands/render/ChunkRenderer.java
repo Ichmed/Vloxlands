@@ -166,7 +166,27 @@ public class ChunkRenderer
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips0.get(key);
 						
-						
+						// if (activeStrips[i] != null)
+						// {
+						// if (val == null)
+						// {
+						// strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+						// activeStrips[i] = null;
+						// }
+						// else if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.pos.z == activeStrips[i].pos.z)
+						// {
+						// activeStrips[i].increaseSize(1, 0, 0);
+						// }
+						// else
+						// {
+						// strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+						// activeStrips[i] = new VoxelFace(val);
+						// }
+						// }
+						// else if (val != null)
+						// {
+						// activeStrips[i] = new VoxelFace(val);
+						// }
 						if (val != null)
 						{
 							if (activeStrips[i] == null)
@@ -175,7 +195,7 @@ public class ChunkRenderer
 							}
 							else
 							{
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ)
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.pos.z == activeStrips[i].pos.z)
 								{
 									activeStrips[i].increaseSize(1, 0, 0);
 								}
@@ -226,7 +246,7 @@ public class ChunkRenderer
 							}
 							else
 							{
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX)
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX && val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z)
 								{
 									activeStrips[i].increaseSize(0, 1, 0);
 								}
@@ -250,6 +270,6 @@ public class ChunkRenderer
 				if (activeStrips[i] != null) strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 		}
 		
-		return strips2;
+		return strips1;
 	}
 }
