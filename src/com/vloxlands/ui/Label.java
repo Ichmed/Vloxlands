@@ -1,6 +1,6 @@
 package com.vloxlands.ui;
 
-import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
 
@@ -10,6 +10,9 @@ import com.vloxlands.util.RenderAssistant;
 public class Label extends IGuiElement
 {
 	String title;
+	public boolean stackTexture;
+	public int texW, texH;
+	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	public Label(int x, int y, int width, int height, String title)
@@ -19,6 +22,9 @@ public class Label extends IGuiElement
 		this.width = width;
 		this.height = height;
 		this.title = title;
+		stackTexture = false;
+		texW = 0;
+		texH = 0;
 		texture = null;
 	}
 	
@@ -28,7 +34,13 @@ public class Label extends IGuiElement
 		if (texture != null)
 		{
 			RenderAssistant.bindTexture(texture);
-			RenderAssistant.renderRect(x, y, width, height);
+			if (!stackTexture) RenderAssistant.renderRect(x, y, width, height);
+			else
+			{
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				RenderAssistant.renderRect(x, y, width, height, 0, 0, width / (float) texW, height / (float) texH);
+			}
 		}
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;

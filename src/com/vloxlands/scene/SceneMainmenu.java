@@ -27,7 +27,7 @@ public class SceneMainmenu extends Scene
 			@Override
 			public void onClick()
 			{
-				Game.currentGame.setScene(new SceneGenerateMap());
+				Game.currentGame.setScene(new SceneNewGame());
 			}
 		});
 		content.add(b);
