@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.ui.IClickableGui;
 import com.vloxlands.ui.IGuiElement;
+import com.vloxlands.ui.Label;
 
 public abstract class Scene
 {
@@ -18,6 +19,13 @@ public abstract class Scene
 	private boolean wasButton2Down;
 	
 	public abstract void init();
+	
+	protected void setBackground()
+	{
+		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
+		bg.setTexture("/graphics/textures/ui/paper.png");
+		content.add(bg);
+	}
 	
 	public void update()
 	{

@@ -33,28 +33,22 @@ public class ProgressBar extends IGuiElement
 		RenderAssistant.bindTexture("/graphics/textures/ui/progressBar.png");
 		RenderAssistant.renderRect(x + 7, y + 8, value * (width - 14), 24, 0, 0, value, 1);
 		
-		RenderAssistant.bindTexture("/graphics/textures/ui/gui.png");
-		RenderAssistant.renderRect(x, y, 18, 39, 793 / 1024.0f, 548 / 1024.0f, 18 / 1024.0f, 39 / 1024.0f);
-		for (int i = 0; i < (width - 36) / 129; i++)
-			RenderAssistant.renderRect(x + 18 + i * 129, y, 129, 39, 831 / 1024.0f, 548 / 1024.0f, 129 / 1024.0f, 39 / 1024.0f);
-		RenderAssistant.renderRect(x + 18 + (width - 36) / 129 * 129, y, (width - 36) % 129, 39, 831 / 1024.0f, 548 / 1024.0f, ((width - 36) % 129) / 1024.0f, 39 / 1024.0f);
+		RenderAssistant.renderOutline(x, y, width, height, false);
 		
-		glDisable(GL_SCISSOR_TEST);
-		RenderAssistant.renderRect(x + width - 18, y, 18, 39, 980 / 1024.0f, 548 / 1024.0f, 18 / 1024.0f, 39 / 1024.0f);
 		glDisable(GL_BLEND);
 		
 		if (showPercentage)
 		{
 			int tx = FontAssistant.getFont(font).getWidth(((int) (value * 100)) + "%");
 			int mx = width / 2 - tx / 2;
-			glColor3f(0.2f,0.2f,0.2f);
+			glColor3f(0.2f, 0.2f, 0.2f);
 			RenderAssistant.renderText(x + mx, y + height / 4f, ((int) (value * 100)) + "%", font);
 		}
 		else if (title != null)
 		{
 			int tx = FontAssistant.getFont(font).getWidth(title);
 			int mx = width / 2 - tx / 2;
-			glColor3f(0.2f,0.2f,0.2f);
+			glColor3f(0.2f, 0.2f, 0.2f);
 			RenderAssistant.renderText(x + mx, y + height / 4f, title, font);
 		}
 	}

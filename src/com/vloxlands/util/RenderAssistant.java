@@ -253,4 +253,44 @@ public class RenderAssistant
 	{
 		ARBShaderObjects.glUniform3fARB(getUniformLocation(name), a, b, c);
 	}
+	
+	// -- 2D GUI Helper functions -- //
+	
+	public static void renderOutline(int x, int y, int width, int height, boolean doubled)
+	{
+		bindTexture("/graphics/textures/ui/gui.png");
+		
+		int cornerSize = (doubled) ? 24 : 19;
+		int lineThickness = (doubled) ? 17 : 12;
+		int lineHeight = (doubled) ? 55 : 59;
+		int lineWidth = (doubled) ? 73 : 74;
+		
+		// x1 y1 y2 x2
+		int[] c = (doubled) ? new int[] { 856, 189, 294, 978 } : new int[] { 865, 398, 498, 982 };
+		int[] m = (doubled) ? new int[] { 893, 227, 301, 985 } : new int[] { 899, 428, 505, 989 };
+		
+		renderRect(x, y, cornerSize, cornerSize, c[0] / 1024f, c[1] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // lt
+		
+		for (int i = 0; i < (width - cornerSize * 2) / lineWidth; i++)
+			renderRect(x + cornerSize + i * lineWidth, y, lineWidth, lineThickness, m[0] / 1024f, c[1] / 1024f, lineWidth / 1024f, lineThickness / 1024f); // mt
+		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, c[1] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
+		
+		renderRect(x + width - cornerSize, y, cornerSize, cornerSize, c[3] / 1024f, c[1] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rt
+		
+		for (int i = 0; i < (height - cornerSize * 2) / lineHeight; i++)
+			renderRect(x, y + cornerSize + i * lineHeight, lineThickness, lineHeight, c[0] / 1024f, m[1] / 1024f, lineThickness / 1024f, lineHeight / 1024f); // ml
+		renderRect(x, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight, c[0] / 1024.0f, m[1] / 1024.0f, lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
+		
+		for (int i = 0; i < (height - cornerSize * 2) / lineHeight; i++)
+			renderRect(x + width - lineThickness, y + cornerSize + i * lineHeight, lineThickness, lineHeight, m[3] / 1024f, m[1] / 1024f, lineThickness / 1024f, lineHeight / 1024f); // mr
+		renderRect(x + width - lineThickness, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight, m[3] / 1024.0f, m[1] / 1024.0f, lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
+		
+		renderRect(x, y + height - cornerSize, cornerSize, cornerSize, c[0] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // lb
+		
+		for (int i = 0; i < (width - cornerSize * 2) / lineWidth; i++)
+			renderRect(x + cornerSize + i * lineWidth, y + height - lineThickness, lineWidth, lineThickness, m[0] / 1024f, m[2] / 1024f, lineWidth / 1024f, lineThickness / 1024f); // mb
+		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y + height - lineThickness, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, m[2] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
+		
+		renderRect(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, c[3] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rb
+	}
 }

@@ -1,7 +1,6 @@
 package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -9,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.util.Camera;
+import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.IslandGenerator;
@@ -61,7 +61,7 @@ public class Game
 		
 		moveCamera();
 		
-		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
+		ViewFrustum.initViewFrustum(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
