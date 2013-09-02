@@ -2,6 +2,7 @@ package com.vloxlands.game.voxel;
 
 import java.util.HashMap;
 
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.CSVReader;
 
 public class Voxel
@@ -29,7 +30,6 @@ public class Voxel
 			System.exit(1);
 		}
 		this.id = (byte) id;
-		voxels.put(this.getName().toUpperCase().replace(" ", "_"), this);
 	}
 	
 	public static Voxel getVoxelForId(byte id)
@@ -208,7 +208,9 @@ public class Voxel
 				case "ID":
 				{
 					voxel.registerVoxel(Integer.valueOf(cell) - 128);
+					break;
 				}
+				
 				case "Texture(x*y)":
 				{
 					if (cell.length() > 0) voxel.setTextureIndex(Integer.parseInt(cell.split("\\*")[1]) * 32 + Integer.parseInt(cell.split("\\*")[0]));
@@ -221,6 +223,7 @@ public class Voxel
 				{
 					if (cell.length() > 0) voxel.setName(cell);
 					else voxel.setName(defaults[csv.getIndex()]);
+					voxels.put(voxel.getName().toUpperCase().replace(" ", "_"), voxel);
 					break;
 				}
 				
