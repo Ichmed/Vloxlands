@@ -45,23 +45,34 @@ public class ChunkRenderer
 	{
 		long time = System.currentTimeMillis();
 		
-		island.chunk0ID = glGenLists(island.chunks[0].capacity() * 2);
-		
-		for (int i = 0; i < island.chunks[0].capacity(); i++)
+		for (int i = 0; i < island.chunks.length; i++)
 		{
-			renderChunk(island.chunk0ID + i * 2, i, island);
-			island.chunks[0].put(i);
-			island.chunks[1].put(i);
+			for (int j = 0; j < island.chunks[0].length; j++)
+			{
+				for (int k = 0; k < island.chunks[0][0].length; k++)
+				{
+					island.chunks[i][j][k].update(island);
+					island.chunks[i][j][k].render(true);
+				}
+			}
 		}
 		
-		island.chunks[0].flip();
-		island.chunks[1].flip();
+		for (int i = 0; i < island.chunks.length; i++)
+		{
+			for (int j = 0; j < island.chunks[0].length; j++)
+			{
+				for (int k = 0; k < island.chunks[0][0].length; k++)
+				{
+					island.chunks[i][j][k].render(false);
+				}
+			}
+		}
 		
 		CFG.p("[ChunkRenderer]: Rendered chunks on Island " + island + ". Took " + (System.currentTimeMillis() - time) + "ms");
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static HashMap<VoxelFaceKey, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
+	public static HashMap<VoxelFaceKey, VoxelFace>[] generateFaces(int cx, int cy, int cz, Island i)
 	{
 		HashMap<VoxelFaceKey, VoxelFace> faces = new HashMap<>();
 		HashMap<VoxelFaceKey, VoxelFace> transparentFaces = new HashMap<>();
@@ -91,12 +102,10 @@ public class ChunkRenderer
 			}
 		}
 		
-		
-		
 		return new HashMap[] { faces, transparentFaces };
 	}
 	
-	private static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(int cx, int cy, int cz, HashMap<VoxelFaceKey, VoxelFace> originalMap)
+	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(int cx, int cy, int cz, HashMap<VoxelFaceKey, VoxelFace> originalMap)
 	{
 		HashMap<VoxelFaceKey, VoxelFace> strips0 = new HashMap<>();
 		

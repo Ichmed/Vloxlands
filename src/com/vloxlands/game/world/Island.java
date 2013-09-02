@@ -2,10 +2,8 @@ package com.vloxlands.game.world;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.nio.IntBuffer;
 import java.util.Arrays;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
@@ -18,9 +16,7 @@ public class Island
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
-	
-	public int chunk0ID;
-	public IntBuffer[] chunks = new IntBuffer[] { BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3)), BufferUtils.createIntBuffer((int) Math.pow(SIZE / CHUNKSIZE, 3)) };
+	public Chunk[][][] chunks = new Chunk[SIZE / CHUNKSIZE][SIZE / CHUNKSIZE][SIZE / CHUNKSIZE];
 	
 	Vector3f pos;
 	
@@ -29,6 +25,7 @@ public class Island
 	public Island()
 	{
 		pos = new Vector3f(0, 0, 0);
+		int s = SIZE / CHUNKSIZE;
 		for (int i = 0; i < SIZE; i++)
 		{
 			for (int j = 0; j < SIZE; j++)
@@ -37,6 +34,7 @@ public class Island
 				{
 					voxels[i][j][k] = Voxel.get("AIR").getId();
 					voxelMetadata[i][j][k] = -128;
+					if (i % s == 0 && j % s == 0 && k % s == 0) chunks[i / s][j / s][k / s] = new Chunk(i / s, j / s, k / s);
 				}
 			}
 		}
@@ -187,11 +185,33 @@ public class Island
 	{
 		glEnable(GL_CULL_FACE);
 		glTranslatef(pos.x, pos.y, pos.z);
-		glListBase(chunk0ID);
-		glCallLists(chunks[0]);
 		
-		glListBase(chunk0ID + chunks[0].capacity());
-		glCallLists(chunks[1]);
+		int s = SIZE / CHUNKSIZE;
+		for (int i = 0; i < s; i++)
+		{
+			for (int j = 0; j < s; j++)
+			{
+				for (int k = 0; k < s; k++)
+				{
+					chunks[i][j][k].onTick(true);
+				}
+			}
+		}
+		for (int i = 0; i < s; i++)
+		{
+			for (int j = 0; j < s; j++)
+			{
+				for (int k = 0; k < s; k++)
+				{
+					chunks[i][j][k].onTick(false);
+				}
+			}
+		}
+		// glListBase(chunk0ID);
+		// glCallLists(chunks[0]);
+		//
+		// glListBase(chunk0ID + chunks[0].capacity());
+		// glCallLists(chunks[1]);
 		
 		if (CFG.SHOW_CHUNK_BOUNDRIES)
 		{
