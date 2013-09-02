@@ -7,6 +7,7 @@ import java.util.Arrays;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.world.Island;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.RenderAssistant;
@@ -23,6 +24,18 @@ public class VoxelFace
 	public VoxelFace(Direction dir, Vector3f pos, int texInd)
 	{
 		this(dir, pos, texInd, 1, 1, 1);
+	}
+	
+	public VoxelFace(VoxelFace o)
+	{
+		sizeX = o.sizeX;
+		sizeY = o.sizeY;
+		sizeZ = o.sizeZ;
+		dir = o.dir;
+		pos = new Vector3f(o.pos);
+		textureIndex = o.textureIndex;
+		
+		updateVertices();
 	}
 	
 	public VoxelFace(Direction dir, Vector3f pos, int texInd, int sizeX, int sizeY, int sizeZ)
@@ -120,7 +133,10 @@ public class VoxelFace
 		
 		glEnable(GL_CULL_FACE);
 		
-		if (CFG.SHOW_WIREFRAME) RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 10, 10);
+		if (CFG.SHOW_WIREFRAME)
+		{
+			RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 7, 7);
+		}
 		else RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -201,7 +217,7 @@ public class VoxelFace
 		@Override
 		public int hashCode()
 		{
-			return Integer.parseInt(x + "" + y + "" + z + "" + d);
+			return ((x * Island.SIZE + y) * Island.SIZE + z) * Island.SIZE + d;// Integer.parseInt(x + "" + y + "" + z + "" + d);
 		}
 		
 		@Override

@@ -55,7 +55,7 @@ public class Map
 	public void addIsland(Island i)
 	{
 		islands.add(i);
-		ChunkRenderer.initChunks(i);
+		ChunkRenderer.renderChunks(i);
 		i.calculateWeight();
 		i.calculateUplift();
 	}

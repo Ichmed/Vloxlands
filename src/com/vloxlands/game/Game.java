@@ -61,7 +61,7 @@ public class Game
 		
 		moveCamera();
 		
-		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
+		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
 		// CFG.p(camera.getRotation());
 		
@@ -107,11 +107,11 @@ public class Game
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.initChunks(currentMap.islands.get(0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
 			{
 				CFG.SHOW_WIREFRAME = !CFG.SHOW_WIREFRAME;
-				ChunkRenderer.initChunks(currentMap.islands.get(0));
+				ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 			{

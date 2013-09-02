@@ -14,7 +14,7 @@ import com.vloxlands.settings.CFG;
 public class Island
 {
 	public static final int SIZE = 256;
-	public static final int CHUNKSIZE = 32;
+	public static final int CHUNKSIZE = 16;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];

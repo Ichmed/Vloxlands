@@ -14,8 +14,6 @@ import com.vloxlands.util.Direction;
 
 public class ChunkRenderer
 {
-	private static int prev, next;
-	
 	public static void renderChunk(int listIndex, int index, Island island)
 	{
 		int cs = Island.SIZE / Island.CHUNKSIZE;
@@ -25,13 +23,8 @@ public class ChunkRenderer
 		
 		HashMap<VoxelFaceKey, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
-		prev += faceLists[0].size();
-		prev += faceLists[1].size();
-		
 		HashMap<VoxelFaceKey, VoxelFace> greedy0 = generateGreedyMesh(cx, cy, cz, faceLists[0]);
-		next += greedy0.size();
 		HashMap<VoxelFaceKey, VoxelFace> greedy1 = generateGreedyMesh(cx, cy, cz, faceLists[1]);
-		next += greedy1.size();
 		
 		glPushMatrix();
 		glNewList(listIndex, GL_COMPILE);
@@ -48,10 +41,9 @@ public class ChunkRenderer
 		glPopMatrix();
 	}
 	
-	public static void initChunks(Island island)
+	public static void renderChunks(Island island)
 	{
-		prev = 0;
-		next = 0;
+		long time = System.currentTimeMillis();
 		
 		island.chunk0ID = glGenLists(island.chunks[0].capacity() * 2);
 		for (int i = 0; i < island.chunks[0].capacity(); i++)
@@ -64,8 +56,7 @@ public class ChunkRenderer
 		island.chunks[0].flip();
 		island.chunks[1].flip();
 		
-		CFG.p(prev + " ->" + next);
-		// CFG.p("[ChunkRenderer]: Initialized chunks on Island " + island);
+		CFG.p("[ChunkRenderer]: Rendered chunks on Island " + island + ". Took " + (System.currentTimeMillis() - time) + "ms");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -109,8 +100,6 @@ public class ChunkRenderer
 		HashMap<VoxelFaceKey, VoxelFace> strips0 = new HashMap<>();
 		
 		if (originalMap.size() == 0) return originalMap;
-		
-		// long time = System.currentTimeMillis();
 		
 		// greedy-mode along Z - axis
 		for (int x = 0; x < Island.CHUNKSIZE; x++)
@@ -177,11 +166,12 @@ public class ChunkRenderer
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips0.get(key);
 						
+						
 						if (val != null)
 						{
 							if (activeStrips[i] == null)
 							{
-								activeStrips[i] = val;
+								activeStrips[i] = new VoxelFace(val);
 							}
 							else
 							{
@@ -193,9 +183,14 @@ public class ChunkRenderer
 								{
 									strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 									
-									activeStrips[i] = val;
+									activeStrips[i] = new VoxelFace(val);
 								}
 							}
+						}
+						else if (activeStrips[i] != null)
+						{
+							strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+							activeStrips[i] = null;
 						}
 					}
 				}
@@ -227,7 +222,7 @@ public class ChunkRenderer
 						{
 							if (activeStrips[i] == null)
 							{
-								activeStrips[i] = val;
+								activeStrips[i] = new VoxelFace(val);
 							}
 							else
 							{
@@ -239,9 +234,14 @@ public class ChunkRenderer
 								{
 									strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 									
-									activeStrips[i] = val;
+									activeStrips[i] = new VoxelFace(val);
 								}
 							}
+						}
+						else if (activeStrips[i] != null)
+						{
+							strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
+							activeStrips[i] = null;
 						}
 					}
 				}
@@ -250,9 +250,6 @@ public class ChunkRenderer
 				if (activeStrips[i] != null) strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 		}
 		
-		// CFG.p("[ChunkRenderer]: Greedy meshing took " + (System.currentTimeMillis() - time) + "ms");
-		
-		// return originalMap;
-		return strips0;
+		return strips2;
 	}
 }
