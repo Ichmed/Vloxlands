@@ -20,8 +20,6 @@ import de.dakror.universion.UniVersion;
 
 public class Vloxlands
 {
-	private static DisplayMode[] fullscreenmodes;
-	
 	public static void main(String[] args)
 	{
 		CFG.INTERNET = false;// Assistant.isInternetReachable();
@@ -52,7 +50,6 @@ public class Vloxlands
 		
 		try
 		{
-			fullscreenmodes = Display.getAvailableDisplayModes();
 			if (CFG.FULLSCREEN) enterFullscreen();
 			else leaveFullscreen();
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });

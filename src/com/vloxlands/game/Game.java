@@ -63,6 +63,8 @@ public class Game
 		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 100);
 		
+		// CFG.p(camera.getRotation());
+		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
 		glRotated(camera.getRotation().z, 0f, 0f, 1f);
@@ -252,6 +254,8 @@ public class Game
 	{
 		float x = (Mouse.getY() - Display.getHeight() / 2) / (float) Display.getHeight() * cameraRotationSpeed;
 		float y = (Mouse.getX() - Display.getWidth() / 2) / (float) Display.getWidth() * cameraRotationSpeed;
+		
+		if (Math.abs(camera.rotation.x - x) > 90) x = 0;
 		
 		camera.rotate(-x, y, 0);
 		
