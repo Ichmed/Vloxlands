@@ -12,7 +12,7 @@ public class SceneGenerateMap extends Scene
 	{
 		setBackground();
 		
-		Spinner s = new Spinner(Display.getWidth() / 2, Display.getHeight() / 2, 300, 0, 100, 0, 1);
+		Spinner s = new Spinner(Display.getWidth() / 2, Display.getHeight() / 2, 300, 0, 100, 0, 1, true);
 		content.add(s);
 	}
 }
