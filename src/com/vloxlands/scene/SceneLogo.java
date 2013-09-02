@@ -17,7 +17,7 @@ import com.vloxlands.util.MediaAssistant;
 import com.vloxlands.util.ZipAssistant;
 
 
-public class Scene_Logo extends Scene
+public class SceneLogo extends Scene
 {
 	ProgressBar download;
 	float alpha;
@@ -78,13 +78,13 @@ public class Scene_Logo extends Scene
 		alpha += 0.05f;
 		if (!update)
 		{
-			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new Scene_Mainmenu());
+			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneMainmenu());
 		}
 		else
 		{
 			download.setValue(downloader.progress / (float) downloader.fullsize);
 			// download.title = Assistant.formatBinarySize(downloader.progress, 2) + " / " + Assistant.formatBinarySize(downloader.fullsize, 2) + " @ " + Assistant.formatBinarySize(downloader.speed, 2) + "/s"; // want that?
-			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new Scene_Mainmenu());
+			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new SceneMainmenu());
 		}
 	}
 }

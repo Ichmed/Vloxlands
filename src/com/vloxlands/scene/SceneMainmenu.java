@@ -12,7 +12,7 @@ import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
 
-public class Scene_Mainmenu extends Scene
+public class SceneMainmenu extends Scene
 {
 	ProgressBar progress;
 	
@@ -25,7 +25,7 @@ public class Scene_Mainmenu extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Spiel starten");
+		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Neues Spiel");
 		b.setClickEvent(new IClickEvent()
 		{
 			@Override
@@ -62,7 +62,7 @@ public class Scene_Mainmenu extends Scene
 		
 		RenderAssistant.renderOutline(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 20 + TextButton.HEIGHT * 2, true);
 		
-		if (Game.currentMap.islands.size() > 0) Game.currentGame.setScene(new Scene_Game());
+		if (Game.currentMap.islands.size() > 0) Game.currentGame.setScene(new SceneGame());
 		
 		if (Game.currentMap.islandGenerator != null) progress.setValue(Game.currentMap.islandGenerator.progress);
 		else progress.setVisible(false);

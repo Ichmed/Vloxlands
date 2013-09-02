@@ -7,7 +7,7 @@ import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
 
-public class Scene_Game extends Scene
+public class SceneGame extends Scene
 {
 	@Override
 	public void init()
