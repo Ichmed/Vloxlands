@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.gen.IslandGenerator;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
@@ -30,7 +31,7 @@ public class SceneNewGame extends Scene
 			@Override
 			public void onClick()
 			{
-				Game.currentGame.setScene(new SceneGame());
+				Game.currentMap.islandGenerator = new IslandGenerator();
 			}
 		});
 		content.add(skip);
@@ -40,13 +41,18 @@ public class SceneNewGame extends Scene
 	public void update()
 	{
 		super.update();
-		RenderAssistant.renderOutline(-15, 80, Display.getWidth() + 30, 1, false);
 		glEnable(GL_BLEND);
+		// RenderAssistant.renderOutline(-15, 80, Display.getWidth() + 30, 1, false);
 		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.renderRect(30, 100, Display.getWidth() / 5 * 3, Display.getHeight() / 5 * 4 - 100);
-		glDisable(GL_BLEND);
-		glColor3f(1, 1, 1);
+		glColor4f(1, 1, 1, 1);
 		RenderAssistant.renderOutline(25, 95, Display.getWidth() / 5 * 3 + 10, Display.getHeight() / 5 * 4 - 90, true);
+		glDisable(GL_BLEND);
+		
+		if (Game.currentMap.islandGenerator != null && Game.currentMap.islandGenerator.finishedIsland != null)
+		{
+			Game.currentGame.setScene(new SceneGame());
+		}
 	}
 }
