@@ -9,6 +9,9 @@ import com.vloxlands.util.RenderAssistant;
 
 public class TextButton extends IClickableGui
 {
+	public static final int WIDTH = 288;
+	public static final int HEIGHT = 59;
+	
 	String title;
 	IClickEvent clickEvent;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
@@ -20,8 +23,8 @@ public class TextButton extends IClickableGui
 	{
 		this.x = x - 144;
 		this.y = y;
-		width = 288;
-		height = 59;
+		width = WIDTH;
+		height = HEIGHT;
 		this.title = title;
 		texture = "/graphics/textures/ui/gui.png";
 	}

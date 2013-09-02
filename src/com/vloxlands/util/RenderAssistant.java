@@ -258,6 +258,7 @@ public class RenderAssistant
 	
 	public static void renderOutline(int x, int y, int width, int height, boolean doubled)
 	{
+		glEnable(GL_BLEND);
 		bindTexture("/graphics/textures/ui/gui.png");
 		
 		int cornerSize = (doubled) ? 24 : 19;
@@ -292,5 +293,6 @@ public class RenderAssistant
 		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y + height - lineThickness, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, m[2] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
 		
 		renderRect(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, c[3] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rb
+		glDisable(GL_BLEND);
 	}
 }

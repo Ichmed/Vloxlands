@@ -9,6 +9,8 @@ import com.vloxlands.util.RenderAssistant;
 
 public class ProgressBar extends IGuiElement
 {
+	public static final int HEIGHT = 39;
+	
 	float value;
 	public String title;
 	boolean showPercentage;
@@ -20,7 +22,7 @@ public class ProgressBar extends IGuiElement
 		this.x = x - (width / 2);
 		this.y = y;
 		this.width = width;
-		height = 39;
+		height = HEIGHT;
 		this.value = 0;
 		this.showPercentage = showPercentage;
 		font = font.deriveFont(20f);

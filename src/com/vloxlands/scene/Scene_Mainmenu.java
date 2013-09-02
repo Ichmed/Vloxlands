@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import java.awt.Font;
+
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
@@ -8,6 +10,7 @@ import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.TextButton;
+import com.vloxlands.util.RenderAssistant;
 
 public class Scene_Mainmenu extends Scene
 {
@@ -16,9 +19,11 @@ public class Scene_Mainmenu extends Scene
 	@Override
 	public void init()
 	{
-		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
-		bg.setTexture("/graphics/textures/ui/paper.png");
-		content.add(bg);
+		setBackground();
+		
+		Label l = new Label(0, 100, Display.getWidth(), 60, "Vloxlands");
+		l.font = l.font.deriveFont(Font.BOLD, 60f);
+		content.add(l);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Spiel starten");
 		b.setClickEvent(new IClickEvent()
@@ -34,7 +39,7 @@ public class Scene_Mainmenu extends Scene
 		});
 		content.add(b);
 		
-		progress = new ProgressBar(Display.getWidth() / 2, 80, 280, 0, true);
+		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 280, 0, true);
 		progress.setVisible(false);
 		content.add(progress);
 		
@@ -54,6 +59,9 @@ public class Scene_Mainmenu extends Scene
 	public void update()
 	{
 		super.update();
+		
+		RenderAssistant.renderOutline(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 20 + TextButton.HEIGHT * 2, true);
+		
 		if (Game.currentMap.islands.size() > 0) Game.currentGame.setScene(new Scene_Game());
 		
 		if (Game.currentMap.islandGenerator != null) progress.setValue(Game.currentMap.islandGenerator.progress);
