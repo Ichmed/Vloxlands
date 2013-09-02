@@ -26,7 +26,7 @@ import com.vloxlands.settings.CFG;
 
 public class RenderAssistant
 {
-	private static HashMap<String, Texture> textures = new HashMap<>();
+	public static HashMap<String, Texture> textures = new HashMap<>();
 	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
 	private static HashMap<String, TextureAtlas> textureAtlases = new HashMap<>();
 	
@@ -293,5 +293,7 @@ public class RenderAssistant
 		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y + height - lineThickness, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, m[2] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
 		
 		renderRect(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, c[3] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rb
+		
+		glDisable(GL_BLEND);
 	}
 }
