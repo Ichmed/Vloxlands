@@ -7,7 +7,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 
-import com.vloxlands.game.Game;
 import com.vloxlands.ui.IClickableGui;
 import com.vloxlands.ui.IGuiElement;
 
@@ -34,18 +33,6 @@ public abstract class Scene
 	
 	public void handleInput()
 	{
-		
-		if (Mouse.isButtonDown(1))
-		{
-			Mouse.setGrabbed(true);
-			if (Mouse.isButtonDown(1) && !wasButton1Down)
-			{
-				Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
-			}
-			Game.currentGame.rotateCamera();
-		}
-		else Mouse.setGrabbed(false);
-		
 		int x = Mouse.getX();
 		int y = Mouse.getY();
 		int flag = 0;
