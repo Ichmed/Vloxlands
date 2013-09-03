@@ -10,6 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
+import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
@@ -30,6 +31,10 @@ public class Game
 {
 	public static Game currentGame;
 	public static Map currentMap;
+	public ViewFrustum viewFrustum = new ViewFrustum();
+	
+	public float zNear = 0.001f, zFar = 10000;
+	Vector3f up = new Vector3f(0, 1, 0);
 	
 	public static MapGenerator mapGenerator;
 	public static int fov = 50;
@@ -65,7 +70,8 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
-		gluPerspective(this.fov, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
+		gluPerspective(this.fov, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
+		viewFrustum.calculateViewFrustum(this.camera.getPosition(), this.camera.getRotation(), up, zNear, zFar);
 		
 		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		// glRotated(camera.getRotation().y, 0f, 1f, 0f);
@@ -102,15 +108,7 @@ public class Game
 				glEnd();
 			}
 			glPopMatrix();
-		}
-		
-		glPushMatrix();
-		{
-			glTranslated(128, 160, 128);
-			m.renderModel();
-		}
-		glPopMatrix();
-		
+		}		
 		
 		RenderAssistant.set2DRenderMode(true);
 		
