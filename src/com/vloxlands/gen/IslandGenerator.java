@@ -13,10 +13,6 @@ import com.vloxlands.util.MathHelper;
 
 public class IslandGenerator extends Thread
 {
-	public static final int ISLAND_SMALL = 16;
-	public static final int ISLAND_MEDIUM = 32;
-	public static final int ISLAND_BIG = 64;
-	
 	/**
 	 * Override L
 	 */
@@ -40,10 +36,13 @@ public class IslandGenerator extends Thread
 	private int actions;
 	private int quotient;
 	
-	public IslandGenerator()
+	int minSize, maxSize;
+	
+	public IslandGenerator(int minSize, int maxSize)
 	{
+		this.minSize = minSize;
+		this.maxSize = maxSize;
 		progress = quotient = 0;
-		start();
 	}
 	
 	@Override
@@ -54,17 +53,16 @@ public class IslandGenerator extends Thread
 	
 	private Island generateIsland()
 	{
-		int radius = getRandomRadius(ISLAND_SMALL);
+		int radius = getRandomRadius();
 		
-		quotient = (radius + 2) * 2 + 1;
+		quotient = radius + 2;
 		
-		Island L = generatePerfectIsland(128, Island.SIZE / 2, 128, radius);
-		Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
-		
-		Island m = mergeIslandData(L, R, OVR_L);
-		generateCrystals(m, Island.SIZE / 2);
-		m.grassify();
-		return m;
+		Island L = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 2, Island.SIZE / 2, radius);
+		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
+		// Island m = mergeIslandData(L, R, OVR_L);
+		generateCrystals(L, Island.SIZE / 2);
+		L.grassify();
+		return L;
 	}
 	
 	private void updateProgress()
@@ -101,7 +99,7 @@ public class IslandGenerator extends Thread
 			
 			Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
 			int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
-			island.setVoxel((int) pos.x, 127, (int) pos.y, Voxel.get("STONE").getId());
+			island.setVoxel((int) pos.x, Island.SIZE / 2 - 1, (int) pos.y, Voxel.get("STONE").getId());
 			generateBezier(island, SPIKE_BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
 			updateProgress();
 		}
@@ -139,9 +137,9 @@ public class IslandGenerator extends Thread
 		return new Vector2f(x, y);
 	}
 	
-	private int getRandomRadius(int size)
+	private int getRandomRadius()
 	{
-		return (int) (Math.random() * size) + size;
+		return (int) (Math.random() * (maxSize - minSize)) + minSize;
 	}
 	
 	private byte[] createRatio(byte[] keys, int[] vals)

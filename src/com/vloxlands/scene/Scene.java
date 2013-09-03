@@ -1,7 +1,8 @@
 package com.vloxlands.scene;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -12,7 +13,7 @@ import com.vloxlands.ui.Label;
 
 public abstract class Scene
 {
-	public List<IGuiElement> content = new ArrayList<>();
+	public ArrayList<IGuiElement> content = new ArrayList<>();
 	private boolean wasButton0Down;
 	private boolean wasButton1Down;
 	private boolean wasButton2Down;
@@ -31,13 +32,15 @@ public abstract class Scene
 	
 	public void update()
 	{
-		for (IGuiElement i : content)
+		ArrayList<IGuiElement> sorted = getSortedContent();
+		
+		for (IGuiElement i : sorted)
 			if (i instanceof IClickableGui)
 			{
 				((IClickableGui) i).onTick();
 			}
 		handleInput();
-		for (IGuiElement g : content)
+		for (IGuiElement g : sorted)
 			if (g.isVisible()) g.render();
 	}
 	
@@ -74,13 +77,30 @@ public abstract class Scene
 	
 	public IClickableGui getObjectUnderCursor()
 	{
-		for (IGuiElement i : content)
+		for (IGuiElement i : getSortedContent())
 			if (i instanceof IClickableGui)
 			{
 				IClickableGui iG = (IClickableGui) i;
 				if (iG.isUnderCursor()) return iG;
 			}
 		return null;
+	}
+	
+	public ArrayList<IGuiElement> getSortedContent()
+	{
+		@SuppressWarnings("unchecked")
+		ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();
+		Collections.sort(sorted, new Comparator<IGuiElement>()
+		{
+			
+			@Override
+			public int compare(IGuiElement o1, IGuiElement o2)
+			{
+				return o1.getZIndex() - o2.getZIndex();
+			}
+		});
+		
+		return sorted;
 	}
 	
 	protected void handleMouseWorld(int x, int y, int flag)

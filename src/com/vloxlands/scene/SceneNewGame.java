@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.gen.IslandGenerator;
+import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
@@ -31,14 +31,25 @@ public class SceneNewGame extends Scene
 		progress.setVisible(false);
 		content.add(progress);
 		
-		TextButton skip = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Weiter");
-		skip.setClickEvent(new IClickEvent()
+		TextButton back = new TextButton(TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Zurueck");
+		back.setClickEvent(new IClickEvent()
 		{
-			
 			@Override
 			public void onClick()
 			{
-				Game.currentMap.islandGenerator = new IslandGenerator();
+				Game.currentGame.setScene(new SceneMainmenu());
+			}
+		});
+		content.add(back);
+		
+		TextButton skip = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Weiter");
+		skip.setClickEvent(new IClickEvent()
+		{
+			@Override
+			public void onClick()
+			{
+				Game.mapGenerator = new MapGenerator(2, 2, 20, 48);
+				Game.mapGenerator.start();
 				lockScene();
 				progress.setVisible(true);
 			}
@@ -69,18 +80,19 @@ public class SceneNewGame extends Scene
 		}
 		glPopMatrix();
 		
-		if (progress.isVisible())
+		if (Game.mapGenerator != null)
 		{
 			glEnable(GL_BLEND);
 			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 			glColor4f(1, 1, 1, 1);
-			progress.setValue(Game.currentMap.islandGenerator.progress);
+			progress.setValue(Game.mapGenerator.progress);
 			progress.render();
 			glDisable(GL_BLEND);
 		}
+		if (Game.currentMap != null) Game.currentGame.setScene(new SceneGame());
 		
-		if (Game.currentMap.islandGenerator != null && Game.currentMap.islandGenerator.finishedIsland != null) Game.currentGame.setScene(new SceneGame());
+		// if (Game.currentMap.islandGenerator != null && Game.currentMap.islandGenerator.finishedIsland != null) Game.currentGame.setScene(new SceneGame());
 	}
 }

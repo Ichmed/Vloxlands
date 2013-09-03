@@ -45,9 +45,6 @@ public class Vloxlands
 		
 		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
 		
-		// Direction.get90DegreeDiretions(Direction.UP);
-		
-		
 		try
 		{
 			if (CFG.FULLSCREEN) enterFullscreen();

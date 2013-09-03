@@ -11,7 +11,7 @@ import com.vloxlands.settings.CFG;
 
 public class Island
 {
-	public static final int SIZE = 256;
+	public static final int SIZE = 128;
 	public static final int CHUNKSIZE = 16;
 	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
@@ -25,7 +25,6 @@ public class Island
 	public Island()
 	{
 		pos = new Vector3f(0, 0, 0);
-		int s = SIZE / CHUNKSIZE;
 		for (int i = 0; i < SIZE; i++)
 		{
 			for (int j = 0; j < SIZE; j++)
@@ -34,7 +33,10 @@ public class Island
 				{
 					voxels[i][j][k] = Voxel.get("AIR").getId();
 					voxelMetadata[i][j][k] = -128;
-					if (i % s == 0 && j % s == 0 && k % s == 0) chunks[i / s][j / s][k / s] = new Chunk(i / s, j / s, k / s);
+					if (i % CHUNKSIZE == 0 && j % CHUNKSIZE == 0 && k % CHUNKSIZE == 0)
+					{
+						chunks[i / CHUNKSIZE][j / CHUNKSIZE][k / CHUNKSIZE] = new Chunk(i / CHUNKSIZE, j / CHUNKSIZE, k / CHUNKSIZE);
+					}
 				}
 			}
 		}
@@ -223,7 +225,6 @@ public class Island
 					{
 						glPushMatrix();
 						{
-							glTranslated(pos.x, pos.y, pos.z);
 							glLineWidth(1);
 							glColor3d(1, 0, 0);
 							glBegin(GL_LINES);

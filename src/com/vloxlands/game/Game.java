@@ -11,7 +11,7 @@ import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
-import com.vloxlands.gen.IslandGenerator;
+import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -28,6 +28,8 @@ public class Game
 {
 	public static Game currentGame;
 	public static Map currentMap;
+	
+	public static MapGenerator mapGenerator;
 	
 	public Camera camera = new Camera();
 	
@@ -71,19 +73,21 @@ public class Game
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
-		glPushMatrix();
+		if (currentMap != null)
 		{
-			currentMap.render();
-			
-			glPointSize(10);
-			glBegin(GL_POINTS);
+			glPushMatrix();
 			{
-				glVertex3f(lightPos.x, lightPos.y, lightPos.z);
+				currentMap.render();
+				
+				glPointSize(10);
+				glBegin(GL_POINTS);
+				{
+					glVertex3f(lightPos.x, lightPos.y, lightPos.z);
+				}
+				glEnd();
 			}
-			glEnd();
+			glPopMatrix();
 		}
-		glPopMatrix();
-		
 		
 		glPushMatrix();
 		{
@@ -105,11 +109,11 @@ public class Game
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-			if (Keyboard.getEventKey() == Keyboard.KEY_U && Keyboard.getEventKeyState())
-			{
-				currentMap.islands.remove(0);
-				currentMap.islandGenerator = new IslandGenerator();
-			}
+			// if (Keyboard.getEventKey() == Keyboard.KEY_U && Keyboard.getEventKeyState())
+			// {
+			// currentMap.islands.remove(0);
+			// currentMap.islandGenerator = new IslandGenerator();
+			// }
 			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
 			{
@@ -159,7 +163,7 @@ public class Game
 		else cameraSpeed = 0.1f;
 		
 		
-		currentMap.onTick();
+		if (currentMap != null) currentMap.onTick();
 		
 		Display.update();
 		if (Display.wasResized()) glViewport(0, 0, Display.getWidth(), Display.getHeight());
@@ -168,6 +172,13 @@ public class Game
 		
 		frames++;
 		
+		if (mapGenerator != null && mapGenerator.isDone())
+		{
+			mapGenerator.map.initMap();
+			currentMap = mapGenerator.map;
+			mapGenerator = null;
+		}
+		
 	}
 	
 	public static void initGame()
@@ -175,7 +186,6 @@ public class Game
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
-		currentMap = new Map();
 		currentGame.camera.setPosition(128.5f, 130, 128.5f);
 		currentGame.camera.setRotation(90, 0, 0);
 	}

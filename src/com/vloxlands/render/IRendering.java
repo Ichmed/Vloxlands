@@ -4,7 +4,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 public abstract class IRendering
 {
-	protected int x, y, width, height;
+	protected int x, y, width, height, zIndex;
 	protected boolean visible;
 	protected boolean enabled;
 	protected String texture;
@@ -14,6 +14,7 @@ public abstract class IRendering
 		visible = true;
 		enabled = true;
 		texture = null;
+		zIndex = 0;
 	}
 	
 	public abstract void render();
@@ -56,5 +57,15 @@ public abstract class IRendering
 	public Vector2f getSize()
 	{
 		return new Vector2f(width, height);
+	}
+	
+	public int getZIndex()
+	{
+		return zIndex;
+	}
+	
+	public void setZIndex(int zIndex)
+	{
+		this.zIndex = zIndex;
 	}
 }

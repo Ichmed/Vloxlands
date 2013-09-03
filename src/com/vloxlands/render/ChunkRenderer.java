@@ -16,10 +16,9 @@ public class ChunkRenderer
 {
 	public static void renderChunk(int listIndex, int index, Island island)
 	{
-		int cs = Island.SIZE / Island.CHUNKSIZE;
-		int cx = index / (cs * cs);
-		int cy = index / cs % cs;
-		int cz = index % cs;
+		int cx = index / (Island.CHUNKSIZE * Island.CHUNKSIZE);
+		int cy = index / Island.CHUNKSIZE % Island.CHUNKSIZE;
+		int cz = index % Island.CHUNKSIZE;
 		
 		HashMap<VoxelFaceKey, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
 		
