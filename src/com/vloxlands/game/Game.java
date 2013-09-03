@@ -42,7 +42,7 @@ public class Game
 	
 	Scene scene;
 	
-	public float cameraSpeed = 0.1f;
+	public float cameraSpeed = 0.3f;
 	public int cameraRotationSpeed = 180;
 	private Vector3f lightPos = new Vector3f();
 	private Vector3f directionalArrowsPos = new Vector3f();
@@ -72,7 +72,7 @@ public class Game
 		// glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
 		
 		Vector3f u = camera.getPosition();
-		Vector3f v = camera.getNormalizedRotationVector();
+		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
 		// CFG.p("u: " + u);
@@ -174,7 +174,7 @@ public class Game
 			lightPos.x--;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
-		else cameraSpeed = 0.1f;
+		else cameraSpeed = 0.3f;
 		
 		
 		if (currentMap != null) currentMap.onTick();
@@ -252,32 +252,22 @@ public class Game
 	}
 	
 	public void moveCamera()
-	{
-		double x = -Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
-		double y = -Math.sin(Math.toRadians(camera.rotation.x)) * cameraSpeed;
-		double z = Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;
-		
+	{		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
-			camera.position.x += x * Math.cos(Math.toRadians(camera.rotation.x));
-			camera.position.y += y;
-			camera.position.z += z * Math.cos(Math.toRadians(camera.rotation.x));
+			camera.move((Vector3f) MathHelper.getNormalizedRotationVector(camera.getRotation()).scale(cameraSpeed));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_S))
 		{
-			camera.position.x -= x * Math.cos(Math.toRadians(camera.rotation.x));
-			camera.position.y -= y;
-			camera.position.z -= z * Math.cos(Math.toRadians(camera.rotation.x));
+			camera.move((Vector3f) MathHelper.getNormalizedRotationVector(camera.getRotation()).scale(cameraSpeed).negate());
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
-			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
-			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
+			camera.move((Vector3f)getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, 90, 0)).scale(cameraSpeed));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
-			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;
-			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;
+			camera.move((Vector3f)getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, -90, 0)).scale(cameraSpeed));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_Q))
 		{
@@ -294,11 +284,21 @@ public class Game
 		float x = (Mouse.getY() - Display.getHeight() / 2) / (float) Display.getHeight() * cameraRotationSpeed;
 		float y = (Mouse.getX() - Display.getWidth() / 2) / (float) Display.getWidth() * cameraRotationSpeed;
 		
-		if (Math.abs(camera.rotation.x - x) > 90) x = 0;
+		if (Math.abs(camera.rotation.x - x) >= 90) x = 0;
 		
 		camera.rotate(-x, y, 0);
 		
 		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+	}
+
+	
+	public static Vector3f getNormalizedRotationVectorForSidewardMovement(Vector3f v)
+	{
+		double x = Math.sin(Math.toRadians(v.y));
+		double y = 0;
+		double z = Math.cos(Math.toRadians(v.y));
+		
+		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
 	
 	public void renderDirectionalArrows()

@@ -1,5 +1,6 @@
 package com.vloxlands.game.util;
 
+import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
@@ -49,18 +50,14 @@ public class Camera
 	{
 		this.move((float) d, (float) y, (float) e);
 	}
+
+	public void move(Vector3f v)
+	{
+		this.move(v.x, v.y, v.z);
+	}
 	
 	public void rotate(float x, float y, float z)
 	{
 		rotation.translate(x, y, z);
-	}
-	
-	public Vector3f getNormalizedRotationVector()
-	{
-		double x = Math.sin(Math.toRadians(rotation.y));
-		double y = Math.sin(Math.toRadians(rotation.x));
-		double z = Math.cos(Math.toRadians(rotation.y));
-		
-		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
 }

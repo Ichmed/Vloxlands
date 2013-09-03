@@ -96,4 +96,13 @@ public class MathHelper
 		m.m20 * v.x + m.m21 * v.y + m.m22 * v.z //
 		);
 	}
+	
+	public static Vector3f getNormalizedRotationVector(Vector3f v)
+	{
+		double x = Math.sin(Math.toRadians(v.y)) * Math.cos(Math.toRadians(v.x));
+		double y = Math.sin(Math.toRadians(v.x));
+		double z = Math.cos(Math.toRadians(v.y)) * Math.cos(Math.toRadians(v.x));
+		
+		return new Vector3f((float) -x, (float) -y, (float) z);
+	}
 }
