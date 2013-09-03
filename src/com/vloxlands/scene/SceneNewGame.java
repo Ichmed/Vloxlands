@@ -48,7 +48,7 @@ public class SceneNewGame extends Scene
 			@Override
 			public void onClick()
 			{
-				Game.mapGenerator = new MapGenerator(2, 2, 20, 48);
+				Game.mapGenerator = new MapGenerator(2, 2, 20, 24);
 				Game.mapGenerator.start();
 				lockScene();
 				progress.setVisible(true);
