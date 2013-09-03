@@ -32,6 +32,7 @@ public class Game
 	public static Map currentMap;
 	
 	public static MapGenerator mapGenerator;
+	public static int fov = 50;
 	
 	public Camera camera = new Camera();
 	
@@ -64,7 +65,7 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
-		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
+		gluPerspective(this.fov, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
 		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		// glRotated(camera.getRotation().y, 0f, 1f, 0f);
