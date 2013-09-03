@@ -13,6 +13,7 @@ public class Chunk
 	HashMap<VoxelFaceKey, VoxelFace>[] faces;
 	@SuppressWarnings("unchecked")
 	HashMap<VoxelFaceKey, VoxelFace>[] meshes = new HashMap[2];
+	
 	int x, y, z, opaqueID = -1, transparentID = -1;
 	
 	public Chunk(int x, int y, int z)
@@ -35,8 +36,10 @@ public class Chunk
 		meshes[1] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[1]);
 	}
 	
-	public void onTick(boolean opaque)
+	public void onTick(Island i, boolean opaque)
 	{
+		if (meshes[0].size() + meshes[1].size() == 0) return;
+		
 		glCallList(opaque ? opaqueID : transparentID);
 	}
 	

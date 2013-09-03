@@ -14,6 +14,10 @@ public class Island
 	public static final int SIZE = 128;
 	public static final int CHUNKSIZE = 16;
 	
+	public static final int SNOWLEVEL = 50;
+	public static final float SNOW_PER_TICK = 0.2f;
+	public static final float SNOW_INCREASE = 16;
+	
 	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	public Chunk[][][] chunks = new Chunk[SIZE / CHUNKSIZE][SIZE / CHUNKSIZE][SIZE / CHUNKSIZE];
@@ -65,7 +69,7 @@ public class Island
 	
 	public void onTick()
 	{
-		// pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance, 0);
+		pos.translate(0, (uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance, 0);
 	}
 	
 	public void calculateWeight()
@@ -195,7 +199,7 @@ public class Island
 			{
 				for (int k = 0; k < s; k++)
 				{
-					chunks[i][j][k].onTick(true);
+					chunks[i][j][k].onTick(this, true);
 				}
 			}
 		}
@@ -205,7 +209,7 @@ public class Island
 			{
 				for (int k = 0; k < s; k++)
 				{
-					chunks[i][j][k].onTick(false);
+					chunks[i][j][k].onTick(this, false);
 				}
 			}
 		}
@@ -260,11 +264,11 @@ public class Island
 	public int grassify()
 	{
 		int grassed = 0;
-		for (int i = 0; i < Island.SIZE; i++)
+		for (int i = 0; i < SIZE; i++)
 		{
-			for (int j = 0; j < Island.SIZE; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
-				for (int k = 0; k < Island.SIZE; k++)
+				for (int k = 0; k < SIZE; k++)
 				{
 					if (getVoxelId(i, j, k) == Voxel.get("DIRT").getId())
 					{
@@ -279,5 +283,15 @@ public class Island
 		}
 		
 		return grassed;
+	}
+	
+	public byte getHighestVoxel(int x, int z)
+	{
+		for (int i = SIZE - 1; i > -1; i--)
+		{
+			if (voxels[x][i][z] != Voxel.get("AIR").getId()) return voxels[x][i][z];
+		}
+		
+		return Voxel.get("AIR").getId();
 	}
 }

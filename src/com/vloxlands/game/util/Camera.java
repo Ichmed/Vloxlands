@@ -26,7 +26,7 @@ public class Camera
 	
 	public void setPosition(float x, float y, float z)
 	{
-		this.position = new Vector3f(x, y, z);
+		position = new Vector3f(x, y, z);
 	}
 	
 	public void setRotation(Vector3f v)
@@ -36,13 +36,13 @@ public class Camera
 	
 	public void setRotation(float x, float y, float z)
 	{
-		this.rotation = new Vector3f(x, y, z);
+		rotation = new Vector3f(x, y, z);
 	}
 	
 	public void move(float x, float y, float z)
 	{
 		float speed = Game.currentGame.cameraSpeed;
-		this.position.translate(x * speed, y * speed, z * speed);
+		position.translate(x * speed, y * speed, z * speed);
 	}
 	
 	public void move(double d, double y, double e)
@@ -52,15 +52,15 @@ public class Camera
 	
 	public void rotate(float x, float y, float z)
 	{
-		this.rotation.translate(x, y, z);
+		rotation.translate(x, y, z);
 	}
 	
 	public Vector3f getNormalizedRotationVector()
 	{
-		double x = Math.cos(Math.toRadians(this.rotation.y)) * Math.sin(Math.toRadians(this.rotation.z));
-		double y = Math.sin(Math.toRadians(this.rotation.x));
-		double z = Math.cos(Math.toRadians(this.rotation.x)) * Math.sin(Math.toRadians(this.rotation.y));
+		double x = Math.sin(Math.toRadians(rotation.y));
+		double y = Math.sin(Math.toRadians(rotation.x));
+		double z = Math.cos(Math.toRadians(rotation.y));
 		
-		return new Vector3f((float)x, (float)y, (float)z);
+		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
 }

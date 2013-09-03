@@ -1,7 +1,5 @@
 package com.vloxlands;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.File;
 import java.nio.ByteBuffer;
 
@@ -47,10 +45,10 @@ public class Vloxlands
 		
 		try
 		{
-			if (CFG.FULLSCREEN) enterFullscreen();
-			else leaveFullscreen();
+			setFullscreen();
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
+			Display.setResizable(false);
 			// Display.setInitialBackground(0.5f, 0.8f, 0.85f);
 			
 			Display.create();
@@ -70,18 +68,38 @@ public class Vloxlands
 		Display.destroy();
 	}
 	
-	public static void enterFullscreen() throws LWJGLException
+	public static void setFullscreen()
 	{
-		Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
-		Display.setVSyncEnabled(true);
+		if (CFG.FULLSCREEN) enterFullscreen();
+		else leaveFullscreen();
 	}
 	
-	public static void leaveFullscreen() throws LWJGLException
+	public static void enterFullscreen()
 	{
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+		try
+		{
+			Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+			Display.setVSyncEnabled(true);
+		}
+		catch (LWJGLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void leaveFullscreen()
+	{
+		// Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */720));
-		Display.setResizable(true);
-		Display.setFullscreen(false);
+		try
+		{
+			Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */720));
+			Display.setResizable(true);
+			Display.setFullscreen(false);
+		}
+		catch (LWJGLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }

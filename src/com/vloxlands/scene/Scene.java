@@ -6,6 +6,7 @@ import java.util.Comparator;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.ui.IClickableGui;
 import com.vloxlands.ui.IGuiElement;
@@ -113,5 +114,14 @@ public abstract class Scene
 			{
 				((IClickableGui) i).setEnabled(false);
 			}
+	}
+	
+	public void computeNewComponentBounds(int oWidth, int oHeight, int nWidth, int nHeight)
+	{
+		for (IGuiElement i : content)
+		{
+			Vector2f oPos = i.getPos();
+			Vector2f oSize = i.getSize();
+		}
 	}
 }

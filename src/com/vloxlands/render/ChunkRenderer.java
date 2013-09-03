@@ -1,7 +1,5 @@
 package com.vloxlands.render;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -14,32 +12,6 @@ import com.vloxlands.util.Direction;
 
 public class ChunkRenderer
 {
-	public static void renderChunk(int listIndex, int index, Island island)
-	{
-		int cx = index / (Island.CHUNKSIZE * Island.CHUNKSIZE);
-		int cy = index / Island.CHUNKSIZE % Island.CHUNKSIZE;
-		int cz = index % Island.CHUNKSIZE;
-		
-		HashMap<VoxelFaceKey, VoxelFace>[] faceLists = generateFaces(cx, cy, cz, island);
-		
-		HashMap<VoxelFaceKey, VoxelFace> greedy0 = generateGreedyMesh(cx, cy, cz, faceLists[0]);
-		HashMap<VoxelFaceKey, VoxelFace> greedy1 = generateGreedyMesh(cx, cy, cz, faceLists[1]);
-		
-		glPushMatrix();
-		glNewList(listIndex, GL_COMPILE);
-		for (VoxelFace v : greedy0.values())
-			v.render();
-		glEndList();
-		glPopMatrix();
-		
-		glPushMatrix();
-		glNewList(listIndex + 1, GL_COMPILE);
-		for (VoxelFace v : greedy1.values())
-			v.render();
-		glEndList();
-		glPopMatrix();
-	}
-	
 	public static void renderChunks(Island island)
 	{
 		long time = System.currentTimeMillis();

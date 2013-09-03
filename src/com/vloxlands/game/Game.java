@@ -1,7 +1,6 @@
 package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
 import static org.lwjgl.util.glu.GLU.*;
 
 import org.lwjgl.input.Keyboard;
@@ -9,11 +8,14 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.render.ChunkRenderer;
+import com.vloxlands.render.model.Model;
+import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
@@ -36,7 +38,7 @@ public class Game
 	public int frames = 21;
 	boolean showFPS = false;
 	
-	Vector3f cPos, cRot;
+	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
 	Scene scene;
 	
@@ -44,6 +46,8 @@ public class Game
 	public int cameraRotationSpeed = 180;
 	private Vector3f lightPos = new Vector3f();
 	private Vector3f directionalArrowsPos = new Vector3f();
+	
+	private int width, height;
 	
 	public void gameLoop()
 	{
@@ -61,26 +65,26 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
-		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
-//		glRotated(camera.getRotation().x, 1f, 0f, 0f);
-//		glRotated(camera.getRotation().y, 0f, 1f, 0f);
-//		glRotated(camera.getRotation().z, 0f, 0f, 1f);
-//		
-//		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
+		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
+		// glRotated(camera.getRotation().y, 0f, 1f, 0f);
+		// glRotated(camera.getRotation().z, 0f, 0f, 1f);
+		//
+		// glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
 		
 		Vector3f u = camera.getPosition();
 		Vector3f v = camera.getNormalizedRotationVector();
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
-		CFG.p("u: " + u);
-//		CFG.p("v: " + v);
-//		CFG.p("v.length(): " + v.length());
-		CFG.p("w: " + w);
+		// CFG.p("u: " + u);
+		// // CFG.p("v: " + v);
+		// // CFG.p("v.length(): " + v.length());
+		// CFG.p("w: " + w);
 		
 		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
+		
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
@@ -88,17 +92,25 @@ public class Game
 		{
 			glPushMatrix();
 			{
-				// currentMap.render();
+				currentMap.render();
 				
 				glPointSize(10);
 				glBegin(GL_POINTS);
 				{
-					glVertex3f(w.x, w.y, w.z);
+					glVertex3f(lightPos.x, lightPos.y, lightPos.z);
 				}
 				glEnd();
 			}
 			glPopMatrix();
-		}		
+		}
+		
+		glPushMatrix();
+		{
+			glTranslated(128, 160, 128);
+			m.renderModel();
+		}
+		glPopMatrix();
+		
 		
 		RenderAssistant.set2DRenderMode(true);
 		
@@ -109,14 +121,15 @@ public class Game
 		glPopMatrix();
 		while (Keyboard.next())
 		{
+			if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState())
+			{
+				CFG.FULLSCREEN = !CFG.FULLSCREEN;
+				Vloxlands.setFullscreen();
+				updateViewport();
+			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-			if (Keyboard.getEventKey() == Keyboard.KEY_U && Keyboard.getEventKeyState())
-			{
-				cPos = new Vector3f(camera.getPosition());
-				cRot = new Vector3f(camera.getRotation());
-			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
 			{
@@ -168,8 +181,12 @@ public class Game
 		
 		if (currentMap != null) currentMap.onTick();
 		
+		width = Display.getWidth();
+		height = Display.getHeight();
+		
 		Display.update();
-		if (Display.wasResized()) glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		if (Display.wasResized()) updateViewport();
+		
 		
 		Display.sync(60);
 		
@@ -182,6 +199,13 @@ public class Game
 			mapGenerator = null;
 		}
 		
+	}
+	
+	public void updateViewport()
+	{
+		CFG.p(width, height);
+		CFG.p(Display.getWidth(), Display.getHeight());
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
 	}
 	
 	public static void initGame()
@@ -234,9 +258,9 @@ public class Game
 	
 	public void moveCamera()
 	{
-		double x = Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
+		double x = -Math.sin(Math.toRadians(camera.rotation.y)) * cameraSpeed;
 		double y = -Math.sin(Math.toRadians(camera.rotation.x)) * cameraSpeed;
-		double z = -Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;
+		double z = Math.cos(Math.toRadians(camera.rotation.y)) * cameraSpeed;
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
@@ -250,12 +274,12 @@ public class Game
 			camera.position.y -= y;
 			camera.position.z -= z * Math.cos(Math.toRadians(camera.rotation.x));
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_A))
+		if (Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
 			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
 			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y - 90)) * cameraSpeed;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_D))
+		if (Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
 			camera.position.x += Math.sin(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;
 			camera.position.z -= Math.cos(Math.toRadians(camera.rotation.y + 90)) * cameraSpeed;

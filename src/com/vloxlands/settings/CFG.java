@@ -1,6 +1,7 @@
 package com.vloxlands.settings;
 
 import java.io.File;
+import java.util.Arrays;
 
 import com.vloxlands.util.Assistant;
 
@@ -47,9 +48,9 @@ public class CFG
 		}
 	}
 	
-	public static void p(Object p)
+	public static void p(Object... p)
 	{
-		System.out.println(p);
+		System.out.println(Arrays.toString(p));
 	}
 	
 	public static void b(Object... b)

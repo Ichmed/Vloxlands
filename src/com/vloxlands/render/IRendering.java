@@ -59,6 +59,18 @@ public abstract class IRendering
 		return new Vector2f(width, height);
 	}
 	
+	public void setPos(Vector2f pos)
+	{
+		x = (int) pos.x;
+		y = (int) pos.y;
+	}
+	
+	public void setSize(Vector2f size)
+	{
+		width = (int) size.x;
+		height = (int) size.y;
+	}
+	
 	public int getZIndex()
 	{
 		return zIndex;

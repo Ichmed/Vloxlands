@@ -9,6 +9,7 @@ import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
+import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
 
@@ -16,6 +17,7 @@ import com.vloxlands.util.RenderAssistant;
 public class SceneNewGame extends Scene
 {
 	ProgressBar progress;
+	Spinner xSize, zSize, radius;
 	
 	@Override
 	public void init()
@@ -48,13 +50,15 @@ public class SceneNewGame extends Scene
 			@Override
 			public void onClick()
 			{
-				Game.mapGenerator = new MapGenerator(2, 2, 20, 24);
+				Game.mapGenerator = new MapGenerator(1, 1, 20, 24);
 				Game.mapGenerator.start();
 				lockScene();
 				progress.setVisible(true);
 			}
 		});
 		content.add(skip);
+		
+		
 	}
 	
 	@Override
@@ -66,19 +70,8 @@ public class SceneNewGame extends Scene
 			RenderAssistant.renderOutline(-15, 85, Display.getWidth() + 30, 1, false);
 		}
 		glPopMatrix();
-		glPushMatrix();
-		{
-			glEnable(GL_BLEND);
-			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			RenderAssistant.renderRect(5, 120, Display.getWidth() - TextButton.WIDTH - 100, Display.getHeight() - 250);
-			glColor4f(1, 1, 1, 1);
-			
-			glBindTexture(GL_TEXTURE_2D, RenderAssistant.textures.get("/graphics/textures/ui/gui.png").getTextureID());
-			RenderAssistant.renderOutline(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 240, true);
-			glDisable(GL_BLEND);
-		}
-		glPopMatrix();
+		
+		RenderAssistant.renderContainer(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 240, true);
 		
 		if (Game.mapGenerator != null)
 		{

@@ -296,4 +296,21 @@ public class RenderAssistant
 		
 		glDisable(GL_BLEND);
 	}
+	
+	public static void renderContainer(int x, int y, int width, int height, boolean doubled)
+	{
+		glPushMatrix();
+		{
+			glEnable(GL_BLEND);
+			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			RenderAssistant.renderRect(x + 5, y + 5, width - 10, height - 10);
+			glColor4f(1, 1, 1, 1);
+			
+			glBindTexture(GL_TEXTURE_2D, RenderAssistant.textures.get("/graphics/textures/ui/gui.png").getTextureID());
+			RenderAssistant.renderOutline(x, y, width, height, true);
+			glDisable(GL_BLEND);
+		}
+		glPopMatrix();
+	}
 }
