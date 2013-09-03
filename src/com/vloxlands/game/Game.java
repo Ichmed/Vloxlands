@@ -47,8 +47,6 @@ public class Game
 	private Vector3f lightPos = new Vector3f();
 	private Vector3f directionalArrowsPos = new Vector3f();
 	
-	private int width, height;
-	
 	public void gameLoop()
 	{
 		if (start == 0) start = System.currentTimeMillis();
@@ -181,9 +179,6 @@ public class Game
 		
 		if (currentMap != null) currentMap.onTick();
 		
-		width = Display.getWidth();
-		height = Display.getHeight();
-		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
 		
@@ -203,8 +198,8 @@ public class Game
 	
 	public void updateViewport()
 	{
-		CFG.p(width, height);
-		CFG.p(Display.getWidth(), Display.getHeight());
+		scene.content.clear();
+		scene.init();
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
 	}
 	
