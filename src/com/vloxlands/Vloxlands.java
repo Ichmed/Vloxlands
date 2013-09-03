@@ -52,11 +52,11 @@ public class Vloxlands
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			// Display.setInitialBackground(0.5f, 0.8f, 0.85f);
+			
 			Display.create();
 			Game.initGLSettings();
 			
 			Game.initGame();
-			// Game.currentGame.setScene(new Scene_Mainmenu());
 			Game.currentGame.setScene(new SceneLogo());
 			
 			while (!Display.isCloseRequested())

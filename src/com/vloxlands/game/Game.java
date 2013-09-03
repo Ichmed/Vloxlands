@@ -1,6 +1,7 @@
 package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -8,7 +9,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.util.Camera;
-import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
@@ -37,6 +37,8 @@ public class Game
 	public int frames = 21;
 	boolean showFPS = false;
 	
+	Vector3f cPos, cRot;
+	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
 	Scene scene;
@@ -63,7 +65,7 @@ public class Game
 		
 		moveCamera();
 		
-		ViewFrustum.initViewFrustum(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
+		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
 		glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		glRotated(camera.getRotation().y, 0f, 1f, 0f);
@@ -77,7 +79,7 @@ public class Game
 		{
 			glPushMatrix();
 			{
-				currentMap.render();
+				// currentMap.render();
 				
 				glPointSize(10);
 				glBegin(GL_POINTS);
@@ -109,11 +111,11 @@ public class Game
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-			// if (Keyboard.getEventKey() == Keyboard.KEY_U && Keyboard.getEventKeyState())
-			// {
-			// currentMap.islands.remove(0);
-			// currentMap.islandGenerator = new IslandGenerator();
-			// }
+			if (Keyboard.getEventKey() == Keyboard.KEY_U && Keyboard.getEventKeyState())
+			{
+				cPos = new Vector3f(camera.getPosition());
+				cRot = new Vector3f(camera.getRotation());
+			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
 			{
