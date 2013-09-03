@@ -20,15 +20,12 @@ public class CFG
 	public static boolean SHOW_DIRECTIONS = false;
 	public static boolean SHOW_WIREFRAME = false;
 	
-	// -- checksums -- //
-	public static final String NATIVES_CS = "D5F0AA01BE562FE478FBC52209F56167";
-	
 	public static final File DIR = new File(System.clearProperty("user.home") + "/.dakror/Vloxlands");
 	
 	static
 	{
 		DIR.mkdir();
-		String[] fs = { "natives" };
+		String[] fs = {};
 		for (String f : fs)
 		{
 			String cs = Assistant.getFolderChecksum(new File(DIR, f));

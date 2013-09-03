@@ -20,7 +20,6 @@ import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -207,7 +206,6 @@ public class Game
 	public static void initGame()
 	{
 		Voxel.loadVoxels();
-		Tr.loadLanguage("us");
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.camera.setPosition(128.5f, 130, 128.5f);

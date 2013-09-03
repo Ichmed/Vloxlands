@@ -12,7 +12,9 @@ import org.lwjgl.opengl.DisplayMode;
 import com.vloxlands.game.Game;
 import com.vloxlands.scene.SceneLogo;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.settings.Settings;
 import com.vloxlands.util.Assistant;
+import com.vloxlands.util.MediaAssistant;
 
 import de.dakror.universion.UniVersion;
 
@@ -20,7 +22,9 @@ public class Vloxlands
 {
 	public static void main(String[] args)
 	{
-		CFG.INTERNET = false;// Assistant.isInternetReachable();
+		CFG.INTERNET = Assistant.isInternetReachable();
+		
+		Settings.loadSettings();
 		
 		try
 		{
@@ -41,8 +45,9 @@ public class Vloxlands
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
 		
-		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
+		MediaAssistant.initNatives();
 		
+		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
 		try
 		{
 			setFullscreen();
@@ -99,5 +104,12 @@ public class Vloxlands
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void exit()
+	{
+		Settings.saveSettings();
+		
+		System.exit(0);
 	}
 }

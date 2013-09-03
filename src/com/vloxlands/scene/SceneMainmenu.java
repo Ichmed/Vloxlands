@@ -4,6 +4,7 @@ import java.awt.Font;
 
 import org.lwjgl.opengl.Display;
 
+import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.FlagButton;
@@ -40,7 +41,7 @@ public class SceneMainmenu extends Scene
 			@Override
 			public void onClick()
 			{
-				System.exit(0);
+				Vloxlands.exit();
 			}
 		});
 		content.add(b);

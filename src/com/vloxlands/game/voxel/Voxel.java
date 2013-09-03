@@ -2,6 +2,7 @@ package com.vloxlands.game.voxel;
 
 import java.util.HashMap;
 
+import com.vloxlands.Vloxlands;
 import com.vloxlands.util.CSVReader;
 
 public class Voxel
@@ -26,7 +27,7 @@ public class Voxel
 		else
 		{
 			System.err.println("[Voxel]: The ID " + id + " was already taken up by \"" + voxelList[id + 128].name + "\"");
-			System.exit(1);
+			Vloxlands.exit();
 		}
 		this.id = (byte) id;
 	}

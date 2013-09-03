@@ -9,9 +9,13 @@ public class Tr
 {
 	private static HashMap<String, String> tr = new HashMap<>();
 	
+	public static String activeLanguage;
+	
 	public static void loadLanguage(String langName)
 	{
 		langName = langName.toLowerCase();
+		
+		activeLanguage = langName;
 		
 		tr.clear();
 		CSVReader csv = new CSVReader("/data/lang.csv");

@@ -81,7 +81,7 @@ public class ZipAssistant extends Thread
 		}
 	}
 	
-	public File unzip(File zip, File dest)
+	public static File unzip(File zip, File dest)
 	{
 		
 		try
@@ -100,7 +100,7 @@ public class ZipAssistant extends Thread
 		return zip;
 	}
 	
-	public void extractEntry(ZipFile zipFile, ZipEntry entry, String destDir) throws IOException
+	public static void extractEntry(ZipFile zipFile, ZipEntry entry, String destDir) throws IOException
 	{
 		File file = new File(destDir + "/" + entry.getName().replace("\\", "/"));
 		if (entry.isDirectory()) file.mkdirs();

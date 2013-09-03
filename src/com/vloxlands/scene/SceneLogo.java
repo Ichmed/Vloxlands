@@ -2,10 +2,6 @@ package com.vloxlands.scene;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -13,7 +9,6 @@ import com.vloxlands.game.Game;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
-import com.vloxlands.util.MediaAssistant;
 import com.vloxlands.util.ZipAssistant;
 
 
@@ -42,7 +37,7 @@ public class SceneLogo extends Scene
 			try
 			{
 				downloader = new ZipAssistant();
-				if (MediaAssistant.needMediaUpdate("natives")) downloader.addDownload(new URL("http://dakror.de/vloxlands/GAMECONTENT/natives.zip"), new File(CFG.DIR, "natives"), true);
+				// if (MediaAssistant.needMediaUpdate("natives")) downloader.addDownload(new URL("http://dakror.de/vloxlands/GAMECONTENT/natives.zip"), new File(CFG.DIR, "natives"), true);
 				
 				if (downloader.hasDownloads())
 				{
@@ -52,7 +47,7 @@ public class SceneLogo extends Scene
 					update = true;
 				}
 			}
-			catch (MalformedURLException e)
+			catch (Exception e)
 			{
 				e.printStackTrace();
 			}

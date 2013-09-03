@@ -1,8 +1,12 @@
 package com.vloxlands.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
@@ -60,6 +64,23 @@ public class Assistant
 		{}
 	}
 	
+	public static String getFileContent(File f)
+	{
+		String res = "", line = "";
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(f));
+			while ((line = br.readLine()) != null)
+				res += line;
+			br.close();
+		}
+		catch (IOException e)
+		{
+			return null;
+		}
+		return res;
+	}
+	
 	public static String getFolderChecksum(File folder)
 	{
 		if (!folder.exists()) return null;
@@ -115,5 +136,18 @@ public class Assistant
 				return df.format(size / Math.pow(1024, i)) + levels[i] + "B";
 			}
 		return null;
+	}
+	
+	public static void copyInputStream(InputStream in, OutputStream out) throws IOException
+	{
+		byte[] buffer = new byte[1024];
+		int len = in.read(buffer);
+		while (len >= 0)
+		{
+			out.write(buffer, 0, len);
+			len = in.read(buffer);
+		}
+		in.close();
+		out.close();
 	}
 }
