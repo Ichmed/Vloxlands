@@ -100,4 +100,9 @@ public class Plane
 	{
 		return "normal: " + normal.toString() + "\nstartingPoint: " + startingPoint.toString();
 	}
+	
+	public double getSignedDistanceToPoint(Vector3f point)
+	{
+		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z)) / Math.sqrt(normal.x + normal.y + normal.z);  
+	}
 }
