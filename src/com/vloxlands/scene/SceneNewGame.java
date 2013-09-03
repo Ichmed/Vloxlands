@@ -63,13 +63,15 @@ public class SceneNewGame extends Scene
 		});
 		content.add(skip);
 		
-		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 130, (TextButton.WIDTH + 70) / 2, 25, "X-Islands:"));
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("lang.islands") + ":"));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, true);
 		content.add(xSize);
 		
-		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-Islands:"));
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("lang.islands") + ":"));
 		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, true);
 		content.add(zSize);
+		
+		
 	}
 	
 	@Override

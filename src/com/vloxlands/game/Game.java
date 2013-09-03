@@ -207,7 +207,7 @@ public class Game
 	public static void initGame()
 	{
 		Voxel.loadVoxels();
-		Tr.loadLanguage("en");
+		Tr.loadLanguage("us");
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.camera.setPosition(128.5f, 130, 128.5f);

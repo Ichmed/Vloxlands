@@ -64,11 +64,11 @@ public class Spinner extends IClickableGui
 	{
 		minus.onTick();
 		if (value == min) minus.setEnabled(false);
-		else if (enabled) minus.setEnabled(true);
+		else minus.setEnabled(enabled);
 		
 		plus.onTick();
 		if (value == max) plus.setEnabled(false);
-		else if (enabled) plus.setEnabled(true);
+		else plus.setEnabled(enabled);
 	}
 	
 	@Override
