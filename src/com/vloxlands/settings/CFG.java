@@ -34,6 +34,19 @@ public class CFG
 		}
 	}
 	
+	static long time = 0;
+	
+	// -- debug profiling -- //
+	public static void u()
+	{
+		if (time == 0) time = System.currentTimeMillis();
+		else
+		{
+			CFG.p(System.currentTimeMillis() - time);
+			time = 0;
+		}
+	}
+	
 	public static void p(Object p)
 	{
 		System.out.println(p);
