@@ -68,11 +68,13 @@ public class SceneGame extends Scene
 	public void handleMouseWorld(int x, int y, int flag)
 	{
 		super.handleMouseWorld(x, y, flag);
-		if (!paused)
+		if (Mouse.isButtonDown(1))
 		{
+			if (!Mouse.isGrabbed()) Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+			
 			Mouse.setGrabbed(true);
-			Game.currentGame.rotateCamera();
-			Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
+			if (Mouse.isButtonDown(1)) Game.currentGame.rotateCamera();
+			else Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 		}
 		else Mouse.setGrabbed(false);
 	}
