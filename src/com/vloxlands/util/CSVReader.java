@@ -83,7 +83,7 @@ public class CSVReader
 	{
 		try
 		{
-			if (segments == null || index == lineLength - 1)
+			if (segments == null || index == lineLength)
 			{
 				String l = br.readLine();
 				if (l == null)
@@ -92,7 +92,6 @@ public class CSVReader
 					return null;
 				}
 				segments = splitCells(l);
-				
 				if (lineLength == -1)
 				{
 					lineLength = segments.length;

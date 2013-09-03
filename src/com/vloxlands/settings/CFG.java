@@ -19,6 +19,7 @@ public class CFG
 	public static boolean SHOW_CHUNK_BOUNDRIES = false;
 	public static boolean SHOW_DIRECTIONS = false;
 	public static boolean SHOW_WIREFRAME = false;
+	
 	// -- checksums -- //
 	public static final String NATIVES_CS = "D5F0AA01BE562FE478FBC52209F56167";
 	

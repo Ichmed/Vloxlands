@@ -39,12 +39,18 @@ public abstract class Scene
 			{
 				((IClickableGui) i).onTick();
 			}
-		handleInput();
+		handleMouse();
+		render();
+	}
+	
+	public void render()
+	{
+		ArrayList<IGuiElement> sorted = getSortedContent();
 		for (IGuiElement g : sorted)
 			if (g.isVisible()) g.render();
 	}
 	
-	public void handleInput()
+	public void handleMouse()
 	{
 		int x = Mouse.getX();
 		int y = Mouse.getY();
@@ -64,10 +70,13 @@ public abstract class Scene
 		if (!handleMouseGUI(x, y, flag)) handleMouseWorld(x, y, flag);
 	}
 	
+	public void handleKeyboard(int key, boolean down)
+	{}
+	
 	protected boolean handleMouseGUI(int posX, int posY, int flag)
 	{
 		IClickableGui iG = getObjectUnderCursor();
-		if (iG != null)
+		if (iG != null && iG.isVisible() && iG.isEnabled())
 		{
 			iG.handleMouse(posX - (int) iG.getPos().x, posY - (int) iG.getPos().y, flag);
 			return true;

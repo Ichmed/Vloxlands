@@ -5,6 +5,7 @@ import java.awt.Font;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
@@ -21,7 +22,7 @@ public class SceneMainmenu extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, "Neues Spiel");
+		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, Tr._("title.newGame"));
 		b.setClickEvent(new IClickEvent()
 		{
 			@Override
@@ -32,7 +33,7 @@ public class SceneMainmenu extends Scene
 		});
 		content.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, "Spiel beenden");
+		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, Tr._("title.quitGame"));
 		b.setClickEvent(new IClickEvent()
 		{
 			@Override

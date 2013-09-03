@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.settings.CFG;
 
 public class MapGenerator extends Thread
 {
@@ -31,6 +32,7 @@ public class MapGenerator extends Thread
 		map = new Map();
 		while (!isDone())
 		{
+			CFG.p("runs");
 			if (gen == null)
 			{
 				progressBefore = progress;

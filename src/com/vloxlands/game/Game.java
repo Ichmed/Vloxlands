@@ -19,6 +19,7 @@ import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -139,6 +140,7 @@ public class Game
 				CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;
 				directionalArrowsPos = new Vector3f(camera.getPosition());
 			}
+			if (scene != null) scene.handleKeyboard(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 		}
 		
 		glColor4f(1, 1, 1, 1);
@@ -206,6 +208,7 @@ public class Game
 	public static void initGame()
 	{
 		Voxel.loadVoxels();
+		Tr.loadLanguage("en");
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.camera.setPosition(128.5f, 130, 128.5f);
@@ -252,7 +255,7 @@ public class Game
 	}
 	
 	public void moveCamera()
-	{		
+	{
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
 		{
 			camera.move((Vector3f) MathHelper.getNormalizedRotationVector(camera.getRotation()).scale(cameraSpeed));
@@ -263,11 +266,11 @@ public class Game
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_D))
 		{
-			camera.move((Vector3f)getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, 90, 0)).scale(cameraSpeed));
+			camera.move((Vector3f) getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, 90, 0)).scale(cameraSpeed));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_A))
 		{
-			camera.move((Vector3f)getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, -90, 0)).scale(cameraSpeed));
+			camera.move((Vector3f) getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, -90, 0)).scale(cameraSpeed));
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_Q))
 		{
@@ -290,7 +293,7 @@ public class Game
 		
 		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 	}
-
+	
 	
 	public static Vector3f getNormalizedRotationVectorForSidewardMovement(Vector3f v)
 	{

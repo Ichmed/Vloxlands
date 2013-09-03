@@ -6,6 +6,7 @@ import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.IClickEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
@@ -24,7 +25,7 @@ public class SceneNewGame extends Scene
 	{
 		setBackground();
 		
-		Label header = new Label(0, 0, Display.getWidth(), 60, "Neues Spiel");
+		Label header = new Label(0, 0, Display.getWidth(), 60, Tr._("title.newGame"));
 		header.font = header.font.deriveFont(60f);
 		
 		content.add(header);
@@ -33,7 +34,7 @@ public class SceneNewGame extends Scene
 		progress.setVisible(false);
 		content.add(progress);
 		
-		TextButton back = new TextButton(TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Zurueck");
+		TextButton back = new TextButton(TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.back"));
 		back.setClickEvent(new IClickEvent()
 		{
 			@Override
@@ -44,7 +45,7 @@ public class SceneNewGame extends Scene
 		});
 		content.add(back);
 		
-		TextButton skip = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Weiter");
+		TextButton skip = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.next"));
 		skip.setClickEvent(new IClickEvent()
 		{
 			@Override
