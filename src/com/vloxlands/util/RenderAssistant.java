@@ -16,6 +16,7 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import com.vloxlands.render.util.ShaderLoader;
@@ -165,6 +166,7 @@ public class RenderAssistant
 	
 	public static void renderText(float x, float y, String text, Font f)
 	{
+		TextureImpl.bindNone();
 		glEnable(GL_BLEND);
 		FloatBuffer fb = BufferUtils.createFloatBuffer(16);
 		glGetFloat(GL_CURRENT_COLOR, fb);

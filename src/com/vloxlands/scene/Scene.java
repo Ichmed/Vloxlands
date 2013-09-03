@@ -23,6 +23,7 @@ public abstract class Scene
 	protected void setBackground()
 	{
 		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
+		bg.setZIndex(-1);
 		bg.setTexture("/graphics/textures/ui/paper.png");
 		bg.stackTexture = true;
 		bg.texW = 512;

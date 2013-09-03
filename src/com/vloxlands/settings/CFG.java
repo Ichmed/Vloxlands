@@ -51,6 +51,7 @@ public class CFG
 	
 	public static void p(Object... p)
 	{
+		if (p.length == 0) System.out.println(p[0]);
 		System.out.println(Arrays.toString(p));
 	}
 	

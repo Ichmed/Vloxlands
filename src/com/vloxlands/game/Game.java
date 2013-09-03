@@ -70,8 +70,8 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
-		gluPerspective(this.fov, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
-		viewFrustum.calculateViewFrustum(this.camera.getPosition(), this.camera.getRotation(), up, zNear, zFar);
+		gluPerspective(fov, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
+		viewFrustum.calculateViewFrustum(camera.getPosition(), camera.getRotation(), up, zNear, zFar);
 		
 		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
 		// glRotated(camera.getRotation().y, 0f, 1f, 0f);
@@ -108,7 +108,7 @@ public class Game
 				glEnd();
 			}
 			glPopMatrix();
-		}		
+		}
 		
 		RenderAssistant.set2DRenderMode(true);
 		
@@ -251,6 +251,8 @@ public class Game
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
 		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
+		
+		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	}
 	
 	public void moveCamera()
