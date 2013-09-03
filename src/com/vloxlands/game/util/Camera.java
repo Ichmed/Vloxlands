@@ -54,4 +54,13 @@ public class Camera
 	{
 		this.rotation.translate(x, y, z);
 	}
+	
+	public Vector3f getNormalizedRotationVector()
+	{
+		double x = Math.cos(Math.toRadians(this.rotation.y)) * Math.sin(Math.toRadians(this.rotation.z));
+		double y = Math.sin(Math.toRadians(this.rotation.x));
+		double z = Math.cos(Math.toRadians(this.rotation.x)) * Math.sin(Math.toRadians(this.rotation.y));
+		
+		return new Vector3f((float)x, (float)y, (float)z);
+	}
 }

@@ -2,6 +2,7 @@ package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
+import static org.lwjgl.util.glu.GLU.*;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -13,8 +14,6 @@ import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.render.ChunkRenderer;
-import com.vloxlands.render.model.Model;
-import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
@@ -38,8 +37,6 @@ public class Game
 	boolean showFPS = false;
 	
 	Vector3f cPos, cRot;
-	
-	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
 	Scene scene;
 	
@@ -67,11 +64,23 @@ public class Game
 		
 		gluPerspective(50, Display.getWidth() / (float) Display.getHeight(), 0.001f, 10000);
 		
-		glRotated(camera.getRotation().x, 1f, 0f, 0f);
-		glRotated(camera.getRotation().y, 0f, 1f, 0f);
-		glRotated(camera.getRotation().z, 0f, 0f, 1f);
+//		glRotated(camera.getRotation().x, 1f, 0f, 0f);
+//		glRotated(camera.getRotation().y, 0f, 1f, 0f);
+//		glRotated(camera.getRotation().z, 0f, 0f, 1f);
+//		
+//		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
 		
-		glTranslated(-camera.getPosition().x, -camera.getPosition().y, -camera.getPosition().z);
+		Vector3f u = camera.getPosition();
+		Vector3f v = camera.getNormalizedRotationVector();
+		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
+		
+		CFG.p("u: " + u);
+//		CFG.p("v: " + v);
+//		CFG.p("v.length(): " + v.length());
+		CFG.p("w: " + w);
+		
+		
+		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
@@ -84,20 +93,12 @@ public class Game
 				glPointSize(10);
 				glBegin(GL_POINTS);
 				{
-					glVertex3f(lightPos.x, lightPos.y, lightPos.z);
+					glVertex3f(w.x, w.y, w.z);
 				}
 				glEnd();
 			}
 			glPopMatrix();
-		}
-		
-		glPushMatrix();
-		{
-			glTranslated(128, 160, 128);
-			m.renderModel();
-		}
-		glPopMatrix();
-		
+		}		
 		
 		RenderAssistant.set2DRenderMode(true);
 		
