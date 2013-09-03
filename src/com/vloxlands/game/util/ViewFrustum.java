@@ -23,10 +23,10 @@ public class ViewFrustum
 
 		float ratio = Display.getWidth() / Display.getHeight();
 
-		Hnear = (float) (2 * Math.tan(Game.fov / 2) * nearDist);
+		Hnear = (float) (2 * Math.tan(Game.currentGame.fov / 2) * nearDist);
 		Wnear = Hnear * ratio;
 
-		Hfar = (float) (2 * Math.tan(Game.fov / 2) * farDist);
+		Hfar = (float) (2 * Math.tan(Game.currentGame.fov / 2) * farDist);
 		Wfar = Hfar * ratio;
 
 		ftl = Vector3f.sub(Vector3f.add(fc, (Vector3f) up.scale(Hfar / 2), null), (Vector3f) right.scale(Wfar / 2), null);
