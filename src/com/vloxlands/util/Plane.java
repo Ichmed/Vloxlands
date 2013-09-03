@@ -10,19 +10,23 @@ public class Plane
 {
 	public Vector3f normal = new Vector3f();
 	public Vector3f startingPoint = new Vector3f();
-	
-	public Plane() { }
+	float d;
 	
 	public Plane(Vector3f normal, Vector3f startingPoint)
 	{
 		this.normal.set(normal.getX(), normal.getY(), normal.getZ());
 		this.startingPoint.set(startingPoint.getX(), startingPoint.getY(), startingPoint.getZ());
+		this.calculateD();
 	}
 	
+	private void calculateD()
+	{
+		this.d = -((this.normal.x * this.startingPoint.x) + (this.normal.y * this.startingPoint.y) + (this.normal.z * this.startingPoint.z));
+	}
+
 	public Plane(Plane plane)
 	{
-		this.normal.set(plane.normal.getX(), plane.normal.getY(), plane.normal.getZ());
-		this.startingPoint.set(plane.startingPoint.getX(), plane.startingPoint.getY(), plane.startingPoint.getZ());
+		this(plane.normal, plane.startingPoint);
 	}
 	
 	public Plane(Vector3f a, Vector3f b, Vector3f c)
@@ -103,6 +107,6 @@ public class Plane
 	
 	public double getSignedDistanceToPoint(Vector3f point)
 	{
-		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z)) / Math.sqrt(normal.x + normal.y + normal.z);  
+		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(normal.x + normal.y + normal.z);  
 	}
 }
