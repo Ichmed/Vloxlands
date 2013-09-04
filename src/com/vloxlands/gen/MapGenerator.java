@@ -45,7 +45,7 @@ public class MapGenerator extends Thread
 			if (gen.finishedIsland != null)
 			{
 				Island i = gen.finishedIsland;
-				i.setPos(new Vector3f(((index - 1) / z) * size * 2, 0, ((index - 1) % z) * size * 2));
+				i.setPos(new Vector3f((float) (((index - 1) / z) * size * 2 + (Math.random() * spread * 2) - spread), (float) ((Math.random() * spread * 2) - spread), (float) (((index - 1) % z) * size * 2 + (Math.random() * spread * 2) - spread)));
 				
 				map.addIsland(i);
 				gen = null;

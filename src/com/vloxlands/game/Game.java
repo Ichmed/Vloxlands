@@ -83,10 +83,6 @@ public class Game
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
 		// CFG.p("u: " + u);
-		// // CFG.p("v: " + v);
-		// // CFG.p("v.length(): " + v.length());
-		// CFG.p("w: " + w);
-		CFG.p(camera.getRotation());
 		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		
