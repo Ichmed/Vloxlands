@@ -1,6 +1,6 @@
 package com.vloxlands.ui;
 
-public interface IClickEvent
+public interface IGuiEvent
 {
-	public void onClick();
+	public void activate();
 }

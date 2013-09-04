@@ -9,7 +9,7 @@ import com.vloxlands.settings.Tr;
 import com.vloxlands.util.RenderAssistant;
 
 
-public class FlagButton extends IClickableGui
+public class FlagButton extends ClickableGui
 {
 	public static final int SIZE = 48;
 	
@@ -23,10 +23,10 @@ public class FlagButton extends IClickableGui
 		width = SIZE;
 		height = SIZE;
 		
-		clickEvent = new IClickEvent()
+		clickEvent = new IGuiEvent()
 		{
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				Tr.loadLanguage(lang);
 				Game.currentGame.updateViewport();
@@ -54,6 +54,6 @@ public class FlagButton extends IClickableGui
 	public void handleMouse(int posX, int posY, int flag)
 	{
 		if (!enabled) return;
-		if ((flag & 2) != 0) clickEvent.onClick();
+		if ((flag & 2) != 0) clickEvent.activate();
 	}
 }

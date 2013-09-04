@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.util.RenderAssistant;
 
-public class ArrowButton extends IClickableGui
+public class ArrowButton extends ClickableGui
 {
 	public static final Vector2f MINUS_HOR = new Vector2f(322, 5);
 	public static final Vector2f PLUS_HOR = new Vector2f(360, 5);
@@ -46,7 +46,7 @@ public class ArrowButton extends IClickableGui
 	{
 		if (!enabled) return;
 		if ((flag & 1) != 0) texY = 57;
-		else if ((flag & 2) != 0) clickEvent.onClick();
+		else if ((flag & 2) != 0) clickEvent.activate();
 		else texY = 109;
 	}
 	

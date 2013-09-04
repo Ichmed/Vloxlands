@@ -5,20 +5,20 @@ import org.lwjgl.opengl.Display;
 
 
 
-public abstract class IClickableGui extends IGuiElement
+public abstract class ClickableGui extends IGuiElement
 {
-	protected IClickEvent clickEvent;
+	protected IGuiEvent clickEvent;
 	
 	public abstract void onTick();
 	
 	public abstract void handleMouse(int posX, int posY, int flag);
 	
-	public IClickEvent getClickEvent()
+	public IGuiEvent getClickEvent()
 	{
 		return clickEvent;
 	}
 	
-	public void setClickEvent(IClickEvent clickEvent)
+	public void setClickEvent(IGuiEvent clickEvent)
 	{
 		this.clickEvent = clickEvent;
 	}

@@ -33,6 +33,7 @@ public class Tr
 	
 	public static String _(String key)
 	{
-		return tr.get(key);
+		String s = tr.get(key);
+		return s == null ? key : s;
 	}
 }
