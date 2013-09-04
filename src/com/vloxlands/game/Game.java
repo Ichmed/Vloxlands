@@ -20,6 +20,7 @@ import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.settings.Settings;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -36,11 +37,10 @@ public class Game
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	public static MapGenerator mapGenerator;
-	public static int fov = 50;
 	
 	public Camera camera = new Camera();
 	
-	long start = 0;
+	long start = 0, last;
 	public int frames = 21;
 	boolean showFPS = false;
 	
@@ -69,7 +69,7 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		moveCamera();
-		gluPerspective(fov, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
+		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		viewFrustum.calculateViewFrustum(camera.getPosition(), camera.getRotation(), up, zNear, zFar);
 		
 		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
@@ -123,6 +123,7 @@ public class Game
 				CFG.FULLSCREEN = !CFG.FULLSCREEN;
 				Vloxlands.setFullscreen();
 				updateViewport();
+				Settings.saveSettings();
 			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
 			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
@@ -182,8 +183,7 @@ public class Game
 		Display.update();
 		if (Display.wasResized()) updateViewport();
 		
-		
-		Display.sync(60);
+		if (CFG.FPS <= 120) Display.sync(CFG.FPS);
 		
 		frames++;
 		
@@ -193,6 +193,8 @@ public class Game
 			currentMap = mapGenerator.map;
 			mapGenerator = null;
 		}
+		
+		last = System.currentTimeMillis();
 		
 	}
 	

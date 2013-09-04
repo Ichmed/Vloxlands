@@ -3,6 +3,7 @@ package com.vloxlands.ui;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
+import java.util.HashMap;
 
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
@@ -11,6 +12,8 @@ import com.vloxlands.util.RenderAssistant;
 
 public class Slider extends ClickableGui
 {
+	HashMap<Float, String> customTitles;
+	
 	public static final int WIDTH = 205;
 	public static final int HEIGHT = 18;
 	
@@ -52,6 +55,13 @@ public class Slider extends ClickableGui
 		maxValue = max;
 		value = startValue;
 		sliderPos = (value - min) / (max - min) * (size - 14);
+		
+		customTitles = new HashMap<>();
+	}
+	
+	public void addCustomTitle(float value, String title)
+	{
+		customTitles.put(value, title);
 	}
 	
 	@Override
@@ -83,7 +93,7 @@ public class Slider extends ClickableGui
 			}
 		}
 		
-		event.activate();
+		if (event != null) event.activate();
 		
 	}
 	
@@ -127,6 +137,8 @@ public class Slider extends ClickableGui
 			}
 			
 			String displayString = ((title != null) ? title + ": " : "") + ((integerMode) ? ((int) value) + "" : value);
+			
+			if (customTitles.containsKey(value)) displayString = customTitles.get(value);
 			
 			int tx = FontAssistant.getFont(font).getWidth(displayString);
 			int mx = width / 2 - tx / 2;

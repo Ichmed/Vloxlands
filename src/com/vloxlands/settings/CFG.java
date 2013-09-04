@@ -17,6 +17,7 @@ public class CFG
 	
 	// -- settings -- //
 	public static int FOV = 30;
+	public static int FPS = 60;
 	public static boolean LIGHTING = false;
 	public static boolean FULLSCREEN = false;
 	public static boolean SHOW_CHUNK_BOUNDRIES = false;

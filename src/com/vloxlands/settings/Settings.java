@@ -20,6 +20,7 @@ public class Settings
 			data.put("lang", Tr.activeLanguage);
 			data.put("fullscreen", CFG.FULLSCREEN);
 			data.put("fov", CFG.FOV);
+			data.put("fps", CFG.FPS);
 			
 			Assistant.setFileContent(file, data.toString());
 		}
@@ -44,6 +45,8 @@ public class Settings
 			JSONObject data = new JSONObject(Assistant.getFileContent(file));
 			Tr.loadLanguage(data.getString("lang"));
 			CFG.FULLSCREEN = data.getBoolean("fullscreen");
+			CFG.FOV = data.getInt("fov");
+			CFG.FPS = data.getInt("fps");
 		}
 		catch (JSONException e)
 		{

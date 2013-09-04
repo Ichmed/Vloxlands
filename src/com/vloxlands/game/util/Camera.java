@@ -1,6 +1,5 @@
 package com.vloxlands.game.util;
 
-import org.lwjgl.util.vector.Vector;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
@@ -50,7 +49,7 @@ public class Camera
 	{
 		this.move((float) d, (float) y, (float) e);
 	}
-
+	
 	public void move(Vector3f v)
 	{
 		this.move(v.x, v.y, v.z);
