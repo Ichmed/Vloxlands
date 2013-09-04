@@ -2,6 +2,8 @@ package com.vloxlands.scene;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.Font;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -9,7 +11,8 @@ import org.lwjgl.opengl.Display;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
-import com.vloxlands.ui.IClickEvent;
+import com.vloxlands.ui.IGuiEvent;
+import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
 
@@ -22,23 +25,30 @@ public class SceneGame extends Scene
 	{
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;
+		
+		setBackground();
+		
+		Label l = new Label(0, 100, Display.getWidth(), 60, "Vloxlands");
+		l.font = l.font.deriveFont(Font.BOLD, 60f);
+		l.setTexture("/graphics/textures/ui/pauseBackground.png");
+		content.add(l);
 		TextButton mainmenu = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 65, Tr._("title.mainmenu"));
-		mainmenu.setClickEvent(new IClickEvent()
+		mainmenu.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				Game.currentMap = null;
-				Game.currentGame.setScene(new SceneMainmenu());
+				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
 		content.add(mainmenu);
 		
 		TextButton quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 10, Tr._("title.quitGame"));
-		quit.setClickEvent(new IClickEvent()
+		quit.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				Vloxlands.exit();
 			}
@@ -49,8 +59,11 @@ public class SceneGame extends Scene
 	@Override
 	public void update()
 	{
-		content.get(0).setVisible(paused);
+//		content.get(0).setVisible(paused);
 		content.get(1).setVisible(paused);
+		content.get(2).setVisible(paused);
+		content.get(3).setVisible(paused);
+		this.worldActive = !paused;
 		super.update();
 		if (!paused) return;
 		
@@ -87,5 +100,18 @@ public class SceneGame extends Scene
 		{
 			paused = !paused;
 		}
+	}
+	
+	@Override
+	protected void setBackground()
+	{
+		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
+		bg.setZIndex(-1);
+		bg.setTexture("/graphics/textures/ui/pauseBackground.png");
+		bg.stackTexture = true;
+		bg.texW = 512;
+		bg.texH = 512;
+		bg.setVisible(false);		
+		content.add(bg);
 	}
 }

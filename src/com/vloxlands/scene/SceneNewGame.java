@@ -8,7 +8,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
-import com.vloxlands.ui.IClickEvent;
+import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
@@ -39,21 +39,21 @@ public class SceneNewGame extends Scene
 		content.add(progress);
 		
 		TextButton back = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.back"));
-		back.setClickEvent(new IClickEvent()
+		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void onClick()
+			public void activate()
 			{
-				Game.currentGame.setScene(new SceneMainmenu());
+				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
 		content.add(back);
 		
 		TextButton skip = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.start"));
-		skip.setClickEvent(new IClickEvent()
+		skip.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				Game.mapGenerator = new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24);
 				Game.mapGenerator.start();
