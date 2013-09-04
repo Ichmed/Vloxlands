@@ -56,7 +56,7 @@ public abstract class Scene
 	public void handleMouse()
 	{
 		int x = Mouse.getX();
-		int y = Mouse.getY();
+		int y = Display.getHeight() - Mouse.getY();
 		int flag = 0;
 		
 		flag += Mouse.isButtonDown(0) ? 1 : 0;
@@ -70,7 +70,7 @@ public abstract class Scene
 		wasButton1Down = Mouse.isButtonDown(1);
 		wasButton2Down = Mouse.isButtonDown(2);
 		
-		if ((!this.uiActive || !handleMouseGUI(x, y, flag)) && this.worldActive) handleMouseWorld(x, y, flag);
+		if ((!uiActive || !handleMouseGUI(x, y, flag)) && worldActive) handleMouseWorld(x, y, flag);
 	}
 	
 	public void handleKeyboard(int key, boolean down)
