@@ -180,7 +180,7 @@ public class IslandGenerator extends Thread
 		island.calculateWeight();
 		island.calculateUplift();
 		
-		island.initBalance = (island.uplift * Map.calculateUplift(0) - island.weight) / 100000f;
+		// island.initBalance = (island.uplift * Map.calculateUplift(0) - island.weight) / 100000f;
 		
 		updateProgress();
 	}
