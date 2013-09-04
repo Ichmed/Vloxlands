@@ -7,7 +7,7 @@ import java.awt.Font;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class TextButton extends IClickableGui
+public class TextButton extends ClickableGui
 {
 	public static final int WIDTH = 288;
 	public static final int HEIGHT = 59;
@@ -69,7 +69,7 @@ public class TextButton extends IClickableGui
 	{
 		if (!enabled) return;
 		if ((flag & 1) != 0) texY = 202;
-		else if ((flag & 2) != 0) clickEvent.onClick();
+		else if ((flag & 2) != 0) clickEvent.activate();
 		else texY = 280;
 	}
 }

@@ -31,6 +31,7 @@ public class Label extends IGuiElement
 	@Override
 	public void render()
 	{
+		glEnable(GL_BLEND);
 		if (texture != null)
 		{
 			RenderAssistant.bindTexture(texture);
@@ -42,6 +43,7 @@ public class Label extends IGuiElement
 				RenderAssistant.renderRect(x, y, width, height, 0, 0, width / (float) texW, height / (float) texH);
 			}
 		}
+		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
 		glColor3f(1, 1, 1);

@@ -7,7 +7,7 @@ import java.awt.Font;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class Spinner extends IClickableGui
+public class Spinner extends ClickableGui
 {
 	public static final int HEIGHT = 52;
 	
@@ -38,21 +38,21 @@ public class Spinner extends IClickableGui
 		this.horizontal = horizontal;
 		
 		minus = new ArrowButton(x, y + ((horizontal) ? 0 : height - ArrowButton.HEIGHT), (horizontal) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
-		minus.setClickEvent(new IClickEvent()
+		minus.setClickEvent(new IGuiEvent()
 		{
 			
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				value = (value >= Spinner.this.min + Spinner.this.step) ? value - Spinner.this.step : Spinner.this.min;
 			}
 		});
 		plus = new ArrowButton(x + ((horizontal) ? width - ArrowButton.WIDTH : 0), y, (horizontal) ? ArrowButton.PLUS_HOR : ArrowButton.PLUS_VER);
-		plus.setClickEvent(new IClickEvent()
+		plus.setClickEvent(new IGuiEvent()
 		{
 			
 			@Override
-			public void onClick()
+			public void activate()
 			{
 				value = (value <= Spinner.this.max - Spinner.this.step) ? value + Spinner.this.step : Spinner.this.max;
 			}

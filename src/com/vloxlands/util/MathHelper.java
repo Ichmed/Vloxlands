@@ -10,7 +10,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class MathHelper
 {
-	public static float clamp(float x, int i, int j)
+	public static float clamp(float x, float i, float j)
 	{
 		return Math.max(i, Math.min(x, j));
 	}
