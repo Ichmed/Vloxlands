@@ -43,9 +43,9 @@ public class Chunk
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return;
 		
-		for(Vector3f v : this.getCorners(i))
+		for (Vector3f v : getCorners(i))
 		{
-			if(Game.currentGame.viewFrustum.isPointInsideFrustum(v))
+			if (Game.currentGame.viewFrustum.isPointInsideFrustum(v))
 			{
 				glCallList(opaque ? opaqueID : transparentID);
 				return;
@@ -70,6 +70,6 @@ public class Chunk
 		int x = (int) ((this.x * i) + island.getPos().x);
 		int y = (int) ((this.y * i) + island.getPos().y);
 		int z = (int) ((this.z * i) + island.getPos().z);
-		return new Vector3f[]{new Vector3f(x, y, z), new Vector3f(x + i, y, z), new Vector3f(x + i, y + i, z), new Vector3f(x + i, y, z + i), new Vector3f(x + i, y + i, z + i), new Vector3f(x, y + i, z), new Vector3f(x, y, z + i), new Vector3f(x, y + i, z + i)};
+		return new Vector3f[] { new Vector3f(x, y, z), new Vector3f(x + i, y, z), new Vector3f(x + i, y + i, z), new Vector3f(x + i, y, z + i), new Vector3f(x + i, y + i, z + i), new Vector3f(x, y + i, z), new Vector3f(x, y, z + i), new Vector3f(x, y + i, z + i) };
 	}
 }

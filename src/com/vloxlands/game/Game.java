@@ -86,7 +86,7 @@ public class Game
 		// // CFG.p("v: " + v);
 		// // CFG.p("v.length(): " + v.length());
 		// CFG.p("w: " + w);
-		
+		CFG.p(camera.getRotation());
 		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		
@@ -210,8 +210,13 @@ public class Game
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
-		currentGame.camera.setPosition(128.5f, 130, 128.5f);
-		currentGame.camera.setRotation(90, 0, 0);
+		currentGame.resetCamera();
+	}
+	
+	public void resetCamera()
+	{
+		camera.setPosition(128.5f, 130, 128.5f);
+		camera.setRotation(30, 135, 0);
 	}
 	
 	public void setScene(Scene s)
