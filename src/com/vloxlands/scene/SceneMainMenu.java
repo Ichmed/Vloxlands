@@ -7,10 +7,10 @@ import org.lwjgl.opengl.Display;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
-import com.vloxlands.util.RenderAssistant;
 
 public class SceneMainMenu extends Scene
 {
@@ -27,7 +27,7 @@ public class SceneMainMenu extends Scene
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.currentGame.setScene(new SceneNewGame());
 			}
@@ -38,7 +38,7 @@ public class SceneMainMenu extends Scene
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.currentGame.setScene(new SceneSettings());
 			}
@@ -49,18 +49,13 @@ public class SceneMainMenu extends Scene
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Vloxlands.exit();
 			}
 		});
 		content.add(b);
-	}
-	
-	@Override
-	public void update()
-	{
-		super.update();
-		RenderAssistant.renderOutline(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 60 + TextButton.HEIGHT * 3, true);
+		
+		content.add(new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 60 + TextButton.HEIGHT * 3, false));
 	}
 }

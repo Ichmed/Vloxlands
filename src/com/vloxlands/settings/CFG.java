@@ -23,6 +23,7 @@ public class CFG
 	public static boolean SHOW_CHUNK_BOUNDRIES = false;
 	public static boolean SHOW_DIRECTIONS = false;
 	public static boolean SHOW_WIREFRAME = false;
+	public static boolean SHOW_DEBUG = false;
 	
 	public static final File DIR = new File(System.clearProperty("user.home") + "/.dakror/Vloxlands");
 	
@@ -53,7 +54,7 @@ public class CFG
 	public static void p(Object... p)
 	{
 		if (p.length == 1) System.out.println(p[0]);
-		System.out.println(Arrays.toString(p));
+		else System.out.println(Arrays.toString(p));
 	}
 	
 	public static void b(Object... b)

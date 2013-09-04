@@ -26,7 +26,7 @@ public class FlagButton extends ClickableGui
 		clickEvent = new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Tr.loadLanguage(lang);
 				Game.currentGame.updateViewport();
@@ -54,6 +54,6 @@ public class FlagButton extends ClickableGui
 	public void handleMouse(int posX, int posY, int flag)
 	{
 		if (!enabled) return;
-		if ((flag & 2) != 0) clickEvent.activate();
+		if ((flag & 2) != 0) clickEvent.trigger();
 	}
 }

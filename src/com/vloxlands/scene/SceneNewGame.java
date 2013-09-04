@@ -40,7 +40,7 @@ public class SceneNewGame extends Scene
 		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.currentGame.setScene(new SceneMainMenu());
 			}
@@ -51,7 +51,7 @@ public class SceneNewGame extends Scene
 		skip.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.mapGenerator = new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24);
 				Game.mapGenerator.start();
@@ -73,9 +73,18 @@ public class SceneNewGame extends Scene
 	}
 	
 	@Override
-	public void update()
+	public void onTick()
 	{
-		super.update();
+		super.onTick();
+		
+		if (Game.currentMap != null) Game.currentGame.setScene(new SceneGame());
+	}
+	
+	@Override
+	public void render()
+	{
+		super.render();
+		
 		if (Game.mapGenerator != null)
 		{
 			glEnable(GL_BLEND);
@@ -87,6 +96,5 @@ public class SceneNewGame extends Scene
 			progress.render();
 			glDisable(GL_BLEND);
 		}
-		if (Game.currentMap != null) Game.currentGame.setScene(new SceneGame());
 	}
 }

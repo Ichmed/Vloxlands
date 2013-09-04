@@ -64,4 +64,8 @@ public class ProgressBar extends IGuiElement
 	{
 		this.value = value;
 	}
+	
+	@Override
+	public void onTick()
+	{}
 }

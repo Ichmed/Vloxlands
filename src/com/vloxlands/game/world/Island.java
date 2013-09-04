@@ -199,7 +199,7 @@ public class Island
 			{
 				for (int k = 0; k < s; k++)
 				{
-					chunks[i][j][k].onTick(this, true);
+					chunks[i][j][k].render(this, true);
 				}
 			}
 		}
@@ -209,15 +209,10 @@ public class Island
 			{
 				for (int k = 0; k < s; k++)
 				{
-					chunks[i][j][k].onTick(this, false);
+					chunks[i][j][k].render(this, false);
 				}
 			}
 		}
-		// glListBase(chunk0ID);
-		// glCallLists(chunks[0]);
-		//
-		// glListBase(chunk0ID + chunks[0].capacity());
-		// glCallLists(chunks[1]);
 		
 		if (CFG.SHOW_CHUNK_BOUNDRIES)
 		{

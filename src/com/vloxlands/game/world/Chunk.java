@@ -26,7 +26,7 @@ public class Chunk
 		this.z = z;
 	}
 	
-	public void update(Island i)
+	public void updateMesh(Island i)
 	{
 		if (opaqueID == -1)
 		{
@@ -39,7 +39,7 @@ public class Chunk
 		meshes[1] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[1]);
 	}
 	
-	public void onTick(Island i, boolean opaque)
+	public void render(Island i, boolean opaque)
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return;
 		
@@ -54,7 +54,7 @@ public class Chunk
 		System.out.println("test");
 	}
 	
-	public void render(boolean opaque)
+	public void renderDisplayList(boolean opaque)
 	{
 		glPushMatrix();
 		glNewList(opaque ? opaqueID : transparentID, GL_COMPILE);

@@ -14,8 +14,6 @@ import com.vloxlands.ui.Label;
 import com.vloxlands.ui.Slider;
 import com.vloxlands.ui.TextButton;
 
-//TODO: Dakror claims to rework this class. Date: 04.09.2013
-
 public class SceneSettings extends Scene
 {
 	@Override
@@ -51,7 +49,7 @@ public class SceneSettings extends Scene
 		{
 			
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.currentGame.setScene(new SceneMainMenu());
 			}
@@ -63,7 +61,7 @@ public class SceneSettings extends Scene
 		{
 			
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				CFG.FOV = (int) fov.getValue();
 				CFG.FPS = (int) fps.getValue();
@@ -72,11 +70,5 @@ public class SceneSettings extends Scene
 			}
 		});
 		content.add(s);
-	}
-	
-	@Override
-	public void update()
-	{
-		super.update();
 	}
 }

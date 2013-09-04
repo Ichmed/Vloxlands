@@ -8,19 +8,16 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
-import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.settings.Settings;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -40,9 +37,10 @@ public class Game
 	
 	public Camera camera = new Camera();
 	
-	long start = 0, last;
-	public int frames = 21;
-	boolean showFPS = false;
+	long start = 0;
+	public int frames = 0;
+	
+	boolean sceneChanged = false;
 	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
@@ -50,8 +48,8 @@ public class Game
 	
 	public float cameraSpeed = 0.3f;
 	public int cameraRotationSpeed = 180;
-	private Vector3f lightPos = new Vector3f();
-	private Vector3f directionalArrowsPos = new Vector3f();
+	Vector3f lightPos = new Vector3f();
+	Vector3f directionalArrowsPos = new Vector3f();
 	
 	public void gameLoop()
 	{
@@ -66,7 +64,7 @@ public class Game
 		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
 		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// -- BEGIN: update stuff that needs the GL Context -- //
 		
 		moveCamera();
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
@@ -86,6 +84,30 @@ public class Game
 		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		
+		
+		if (mapGenerator != null && mapGenerator.isDone())
+		{
+			mapGenerator.map.initMap();
+			currentMap = mapGenerator.map;
+			mapGenerator = null;
+		}
+		
+		
+		if (scene != null)
+		{
+			if (scene.initialized) scene.handleMouse();
+		}
+		
+		// -- END -- //
+		
+		if (Game.mapGenerator != null && Game.mapGenerator.isDone())
+		{
+			Game.mapGenerator.map.initMap();
+			Game.currentMap = Game.mapGenerator.map;
+			Game.mapGenerator = null;
+		}
+		
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
@@ -109,72 +131,32 @@ public class Game
 		
 		glPushMatrix();
 		{
-			if (scene != null) scene.update();
+			if (scene != null)
+			{
+				if (sceneChanged)
+				{
+					scene.init();
+					scene.initialized = true;
+					sceneChanged = false;
+				}
+				if (scene.initialized) scene.render();
+			}
 		}
 		glPopMatrix();
-		while (Keyboard.next())
+		
+		glColor4f(1, 1, 1, 1);
+		if (CFG.SHOW_DEBUG)
 		{
-			if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState())
-			{
-				CFG.FULLSCREEN = !CFG.FULLSCREEN;
-				Vloxlands.setFullscreen();
-				updateViewport();
-				Settings.saveSettings();
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) showFPS = !showFPS;
-			if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
-			if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-			if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(currentMap.islands.get(0));
-			if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
-			{
-				CFG.SHOW_WIREFRAME = !CFG.SHOW_WIREFRAME;
-				ChunkRenderer.renderChunks(currentMap.islands.get(0));
-			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
-			{
-				CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;
-				directionalArrowsPos = new Vector3f(camera.getPosition());
-			}
-			if (scene != null) scene.handleKeyboard(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+			RenderAssistant.renderText(0, 0, "FPS: " + getFPS(), FontAssistant.GAMEFONT.deriveFont(30f));
+			RenderAssistant.renderText(0, 30, "Ticks: " + UpdateThread.currentUpdateThread.getTicksPS(), FontAssistant.GAMEFONT.deriveFont(30f));
+			
+			glColor4f(0.8f, 0.8f, 0.8f, 1);
+			RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
+			glColor4f(1, 1, 1, 1);
 		}
-		
-		glColor4f(1, 1, 1, 1);
-		if (showFPS) RenderAssistant.renderText(0, 0, getFPS() + "", FontAssistant.GAMEFONT.deriveFont(30f));
-		
-		glColor4f(0.8f, 0.8f, 0.8f, 1);
-		RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
-		glColor4f(1, 1, 1, 1);
-		
 		RenderAssistant.set2DRenderMode(false);
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_R))
-		{
-			lightPos.x = camera.position.x;
-			lightPos.y = camera.position.y;
-			lightPos.z = camera.position.z;
-			RenderAssistant.setUniform3f("lightPosition", lightPos);
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP))
-		{
-			lightPos.z++;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN))
-		{
-			lightPos.z--;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
-		{
-			lightPos.x++;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-		{
-			lightPos.x--;
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) cameraSpeed = 0.5f;
-		else cameraSpeed = 0.3f;
-		
-		
-		if (currentMap != null) currentMap.onTick();
+		if (currentMap != null) currentMap.render();
 		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
@@ -182,16 +164,6 @@ public class Game
 		if (CFG.FPS <= 120) Display.sync(CFG.FPS);
 		
 		frames++;
-		
-		if (mapGenerator != null && mapGenerator.isDone())
-		{
-			mapGenerator.map.initMap();
-			currentMap = mapGenerator.map;
-			mapGenerator = null;
-		}
-		
-		last = System.currentTimeMillis();
-		
 	}
 	
 	public void updateViewport()
@@ -207,6 +179,8 @@ public class Game
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.resetCamera();
+		
+		new UpdateThread();
 	}
 	
 	public void resetCamera()
@@ -218,7 +192,7 @@ public class Game
 	public void setScene(Scene s)
 	{
 		scene = s;
-		scene.init();
+		sceneChanged = true;
 	}
 	
 	public int getFPS()

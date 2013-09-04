@@ -57,6 +57,7 @@ public class MapGenerator extends Thread
 	
 	public boolean isDone()
 	{
+		if (map == null) return false;
 		return map.islands.size() == (x * z);
 	}
 }

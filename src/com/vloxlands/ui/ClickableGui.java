@@ -9,8 +9,6 @@ public abstract class ClickableGui extends IGuiElement
 {
 	protected IGuiEvent clickEvent;
 	
-	public abstract void onTick();
-	
 	public abstract void handleMouse(int posX, int posY, int flag);
 	
 	public IGuiEvent getClickEvent()

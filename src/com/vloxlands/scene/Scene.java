@@ -19,6 +19,7 @@ public abstract class Scene
 	private boolean wasButton0Down;
 	private boolean wasButton1Down;
 	private boolean wasButton2Down;
+	public boolean initialized = false;
 	
 	public abstract void init();
 	
@@ -48,7 +49,7 @@ public abstract class Scene
 		content.add(c);
 	}
 	
-	public void update()
+	public void onTickContent()
 	{
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		
@@ -57,11 +58,19 @@ public abstract class Scene
 			{
 				((ClickableGui) i).onTick();
 			}
-		handleMouse();
-		render();
+	}
+	
+	public void onTick()
+	{
+		onTickContent();
 	}
 	
 	public void render()
+	{
+		renderContent();
+	}
+	
+	public void renderContent()
 	{
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		for (IGuiElement g : sorted)
@@ -91,7 +100,8 @@ public abstract class Scene
 	public void handleKeyboard(int key, boolean down)
 	{}
 	
-	protected boolean handleMouseGUI(int posX, int posY, int flag)
+	// not abstract so that implementing won't be forced
+	public boolean handleMouseGUI(int posX, int posY, int flag)
 	{
 		ClickableGui iG = getObjectUnderCursor();
 		if (iG != null && iG.isVisible() && iG.isEnabled())
@@ -102,7 +112,7 @@ public abstract class Scene
 		return false;
 	}
 	
-	public ClickableGui getObjectUnderCursor()
+	private ClickableGui getObjectUnderCursor()
 	{
 		for (IGuiElement i : getSortedContent())
 			if (i instanceof ClickableGui)
@@ -113,7 +123,7 @@ public abstract class Scene
 		return null;
 	}
 	
-	public ArrayList<IGuiElement> getSortedContent()
+	private ArrayList<IGuiElement> getSortedContent()
 	{
 		@SuppressWarnings("unchecked")
 		ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();
@@ -130,7 +140,8 @@ public abstract class Scene
 		return sorted;
 	}
 	
-	protected void handleMouseWorld(int x, int y, int flag)
+	// not abstract so that implementing won't be forced
+	public void handleMouseWorld(int x, int y, int flag)
 	{}
 	
 	protected void lockScene()

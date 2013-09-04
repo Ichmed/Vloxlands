@@ -46,7 +46,7 @@ public class ArrowButton extends ClickableGui
 	{
 		if (!enabled) return;
 		if ((flag & 1) != 0) texY = 57;
-		else if ((flag & 2) != 0) clickEvent.activate();
+		else if ((flag & 2) != 0) clickEvent.trigger();
 		else texY = 109;
 	}
 	

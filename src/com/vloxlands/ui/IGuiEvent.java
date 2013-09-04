@@ -2,5 +2,5 @@ package com.vloxlands.ui;
 
 public interface IGuiEvent
 {
-	public void activate();
+	public void trigger();
 }

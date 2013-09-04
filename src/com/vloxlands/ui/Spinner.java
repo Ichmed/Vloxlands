@@ -42,7 +42,7 @@ public class Spinner extends ClickableGui
 		{
 			
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				value = (value >= Spinner.this.min + Spinner.this.step) ? value - Spinner.this.step : Spinner.this.min;
 			}
@@ -52,7 +52,7 @@ public class Spinner extends ClickableGui
 		{
 			
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				value = (value <= Spinner.this.max - Spinner.this.step) ? value + Spinner.this.step : Spinner.this.max;
 			}

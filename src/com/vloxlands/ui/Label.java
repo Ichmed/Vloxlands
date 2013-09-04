@@ -66,4 +66,8 @@ public class Label extends IGuiElement
 	{
 		this.title = title;
 	}
+	
+	@Override
+	public void onTick()
+	{}
 }

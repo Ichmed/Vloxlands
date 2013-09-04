@@ -19,6 +19,8 @@ public abstract class IRendering
 	
 	public abstract void render();
 	
+	public abstract void onTick();
+	
 	public boolean isVisible()
 	{
 		return visible;

@@ -46,7 +46,7 @@ public class Vloxlands
 		}
 		
 		MediaAssistant.initNatives();
-		
+		Thread.currentThread().setName("Main Thread");
 		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
 		try
 		{

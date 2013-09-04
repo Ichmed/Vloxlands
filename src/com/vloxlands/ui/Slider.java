@@ -93,7 +93,7 @@ public class Slider extends ClickableGui
 			}
 		}
 		
-		if (event != null) event.activate();
+		if (event != null) event.trigger();
 		
 	}
 	

@@ -34,7 +34,7 @@ public class SceneGame extends Scene
 		mainmenu.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Game.currentMap = null;
 				Game.currentGame.setScene(new SceneMainMenu());
@@ -46,7 +46,7 @@ public class SceneGame extends Scene
 		quit.setClickEvent(new IGuiEvent()
 		{
 			@Override
-			public void activate()
+			public void trigger()
 			{
 				Vloxlands.exit();
 			}
@@ -55,30 +55,19 @@ public class SceneGame extends Scene
 	}
 	
 	@Override
-	public void update()
+	public void onTick()
 	{
+		super.onTick();
+		
 		content.get(0).setVisible(paused); // Title label
 		content.get(1).setVisible(paused); // mainmenu button
 		content.get(2).setVisible(paused); // quit button
 		worldActive = !paused;
-		super.update();
-		if (!paused) return;
-		
-		glEnable(GL_BLEND);
-		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-		glColor4f(1, 1, 1, 1);
-		RenderAssistant.renderContainer(Display.getWidth() / 2 - 170, Display.getHeight() / 2 - 100, 340, 200, true);
-		super.render();
-		
-		glDisable(GL_BLEND);
 	}
 	
 	@Override
 	public void handleMouseWorld(int x, int y, int flag)
 	{
-		super.handleMouseWorld(x, y, flag);
 		if (Mouse.isButtonDown(1))
 		{
 			if (!Mouse.isGrabbed()) Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
@@ -97,5 +86,22 @@ public class SceneGame extends Scene
 		{
 			paused = !paused;
 		}
+	}
+	
+	@Override
+	public void render()
+	{
+		super.render();
+		
+		if (!paused) return;
+		
+		glEnable(GL_BLEND);
+		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
+		glColor4f(1, 1, 1, 1);
+		RenderAssistant.renderContainer(Display.getWidth() / 2 - 170, Display.getHeight() / 2 - 100, 340, 200, true);
+		
+		glDisable(GL_BLEND);
 	}
 }

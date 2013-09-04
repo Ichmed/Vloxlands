@@ -22,8 +22,8 @@ public class ChunkRenderer
 			{
 				for (int k = 0; k < island.chunks[0][0].length; k++)
 				{
-					island.chunks[i][j][k].update(island);
-					island.chunks[i][j][k].render(true);
+					island.chunks[i][j][k].updateMesh(island);
+					island.chunks[i][j][k].renderDisplayList(true);
 				}
 			}
 		}
@@ -34,7 +34,7 @@ public class ChunkRenderer
 			{
 				for (int k = 0; k < island.chunks[0][0].length; k++)
 				{
-					island.chunks[i][j][k].render(false);
+					island.chunks[i][j][k].renderDisplayList(false);
 				}
 			}
 		}

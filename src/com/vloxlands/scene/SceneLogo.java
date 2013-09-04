@@ -56,20 +56,15 @@ public class SceneLogo extends Scene
 	}
 	
 	@Override
-	public void update()
+	public void onTick()
 	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
+		super.onTick();
+		
 		if (alpha >= Math.PI * 2)
 		{
 			content.get(0).setVisible(false);
 			content.get(1).setVisible(true);
 		}
-		glColor4f(1, 1, 1, val);
-		super.update();
-		glDisable(GL_BLEND);
 		alpha += 0.05f;
 		if (!update)
 		{
@@ -81,5 +76,19 @@ public class SceneLogo extends Scene
 			// download.title = Assistant.formatBinarySize(downloader.progress, 2) + " / " + Assistant.formatBinarySize(downloader.fullsize, 2) + " @ " + Assistant.formatBinarySize(downloader.speed, 2) + "/s"; // want that?
 			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new SceneMainMenu());
 		}
+	}
+	
+	@Override
+	public void render()
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
+		glColor4f(1, 1, 1, val);
+		
+		super.renderContent();
+		
+		glDisable(GL_BLEND);
 	}
 }
