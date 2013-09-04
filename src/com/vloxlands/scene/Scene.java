@@ -1,5 +1,6 @@
 package com.vloxlands.scene;
 
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,6 +9,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.ui.ClickableGui;
+import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.Label;
 
@@ -31,6 +33,19 @@ public abstract class Scene
 		bg.texW = 512;
 		bg.texH = 512;
 		content.add(bg);
+	}
+	
+	protected void setTitle(String title)
+	{
+		Label l = new Label(0, 0, Display.getWidth(), 60, title);
+		l.font = l.font.deriveFont(Font.BOLD, 60f);
+		content.add(l);
+		
+		Container c = new Container(-15, 85, Display.getWidth() + 30, 1);
+		c.doubled = false;
+		c.filled = false;
+		c.setZIndex(1);
+		content.add(c);
 	}
 	
 	public void update()

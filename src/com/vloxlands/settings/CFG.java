@@ -10,10 +10,13 @@ public class CFG
 	// -- UniVersion -- //
 	public static final int VERSION = 2013090102;
 	public static final int PHASE = 0;
+	
 	// -- debug -- //
 	public static boolean DEBUG = true;
 	public static boolean INTERNET;
-	// -- options -- //
+	
+	// -- settings -- //
+	public static int FOV = 30;
 	public static boolean LIGHTING = false;
 	public static boolean FULLSCREEN = false;
 	public static boolean SHOW_CHUNK_BOUNDRIES = false;

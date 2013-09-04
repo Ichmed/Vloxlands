@@ -7,7 +7,6 @@ import org.lwjgl.opengl.Display;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
-import com.vloxlands.ui.FlagButton;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
@@ -41,7 +40,7 @@ public class SceneMainMenu extends Scene
 			@Override
 			public void activate()
 			{
-				Game.currentGame.setScene(new SceneOptions());
+				Game.currentGame.setScene(new SceneSettings());
 			}
 		});
 		content.add(b);
@@ -56,10 +55,6 @@ public class SceneMainMenu extends Scene
 			}
 		});
 		content.add(b);
-		
-		content.add(new FlagButton(10, Display.getHeight() - FlagButton.SIZE + 5, "de"));
-		content.add(new FlagButton(10 + FlagButton.SIZE, Display.getHeight() - FlagButton.SIZE + 5, "us"));
-		
 	}
 	
 	@Override

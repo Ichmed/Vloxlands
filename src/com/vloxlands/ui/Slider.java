@@ -51,6 +51,7 @@ public class Slider extends ClickableGui
 		minValue = min;
 		maxValue = max;
 		value = startValue;
+		sliderPos = (value - min) / (max - min) * (size - 14);
 	}
 	
 	@Override
@@ -66,10 +67,7 @@ public class Slider extends ClickableGui
 			{
 				float percent = MathHelper.clamp(z - 5, 0, height - 14) / (height - 14) * 100;
 				
-				if (stepMode)
-				{
-					percent = MathHelper.round(percent, stepSize);
-				}
+				if (stepMode) percent = MathHelper.round(percent, stepSize);
 				
 				sliderPos = percent / 100 * (height - 14);
 				value = (maxValue - minValue) * (percent / 100) + minValue;
@@ -78,10 +76,7 @@ public class Slider extends ClickableGui
 			{
 				float percent = MathHelper.clamp(x - 5, 0, width - 14) / (width - 14) * 100;
 				
-				if (stepMode)
-				{
-					percent = MathHelper.round(percent, stepSize);
-				}
+				if (stepMode) percent = MathHelper.round(percent, stepSize);
 				
 				sliderPos = percent / 100 * (width - 14);
 				value = (maxValue - minValue) * (percent / 100) + minValue;

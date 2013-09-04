@@ -11,11 +11,17 @@ public class Label extends IGuiElement
 {
 	String title;
 	public boolean stackTexture;
+	boolean center;
 	public int texW, texH;
 	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	public Label(int x, int y, int width, int height, String title)
+	{
+		this(x, y, width, height, title, true);
+	}
+	
+	public Label(int x, int y, int width, int height, String title, boolean center)
 	{
 		this.x = x;
 		this.y = y;
@@ -26,6 +32,7 @@ public class Label extends IGuiElement
 		texW = 0;
 		texH = 0;
 		texture = null;
+		this.center = center;
 	}
 	
 	@Override
@@ -47,7 +54,7 @@ public class Label extends IGuiElement
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
 		glColor3f(1, 1, 1);
-		RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, font);
+		RenderAssistant.renderText(x + ((width > -1 && center) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, font);
 	}
 	
 	public String getTitle()

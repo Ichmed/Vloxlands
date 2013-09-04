@@ -19,6 +19,7 @@ public class Settings
 			
 			data.put("lang", Tr.activeLanguage);
 			data.put("fullscreen", CFG.FULLSCREEN);
+			data.put("fov", CFG.FOV);
 			
 			Assistant.setFileContent(file, data.toString());
 		}

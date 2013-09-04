@@ -27,13 +27,10 @@ public class SceneNewGame extends Scene
 	{
 		setBackground();
 		
-		Label header = new Label(0, 0, Display.getWidth(), 60, Tr._("title.newGame"));
-		header.font = header.font.deriveFont(60f);
+		setTitle(Tr._("title.newGame"));
 		
 		// content.add(new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220));
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
-		
-		content.add(header);
 		
 		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, true);
 		progress.setVisible(false);
@@ -64,11 +61,11 @@ public class SceneNewGame extends Scene
 		});
 		content.add(skip);
 		
-		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("lang.islands") + ":"));
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("lang.islands") + ":", false));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
 		content.add(xSize);
 		
-		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 80, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("lang.islands") + ":"));
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("lang.islands") + ":", false));
 		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
 		content.add(zSize);
 		
@@ -79,9 +76,6 @@ public class SceneNewGame extends Scene
 	public void update()
 	{
 		super.update();
-		
-		RenderAssistant.renderOutline(-15, 85, Display.getWidth() + 30, 1, false);
-		
 		if (Game.mapGenerator != null)
 		{
 			glEnable(GL_BLEND);

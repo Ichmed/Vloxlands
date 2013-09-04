@@ -4,6 +4,7 @@ import com.vloxlands.util.RenderAssistant;
 
 public class Container extends IGuiElement
 {
+	public boolean filled, doubled;
 	
 	public Container(int x, int y, int width, int height)
 	{
@@ -12,11 +13,14 @@ public class Container extends IGuiElement
 		this.width = width;
 		this.height = height;
 		zIndex = 0;
+		doubled = true;
+		filled = true;
 	}
 	
 	@Override
 	public void render()
 	{
-		RenderAssistant.renderContainer(x, y, width, height, true);
+		if (filled) RenderAssistant.renderContainer(x, y, width, height, doubled);
+		else RenderAssistant.renderOutline(x, y, width, height, doubled);
 	}
 }
