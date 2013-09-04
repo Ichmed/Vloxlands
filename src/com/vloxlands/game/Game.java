@@ -33,7 +33,7 @@ public class Game
 	public static Map currentMap;
 	public ViewFrustum viewFrustum = new ViewFrustum();
 	
-	public float zNear = 0.001f, zFar = 10000;
+	public float zNear = 0.01f, zFar = 10000;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	public static MapGenerator mapGenerator;
@@ -232,7 +232,6 @@ public class Game
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
-		glEnable(GL_ALPHA_TEST);
 		
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_POINT_SMOOTH);
