@@ -14,14 +14,14 @@ public class Spinner extends ClickableGui
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	
 	int min, max, value, step;
-	boolean horizontal;
+	GuiRotation rot;
 	ArrowButton minus, plus;
 	
-	public Spinner(int x, int y, int size, int min, int max, int val, int step, boolean horizontal)
+	public Spinner(int x, int y, int size, int min, int max, int val, int step, GuiRotation rot)
 	{
 		this.x = x;
 		this.y = y;
-		if (horizontal)
+		if (rot == GuiRotation.HORIZONTAL)
 		{
 			width = size;
 			height = HEIGHT;
@@ -35,9 +35,9 @@ public class Spinner extends ClickableGui
 		this.min = min;
 		this.max = max;
 		this.step = step;
-		this.horizontal = horizontal;
+		this.rot = rot;
 		
-		minus = new ArrowButton(x, y + ((horizontal) ? 0 : height - ArrowButton.HEIGHT), (horizontal) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
+		minus = new ArrowButton(x, y + ((rot == GuiRotation.HORIZONTAL) ? 0 : height - ArrowButton.HEIGHT), (rot == GuiRotation.HORIZONTAL) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
 		minus.setClickEvent(new IGuiEvent()
 		{
 			
@@ -47,7 +47,7 @@ public class Spinner extends ClickableGui
 				value = (value >= Spinner.this.min + Spinner.this.step) ? value - Spinner.this.step : Spinner.this.min;
 			}
 		});
-		plus = new ArrowButton(x + ((horizontal) ? width - ArrowButton.WIDTH : 0), y, (horizontal) ? ArrowButton.PLUS_HOR : ArrowButton.PLUS_VER);
+		plus = new ArrowButton(x + ((rot == GuiRotation.HORIZONTAL) ? width - ArrowButton.WIDTH : 0), y, (rot == GuiRotation.HORIZONTAL) ? ArrowButton.PLUS_HOR : ArrowButton.PLUS_VER);
 		plus.setClickEvent(new IGuiEvent()
 		{
 			
@@ -86,7 +86,7 @@ public class Spinner extends ClickableGui
 		
 		if (enabled) glColor3f(1, 1, 1);
 		else glColor3f(0.5f, 0.5f, 0.5f);
-		if (horizontal)
+		if (rot == GuiRotation.HORIZONTAL)
 		{
 			int tx = FontAssistant.getFont(font).getWidth(value + "");
 			int mx = width / 2 - tx / 2;

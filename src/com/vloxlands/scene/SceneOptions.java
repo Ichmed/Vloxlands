@@ -3,15 +3,17 @@ package com.vloxlands.scene;
 import java.awt.Font;
 
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.Slider;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
+
+//TODO: Dakror claims to rework this class. Date: 04.09.2013
 
 public class SceneOptions extends Scene
 {
@@ -19,29 +21,25 @@ public class SceneOptions extends Scene
 	public void init()
 	{
 		setBackground();
-
-		Label l = new Label(-Display.getWidth() / 2 + 140, 10, Display.getWidth(), 60, "Options");
+		
+		Label l = new Label(0, 0, Display.getWidth(), 60, "Options");
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
-
-		final Slider FOVSlider;
-		FOVSlider = new Slider(30, 150);
-		FOVSlider.setPos(new Vector2f(50, 150));
-		FOVSlider.setIntegerMode(true);
-		FOVSlider.setTitle("FOV");
-		FOVSlider.setEvent(new IGuiEvent()
+		
+		final Slider fov = new Slider(Display.getWidth() / 4, 125, 30, 150);
+		fov.setIntegerMode(true);
+		fov.setEvent(new IGuiEvent()
 		{
-			
 			@Override
 			public void activate()
 			{
-				Game.fov = (int) FOVSlider.getValue();
+				Game.fov = (int) fov.getValue();
 			}
 		});
-
-		content.add(FOVSlider);
 		
-		TextButton b = new TextButton(Display.getWidth() - 190, Display.getHeight() - 130, Tr._("title.back"));
+		content.add(fov);
+		
+		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.back"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			
@@ -52,12 +50,27 @@ public class SceneOptions extends Scene
 			}
 		});
 		content.add(b);
+		
+		TextButton s = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.save"));
+		s.setClickEvent(new IGuiEvent()
+		{
+			
+			@Override
+			public void activate()
+			{
+				// Game.currentGame.setScene(new SceneMainMenu());
+			}
+		});
+		content.add(s);
+		
+		content.add(new Container(0, 115, Display.getWidth() / 2, Display.getHeight() - 220));
 	}
 	
 	@Override
 	public void update()
 	{
 		super.update();
-		RenderAssistant.renderOutline(20, 100, Display.getWidth() - 50, Display.getHeight() - 150, true);
+		RenderAssistant.renderOutline(-15, 85, Display.getWidth() + 30, 1, false);
+		// RenderAssistant.renderOutline(0, 115, Display.getWidth() / 2, Display.getHeight() - 220, true);
 	}
 }
