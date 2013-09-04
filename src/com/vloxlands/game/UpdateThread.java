@@ -1,6 +1,7 @@
 package com.vloxlands.game;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -16,6 +17,7 @@ import com.vloxlands.util.RenderAssistant;
 public class UpdateThread extends Thread
 {
 	public static UpdateThread currentUpdateThread;
+	public static boolean requestStop = false;
 	int ticks;
 	
 	public UpdateThread()
@@ -30,12 +32,14 @@ public class UpdateThread extends Thread
 	@Override
 	public void run()
 	{
-		while (!Display.isCloseRequested())
+		while (Display.isCreated() && !Display.isCloseRequested() && Mouse.isCreated())
 		{
+			if (requestStop) break;
+			
 			
 			if (Game.currentGame.scene != null && Game.currentGame.scene.initialized) Game.currentGame.scene.onTick();
 			
-			while (Keyboard.next())
+			while (Keyboard.isCreated() && Keyboard.next())
 			{
 				if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState())
 				{

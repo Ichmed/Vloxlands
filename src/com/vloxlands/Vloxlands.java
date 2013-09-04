@@ -10,6 +10,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.UpdateThread;
 import com.vloxlands.scene.SceneLogo;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -108,6 +109,7 @@ public class Vloxlands
 	
 	public static void exit()
 	{
+		UpdateThread.requestStop = true;
 		Settings.saveSettings();
 		
 		System.exit(0);

@@ -11,6 +11,7 @@ import org.lwjgl.opengl.Display;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
@@ -52,6 +53,8 @@ public class SceneGame extends Scene
 			}
 		});
 		content.add(quit);
+		
+		content.add(new Container(Display.getWidth() / 2 - 170, Display.getHeight() / 2 - 100, 340, 200));
 	}
 	
 	@Override
@@ -72,11 +75,11 @@ public class SceneGame extends Scene
 		{
 			if (!Mouse.isGrabbed()) Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 			
-			Mouse.setGrabbed(true);
+			Game.currentGame.mouseGrabbed = true;
 			if (Mouse.isButtonDown(1)) Game.currentGame.rotateCamera();
 			else Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 		}
-		else Mouse.setGrabbed(false);
+		else Game.currentGame.mouseGrabbed = false;
 	}
 	
 	@Override
@@ -91,16 +94,14 @@ public class SceneGame extends Scene
 	@Override
 	public void render()
 	{
-		super.render();
-		
 		if (!paused) return;
 		
 		glEnable(GL_BLEND);
 		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-		glColor4f(1, 1, 1, 1);
-		RenderAssistant.renderContainer(Display.getWidth() / 2 - 170, Display.getHeight() / 2 - 100, 340, 200, true);
+		
+		renderContent();
 		
 		glDisable(GL_BLEND);
 	}

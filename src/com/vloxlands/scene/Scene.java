@@ -63,6 +63,7 @@ public abstract class Scene
 	public void onTick()
 	{
 		onTickContent();
+		handleMouse();
 	}
 	
 	public void render()

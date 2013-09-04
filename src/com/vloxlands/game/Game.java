@@ -37,6 +37,8 @@ public class Game
 	
 	public Camera camera = new Camera();
 	
+	public boolean mouseGrabbed = false;
+	
 	long start = 0;
 	public int frames = 0;
 	
@@ -95,7 +97,7 @@ public class Game
 		
 		if (scene != null)
 		{
-			if (scene.initialized) scene.handleMouse();
+			// if (scene.initialized) scene.handleMouse();
 		}
 		
 		// -- END -- //
@@ -157,6 +159,8 @@ public class Game
 		RenderAssistant.set2DRenderMode(false);
 		
 		if (currentMap != null) currentMap.render();
+		
+		Mouse.setGrabbed(mouseGrabbed);
 		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
