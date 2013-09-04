@@ -7,7 +7,7 @@ import java.util.Comparator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import com.vloxlands.ui.IClickableGui;
+import com.vloxlands.ui.ClickableGui;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.Label;
 
@@ -19,6 +19,8 @@ public abstract class Scene
 	private boolean wasButton2Down;
 	
 	public abstract void init();
+	
+	boolean uiActive = true, worldActive = true;
 	
 	protected void setBackground()
 	{
@@ -36,9 +38,9 @@ public abstract class Scene
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		
 		for (IGuiElement i : sorted)
-			if (i instanceof IClickableGui)
+			if (i instanceof ClickableGui)
 			{
-				((IClickableGui) i).onTick();
+				((ClickableGui) i).onTick();
 			}
 		handleMouse();
 		render();
@@ -68,7 +70,7 @@ public abstract class Scene
 		wasButton1Down = Mouse.isButtonDown(1);
 		wasButton2Down = Mouse.isButtonDown(2);
 		
-		if (!handleMouseGUI(x, y, flag)) handleMouseWorld(x, y, flag);
+		if ((!this.uiActive || !handleMouseGUI(x, y, flag)) && this.worldActive) handleMouseWorld(x, y, flag);
 	}
 	
 	public void handleKeyboard(int key, boolean down)
@@ -76,7 +78,7 @@ public abstract class Scene
 	
 	protected boolean handleMouseGUI(int posX, int posY, int flag)
 	{
-		IClickableGui iG = getObjectUnderCursor();
+		ClickableGui iG = getObjectUnderCursor();
 		if (iG != null && iG.isVisible() && iG.isEnabled())
 		{
 			iG.handleMouse(posX - (int) iG.getPos().x, posY - (int) iG.getPos().y, flag);
@@ -85,12 +87,12 @@ public abstract class Scene
 		return false;
 	}
 	
-	public IClickableGui getObjectUnderCursor()
+	public ClickableGui getObjectUnderCursor()
 	{
 		for (IGuiElement i : getSortedContent())
-			if (i instanceof IClickableGui)
+			if (i instanceof ClickableGui)
 			{
-				IClickableGui iG = (IClickableGui) i;
+				ClickableGui iG = (ClickableGui) i;
 				if (iG.isUnderCursor()) return iG;
 			}
 		return null;
@@ -119,9 +121,9 @@ public abstract class Scene
 	protected void lockScene()
 	{
 		for (IGuiElement i : content)
-			if (i instanceof IClickableGui)
+			if (i instanceof ClickableGui)
 			{
-				((IClickableGui) i).setEnabled(false);
+				((ClickableGui) i).setEnabled(false);
 			}
 	}
 }
