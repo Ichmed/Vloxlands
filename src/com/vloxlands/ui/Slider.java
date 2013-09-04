@@ -51,7 +51,6 @@ public class Slider extends ClickableGui
 		minValue = min;
 		maxValue = max;
 		value = startValue;
-		zIndex = 1;
 	}
 	
 	@Override

@@ -35,7 +35,7 @@ public class SceneMainMenu extends Scene
 		});
 		content.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, Tr._("title.options"));
+		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, Tr._("title.settings"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override

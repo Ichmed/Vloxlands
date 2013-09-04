@@ -14,7 +14,7 @@ public abstract class IRendering
 		visible = true;
 		enabled = true;
 		texture = null;
-		zIndex = 0;
+		zIndex = 1;
 	}
 	
 	public abstract void render();

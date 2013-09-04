@@ -2,9 +2,11 @@ Key;us;de
 title.newGame;New Game;Neues Spiel
 title.quitGame;Quit Game;Spiel beenden
 title.mainmenu;Main Menu;Hauptmenue
-title.options;Settings;Optionen
+title.settings;Settings;Optionen
+title.pause;Game Paused;Pausiert
 title.next;Next;Weiter
 title.back;Back;Zurueck
 title.save;Save;Speichern
 title.start;Start;Start
 lang.islands;Islands;Inseln
+settings.fov;Field of View;Sichtfeld

@@ -23,13 +23,14 @@ public class SceneOptions extends Scene
 	{
 		setBackground();
 		
-		Label l = new Label(0, 0, Display.getWidth(), 60, "Options");
+		Label l = new Label(0, 0, Display.getWidth(), 60, Tr._("title.settings"));
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		final Slider fov = new Slider(Display.getWidth() / 4, 160, Display.getWidth() / 4 - 20, 30, 150, GuiRotation.HORIZONTAL);
+		content.add(new Label(20, 160, Display.getWidth() / 4, 25, Tr._("settings.fov") + ":"));
+		
+		final Slider fov = new Slider(Display.getWidth() / 4, 170, Display.getWidth() / 4 - 20, 30, 150, GuiRotation.HORIZONTAL);
 		fov.setIntegerMode(true);
-		// fov.setStepSize(5);
 		fov.setEvent(new IGuiEvent()
 		{
 			@Override

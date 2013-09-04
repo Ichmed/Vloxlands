@@ -26,11 +26,8 @@ public class SceneGame extends Scene
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;
 		
-		setBackground();
-		
-		Label l = new Label(0, 100, Display.getWidth(), 60, "Vloxlands");
+		Label l = new Label(0, 100, Display.getWidth(), 60, Tr._("title.pause"));
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
-		l.setTexture("/graphics/textures/ui/pauseBackground.png");
 		content.add(l);
 		TextButton mainmenu = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 65, Tr._("title.mainmenu"));
 		mainmenu.setClickEvent(new IGuiEvent()
@@ -59,11 +56,10 @@ public class SceneGame extends Scene
 	@Override
 	public void update()
 	{
-//		content.get(0).setVisible(paused);
-		content.get(1).setVisible(paused);
-		content.get(2).setVisible(paused);
-		content.get(3).setVisible(paused);
-		this.worldActive = !paused;
+		content.get(0).setVisible(paused); // Title label
+		content.get(1).setVisible(paused); // mainmenu button
+		content.get(2).setVisible(paused); // quit button
+		worldActive = !paused;
 		super.update();
 		if (!paused) return;
 		
@@ -100,18 +96,5 @@ public class SceneGame extends Scene
 		{
 			paused = !paused;
 		}
-	}
-	
-	@Override
-	protected void setBackground()
-	{
-		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
-		bg.setZIndex(-1);
-		bg.setTexture("/graphics/textures/ui/pauseBackground.png");
-		bg.stackTexture = true;
-		bg.texW = 512;
-		bg.texH = 512;
-		bg.setVisible(false);		
-		content.add(bg);
 	}
 }
