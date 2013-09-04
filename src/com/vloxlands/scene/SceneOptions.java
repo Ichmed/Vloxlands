@@ -7,6 +7,7 @@ import org.lwjgl.opengl.Display;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.Slider;
@@ -26,8 +27,9 @@ public class SceneOptions extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		final Slider fov = new Slider(Display.getWidth() / 4, 125, 30, 150);
+		final Slider fov = new Slider(Display.getWidth() / 4, 160, Display.getWidth() / 4 - 20, 30, 150, GuiRotation.HORIZONTAL);
 		fov.setIntegerMode(true);
+		// fov.setStepSize(5);
 		fov.setEvent(new IGuiEvent()
 		{
 			@Override

@@ -4,11 +4,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
 
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
-
-//TODO: Dakror claims to rework this class. Date: 04.09.2013
 
 public class Slider extends ClickableGui
 {
@@ -21,10 +20,8 @@ public class Slider extends ClickableGui
 	public GuiRotation guiRot = GuiRotation.HORIZONTAL;
 	public boolean integerMode = false;
 	
-	int texX = 795;
-	int texY = 72;
-	// private boolean stepMode = false;
-	// private float stepSize;
+	private boolean stepMode = false;
+	private float stepSize;
 	public String title;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	IGuiEvent event;
@@ -67,13 +64,21 @@ public class Slider extends ClickableGui
 		{
 			if (guiRot == GuiRotation.VERTICAL)
 			{
-				sliderPos = MathHelper.clamp(y - 5, 2.5f, 190f);
-				value = (maxValue - minValue) * ((sliderPos - 0.8f) / 193) + minValue;
+				sliderPos = MathHelper.clamp(y - 5, 0, width - 14);
+				value = (maxValue - minValue) * (sliderPos / (width - 14)) + minValue;
 			}
 			else
 			{
-				sliderPos = MathHelper.clamp(x - 5, 2.5f, 193f);
-				value = (maxValue - minValue) * ((sliderPos - 2.5f) / 190f) + minValue;
+				
+				float percent = MathHelper.clamp(x - 5, 0, width - 14) / (width - 14) * 100;
+				
+				if (stepMode)
+				{
+					percent = MathHelper.round(percent, stepSize);
+				}
+				
+				sliderPos = percent / 100 * (width - 14);
+				value = (maxValue - minValue) * (percent / 100) + minValue;
 			}
 		}
 		
@@ -90,10 +95,15 @@ public class Slider extends ClickableGui
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		RenderAssistant.bindTexture(texture);
 		
-		RenderAssistant.renderRect(x, y, width, height, texX / 1024.0f, texY / 1024.0f, width / 1024.0f, height / 1024.0f);
 		if (guiRot == GuiRotation.HORIZONTAL)
 		{
-			RenderAssistant.renderRect(x + sliderPos - 5, y - (35 - height) / 2, 20, 35, 889 / 1024.0f, 16 / 1024.0f, 25 / 1024.0f, 44 / 1024.0f);
+			RenderAssistant.renderRect(x, y, 7, height, 794 / 1024.0f, 72 / 1024.0f, 7 / 1024.0f, 20 / 1024.0f);
+			RenderAssistant.renderRect(x + width - 7, y, 7, height, 994 / 1024.0f, 72 / 1024.0f, 7 / 1024.0f, 20 / 1024.0f);
+			for (int i = 0; i < (width - 14) / 193; i++)
+				RenderAssistant.renderRect(x + 7 + i * 193, y, 193, height, 801 / 1024.0f, 72 / 1024.0f, 193 / 1024.0f, 20 / 1024.0f);
+			RenderAssistant.renderRect(x + 7 + (width - 14) / 193 * 193, y, (width - 14) % 193, height, 801 / 1024.0f, 72 / 1024.0f, (width - 14) % 193 / 1024.0f, 20 / 1024.0f);
+			
+			RenderAssistant.renderRect(x + sliderPos - 5, y - (38 - height) / 2, 20, 35, 889 / 1024.0f, 16 / 1024.0f, 25 / 1024.0f, 44 / 1024.0f);
 		}
 		
 		String displayString = ((title != null) ? title + ": " : "") + ((integerMode) ? ((int) value) + "" : value);
@@ -102,7 +112,7 @@ public class Slider extends ClickableGui
 		int mx = width / 2 - tx / 2;
 		if (enabled) glColor3f(1, 1, 1);
 		else glColor3f(0.5f, 0.5f, 0.5f);
-		RenderAssistant.renderText(x + mx, y - 28, displayString, font);
+		RenderAssistant.renderText(x + mx, y - 34, displayString, font);
 		
 		glDisable(GL_BLEND);
 	}
@@ -117,11 +127,12 @@ public class Slider extends ClickableGui
 		return value;
 	}
 	
-	// public void setStepSize(float f)
-	// {
-	// this.stepSize = f;
-	// this.stepMode = true;
-	// }
+	public void setStepSize(float f)
+	{
+		stepSize = f / (maxValue - minValue) * 100;
+		CFG.p(stepSize);
+		stepMode = true;
+	}
 	
 	public void setTitle(String s)
 	{

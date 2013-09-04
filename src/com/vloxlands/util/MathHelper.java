@@ -15,6 +15,12 @@ public class MathHelper
 		return Math.max(i, Math.min(x, j));
 	}
 	
+	public static float round(float i, float step)
+	{
+		if (i % step > step / 2.0f) return i + (step - (i % step));
+		else return i - (i % step);
+	}
+	
 	public static FloatBuffer asFloatBuffer(float[] fs)
 	{
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(fs.length);
@@ -54,7 +60,7 @@ public class MathHelper
 		
 		Vector2f bs0 = Vector2f.sub(b1, b0, null);
 		
-		return Vector2f.add((Vector2f) MathHelper.scaleVector2f(bs0, t), b0, null);
+		return Vector2f.add(MathHelper.scaleVector2f(bs0, t), b0, null);
 	}
 	
 	public static void renderBezierCurve(float[] c, String file)
@@ -66,7 +72,7 @@ public class MathHelper
 		for (float i = 0; i < 1.0f; i += 0.01f)
 		{
 			Vector2f point = bezierCurve(c, i);
-			s += (int) Math.round(point.x * 300 + 200) + "," + (int) Math.round(point.y * 300 + 200) + " ";
+			s += Math.round(point.x * 300 + 200) + "," + Math.round(point.y * 300 + 200) + " ";
 		}
 		s += "\" />";
 		s += "<rect x='200' y='200' width='300' height='300' stroke='blue' fill='none'></rect>";
