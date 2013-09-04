@@ -12,6 +12,7 @@ public class MapGenerator extends Thread
 	
 	IslandGenerator gen;
 	int z, x, spread, size, index;
+	float cacheY;
 	
 	public MapGenerator(int x, int z, int spread, int size)
 	{
@@ -34,7 +35,8 @@ public class MapGenerator extends Thread
 			if (gen == null)
 			{
 				progressBefore = progress;
-				gen = new IslandGenerator((int) (size * 0.75), (int) (size * 1.25));
+				cacheY = (float) ((Math.random() * spread * 2) - spread);
+				gen = new IslandGenerator((int) (size * 0.75), (int) (size * 1.25), cacheY);
 				gen.start();
 				index++;
 			}
@@ -45,7 +47,7 @@ public class MapGenerator extends Thread
 			if (gen.finishedIsland != null)
 			{
 				Island i = gen.finishedIsland;
-				i.setPos(new Vector3f((float) (((index - 1) / z) * size * 2 + (Math.random() * spread * 2) - spread), (float) ((Math.random() * spread * 2) - spread), (float) (((index - 1) % z) * size * 2 + (Math.random() * spread * 2) - spread)));
+				i.setPos(new Vector3f((int) (((index - 1) / z) * size * 2 + (Math.random() * spread * 2) - spread), cacheY, (int) (((index - 1) % z) * size * 2 + (Math.random() * spread * 2) - spread)));
 				
 				map.addIsland(i);
 				gen = null;

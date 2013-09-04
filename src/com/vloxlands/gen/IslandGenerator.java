@@ -37,12 +37,14 @@ public class IslandGenerator extends Thread
 	private int quotient;
 	
 	int minSize, maxSize;
+	float yPos;
 	
-	public IslandGenerator(int minSize, int maxSize)
+	public IslandGenerator(int minSize, int maxSize, float yPos)
 	{
 		this.minSize = minSize;
 		this.maxSize = maxSize;
 		progress = quotient = 0;
+		this.yPos = yPos;
 	}
 	
 	@Override
@@ -159,7 +161,7 @@ public class IslandGenerator extends Thread
 	{
 		island.calculateWeight();
 		
-		float weightNeededToUplift = island.weight / Map.calculateUplift(0);
+		float weightNeededToUplift = island.weight / Map.calculateUplift(yPos);
 		while (weightNeededToUplift > 100)
 		{
 			int index = (int) (Math.random() * CRYSTALS.length);
