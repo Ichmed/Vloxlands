@@ -1,7 +1,11 @@
 package com.vloxlands;
 
 import java.io.File;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.util.Enumeration;
 
 import javax.swing.UIManager;
 
@@ -25,6 +29,26 @@ public class Vloxlands
 	
 	public static void main(String[] args)
 	{
+		try
+		{
+			Enumeration<NetworkInterface> n = NetworkInterface.getNetworkInterfaces();
+			for (; n.hasMoreElements();)
+			{
+				NetworkInterface e = n.nextElement();
+				System.out.println("Interface: " + e.getName());
+				Enumeration<InetAddress> a = e.getInetAddresses();
+				for (; a.hasMoreElements();)
+				{
+					InetAddress addr = a.nextElement();
+					System.out.println("  " + addr.getHostAddress());
+				}
+			}
+		}
+		catch (SocketException e2)
+		{
+			e2.printStackTrace();
+		}
+		
 		CFG.INTERNET = Assistant.isInternetReachable();
 		
 		Settings.loadSettings();
