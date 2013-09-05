@@ -98,11 +98,11 @@ public abstract class Scene
 		if ((!uiActive || !handleMouseGUI(x, y, flag)) && worldActive) handleMouseWorld(x, y, flag);
 	}
 	
-	public void handleKeyboard(int key, boolean down)
+	public void handleKeyboard(int key, char chr, boolean down)
 	{
 		for (IGuiElement iG : content)
 		{
-			iG.handleKeyboard(key, down);
+			iG.handleKeyboard(key, chr, down);
 		}
 	}
 	

@@ -12,7 +12,6 @@ import com.vloxlands.ui.Container;
 import com.vloxlands.ui.FlagButton;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiEvent;
-import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.Slider;
 import com.vloxlands.ui.TextButton;
@@ -101,8 +100,5 @@ public class SceneSettings extends Scene
 			}
 		});
 		content.add(cl);
-		
-		InputField f = new InputField(Display.getWidth() / 2, Display.getHeight() / 2, 200);
-		content.add(f);
 	}
 }

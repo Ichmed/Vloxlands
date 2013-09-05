@@ -83,7 +83,7 @@ public class SceneGame extends Scene
 	}
 	
 	@Override
-	public void handleKeyboard(int key, boolean down)
+	public void handleKeyboard(int key, char chr, boolean down)
 	{
 		if (key == Keyboard.KEY_ESCAPE && down)
 		{

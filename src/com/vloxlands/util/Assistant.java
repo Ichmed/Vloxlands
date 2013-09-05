@@ -6,9 +6,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -62,6 +64,23 @@ public class Assistant
 		}
 		catch (Exception e)
 		{}
+	}
+	
+	public static String getURLContent(URL u)
+	{
+		String res = "", line = "";
+		try
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream()));
+			while ((line = br.readLine()) != null)
+				res += line;
+			br.close();
+		}
+		catch (IOException e)
+		{
+			return null;
+		}
+		return res;
 	}
 	
 	public static String getFileContent(File f)
