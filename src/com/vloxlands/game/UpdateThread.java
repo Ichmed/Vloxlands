@@ -5,10 +5,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.Vloxlands;
-import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.settings.Settings;
 import com.vloxlands.util.RenderAssistant;
 
 /**
@@ -36,31 +33,14 @@ public class UpdateThread extends Thread
 		{
 			if (requestStop) break;
 			
-			
 			if (Game.currentGame.scene != null && Game.currentGame.scene.initialized) Game.currentGame.scene.onTick();
 			
 			while (Keyboard.isCreated() && Keyboard.next())
 			{
-				if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState())
-				{
-					CFG.FULLSCREEN = !CFG.FULLSCREEN;
-					Vloxlands.setFullscreen();
-					Game.currentGame.updateViewport();
-					Settings.saveSettings();
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState())
-				{
-					Game.currentGame.frames = 0;
-					CFG.SHOW_DEBUG = !CFG.SHOW_DEBUG;
-				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState()) Game.currentGame.fullscreenToggled = true;
+				if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) CFG.SHOW_DEBUG = !CFG.SHOW_DEBUG;
 				if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 				if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
-				if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) ChunkRenderer.renderChunks(Game.currentMap.islands.get(0));
-				if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState())
-				{
-					CFG.SHOW_WIREFRAME = !CFG.SHOW_WIREFRAME;
-					ChunkRenderer.renderChunks(Game.currentMap.islands.get(0));
-				}
 				if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 				{
 					CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;

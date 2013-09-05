@@ -127,16 +127,18 @@ public abstract class Scene
 	private ArrayList<IGuiElement> getSortedContent()
 	{
 		@SuppressWarnings("unchecked")
-		ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();
+		final ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();
+		if (sorted.size() == 0 || sorted.get(0) == null) return new ArrayList<>();
+		
 		Collections.sort(sorted, new Comparator<IGuiElement>()
-		{
+				{
 			
 			@Override
 			public int compare(IGuiElement o1, IGuiElement o2)
 			{
 				return o1.getZIndex() - o2.getZIndex();
 			}
-		});
+				});
 		
 		return sorted;
 	}

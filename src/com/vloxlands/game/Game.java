@@ -8,6 +8,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
@@ -18,6 +19,7 @@ import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.settings.Settings;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
@@ -43,6 +45,7 @@ public class Game
 	public int frames = 0;
 	
 	boolean sceneChanged = false;
+	boolean fullscreenToggled = false;
 	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
@@ -100,6 +103,20 @@ public class Game
 			// if (scene.initialized) scene.handleMouse();
 		}
 		
+		
+		if (fullscreenToggled)
+		{
+			CFG.FULLSCREEN = !CFG.FULLSCREEN;
+			Vloxlands.setFullscreen();
+			updateViewport();
+			Settings.saveSettings();
+			fullscreenToggled = false;
+		}
+		
+		
+		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		
+		Mouse.setGrabbed(mouseGrabbed);
 		// -- END -- //
 		
 		if (Game.mapGenerator != null && Game.mapGenerator.isDone())
@@ -160,8 +177,6 @@ public class Game
 		
 		if (currentMap != null) currentMap.render();
 		
-		Mouse.setGrabbed(mouseGrabbed);
-		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
 		
@@ -174,7 +189,6 @@ public class Game
 	{
 		scene.content.clear();
 		scene.init();
-		glViewport(0, 0, Display.getWidth(), Display.getHeight());
 	}
 	
 	public static void initGame()
