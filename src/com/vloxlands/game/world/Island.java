@@ -280,13 +280,13 @@ public class Island
 		return grassed;
 	}
 	
-	public byte getHighestVoxel(int x, int z)
+	public int getHighestVoxel(int x, int z)
 	{
 		for (int i = SIZE - 1; i > -1; i--)
 		{
-			if (voxels[x][i][z] != Voxel.get("AIR").getId()) return voxels[x][i][z];
+			if (voxels[x][i][z] != Voxel.get("AIR").getId()) return i;
 		}
 		
-		return Voxel.get("AIR").getId();
+		return -1;
 	}
 }

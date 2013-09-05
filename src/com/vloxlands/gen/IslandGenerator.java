@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.MathHelper;
 
 public class IslandGenerator extends Thread
@@ -22,9 +23,9 @@ public class IslandGenerator extends Thread
 	 */
 	public static final boolean OVR_R = false;
 	
-	
 	public static final float[] ISLAND_BEZIER = new float[] { 1, 0.6f, 0.3f, 1, 0.7f, 0.4f, 0, 0.5f };
-	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 0.5f, 0.5f, 0.5f, 0.5f, 0, 0 };
+	public static final float[] SPIKE_BEZIER = new float[] { 1, 1, 0.0f, 0.5f, 0.5f, 0.5f, 0, 0 };
+	public static final float[] TREE_BEZIER = new float[] { 1, 0, 1, 1, 0.5f, 0.7f, 0, 0 };
 	
 	public static final float MIN_VEIN_DISTANCE = 30;
 	public static final Voxel[] CRYSTALS = { Voxel.get("STRONG_CRYSTAL"), Voxel.get("MEDIUM_CRYSTAL"), Voxel.get("WEAK_CRYSTAL") };
@@ -64,6 +65,9 @@ public class IslandGenerator extends Thread
 		// Island m = mergeIslandData(L, R, OVR_L);
 		generateCrystals(L, Island.SIZE / 2);
 		L.grassify();
+		
+		generateTree(L, Island.SIZE / 2, Island.SIZE / 2);
+		
 		return L;
 	}
 	
@@ -303,7 +307,22 @@ public class IslandGenerator extends Thread
 		}
 	}
 	
-	private Island mergeIslandData(Island L, Island R, boolean rule)
+	private void generateTree(Island island, int x, int z)
+	{
+		int y = island.getHighestVoxel(x, z) + 1;
+		
+		if (y < 0) CFG.p("There is no free space in this column to generate a tree!");
+		
+		int height = (int) (Math.random() * 5 + 5);
+		for (int i = 0; i < height; i++)
+		{
+			island.setVoxel(x, y + i, z, Voxel.get("LOG").getId());
+		}
+		
+		generateBezier(island, TREE_BEZIER, x, z, 5, (int) (y + height * 1.5f), (int) (height * 1.4f), new byte[] { Voxel.get("LEAVES").getId() }, false);
+	}
+	
+	public Island mergeIslandData(Island L, Island R, boolean rule)
 	{
 		Island island = rule ? L.clone() : R.clone();
 		
