@@ -310,7 +310,7 @@ public class RenderAssistant
 			glColor4f(1, 1, 1, 1);
 			
 			bindTexture("/graphics/textures/ui/gui.png");
-			RenderAssistant.renderOutline(x, y, width, height, true);
+			RenderAssistant.renderOutline(x, y, width, height, doubled);
 			glDisable(GL_BLEND);
 		}
 		glPopMatrix();

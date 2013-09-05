@@ -68,7 +68,7 @@ public class SceneLogo extends Scene
 		alpha += 0.05f;
 		if (!update)
 		{
-			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneMainMenu());
+			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneLogin());
 		}
 		else
 		{

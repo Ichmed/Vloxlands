@@ -41,10 +41,10 @@ public class UpdateThread extends Thread
 				
 				while (Keyboard.isCreated() && Keyboard.next())
 				{
+					if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState()) Game.currentGame.fullscreenToggled = true;
+					if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) CFG.SHOW_DEBUG = !CFG.SHOW_DEBUG;
 					if (Game.currentMap != null)
 					{
-						if (Keyboard.getEventKey() == Keyboard.KEY_F11 && !Keyboard.getEventKeyState()) Game.currentGame.fullscreenToggled = true;
-						if (Keyboard.getEventKey() == Keyboard.KEY_F4 && !Keyboard.getEventKeyState()) CFG.SHOW_DEBUG = !CFG.SHOW_DEBUG;
 						if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 						if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
 						if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) Game.currentGame.rerender = true;

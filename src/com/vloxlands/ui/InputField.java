@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Font;
 
 import org.lwjgl.input.Keyboard;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -16,7 +17,8 @@ public class InputField extends ClickableGui
 {
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 30f);
 	boolean focused;
-	String text, hint;
+	boolean hidden;
+	String text, hint, hiddenShowText;
 	
 	public InputField(int x, int y, int width)
 	{
@@ -30,12 +32,19 @@ public class InputField extends ClickableGui
 	
 	public InputField(int x, int y, int width, String text, String hint)
 	{
-		this.x = x - width / 2;
+		this.x = x;
 		this.y = y;
 		this.width = width;
 		height = 35;
 		this.text = text;
 		this.hint = hint;
+		hidden = false;
+		hiddenShowText = "";
+	}
+	
+	public void setHidden(boolean hidden)
+	{
+		this.hidden = hidden;
 	}
 	
 	@Override
@@ -48,7 +57,13 @@ public class InputField extends ClickableGui
 			RenderAssistant.renderText(x + 15, y + 13, hint, font);
 		}
 		glColor3f(1, 1, 1);
-		RenderAssistant.renderText(x + 15, y + 13, text, font);
+		RenderAssistant.renderText(x + 15, y + 13, hidden ? hiddenShowText : text, font);
+		if (focused)
+		{
+			TextureImpl.bindNone();
+			glColor3f(1, 1, 1);
+			RenderAssistant.renderRect(x + 15 + FontAssistant.getFont(font).getWidth(hidden ? hiddenShowText : text), y + 13, 3, height - 5);
+		}
 	}
 	
 	@Override
@@ -63,9 +78,17 @@ public class InputField extends ClickableGui
 		if (!down || !focused) return;
 		if (Keyboard.getKeyName(key).equals("BACK"))
 		{
-			if (text.length() > 0) text = text.substring(0, text.length() - 1);
+			if (text.length() > 0)
+			{
+				text = text.substring(0, text.length() - 1);
+				if (hidden) hiddenShowText = hiddenShowText.substring(0, hiddenShowText.length() - 1);
+			}
 		}
-		else if (font.canDisplay(chr)) text += chr;
+		else if (font.canDisplay(chr) && FontAssistant.getFont(font).getWidth((hidden ? hiddenShowText + "*" : text + chr)) < width - 10)
+		{
+			text += chr;
+			if (hidden) hiddenShowText += "*";
+		}
 	}
 	
 	@Override
