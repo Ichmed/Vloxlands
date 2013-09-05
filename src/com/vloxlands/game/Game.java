@@ -74,7 +74,6 @@ public class Game
 		
 		// -- BEGIN: update stuff that needs the GL Context -- //
 		
-		moveCamera();
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		viewFrustum.calculateViewFrustum(camera.getPosition(), camera.getRotation(), up, zNear, zFar);
 		

@@ -31,9 +31,13 @@ public class UpdateThread extends Thread
 	{
 		try
 		{
-			while (Display.isCreated() && !Display.isCloseRequested() && Mouse.isCreated())
+			while (!Display.isCloseRequested())
 			{
 				if (requestStop) break;
+				
+				if (!Display.isCreated() || !Mouse.isCreated() || !Keyboard.isCreated()) break;
+				
+				Game.currentGame.moveCamera();
 				
 				if (Game.currentGame.scene != null && Game.currentGame.scene.initialized) Game.currentGame.scene.onTick();
 				
@@ -92,10 +96,8 @@ public class UpdateThread extends Thread
 				}
 			}
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		catch (IllegalStateException e)
+		{}
 	}
 	
 	public int getTicksPS()
