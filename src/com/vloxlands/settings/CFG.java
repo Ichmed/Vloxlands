@@ -16,6 +16,8 @@ public class CFG
 	public static boolean INTERNET;
 	
 	// -- settings -- //
+	public static final int SERVER_PORT = 1551;
+	
 	public static int FOV = 30;
 	public static int FPS = 60;
 	public static boolean LIGHTING = false;

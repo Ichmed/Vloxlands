@@ -21,6 +21,8 @@ import de.dakror.universion.UniVersion;
 
 public class Vloxlands
 {
+	public static boolean running;
+	
 	public static void main(String[] args)
 	{
 		CFG.INTERNET = Assistant.isInternetReachable();
@@ -51,6 +53,7 @@ public class Vloxlands
 		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
 		try
 		{
+			running = true;
 			setFullscreen();
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
@@ -60,16 +63,20 @@ public class Vloxlands
 			
 			Game.initGame();
 			Game.currentGame.setScene(new SceneLogo());
-			
-			while (!Display.isCloseRequested())
+			while (running)
+			{
+				if (Display.isCloseRequested()) break;
+				
 				Game.currentGame.gameLoop();
-			
+			}
+			running = false;
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		Display.destroy();
+		exit();
 	}
 	
 	public static void setFullscreen()

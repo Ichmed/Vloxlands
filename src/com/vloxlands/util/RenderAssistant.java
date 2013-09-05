@@ -309,7 +309,7 @@ public class RenderAssistant
 			RenderAssistant.renderRect(x + 5, y + 5, width - 10, height - 10);
 			glColor4f(1, 1, 1, 1);
 			
-			glBindTexture(GL_TEXTURE_2D, RenderAssistant.textures.get("/graphics/textures/ui/gui.png").getTextureID());
+			bindTexture("/graphics/textures/ui/gui.png");
 			RenderAssistant.renderOutline(x, y, width, height, true);
 			glDisable(GL_BLEND);
 		}

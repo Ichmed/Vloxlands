@@ -1,10 +1,9 @@
 package com.vloxlands.game;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.Vloxlands;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.RenderAssistant;
 
@@ -31,12 +30,9 @@ public class UpdateThread extends Thread
 	{
 		try
 		{
-			while (!Display.isCloseRequested())
+			while (Vloxlands.running)
 			{
 				if (requestStop) break;
-				
-				if (!Display.isCreated() || !Mouse.isCreated() || !Keyboard.isCreated()) break;
-				
 				Game.currentGame.moveCamera();
 				
 				if (Game.currentGame.scene != null && Game.currentGame.scene.initialized) Game.currentGame.scene.onTick();

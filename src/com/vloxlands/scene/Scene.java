@@ -99,7 +99,12 @@ public abstract class Scene
 	}
 	
 	public void handleKeyboard(int key, boolean down)
-	{}
+	{
+		for (IGuiElement iG : content)
+		{
+			iG.handleKeyboard(key, down);
+		}
+	}
 	
 	// not abstract so that implementing won't be forced
 	public boolean handleMouseGUI(int posX, int posY, int flag)
@@ -131,14 +136,14 @@ public abstract class Scene
 		if (sorted.size() == 0 || sorted.get(0) == null) return new ArrayList<>();
 		
 		Collections.sort(sorted, new Comparator<IGuiElement>()
-				{
+		{
 			
 			@Override
 			public int compare(IGuiElement o1, IGuiElement o2)
 			{
 				return o1.getZIndex() - o2.getZIndex();
 			}
-				});
+		});
 		
 		return sorted;
 	}

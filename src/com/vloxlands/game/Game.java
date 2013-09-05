@@ -14,6 +14,8 @@ import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.net.Client;
+import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -29,6 +31,8 @@ import de.dakror.universion.UniVersion;
 
 public class Game
 {
+	public static Server server;
+	public static Client client;
 	public static Game currentGame;
 	public static Map currentMap;
 	public ViewFrustum viewFrustum = new ViewFrustum();
@@ -207,6 +211,9 @@ public class Game
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.resetCamera();
+		
+		client = new Client("localhost");
+		client.start();
 		
 		new UpdateThread();
 	}
