@@ -23,7 +23,7 @@ public class SceneMainMenu extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 80, Tr._("title.newGame"));
+		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 70, Tr._("title.play"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -34,7 +34,7 @@ public class SceneMainMenu extends Scene
 		});
 		content.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 20, Tr._("title.settings"));
+		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2, Tr._("title.settings"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -45,7 +45,7 @@ public class SceneMainMenu extends Scene
 		});
 		content.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 120, Tr._("title.quitGame"));
+		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 70, Tr._("title.quitGame"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -56,6 +56,6 @@ public class SceneMainMenu extends Scene
 		});
 		content.add(b);
 		
-		content.add(new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 50, Display.getHeight() / 2 - 120, TextButton.WIDTH + 100, 100 + 60 + TextButton.HEIGHT * 3, false));
+		content.add(new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3, true));
 	}
 }
