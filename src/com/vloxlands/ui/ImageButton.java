@@ -14,7 +14,8 @@ public class ImageButton extends ClickableGui
 {
 	public boolean stackTexture;
 	public int texW, texH;
-	public Vector3f diabledColor, activeColor, hoverColor;
+	int flag;
+	public Vector3f disabledColor, activeColor, hoverColor;
 	
 	public ImageButton(int x, int y, int width, int height)
 	{
@@ -24,11 +25,13 @@ public class ImageButton extends ClickableGui
 		this.height = height;
 		texW = 0;
 		texH = 0;
+		disabledColor = activeColor = hoverColor = new Vector3f(1, 1, 1);
 	}
 	
 	@Override
 	public void render()
 	{
+		if (!enabled) glColor3f(disabledColor.x, disabledColor.y, disabledColor.z);
 		glEnable(GL_BLEND);
 		RenderAssistant.bindTexture(texture);
 		if (!stackTexture) RenderAssistant.renderRect(x, y, width, height);
@@ -44,6 +47,7 @@ public class ImageButton extends ClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
+		this.flag = flag;
 		if (flag == 2 && clickEvent != null) clickEvent.trigger();
 	}
 	

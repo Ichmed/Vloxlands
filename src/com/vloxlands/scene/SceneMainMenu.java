@@ -25,6 +25,7 @@ public class SceneMainMenu extends Scene
 	Container userZone;
 	
 	int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
+	int selectedZoneButton;
 	
 	@Override
 	public void init()
@@ -80,6 +81,7 @@ public class SceneMainMenu extends Scene
 		content.add(username);
 		userZone = new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 120, true);
 		defaultUserZoneHeight = userZoneWantedHeight = 120;
+		selectedZoneButton = -1;
 		content.add(userZone);
 		
 		ImageButton friendList = new ImageButton(115, 73, 32, 32);
@@ -89,9 +91,13 @@ public class SceneMainMenu extends Scene
 			@Override
 			public void trigger()
 			{
-				final int wanted = 300;
+				final int wanted = Display.getHeight() / 3 * 2;
 				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
-				else userZoneWantedHeight = wanted;
+				else
+				{
+					selectedZoneButton = 0;
+					userZoneWantedHeight = wanted;
+				}
 			}
 		});
 		content.add(friendList);
@@ -114,7 +120,13 @@ public class SceneMainMenu extends Scene
 		
 		RenderAssistant.renderLine(115, 10, 100, false, false);
 		RenderAssistant.renderLine(110, 65, userZoneWidth - 82, true, false);
-		if (userZone.getSize().y > defaultUserZoneHeight) RenderAssistant.renderLine(10, 103, userZoneWidth + 18, true, false);
-		
+		if (userZone.getSize().y > defaultUserZoneHeight)
+		{
+			if (selectedZoneButton > -1)
+			{
+				RenderAssistant.renderLine(10, 103, 105 + selectedZoneButton * 32, true, false);
+				RenderAssistant.renderLine(115 + (selectedZoneButton + 1) * 32, 103, userZoneWidth - (selectedZoneButton + 1) * 32 - 88, true, false);
+			}
+		}
 	}
 }
