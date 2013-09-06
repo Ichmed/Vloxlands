@@ -28,7 +28,6 @@ public class Dialog extends Scene
 	
 	String title;
 	String[] lines;
-	boolean modal;
 	public boolean centered;
 	TextButton[] buttons;
 	
@@ -37,10 +36,9 @@ public class Dialog extends Scene
 	public Font titleFont = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	public Font messageFont = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 30f);
 	
-	public Dialog(String title, String message, boolean modal, Action... buttons)
+	public Dialog(String title, String message, Action... buttons)
 	{
 		this.title = title;
-		this.modal = modal;
 		centered = true;
 		
 		width = TextButton.WIDTH * 2 + 20;
@@ -66,14 +64,12 @@ public class Dialog extends Scene
 	@Override
 	public void render()
 	{
-		if (modal)
-		{
-			glEnable(GL_BLEND);
-			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-			glColor4f(1, 1, 1, 1);
-		}
+		glEnable(GL_BLEND);
+		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
+		glColor4f(1, 1, 1, 1);
+		
 		RenderAssistant.bindTexture("/graphics/textures/ui/paper.png");
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

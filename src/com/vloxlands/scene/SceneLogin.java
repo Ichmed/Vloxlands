@@ -64,7 +64,7 @@ public class SceneLogin extends Scene
 			public void trigger()
 			{
 				if (NetworkAssistant.login(username.getText(), password.getText())) Game.currentGame.setScene(new SceneMainMenu());
-				else Game.currentGame.addScene(new Dialog(Tr._("error.login"), Tr._("desc.login.error"), true, new Action("OK", Dialog.CLOSE_EVENT)));
+				else Game.currentGame.addScene(new Dialog(Tr._("error.login"), Tr._("desc.login.error"), new Action("OK", Dialog.CLOSE_EVENT)));
 			}
 		});
 		login.setEnabled(false);
