@@ -76,6 +76,12 @@ public class InputField extends ClickableGui
 	public void handleKeyboard(int key, char chr, boolean down)
 	{
 		if (!down || !focused) return;
+		switch (Keyboard.getKeyName(key))
+		{
+			case "TAB":
+			case "RETURN":
+				return;
+		}
 		if (Keyboard.getKeyName(key).equals("BACK"))
 		{
 			if (text.length() > 0)
