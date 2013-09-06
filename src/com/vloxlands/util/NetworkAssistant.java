@@ -21,11 +21,11 @@ public class NetworkAssistant
 		}
 	}
 	
-	public static boolean login(String username, String password)
+	public static boolean login(String username, String md5password)
 	{
 		try
 		{
-			return Integer.parseInt(Assistant.getURLContent(new URL("http://dakror.de/vloxlands/api/login.php?username=" + username + "&password=" + Assistant.MD5(password.getBytes()) + "&ip=" + getClientIP()))) == 1;
+			return Integer.parseInt(Assistant.getURLContent(new URL("http://dakror.de/vloxlands/api/login.php?username=" + username + "&password=" + md5password + "&ip=" + getClientIP()))) == 1;
 		}
 		catch (Exception e)
 		{

@@ -16,6 +16,7 @@ title.password;Password;Passwort
 lang.unlimited;Unlimited;Unbegrenzt
 lang.islands;Islands;Inseln
 settings.language;Language;Sprache
+settings.rememberuser;Remember login;Anmeldung speichern
 settings.fov;Field of View;Sichtfeld
 settings.fps;FPS Cap;FPS Begrenzung
 desc.login;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.

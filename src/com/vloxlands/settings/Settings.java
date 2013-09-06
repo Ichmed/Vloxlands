@@ -17,6 +17,8 @@ public class Settings
 			File file = new File(CFG.DIR, "settings.json");
 			JSONObject data = new JSONObject();
 			
+			data.put("username", (CFG.SAVE_USER) ? CFG.USERNAME : "");
+			data.put("password", (CFG.SAVE_USER) ? CFG.PASSWORD : "");
 			data.put("lang", Tr.activeLanguage);
 			data.put("fullscreen", CFG.FULLSCREEN);
 			data.put("fov", CFG.FOV);
@@ -47,6 +49,9 @@ public class Settings
 			CFG.FULLSCREEN = data.getBoolean("fullscreen");
 			CFG.FOV = data.getInt("fov");
 			CFG.FPS = data.getInt("fps");
+			CFG.USERNAME = data.getString("username");
+			CFG.PASSWORD = data.getString("password");
+			CFG.SAVE_USER = CFG.USERNAME.length() > 0;
 		}
 		catch (JSONException e)
 		{

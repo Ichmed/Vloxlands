@@ -57,7 +57,7 @@ public class Vloxlands
 			setFullscreen();
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
-			Display.setResizable(false);
+			Display.setResizable(true);
 			Display.create();
 			Game.initGLSettings();
 			

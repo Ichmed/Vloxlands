@@ -18,6 +18,13 @@ public class CFG
 	// -- settings -- //
 	public static final int SERVER_PORT = 1551;
 	
+	public static boolean SAVE_USER = false;
+	public static String USERNAME = "";
+	/**
+	 * already md5'd
+	 */
+	public static String PASSWORD = "";
+	
 	public static int FOV = 30;
 	public static int FPS = 60;
 	public static boolean LIGHTING = false;
