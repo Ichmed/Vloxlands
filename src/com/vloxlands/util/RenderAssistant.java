@@ -364,11 +364,12 @@ public class RenderAssistant
 		renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
 		
 		renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
-		// }
-		// else
-		// {
-		//
-		// }
+		if (!horizontal)
+		{
+			glTranslatef(x, y, 0);
+			glRotatef(-90, 0, 0, 1);
+			glTranslatef(-x, -y, 0);
+		}
 		glDisable(GL_BLEND);
 	}
 	
