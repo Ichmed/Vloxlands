@@ -87,6 +87,15 @@ public class ViewFrustum implements IRendering
 			glVertex3f(ftl.x, ftl.y, ftl.z);
 			glVertex3f(ntr.x, ntr.y, ntr.z);
 			
+			glVertex3f(nbr.x, nbr.y, nbr.z);
+			glVertex3f(nbl.x, nbl.y, nbl.z);
+			
+			glVertex3f(nbr.x, nbr.y, nbr.z);
+			glVertex3f(ntr.x, ntr.y, ntr.z);
+
+			glVertex3f(nbr.x, nbr.y, nbr.z);
+			glVertex3f(fbr.x, fbr.y, fbr.z);
+			
 		}
 		glEnd();
 		
