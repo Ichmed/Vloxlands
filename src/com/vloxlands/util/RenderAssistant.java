@@ -3,7 +3,6 @@ package com.vloxlands.util;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.glu.MipMap;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
@@ -59,18 +57,6 @@ public class RenderAssistant
 		else
 		{
 			Texture tex = tr.loadTexture();
-			
-			byte[] texbytes = tex.getTextureData();
-			int components = texbytes.length / (width*height);
-
-			ByteBuffer texdata = ByteBuffer.allocate(texbytes.length);
-			texdata.put(texbytes);
-			texdata.rewind();
-
-			MipMap.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, components, width, height, components==3 ? GL11.GL_RGB : GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE,texdata);
-
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			textureRegions.put(tr, tex);
 			tex.bind();
 		}
