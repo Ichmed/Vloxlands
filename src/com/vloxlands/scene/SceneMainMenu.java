@@ -10,6 +10,7 @@ import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
+import com.vloxlands.ui.ImageButton;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.FontAssistant;
@@ -18,6 +19,8 @@ import com.vloxlands.util.RenderAssistant;
 
 public class SceneMainMenu extends Scene
 {
+	int userZoneWidth;
+	
 	@Override
 	public void init()
 	{
@@ -68,9 +71,19 @@ public class SceneMainMenu extends Scene
 		user.setTexture("USER_LOGO");
 		content.add(user);
 		Label username = new Label(120, 10, 10, 30, CFG.USERNAME, false);
-		int width = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
+		userZoneWidth = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
 		content.add(username);
-		content.add(new Container(0, 0, (width > TextButton.WIDTH) ? width : TextButton.WIDTH, 120, true));
+		content.add(new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 120, true));
+		
+		ImageButton friendList = new ImageButton(115, 73, 32, 32);
+		friendList.setTexture("/graphics/textures/ui/FriendList.png");
+		friendList.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{}
+		});
+		content.add(friendList);
 	}
 	
 	@Override
@@ -79,6 +92,7 @@ public class SceneMainMenu extends Scene
 		super.render();
 		
 		RenderAssistant.renderLine(115, 10, 100, false, false);
+		RenderAssistant.renderLine(110, 65, userZoneWidth - 82, true, false);
 		
 	}
 }

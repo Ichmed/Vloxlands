@@ -359,7 +359,7 @@ public class RenderAssistant
 		}
 		renderRect(x, y, 15, height, c[0] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
 		
-		for (int i = 0; i < width / lineLength; i++)
+		for (int i = 0; i < (width - 15) / lineLength; i++)
 			renderRect(x + i * lineLength + 15, y, lineLength, height, m[0] / 1024f, m[1] / 1024f, lineLength / 1024f, height / 1024f);
 		renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
 		
