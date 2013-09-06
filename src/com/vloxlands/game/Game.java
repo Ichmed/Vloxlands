@@ -180,9 +180,7 @@ public class Game
 				}
 			}
 			catch (ConcurrentModificationException e)
-			{
-				CFG.p("conc2");
-			}
+			{}
 		}
 		glPopMatrix();
 		
@@ -256,6 +254,12 @@ public class Game
 	public void removeScene(Scene s)
 	{
 		sceneStack.remove(s);
+	}
+	
+	public void removeActiveScene()
+	{
+		if (sceneStack.size() == 0) return;
+		sceneStack.remove(sceneStack.size() - 1);
 	}
 	
 	public Scene getActiveScene()

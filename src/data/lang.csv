@@ -19,3 +19,5 @@ settings.language;Language;Sprache
 settings.fov;Field of View;Sichtfeld
 settings.fps;FPS Cap;FPS Begrenzung
 desc.login;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
+desc.login.error;Wrong Username or Password;Falscher Benutzername oder Passwort
+error.login;Login failed!;Anmeldung fehlgeschlagen!

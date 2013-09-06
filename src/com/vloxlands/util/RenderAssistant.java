@@ -318,6 +318,41 @@ public class RenderAssistant
 		glPopMatrix();
 	}
 	
+	public static void renderLine(int x, int y, int length, boolean horizontal, boolean doubled)
+	{
+		glEnable(GL_BLEND);
+		bindTexture("/graphics/textures/ui/gui.png");
+		
+		int height = (doubled) ? 17 : 12;
+		int width = length;
+		int lineLength = (doubled) ? 73 : 74;
+		if (!horizontal)
+		{
+			width = height;
+			height = length;
+		}
+		
+		// x1 y1 x2
+		// x3 y2 x4
+		int[] c = (doubled) ? new int[] { 849, 155, 897 } : new int[] { 845, 363, 887 };
+		
+		// x1 y1
+		// x2 y2
+		int[] m = (doubled) ? new int[] { 893, 189 } : new int[] { 899, 398 };
+		if (horizontal)
+		{
+			renderRect(x, y, 15, height, c[0] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
+			
+			for (int i = 0; i < width / lineLength; i++)
+				renderRect(x + i * lineLength + 15, y, lineLength, height, m[0] / 1024f, m[1] / 1024f, lineLength / 1024f, height / 1024f);
+			renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
+			
+			renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
+		}
+		
+		glDisable(GL_BLEND);
+	}
+	
 	public static String[] wrap(String raw, Font f, int width)
 	{
 		ArrayList<String> lines = new ArrayList<>();

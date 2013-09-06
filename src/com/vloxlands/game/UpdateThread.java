@@ -46,9 +46,7 @@ public class UpdateThread extends Thread
 					}
 				}
 				catch (ConcurrentModificationException e)
-				{
-					CFG.p("conc");
-				}
+				{}
 				
 				if (Game.currentGame.getActiveScene() != null)
 				{

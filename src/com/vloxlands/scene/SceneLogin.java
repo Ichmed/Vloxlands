@@ -6,9 +6,10 @@ import java.net.URL;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
@@ -62,10 +63,8 @@ public class SceneLogin extends Scene
 			@Override
 			public void trigger()
 			{
-				// login stuff
-				CFG.p(NetworkAssistant.login(username.getText(), password.getText()));
-				
-				Game.currentGame.setScene(new SceneMainMenu()); // temporary
+				if (NetworkAssistant.login(username.getText(), password.getText())) Game.currentGame.setScene(new SceneMainMenu());
+				else Game.currentGame.addScene(new Dialog(Tr._("error.login"), Tr._("desc.login.error"), true, new Action("OK", Dialog.CLOSE_EVENT)));
 			}
 		});
 		login.setEnabled(false);
