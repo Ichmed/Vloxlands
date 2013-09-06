@@ -109,7 +109,7 @@ public class SceneMainMenu extends Scene
 		super.onTick();
 		
 		float dif = userZoneWantedHeight - userZone.getSize().y;
-		if (Math.abs(dif) >= SPEED) userZone.setSize(new Vector2f(userZone.getSize().x, userZone.getSize().y + ((dif < 0) ? -1 : 1) * SPEED));
+		if (Math.abs(dif) >= Math.abs(dif) / SPEED) userZone.setSize(new Vector2f(userZone.getSize().x, userZone.getSize().y + dif / SPEED));
 		else if (Math.abs(dif) != 0) userZone.setSize(new Vector2f(userZone.getSize().x, userZoneWantedHeight));
 	}
 	
