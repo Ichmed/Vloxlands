@@ -7,11 +7,19 @@ import java.util.Comparator;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 
+import com.vloxlands.settings.CFG;
 import com.vloxlands.ui.ClickableGui;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiElement;
+import com.vloxlands.ui.IGuiEvent;
+import com.vloxlands.ui.ImageButton;
 import com.vloxlands.ui.Label;
+import com.vloxlands.ui.TextButton;
+import com.vloxlands.util.FontAssistant;
+import com.vloxlands.util.NetworkAssistant;
+import com.vloxlands.util.RenderAssistant;
 
 public abstract class Scene
 {
@@ -25,6 +33,17 @@ public abstract class Scene
 	
 	boolean uiActive = true, worldActive = true;
 	
+	// -- title -- //
+	boolean titled = false;
+	
+	// -- userZone -- //
+	final int SPEED = 10;
+	
+	Container userZone;
+	
+	int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
+	int selectedZoneButton;
+	
 	protected void setBackground()
 	{
 		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
@@ -36,17 +55,51 @@ public abstract class Scene
 		content.add(bg);
 	}
 	
+	protected void setUserZone()
+	{
+		NetworkAssistant.pullUserLogo();
+		
+		Label user = new Label(15, 15, 70, 70, "");
+		user.setZIndex(4);
+		user.setTexture("USER_LOGO");
+		content.add(user);
+		Label username = new Label(100, 10, 10, 30, CFG.USERNAME, false);
+		username.setZIndex(4);
+		userZoneWidth = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
+		content.add(username);
+		userZone = new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 100, true);
+		userZone.setZIndex(3);
+		defaultUserZoneHeight = userZoneWantedHeight = 100;
+		selectedZoneButton = -1;
+		content.add(userZone);
+		
+		ImageButton friendList = new ImageButton(95, 53, 32, 32);
+		friendList.setZIndex(4);
+		friendList.setTexture("/graphics/textures/ui/FriendList.png");
+		friendList.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				final int wanted = Display.getHeight() / 3 * 2;
+				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
+				else
+				{
+					selectedZoneButton = 0;
+					userZoneWantedHeight = wanted;
+				}
+			}
+		});
+		content.add(friendList);
+	}
+	
 	protected void setTitle(String title)
 	{
 		Label l = new Label(0, 0, Display.getWidth(), 60, title);
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		Container c = new Container(-15, 85, Display.getWidth() + 30, 1);
-		c.doubled = false;
-		c.filled = false;
-		c.setZIndex(1);
-		content.add(c);
+		titled = true;
 	}
 	
 	public void onTickContent()
@@ -63,11 +116,33 @@ public abstract class Scene
 	public void onTick()
 	{
 		onTickContent();
+		
+		if (userZone != null)
+		{
+			float dif = userZoneWantedHeight - userZone.getSize().y;
+			if (Math.abs(dif) >= Math.abs(dif) / SPEED) userZone.setSize(new Vector2f(userZone.getSize().x, userZone.getSize().y + dif / SPEED));
+			else if (Math.abs(dif) != 0) userZone.setSize(new Vector2f(userZone.getSize().x, userZoneWantedHeight));
+		}
 	}
 	
 	public void render()
 	{
 		renderContent();
+		
+		if (userZone != null)
+		{
+			RenderAssistant.renderLine(95, 10, 80, false, false);
+			RenderAssistant.renderLine(90, 45, userZoneWidth - 62, true, false);
+			if (userZone.getSize().y > defaultUserZoneHeight)
+			{
+				if (selectedZoneButton > -1)
+				{
+					RenderAssistant.renderLine(10, 83, 85 + selectedZoneButton * 32, true, false);
+					RenderAssistant.renderLine(95 + (selectedZoneButton + 1) * 32, 83, userZoneWidth - (selectedZoneButton + 1) * 32 - 68, true, false);
+				}
+			}
+		}
+		if (titled) RenderAssistant.renderLine((int) ((userZone != null) ? userZone.getPos().x + userZoneWidth + 30 : 0), 83, Display.getWidth(), true, true);
 	}
 	
 	public void renderContent()

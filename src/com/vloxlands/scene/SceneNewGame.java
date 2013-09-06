@@ -27,6 +27,8 @@ public class SceneNewGame extends Scene
 	{
 		setBackground();
 		
+		setUserZone();
+		
 		setTitle(Tr._("title.newGame"));
 		
 		// content.add(new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220));

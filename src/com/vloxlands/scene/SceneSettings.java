@@ -23,6 +23,7 @@ public class SceneSettings extends Scene
 	public void init()
 	{
 		setBackground();
+		setUserZone();
 		setTitle(Tr._("title.settings"));
 		
 		content.add(new Container(0, 115, Display.getWidth() / 2, Display.getHeight() - 220));
