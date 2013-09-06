@@ -36,40 +36,40 @@ public class Game
 {
 	public static Server server;
 	public static Client client;
-
+	
 	public static Game currentGame;
 	public static Map currentMap;
 	public ViewFrustum viewFrustum = new ViewFrustum();
-
+	
 	public float zNear = 0.01f, zFar = 10000;
 	Vector3f up = new Vector3f(0, 1, 0);
-
+	
 	public static MapGenerator mapGenerator;
-
+	
 	public Camera camera = new Camera();
-
+	
 	public boolean mouseGrabbed = false;
-
+	
 	long start = 0;
 	public int frames = 0;
-
+	
 	boolean fullscreenToggled = false;
 	boolean rerender = false;
 	boolean regenerate = false;
-
+	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
-
+	
 	ArrayList<Scene> sceneStack = new ArrayList<>();
-
+	
 	public float cameraSpeed = 0.3f;
 	public int cameraRotationSpeed = 180;
 	Vector3f lightPos = new Vector3f();
 	Vector3f directionalArrowsPos = new Vector3f();
-
+	
 	public void gameLoop()
 	{
 		if (start == 0) start = System.currentTimeMillis();
-
+		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
@@ -78,26 +78,26 @@ public class Game
 		ShaderLoader.useProgram("/graphics/shaders/", "default");
 		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
-
+		
 		// -- BEGIN: update stuff that needs the GL Context -- //
-
+		
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
-
+		
 		// CFG.p("u: " + u);
-
+		
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
-
+		
 		if (mapGenerator != null && mapGenerator.isDone())
 		{
 			mapGenerator.map.initMap();
 			currentMap = mapGenerator.map;
 			mapGenerator = null;
 		}
-
+		
 		if (fullscreenToggled)
 		{
 			CFG.FULLSCREEN = !CFG.FULLSCREEN;
@@ -106,17 +106,17 @@ public class Game
 			Settings.saveSettings();
 			fullscreenToggled = false;
 		}
-
+		
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
-
+		
 		Mouse.setGrabbed(mouseGrabbed);
-
+		
 		if (rerender)
 		{
 			if (currentMap != null && currentMap.islands.size() > 0) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			rerender = false;
 		}
-
+		
 		this.viewFrustum.render();
 		
 		if (regenerate)
@@ -126,29 +126,29 @@ public class Game
 				Game.mapGenerator = new MapGenerator(1, 1, 20, 24);
 				Game.mapGenerator.start();
 			}
-
+			
 			regenerate = false;
 		}
 		// -- END -- //
-
+		
 		if (Game.mapGenerator != null && Game.mapGenerator.isDone())
 		{
 			Game.mapGenerator.map.initMap();
 			Game.currentMap = Game.mapGenerator.map;
 			Game.mapGenerator = null;
 		}
-
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
-
+		
 		if (currentMap != null)
 		{
 			glPushMatrix();
 			{
 				currentMap.render();
-
+				
 				glPointSize(10);
 				glBegin(GL_POINTS);
 				{
@@ -156,13 +156,13 @@ public class Game
 				}
 				glEnd();
 				
-//				this.viewFrustum.render();
+				// this.viewFrustum.render();
 			}
 			glPopMatrix();
 		}
-
+		
 		RenderAssistant.set2DRenderMode(true);
-
+		
 		glPushMatrix();
 		{
 			try
@@ -176,34 +176,34 @@ public class Game
 					}
 					s.render();
 				}
-			} catch (ConcurrentModificationException e)
-			{
 			}
+			catch (ConcurrentModificationException e)
+			{}
 		}
 		glPopMatrix();
-
+		
 		glColor4f(1, 1, 1, 1);
 		if (CFG.SHOW_DEBUG)
 		{
 			RenderAssistant.renderText(0, 0, "FPS: " + getFPS(), FontAssistant.GAMEFONT.deriveFont(30f));
 			RenderAssistant.renderText(0, 30, "Ticks: " + UpdateThread.currentUpdateThread.getTicksPS(), FontAssistant.GAMEFONT.deriveFont(30f));
-
+			
 			glColor4f(0.8f, 0.8f, 0.8f, 1);
 			RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));
 			glColor4f(1, 1, 1, 1);
 		}
 		RenderAssistant.set2DRenderMode(false);
-
+		
 		if (currentMap != null) currentMap.render();
-
+		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
-
+		
 		if (CFG.FPS <= 120) Display.sync(CFG.FPS);
-
+		
 		frames++;
 	}
-
+	
 	public void updateViewport()
 	{
 		for (Scene scene : sceneStack)
@@ -212,84 +212,84 @@ public class Game
 			scene.init();
 		}
 	}
-
+	
 	public static void initGame()
 	{
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.resetCamera();
-
+		
 		client = new Client("localhost");
 		client.start();
-
+		
 		new UpdateThread();
 	}
-
+	
 	public void resetCamera()
 	{
 		camera.setPosition(128.5f, 130, 128.5f);
 		camera.setRotation(30, 135, 0);
 	}
-
+	
 	public void addScene(Scene s, int index)
 	{
 		sceneStack.add(index, s);
 	}
-
+	
 	public void setSceneIndex(Scene s, int index)
 	{
 		sceneStack.remove(s);
 		addScene(s, index);
 	}
-
+	
 	public void setScene(Scene s)
 	{
 		sceneStack.clear();
 		addScene(s);
 	}
-
+	
 	public void removeScene(Scene s)
 	{
 		sceneStack.remove(s);
 	}
-
+	
 	public void removeActiveScene()
 	{
 		if (sceneStack.size() == 0) return;
 		sceneStack.remove(sceneStack.size() - 1);
 	}
-
+	
 	public Scene getActiveScene()
 	{
 		if (sceneStack.size() == 0) return null;
 		return sceneStack.get(sceneStack.size() - 1);
 	}
-
+	
 	public void addScene(Scene s)
 	{
 		addScene(s, sceneStack.size());
 	}
-
+	
 	public int getFPS()
 	{
 		return Math.round(frames / ((System.currentTimeMillis() - start) / 1000f));
 	}
-
+	
 	public static void initGLSettings()
 	{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_DEPTH_TEST);
-
+		
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_POINT_SMOOTH);
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 		glEnable(GL_LINE_SMOOTH);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
+		
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
 		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1f }));
@@ -297,17 +297,17 @@ public class Game
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
-
+		
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
 		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
-
+		
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
+		
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	}
-
+	
 	public void moveCamera()
 	{
 		if (Keyboard.isKeyDown(Keyboard.KEY_W))
@@ -335,28 +335,28 @@ public class Game
 			camera.move(0, -0.5f, 0);
 		}
 	}
-
+	
 	public void rotateCamera()
 	{
 		float x = (Mouse.getY() - Display.getHeight() / 2) / (float) Display.getHeight() * cameraRotationSpeed;
 		float y = (Mouse.getX() - Display.getWidth() / 2) / (float) Display.getWidth() * cameraRotationSpeed;
-
+		
 		if (Math.abs(camera.rotation.x - x) >= 90) x = 0;
-
+		
 		camera.rotate(-x, y, 0);
-
+		
 		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 	}
-
+	
 	public static Vector3f getNormalizedRotationVectorForSidewardMovement(Vector3f v)
 	{
 		double x = Math.sin(Math.toRadians(v.y));
 		double y = 0;
 		double z = Math.cos(Math.toRadians(v.y));
-
+		
 		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
-
+	
 	public void renderDirectionalArrows()
 	{
 		glPushMatrix();
@@ -370,25 +370,25 @@ public class Game
 				glVertex3d(2, 0, 0);
 			}
 			glEnd();
-
+			
 			glColor3d(0, 1, 0);
-
+			
 			glBegin(GL_LINES);
 			{
 				glVertex3d(0, 0, 0);
 				glVertex3d(0, 2, 0);
 			}
 			glEnd();
-
+			
 			glColor3d(0, 0, 1);
-
+			
 			glBegin(GL_LINES);
 			{
 				glVertex3d(0, 0, 0);
 				glVertex3d(0, 0, 2);
 			}
 			glEnd();
-
+			
 			glColor3d(1, 1, 1);
 			glLineWidth(1);
 		}

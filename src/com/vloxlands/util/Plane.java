@@ -23,7 +23,7 @@ public class Plane
 	{
 		this.d = -((this.normal.x * this.startingPoint.x) + (this.normal.y * this.startingPoint.y) + (this.normal.z * this.startingPoint.z));
 	}
-
+	
 	public Plane(Plane plane)
 	{
 		this(plane.normal, plane.startingPoint);
@@ -44,15 +44,15 @@ public class Plane
 		return new Vector3f(startingPoint.x, startingPoint.y, startingPoint.z);
 	}
 	
-//	public void setNormal(Vector3f newNormal)
-//	{
-//		normal = MathHelper.cloneVector(newNormal);
-//	}
-//	
-//	public void setStartingPoint(Vector3f newStartingPoint)
-//	{
-//		startingPoint = MathHelper.cloneVector(newStartingPoint);
-//	}
+	// public void setNormal(Vector3f newNormal)
+	// {
+	// normal = MathHelper.cloneVector(newNormal);
+	// }
+	//
+	// public void setStartingPoint(Vector3f newStartingPoint)
+	// {
+	// startingPoint = MathHelper.cloneVector(newStartingPoint);
+	// }
 	
 	public void negateNormal()
 	{
@@ -63,20 +63,21 @@ public class Plane
 	
 	public Vector3f getPoint(float x, float y)
 	{
-		return new Vector3f (x, y, (Vector3f.dot(normal, startingPoint) - normal.x * x - normal.y * y) / normal.z);
+		return new Vector3f(x, y, (Vector3f.dot(normal, startingPoint) - normal.x * x - normal.y * y) / normal.z);
 	}
 	
 	public void transformToHesseNormalForm()
 	{
-		normal.normalise ();
-		//last factor of the coordinate-form
-//		float lastFactor = Vector3f.dot(normal, (Vector3f) MathHelper.cloneVector(startingPoint).negate());
-//		if(lastFactor > 0)
-			normal.negate ();
+		normal.normalise();
+		// last factor of the coordinate-form
+		// float lastFactor = Vector3f.dot(normal, (Vector3f) MathHelper.cloneVector(startingPoint).negate());
+		// if(lastFactor > 0)
+		normal.negate();
 	}
 	
 	/**
 	 * calculates the distance between a point and a plane
+	 * 
 	 * @param point the point
 	 * @return the distance
 	 */
@@ -88,14 +89,14 @@ public class Plane
 	
 	/**
 	 * calculates the distance between a point and a plane
+	 * 
 	 * @param transformToHesseNormalFormFirst if this plane should be transformed
 	 * @param point the point
 	 * @return the distance
 	 */
 	public float calculateDistancePoint(boolean transformToHesseNormalFormFirst, Vector3f point)
 	{
-		if(transformToHesseNormalFormFirst)
-			this.transformToHesseNormalForm();
+		if (transformToHesseNormalFormFirst) this.transformToHesseNormalForm();
 		return (Vector3f.dot(this.normal, point) - Vector3f.dot(this.startingPoint, this.normal));
 	}
 	
@@ -107,6 +108,6 @@ public class Plane
 	
 	public double getSignedDistanceToPoint(Vector3f point)
 	{
-		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(normal.x + normal.y + normal.z);  
+		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(normal.x + normal.y + normal.z);
 	}
 }
