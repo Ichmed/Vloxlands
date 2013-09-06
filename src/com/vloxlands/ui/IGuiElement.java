@@ -4,7 +4,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.render.IRendering;
 
-public abstract class IGuiElement extends IRendering
+public abstract class IGuiElement implements IRendering
 {
 	protected int x, y, width, height, zIndex;
 	protected boolean visible;
