@@ -51,7 +51,6 @@ public class Chunk
 				return;
 			}
 		}
-		System.out.println("test");
 	}
 	
 	public void renderDisplayList(boolean opaque)
