@@ -3,6 +3,7 @@ package com.vloxlands.scene;
 import java.awt.Font;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
@@ -19,7 +20,11 @@ import com.vloxlands.util.RenderAssistant;
 
 public class SceneMainMenu extends Scene
 {
-	int userZoneWidth;
+	final int SPEED = 10;
+	
+	Container userZone;
+	
+	int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
 	
 	@Override
 	public void init()
@@ -73,7 +78,9 @@ public class SceneMainMenu extends Scene
 		Label username = new Label(120, 10, 10, 30, CFG.USERNAME, false);
 		userZoneWidth = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
 		content.add(username);
-		content.add(new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 120, true));
+		userZone = new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 120, true);
+		defaultUserZoneHeight = userZoneWantedHeight = 120;
+		content.add(userZone);
 		
 		ImageButton friendList = new ImageButton(115, 73, 32, 32);
 		friendList.setTexture("/graphics/textures/ui/FriendList.png");
@@ -81,9 +88,23 @@ public class SceneMainMenu extends Scene
 		{
 			@Override
 			public void trigger()
-			{}
+			{
+				final int wanted = 300;
+				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
+				else userZoneWantedHeight = wanted;
+			}
 		});
 		content.add(friendList);
+	}
+	
+	@Override
+	public void onTick()
+	{
+		super.onTick();
+		
+		float dif = userZoneWantedHeight - userZone.getSize().y;
+		if (Math.abs(dif) >= SPEED) userZone.setSize(new Vector2f(userZone.getSize().x, userZone.getSize().y + ((dif < 0) ? -1 : 1) * SPEED));
+		else if (Math.abs(dif) != 0) userZone.setSize(new Vector2f(userZone.getSize().x, userZoneWantedHeight));
 	}
 	
 	@Override
@@ -93,6 +114,7 @@ public class SceneMainMenu extends Scene
 		
 		RenderAssistant.renderLine(115, 10, 100, false, false);
 		RenderAssistant.renderLine(110, 65, userZoneWidth - 82, true, false);
+		if (userZone.getSize().y > defaultUserZoneHeight) RenderAssistant.renderLine(10, 103, userZoneWidth + 18, true, false);
 		
 	}
 }
