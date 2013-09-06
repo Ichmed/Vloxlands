@@ -46,7 +46,7 @@ public class SceneSettings extends Scene
 		content.add(fps);
 		
 		content.add(new Label(20, 298, 0, 25, Tr._("settings.rememberuser") + ":", false));
-		final Checkbox remember = new Checkbox(Display.getWidth() / 4, 300, CFG.SAVE_USER);
+		final Checkbox remember = new Checkbox(Display.getWidth() / 2 - 60, 300, CFG.SAVE_USER);
 		content.add(remember);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.back"));
