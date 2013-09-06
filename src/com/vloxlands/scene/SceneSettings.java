@@ -52,7 +52,7 @@ public class SceneSettings extends Scene
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.setScene(new SceneMainMenu());
+				Game.currentGame.removeScene(SceneSettings.this);
 			}
 		});
 		content.add(b);

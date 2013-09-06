@@ -22,6 +22,11 @@ public class Island
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	public Chunk[][][] chunks = new Chunk[SIZE / CHUNKSIZE][SIZE / CHUNKSIZE][SIZE / CHUNKSIZE];
 	
+	/**
+	 * Keeps track of which 'special' resources can be found on this particular Island
+	 */
+	boolean[] resources = new boolean[Voxel.VOXELS];
+	
 	Vector3f pos;
 	
 	public float weight, uplift, initBalance = 0;
@@ -44,6 +49,20 @@ public class Island
 				}
 			}
 		}
+		for (int i = 0; i < resources.length; i++)
+			resources[i] = false;
+		
+		setResourceAvailable(Voxel.get("AIR"), true);
+	}
+	
+	public void setResourceAvailable(Voxel v, boolean avail)
+	{
+		resources[v.getId() + 128] = avail;
+	}
+	
+	public boolean isResourceAvailable(Voxel v)
+	{
+		return resources[v.getId() + 128];
 	}
 	
 	@Override
@@ -140,7 +159,7 @@ public class Island
 	public void setVoxel(int x, int y, int z, byte id)
 	{
 		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return;
-		
+		setResourceAvailable(Voxel.getVoxelForId(id), true);
 		voxels[x][y][z] = id;
 	}
 	

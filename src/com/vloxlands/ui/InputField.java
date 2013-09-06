@@ -91,6 +91,11 @@ public class InputField extends ClickableGui
 		}
 	}
 	
+	public String getText()
+	{
+		return text;
+	}
+	
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{

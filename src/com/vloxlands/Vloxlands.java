@@ -62,7 +62,7 @@ public class Vloxlands
 			Game.initGLSettings();
 			
 			Game.initGame();
-			Game.currentGame.setScene(new SceneLogo());
+			Game.currentGame.addScene(new SceneLogo());
 			while (running)
 			{
 				if (Display.isCloseRequested()) break;

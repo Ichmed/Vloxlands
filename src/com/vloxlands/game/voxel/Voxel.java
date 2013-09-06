@@ -7,9 +7,11 @@ import com.vloxlands.util.CSVReader;
 
 public class Voxel
 {
+	public static final int VOXELS = 256;
+	
 	private static HashMap<String, Voxel> voxels = new HashMap<>();
 	
-	private static Voxel[] voxelList = new Voxel[256];
+	private static Voxel[] voxelList = new Voxel[VOXELS];
 	
 	private String name = "NA";
 	int textureIndex = 0;

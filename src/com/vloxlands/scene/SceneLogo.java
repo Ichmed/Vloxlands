@@ -68,13 +68,12 @@ public class SceneLogo extends Scene
 		alpha += 0.05f;
 		if (!update)
 		{
-			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneLogin());
+			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(CFG.INTERNET ? new SceneLogin() : new SceneMainMenu());
 		}
 		else
 		{
 			download.setValue(downloader.progress / (float) downloader.fullsize);
-			// download.title = Assistant.formatBinarySize(downloader.progress, 2) + " / " + Assistant.formatBinarySize(downloader.fullsize, 2) + " @ " + Assistant.formatBinarySize(downloader.speed, 2) + "/s"; // want that?
-			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new SceneMainMenu());
+			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(CFG.INTERNET ? new SceneLogin() : new SceneMainMenu());
 		}
 	}
 	

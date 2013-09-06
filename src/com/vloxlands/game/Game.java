@@ -3,6 +3,9 @@ package com.vloxlands.game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -33,6 +36,7 @@ public class Game
 {
 	public static Server server;
 	public static Client client;
+	
 	public static Game currentGame;
 	public static Map currentMap;
 	public ViewFrustum viewFrustum = new ViewFrustum();
@@ -49,14 +53,13 @@ public class Game
 	long start = 0;
 	public int frames = 0;
 	
-	boolean sceneChanged = false;
 	boolean fullscreenToggled = false;
 	boolean rerender = false;
 	boolean regenerate = false;
 	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
-	Scene scene;
+	ArrayList<Scene> sceneStack = new ArrayList<>();
 	
 	public float cameraSpeed = 0.3f;
 	public int cameraRotationSpeed = 180;
@@ -164,15 +167,21 @@ public class Game
 		
 		glPushMatrix();
 		{
-			if (scene != null)
+			try
 			{
-				if (sceneChanged)
+				for (Scene s : sceneStack)
 				{
-					scene.init();
-					scene.initialized = true;
-					sceneChanged = false;
+					if (!s.initialized)
+					{
+						s.init();
+						s.initialized = true;
+					}
+					s.render();
 				}
-				if (scene.initialized) scene.render();
+			}
+			catch (ConcurrentModificationException e)
+			{
+				CFG.p("conc2");
 			}
 		}
 		glPopMatrix();
@@ -201,8 +210,11 @@ public class Game
 	
 	public void updateViewport()
 	{
-		scene.content.clear();
-		scene.init();
+		for (Scene scene : sceneStack)
+		{
+			scene.content.clear();
+			scene.init();
+		}
 	}
 	
 	public static void initGame()
@@ -224,10 +236,37 @@ public class Game
 		camera.setRotation(30, 135, 0);
 	}
 	
+	public void addScene(Scene s, int index)
+	{
+		sceneStack.add(index, s);
+	}
+	
+	public void setSceneIndex(Scene s, int index)
+	{
+		sceneStack.remove(s);
+		addScene(s, index);
+	}
+	
 	public void setScene(Scene s)
 	{
-		scene = s;
-		sceneChanged = true;
+		sceneStack.clear();
+		addScene(s);
+	}
+	
+	public void removeScene(Scene s)
+	{
+		sceneStack.remove(s);
+	}
+	
+	public Scene getActiveScene()
+	{
+		if (sceneStack.size() == 0) return null;
+		return sceneStack.get(sceneStack.size() - 1);
+	}
+	
+	public void addScene(Scene s)
+	{
+		addScene(s, sceneStack.size());
 	}
 	
 	public int getFPS()

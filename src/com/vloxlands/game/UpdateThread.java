@@ -1,9 +1,12 @@
 package com.vloxlands.game;
 
+import java.util.ConcurrentModificationException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.Vloxlands;
+import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.RenderAssistant;
 
@@ -35,9 +38,22 @@ public class UpdateThread extends Thread
 				if (requestStop) break;
 				Game.currentGame.moveCamera();
 				
-				if (Game.currentGame.scene != null && Game.currentGame.scene.initialized) Game.currentGame.scene.onTick();
+				try
+				{
+					for (Scene scene : Game.currentGame.sceneStack)
+					{
+						if (scene.initialized) scene.onTick();
+					}
+				}
+				catch (ConcurrentModificationException e)
+				{
+					CFG.p("conc");
+				}
 				
-				
+				if (Game.currentGame.getActiveScene() != null)
+				{
+					Game.currentGame.getActiveScene().handleMouse();
+				}
 				
 				while (Keyboard.isCreated() && Keyboard.next())
 				{
@@ -55,7 +71,10 @@ public class UpdateThread extends Thread
 							Game.currentGame.directionalArrowsPos = new Vector3f(Game.currentGame.camera.getPosition());
 						}
 					}
-					if (Game.currentGame.scene != null) Game.currentGame.scene.handleKeyboard(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+					if (Game.currentGame.getActiveScene() != null)
+					{
+						Game.currentGame.getActiveScene().handleKeyboard(Keyboard.getEventKey(), Keyboard.getEventCharacter(), Keyboard.getEventKeyState());
+					}
 				}
 				
 				if (Game.currentMap != null)

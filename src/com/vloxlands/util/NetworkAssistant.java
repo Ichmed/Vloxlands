@@ -3,8 +3,6 @@ package com.vloxlands.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.vloxlands.settings.CFG;
-
 /**
  * @author Dakror
  */
@@ -27,12 +25,12 @@ public class NetworkAssistant
 	{
 		try
 		{
-			CFG.p(Assistant.getURLContent(new URL("http://dakror.de/vloxlands/api/login.php?username=" + username + "&password=" + password)));
+			return Integer.parseInt(Assistant.getURLContent(new URL("http://dakror.de/vloxlands/api/login.php?username=" + username + "&password=" + Assistant.MD5(password.getBytes()) + "&ip=" + getClientIP()))) == 1;
 		}
-		catch (MalformedURLException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
+			return false;
 		}
-		return false;
 	}
 }

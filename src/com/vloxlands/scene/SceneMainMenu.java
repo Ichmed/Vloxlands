@@ -29,7 +29,7 @@ public class SceneMainMenu extends Scene
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.setScene(new SceneNewGame());
+				Game.currentGame.addScene(new SceneNewGame());
 			}
 		});
 		content.add(b);
@@ -40,7 +40,7 @@ public class SceneMainMenu extends Scene
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.setScene(new SceneSettings());
+				Game.currentGame.addScene(new SceneSettings());
 			}
 		});
 		content.add(b);

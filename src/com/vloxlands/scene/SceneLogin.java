@@ -6,12 +6,14 @@ import java.net.URL;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
+import com.vloxlands.util.NetworkAssistant;
 
 /**
  * @author Dakror
@@ -19,6 +21,7 @@ import com.vloxlands.ui.TextButton;
 public class SceneLogin extends Scene
 {
 	InputField username, password;
+	TextButton login;
 	
 	@Override
 	public void init()
@@ -53,16 +56,26 @@ public class SceneLogin extends Scene
 		});
 		content.add(register);
 		
-		TextButton login = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() / 2 + 25, Tr._("title.login"));
+		login = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() / 2 + 25, Tr._("title.login"));
 		login.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
 				// login stuff
+				CFG.p(NetworkAssistant.login(username.getText(), password.getText()));
+				
 				Game.currentGame.setScene(new SceneMainMenu()); // temporary
 			}
 		});
+		login.setEnabled(false);
 		content.add(login);
+	}
+	
+	@Override
+	public void onTick()
+	{
+		super.onTick();
+		login.setEnabled(username.getText().length() > 0 && password.getText().length() > 0);
 	}
 }

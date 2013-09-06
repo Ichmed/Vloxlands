@@ -65,7 +65,6 @@ public class IslandGenerator extends Thread
 		// Island m = mergeIslandData(L, R, OVR_L);
 		generateCrystals(L, Island.SIZE / 2);
 		L.grassify();
-		
 		generateTree(L, Island.SIZE / 2, Island.SIZE / 2);
 		
 		return L;
@@ -316,7 +315,7 @@ public class IslandGenerator extends Thread
 		int height = (int) (Math.random() * 5 + 5);
 		for (int i = 0; i < height; i++)
 		{
-			island.setVoxel(x, y + i, z, Voxel.get("LOG").getId());
+			island.setVoxel(x, y + i, z, Voxel.get("WOOD").getId());
 		}
 		
 		generateBezier(island, TREE_BEZIER, x, z, 5, (int) (y + height * 1.5f), (int) (height * 1.4f), new byte[] { Voxel.get("LEAVES").getId() }, false);
