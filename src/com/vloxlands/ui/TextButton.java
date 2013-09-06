@@ -28,6 +28,12 @@ public class TextButton extends ClickableGui
 		texture = "/graphics/textures/ui/gui.png";
 	}
 	
+	public TextButton(int x, int y, Action action)
+	{
+		this(x, y, action.getText());
+		setClickEvent(action.getEvent());
+	}
+	
 	@Override
 	public void render()
 	{

@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
 
@@ -15,6 +16,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureImpl;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -314,5 +316,26 @@ public class RenderAssistant
 			glDisable(GL_BLEND);
 		}
 		glPopMatrix();
+	}
+	
+	public static String[] wrap(String raw, Font f, int width)
+	{
+		ArrayList<String> lines = new ArrayList<>();
+		TrueTypeFont ttf = FontAssistant.getFont(f);
+		String cpy = raw;
+		while (cpy.length() > 0)
+		{
+			int length = 0;
+			for (int i = 0; i < cpy.length(); i++)
+			{
+				int wdth = ttf.getWidth(cpy.substring(0, i));
+				if (wdth < width) length++;
+				else break;
+			}
+			String line = cpy.substring(0, length);
+			lines.add(line);
+			cpy = cpy.substring(length);
+		}
+		return lines.toArray(new String[] {});
 	}
 }
