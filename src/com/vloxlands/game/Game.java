@@ -81,14 +81,6 @@ public class Game
 
 		// -- BEGIN: update stuff that needs the GL Context -- //
 
-
-		// glRotated(camera.getRotation().x, 1f, 0f, 0f);
-		// glRotated(camera.getRotation().y, 0f, 1f, 0f);
-		// glRotated(camera.getRotation().z, 0f, 0f, 1f);
-		//
-		// glTranslated(-camera.getPosition().x, -camera.getPosition().y,
-		// -camera.getPosition().z);
-
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
@@ -97,7 +89,7 @@ public class Game
 
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
-		viewFrustum.calculateViewFrustum(camera.getPosition(), MathHelper.getNormalizedRotationVector(camera.rotation), CFG.FOV, up, zNear, zFar);
+		viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
 
 		if (mapGenerator != null && mapGenerator.isDone())
 		{
