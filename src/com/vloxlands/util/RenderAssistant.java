@@ -3,6 +3,8 @@ package com.vloxlands.util;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +34,6 @@ public class RenderAssistant
 	public static HashMap<String, Texture> textures = new HashMap<>();
 	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
 	private static HashMap<String, TextureAtlas> textureAtlases = new HashMap<>();
-	
 	private static HashMap<Integer, HashMap<String, Integer>> uniformPosition = new HashMap<>();
 	
 	// public static HashMap<String, Model> models = new HashMap<>();
@@ -258,6 +259,14 @@ public class RenderAssistant
 		ARBShaderObjects.glUniform3fARB(getUniformLocation(name), a, b, c);
 	}
 	
+	public static BufferedImage toBufferedImage(Image img)
+	{
+		BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		image.getGraphics().drawImage(img, 0, 0, null);
+		
+		return image;
+	}
+	
 	// -- 2D GUI Helper functions -- //
 	
 	public static void renderOutline(int x, int y, int width, int height, boolean doubled)
@@ -308,6 +317,8 @@ public class RenderAssistant
 			glEnable(GL_BLEND);
 			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
 			glBindTexture(GL_TEXTURE_2D, 0);
+			TextureImpl.unbind();
+			TextureImpl.bindNone();
 			RenderAssistant.renderRect(x + 5, y + 5, width - 10, height - 10);
 			glColor4f(1, 1, 1, 1);
 			
@@ -326,11 +337,11 @@ public class RenderAssistant
 		int height = (doubled) ? 17 : 12;
 		int width = length;
 		int lineLength = (doubled) ? 73 : 74;
-		if (!horizontal)
-		{
-			width = height;
-			height = length;
-		}
+		// if (!horizontal)
+		// {
+		// width = height;
+		// height = length;
+		// }
 		
 		// x1 y1 x2
 		// x3 y2 x4
@@ -339,17 +350,25 @@ public class RenderAssistant
 		// x1 y1
 		// x2 y2
 		int[] m = (doubled) ? new int[] { 893, 189 } : new int[] { 899, 398 };
-		if (horizontal)
-		{
-			renderRect(x, y, 15, height, c[0] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
-			
-			for (int i = 0; i < width / lineLength; i++)
-				renderRect(x + i * lineLength + 15, y, lineLength, height, m[0] / 1024f, m[1] / 1024f, lineLength / 1024f, height / 1024f);
-			renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
-			
-			renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
-		}
 		
+		if (!horizontal)
+		{
+			glTranslatef(x, y, 0);
+			glRotatef(90, 0, 0, 1);
+			glTranslatef(-x, -y, 0);
+		}
+		renderRect(x, y, 15, height, c[0] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
+		
+		for (int i = 0; i < width / lineLength; i++)
+			renderRect(x + i * lineLength + 15, y, lineLength, height, m[0] / 1024f, m[1] / 1024f, lineLength / 1024f, height / 1024f);
+		renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
+		
+		renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
+		// }
+		// else
+		// {
+		//
+		// }
 		glDisable(GL_BLEND);
 	}
 	

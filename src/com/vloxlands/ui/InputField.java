@@ -57,6 +57,7 @@ public class InputField extends ClickableGui
 			RenderAssistant.renderText(x + 15, y + 13, hint, font);
 		}
 		glColor3f(1, 1, 1);
+		if (!enabled) glColor3f(0.6f, 0.6f, 0.6f);
 		RenderAssistant.renderText(x + 15, y + 13, hidden ? hiddenShowText : text, font);
 		if (focused)
 		{

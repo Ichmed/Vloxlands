@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
@@ -12,6 +14,7 @@ public class Label extends IGuiElement
 	String title;
 	public boolean stackTexture;
 	boolean center;
+	public Vector3f color;
 	public int texW, texH;
 	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
@@ -33,6 +36,7 @@ public class Label extends IGuiElement
 		texH = 0;
 		texture = null;
 		this.center = center;
+		color = new Vector3f(1, 1, 1);
 	}
 	
 	@Override
@@ -53,7 +57,7 @@ public class Label extends IGuiElement
 		glDisable(GL_BLEND);
 		int tx = FontAssistant.getFont(font).getWidth(title);
 		int mx = width / 2 - tx / 2;
-		glColor3f(1, 1, 1);
+		glColor3f(color.x, color.y, color.z);
 		RenderAssistant.renderText(x + ((width > -1 && center) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, font);
 	}
 	

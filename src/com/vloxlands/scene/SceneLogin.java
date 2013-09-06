@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Desktop;
 import java.net.URL;
 
@@ -19,6 +21,7 @@ import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.Assistant;
 import com.vloxlands.util.NetworkAssistant;
+import com.vloxlands.util.RenderAssistant;
 
 /**
  * @author Dakror
@@ -32,16 +35,10 @@ public class SceneLogin extends Scene
 	@Override
 	public void init()
 	{
-		if (CFG.USERNAME.length() > 0)
-		{
-			if (NetworkAssistant.login(CFG.USERNAME, CFG.PASSWORD))
-			{
-				Game.currentGame.setScene(new SceneMainMenu());
-			}
-		}
-		
 		setBackground();
+		
 		setTitle(Tr._("title.login"));
+		
 		content.add(new Label(Display.getWidth() / 2 - 200, Display.getHeight() / 2 - 200, 400, 60, Tr._("desc.login")));
 		content.add(new Container(Display.getWidth() / 2 - TextButton.WIDTH - 10, Display.getHeight() / 2 - 100, TextButton.WIDTH * 2 + 20, 230, false, false));
 		
@@ -96,6 +93,33 @@ public class SceneLogin extends Scene
 		});
 		login.setEnabled(false);
 		content.add(login);
+		
+		if (CFG.USERNAME.length() > 0)
+		{
+			if (NetworkAssistant.login(CFG.USERNAME, CFG.PASSWORD))
+			{
+				lockScene();
+				Game.currentGame.setScene(new SceneMainMenu());
+			}
+		}
+	}
+	
+	@Override
+	public void render()
+	{
+		super.render();
+		
+		if (CFG.USERNAME.length() > 0)
+		{
+			glEnable(GL_BLEND);
+			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
+			glColor4f(1, 1, 1, 1);
+			
+			glDisable(GL_BLEND);
+			
+		}
 	}
 	
 	@Override

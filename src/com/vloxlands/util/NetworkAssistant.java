@@ -1,7 +1,15 @@
 package com.vloxlands.util;
 
+import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.imageio.ImageIO;
+
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.util.BufferedImageUtil;
+
+import com.vloxlands.settings.CFG;
 
 /**
  * @author Dakror
@@ -31,6 +39,20 @@ public class NetworkAssistant
 		{
 			e.printStackTrace();
 			return false;
+		}
+	}
+	
+	public static void pullUserLogo()
+	{
+		if (RenderAssistant.textures.containsKey("USER_LOGO")) return;
+		try
+		{
+			Texture t = BufferedImageUtil.getTexture("USER_LOGO", RenderAssistant.toBufferedImage(ImageIO.read(new URL("http://dakror.de/vloxlands/api/userlogo.php?user=" + CFG.USERNAME)).getScaledInstance(256, 256, BufferedImage.SCALE_SMOOTH)));
+			RenderAssistant.textures.put("USER_LOGO", t);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 }
