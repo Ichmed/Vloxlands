@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,6 +95,44 @@ public abstract class Scene
 			}
 		});
 		content.add(friendList);
+		
+		friendList = new ImageButton(95 + 32, 53, 32, 32);
+		friendList.setZIndex(4);
+		friendList.setTexture("/graphics/textures/ui/FriendList.png");
+		friendList.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				final int wanted = Display.getHeight() / 3;
+				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
+				else
+				{
+					selectedZoneButton = 1;
+					userZoneWantedHeight = wanted;
+				}
+			}
+		});
+		content.add(friendList);
+		
+		friendList = new ImageButton(95 + 64, 53, 32, 32);
+		friendList.setZIndex(4);
+		friendList.setTexture("/graphics/textures/ui/FriendList.png");
+		friendList.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				final int wanted = Display.getHeight() / 3 + 20;
+				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
+				else
+				{
+					selectedZoneButton = 2;
+					userZoneWantedHeight = wanted;
+				}
+			}
+		});
+		content.add(friendList);
 	}
 	
 	protected void setTitle(String title)
@@ -133,14 +173,28 @@ public abstract class Scene
 		
 		if (userZone != null)
 		{
-			RenderAssistant.renderLine(95, 10, 80, false, false);
+			RenderAssistant.renderLine(96, 10, 72, false, false);
 			RenderAssistant.renderLine(90, 45, userZoneWidth - 62, true, false);
+			glEnable(GL_BLEND);
+			RenderAssistant.renderRect(84, 38, 19, 26, 787 / 1024f, 409 / 1024f, 19 / 1024f, 26 / 1024f);
+			glDisable(GL_BLEND);
 			if (userZone.getSize().y > defaultUserZoneHeight)
 			{
 				if (selectedZoneButton > -1)
 				{
-					RenderAssistant.renderLine(10, 83, 85 + selectedZoneButton * 32, true, false);
+					RenderAssistant.renderLine(10, 83, 72, true, false);
+					
+					glEnable(GL_BLEND);
+					if (selectedZoneButton > 0)
+					{
+						RenderAssistant.renderLine(85, 83, 13 + selectedZoneButton * 32, true, false);
+						glEnable(GL_BLEND);
+						RenderAssistant.renderRect(77, 76, 26, 19, 780 / 1024f, 450 / 1024f, 26 / 1024f, 19 / 1024f);
+						glDisable(GL_BLEND);
+					}
+					else RenderAssistant.renderRect(77, 76, 19, 19, 982 / 1024f, 498 / 1024f, 19 / 1024f, 19 / 1024f);
 					RenderAssistant.renderLine(95 + (selectedZoneButton + 1) * 32, 83, userZoneWidth - (selectedZoneButton + 1) * 32 - 68, true, false);
+					glDisable(GL_BLEND);
 				}
 			}
 		}

@@ -354,8 +354,9 @@ public class RenderAssistant
 		if (!horizontal)
 		{
 			glTranslatef(x, y, 0);
-			glRotatef(90, 0, 0, 1);
+			glRotatef(-90, 0, 0, 1);
 			glTranslatef(-x, -y, 0);
+			glTranslatef(-width, -height, 0);
 		}
 		renderRect(x, y, 15, height, c[0] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
 		
@@ -366,8 +367,9 @@ public class RenderAssistant
 		renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
 		if (!horizontal)
 		{
+			glTranslatef(width, height, 0);
 			glTranslatef(x, y, 0);
-			glRotatef(-90, 0, 0, 1);
+			glRotatef(90, 0, 0, 1);
 			glTranslatef(-x, -y, 0);
 		}
 		glDisable(GL_BLEND);
