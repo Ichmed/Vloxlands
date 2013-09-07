@@ -69,8 +69,8 @@ public abstract class Scene
 	
 	public void initUserZone()
 	{
-		NetworkAssistant.pullUserLogo(CFG.USERNAME);
-		
+		// NetworkAssistant.pullUserLogo(CFG.USERNAME);
+		/* new URL("http://dakror.de/vloxlands/api/userlogo.php?user=" + name) */
 		collapse = false;
 		user = new Label(15, 15, 70, 70, "");
 		user.setZIndex(4);
@@ -113,13 +113,46 @@ public abstract class Scene
 								@Override
 								public void trigger()
 								{
+									if (input.getText().length() == 0)
+									{
+										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searchemtpy") + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										return;
+									}
 									if (input.getText().equals(CFG.USERNAME))
 									{
 										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searchself"), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 										return;
 									}
-									JSONObject data = NetworkAssistant.searchFriend(input.getText());
-									if (data.length() == 0) Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searcherror").replace("%name%", input.getText()) + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+									try
+									{
+										JSONObject data = NetworkAssistant.searchFriend(input.getText());
+										if (data.length() == 0) Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searcherror").replace("%name%", input.getText()) + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										else if (data.length() == 1) Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searchexists").replace("%name%", input.getText()) + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										else
+										{
+											String response = NetworkAssistant.addFriend(data.getInt("ID"));
+											switch (response)
+											{
+												case "1":
+												{
+													break;
+												}
+												case "-1":
+												{
+													Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searchexists").replace("%name%", input.getText()) + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+													break;
+												}
+												case "0":
+												default:
+													Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("errno") + " " + ((response.length() > 1) ? response : ""), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+													break;
+											}
+										}
+									}
+									catch (Exception e)
+									{
+										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("errno") + " " + e.getClass().getName() + ": " + e.getMessage(), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+									}
 								}
 							}));
 							input.setWidth(addDialog.getWidth() - 50);
@@ -171,16 +204,16 @@ public abstract class Scene
 	
 	protected void setUserZone()
 	{
-		if (!CFG.INTERNET) return;
-		
-		if (user == null) initUserZone();
-		
-		showUserZone = true;
-		content.add(user);
-		content.add(username);
-		content.add(userZone);
-		content.add(friendList);
-		content.add(logout);
+		// if (!CFG.INTERNET) return;
+		//
+		// if (user == null) initUserZone();
+		//
+		// showUserZone = true;
+		// content.add(user);
+		// content.add(username);
+		// content.add(userZone);
+		// content.add(friendList);
+		// content.add(logout);
 	}
 	
 	protected void setTitle(String title)

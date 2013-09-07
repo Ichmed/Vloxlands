@@ -30,7 +30,10 @@ fov;Field of View;Sichtfeld
 fps;FPS Cap;FPS Begrenzung
 logindesc;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
 loginerror;Wrong Username or Password;Falscher Benutzername oder Passwort
-searcherror;No user having the name "%name%" could be found;Es konnte kein Benutzer mit dem Name "%name%" gefunden werden
+searchemtpy;Please enter an username;Bitte gib einen Benutzernamen an
+searcherror;No user having the name "%name%" could be found;Es konnte kein Benutzer mit dem Namen "%name%" gefunden werden
 searchself;Don't you have friends, or why are you trying to add yourself as a friend?;Hast du keine Freunde, oder warum versuchst du, dich selbst als Freund hinzuzufuegen?
+searchexists;"%name%" is already a friend of yours;"%name%" ist bereits dein Freund
 logout;Logout;Abmelden
+errno;An error has occurred!;Ein Fehler ist aufgetreten!
 logoutquestion;Do you really want to logout?;Willst du dich wirklich abmelden?

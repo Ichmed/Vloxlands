@@ -19,6 +19,7 @@ import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Client;
 import com.vloxlands.net.Server;
+import com.vloxlands.net.User;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -36,6 +37,7 @@ public class Game
 {
 	public static Server server;
 	public static Client client;
+	public static User user;
 	
 	public static Game currentGame;
 	public static Map currentMap;

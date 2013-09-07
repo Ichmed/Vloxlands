@@ -74,8 +74,8 @@ public class Server extends Thread
 			{
 				Packet00Connect packet = new Packet00Connect(data);
 				CFG.p("[" + address.getHostAddress() + ":" + port + "]: " + packet.getUsername() + " has connected.");
-				PlayerMP playerMP = new PlayerMP(address, port, packet.getUsername());
-				connectedPlayers.add(playerMP);
+				// TODO PlayerMP playerMP = new PlayerMP(address, port, packet.getUsername());
+				// connectedPlayers.add(playerMP);
 				break;
 			}
 			case DISCONNECT:
