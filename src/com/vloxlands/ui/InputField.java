@@ -16,9 +16,9 @@ import com.vloxlands.util.RenderAssistant;
 public class InputField extends ClickableGui
 {
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 30f);
-	boolean focused;
 	boolean hidden;
 	String text, hint, hiddenShowText;
+	public static InputField currentInputfield;
 	
 	public InputField(int x, int y, int width)
 	{
@@ -59,7 +59,7 @@ public class InputField extends ClickableGui
 		glColor3f(1, 1, 1);
 		if (!enabled) glColor3f(0.6f, 0.6f, 0.6f);
 		RenderAssistant.renderText(x + 15, y + 13, hidden ? hiddenShowText : text, font);
-		if (focused)
+		if (isFocused())
 		{
 			TextureImpl.bindNone();
 			glColor3f(1, 1, 1);
@@ -68,15 +68,9 @@ public class InputField extends ClickableGui
 	}
 	
 	@Override
-	public void onTick()
-	{
-		focused = false;
-	}
-	
-	@Override
 	public void handleKeyboard(int key, char chr, boolean down)
 	{
-		if (!down || !focused) return;
+		if (!down || !isFocused()) return;
 		switch (Keyboard.getKeyName(key))
 		{
 			case "TAB":
@@ -106,6 +100,23 @@ public class InputField extends ClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
-		focused = true;
+		if((flag & 1) != 0) currentInputfield = this;
+	}
+	
+	public boolean isFocused()
+	{
+		return currentInputfield == this;
+	}
+
+	@Override
+	public void resetElement()
+	{
+		super.resetElement();
+		currentInputfield = null;
+	}
+
+	@Override
+	public void onTick()
+	{		
 	}
 }

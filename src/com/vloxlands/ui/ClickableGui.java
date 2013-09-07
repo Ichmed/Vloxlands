@@ -33,4 +33,8 @@ public abstract class ClickableGui extends IGuiElement
 		
 		return this.x + tX < x && this.x + width + tX >= x && this.y + tY < y && this.y + height + tY >= y;
 	}
+	
+	public void resetElement()
+	{
+	}
 }
