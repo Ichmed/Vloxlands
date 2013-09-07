@@ -108,6 +108,6 @@ public class Plane
 	
 	public double getSignedDistanceToPoint(Vector3f point)
 	{
-		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(normal.x + normal.y + normal.z);
+		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(Math.pow(normal.x, 2) + Math.pow(normal.y, 2) + Math.pow(normal.z, 2));
 	}
 }
