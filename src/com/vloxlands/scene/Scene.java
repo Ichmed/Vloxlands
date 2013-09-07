@@ -277,7 +277,7 @@ public abstract class Scene
 			}
 		}
 		
-		if (titled) RenderAssistant.renderLine((userZone != null) ? userZone.getX() + userZoneWidth + 30 : 0, 83, Display.getWidth(), true, true);
+		if (titled) RenderAssistant.renderLine((showUserZone) ? userZone.getX() + userZoneWidth + 30 : 0, 83, Display.getWidth(), true, true);
 	}
 	
 	public void renderContent()
