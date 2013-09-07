@@ -108,7 +108,7 @@ public abstract class Scene
 						public void trigger()
 						{
 							// add dialog
-							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3"), new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), Dialog.CLOSE_EVENT));
+							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), Dialog.CLOSE_EVENT));
 							Game.currentGame.addScene(addDialog);
 						}
 					}));

@@ -384,22 +384,27 @@ public class RenderAssistant
 	
 	public static String[] wrap(String raw, Font f, int width)
 	{
+		String[] words = raw.split(" ");
 		ArrayList<String> lines = new ArrayList<>();
+		int wordIndex = 0;
+		String line = "";
 		TrueTypeFont ttf = FontAssistant.getFont(f);
-		String cpy = raw;
-		while (cpy.length() > 0)
+		
+		while (wordIndex < words.length)
 		{
-			int length = 0;
-			for (int i = 0; i < cpy.length(); i++)
+			if (ttf.getWidth(line + " " + words[wordIndex]) <= width)
 			{
-				int wdth = ttf.getWidth(cpy.substring(0, i));
-				if (wdth < width) length++;
-				else break;
+				line += " " + words[wordIndex];
+				wordIndex++;
 			}
-			String line = cpy.substring(0, length);
-			lines.add(line);
-			cpy = cpy.substring(length);
+			else
+			{
+				
+				lines.add(line);
+				line = "";
+			}
 		}
+		lines.add(line);
 		return lines.toArray(new String[] {});
 	}
 }
