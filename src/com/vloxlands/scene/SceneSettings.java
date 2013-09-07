@@ -24,33 +24,33 @@ public class SceneSettings extends Scene
 	{
 		setBackground();
 		setUserZone();
-		setTitle(Tr._("title.settings"));
+		setTitle(Tr._("settings"));
 		
 		content.add(new Container(0, 115, Display.getWidth() / 2, Display.getHeight() - 220));
 		
-		content.add(new Label(20, 125, 0, 25, Tr._("settings.language") + ":", false));
+		content.add(new Label(20, 125, 0, 25, Tr._("language") + ":", false));
 		content.add(new FlagButton(Display.getWidth() / 4, 130, "de"));
 		content.add(new FlagButton(Display.getWidth() / 4 + FlagButton.SIZE, 130, "us"));
 		
-		content.add(new Label(20, 185, 0, 25, Tr._("settings.fov") + ":", false));
+		content.add(new Label(20, 185, 0, 25, Tr._("fov") + ":", false));
 		
 		final Slider fov = new Slider(Display.getWidth() / 4, 200, Display.getWidth() / 4 - 20, 30, 150, CFG.FOV, GuiRotation.HORIZONTAL);
 		fov.setIntegerMode(true);
 		
 		content.add(fov);
 		
-		content.add(new Label(20, 245, 0, 25, Tr._("settings.fps") + ":", false));
+		content.add(new Label(20, 245, 0, 25, Tr._("fps") + ":", false));
 		
 		final Slider fps = new Slider(Display.getWidth() / 4, 260, Display.getWidth() / 4 - 20, 30, 121, CFG.FPS, GuiRotation.HORIZONTAL);
-		fps.addCustomTitle(121, Tr._("lang.unlimited"));
+		fps.addCustomTitle(121, Tr._("unlimited"));
 		fps.setIntegerMode(true);
 		content.add(fps);
 		
-		content.add(new Label(20, 298, 0, 25, Tr._("settings.rememberuser") + ":", false));
+		content.add(new Label(20, 298, 0, 25, Tr._("rememberuser") + ":", false));
 		final Checkbox remember = new Checkbox(Display.getWidth() / 2 - 60, 300, CFG.SAVE_USER);
 		content.add(remember);
 		
-		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.back"));
+		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			
@@ -62,7 +62,7 @@ public class SceneSettings extends Scene
 		});
 		content.add(b);
 		
-		TextButton s = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("title.save"));
+		TextButton s = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("save"));
 		s.setClickEvent(new IGuiEvent()
 		{
 			

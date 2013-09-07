@@ -1,25 +1,29 @@
 Key;us;de
-title.newGame;New Game;Neues Spiel
-title.quitGame;Quit Game;Spiel beenden
-title.mainmenu;Main Menu;Hauptmenue
-title.settings;Settings;Optionen
-title.login;Login;Anmelden
-title.register;Register;Registrieren
-title.pause;Game Paused;Pausiert
-title.next;Next;Weiter
-title.back;Back;Zurueck
-title.save;Save;Speichern
-title.start;Start;Start
-title.play;Play;Spiel starten
-title.username;Username;Benutzername
-title.password;Password;Passwort
-title.addfriend;+ Friend;+ Freund
-lang.unlimited;Unlimited;Unbegrenzt
-lang.islands;Islands;Inseln
-settings.language;Language;Sprache
-settings.rememberuser;Remember login;Anmeldung speichern
-settings.fov;Field of View;Sichtfeld
-settings.fps;FPS Cap;FPS Begrenzung
-desc.login;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
-desc.login.error;Wrong Username or Password;Falscher Benutzername oder Passwort
-error.login;Login failed!;Anmeldung fehlgeschlagen!
+newGame;New Game;Neues Spiel
+quitGame;Quit Game;Spiel beenden
+mainmenu;Main Menu;Hauptmenue
+settings;Settings;Optionen
+login;Login;Anmelden
+register;Register;Registrieren
+pause;Game Paused;Pausiert
+abort;Abort;Abbrechen
+add;Add;Hinzufuegen
+next;Next;Weiter
+back;Back;Zurueck
+save;Save;Speichern
+start;Start;Start
+play;Play;Spiel starten
+username;Username;Benutzername
+password;Password;Passwort
+addfriend;+ Friend;+ Freund
+addfriend2;Add a Friend;Freund hinzufuegen
+addfriend3;You can add a Friend with his Username;Du kannst einen Freund mithilfe seines Benutzernamens hinzufuegen
+unlimited;Unlimited;Unbegrenzt
+islands;Islands;Inseln
+language;Language;Sprache
+rememberuser;Remember login;Anmeldung speichern
+fov;Field of View;Sichtfeld
+fps;FPS Cap;FPS Begrenzung
+logindesc;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
+loginerror;Wrong Username or Password;Falscher Benutzername oder Passwort
+loginerror2;Login failed!;Anmeldung fehlgeschlagen!

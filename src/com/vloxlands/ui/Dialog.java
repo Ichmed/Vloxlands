@@ -30,6 +30,7 @@ public class Dialog extends Scene
 	String[] lines;
 	public boolean centered;
 	TextButton[] buttons;
+	Container container;
 	
 	int width, height, x, y;
 	
@@ -51,14 +52,19 @@ public class Dialog extends Scene
 		
 		if (buttons.length > 2) throw new InvalidParameterException("Max button count is 2");
 		this.buttons = new TextButton[buttons.length];
-		if (buttons.length == 1)
+		if (buttons.length == 1) this.buttons[0] = new TextButton(x + width / 2, y + height - 20 - TextButton.HEIGHT, buttons[0]);
+		else
 		{
-			this.buttons[0] = new TextButton(x + width / 2, y + height - 20 - TextButton.HEIGHT, buttons[0]);
+			this.buttons[0] = new TextButton(x + width / 4 + 10, y + height - 20 - TextButton.HEIGHT, buttons[0]);
+			this.buttons[1] = new TextButton(x + width / 4 * 3 - 10, y + height - 20 - TextButton.HEIGHT, buttons[1]);
 		}
 		for (TextButton b : this.buttons)
 		{
 			content.add(b);
 		}
+		container = new Container(x, y, width, height);
+		container.border = false;
+		content.add(container);
 	}
 	
 	@Override
@@ -97,4 +103,9 @@ public class Dialog extends Scene
 	@Override
 	public void init()
 	{}
+	
+	public void addComponent(IGuiElement g)
+	{
+		container.add(g);
+	}
 }

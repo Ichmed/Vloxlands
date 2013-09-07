@@ -28,10 +28,10 @@ public class SceneGame extends Scene
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;
 		
-		Label l = new Label(0, 100, Display.getWidth(), 60, Tr._("title.pause"));
+		Label l = new Label(0, 100, Display.getWidth(), 60, Tr._("pause"));
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
-		TextButton mainmenu = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 65, Tr._("title.mainmenu"));
+		TextButton mainmenu = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 65, Tr._("mainmenu"));
 		mainmenu.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -43,7 +43,7 @@ public class SceneGame extends Scene
 		});
 		content.add(mainmenu);
 		
-		TextButton quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 10, Tr._("title.quitGame"));
+		TextButton quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 10, Tr._("quitGame"));
 		quit.setClickEvent(new IGuiEvent()
 		{
 			@Override

@@ -27,7 +27,7 @@ public class SceneMainMenu extends Scene
 		
 		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3, true);
 		
-		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("title.play"));
+		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("play"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -38,7 +38,7 @@ public class SceneMainMenu extends Scene
 		});
 		c.add(b);
 		
-		b = new TextButton(TextButton.WIDTH / 2 + 40, 120, Tr._("title.settings"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 120, Tr._("settings"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -49,7 +49,7 @@ public class SceneMainMenu extends Scene
 		});
 		c.add(b);
 		
-		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("title.quitGame"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("quitGame"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override

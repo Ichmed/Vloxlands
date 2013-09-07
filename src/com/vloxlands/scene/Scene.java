@@ -10,11 +10,13 @@ import java.util.Comparator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ClickableGui;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.ImageButton;
@@ -100,13 +102,14 @@ public abstract class Scene
 				else
 				{
 					userZoneContent.components.clear();
-					TextButton add = new TextButton(userZoneContent.getWidth() / 2, 0, new Action(Tr._("title.addfriend"), new IGuiEvent()
+					TextButton add = new TextButton(userZoneContent.getWidth() / 2, 0, new Action(Tr._("addfriend"), new IGuiEvent()
 					{
 						@Override
 						public void trigger()
 						{
 							// add dialog
-							CFG.p("clicked");
+							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3"), new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), Dialog.CLOSE_EVENT));
+							Game.currentGame.addScene(addDialog);
 						}
 					}));
 					add.setWidth(userZoneContent.getWidth() - 30);
@@ -211,11 +214,11 @@ public abstract class Scene
 						}
 					}
 					
-					
 					glDisable(GL_SCISSOR_TEST);
 				}
 			}
 		}
+		
 		if (titled) RenderAssistant.renderLine((userZone != null) ? userZone.getX() + userZoneWidth + 30 : 0, 83, Display.getWidth(), true, true);
 	}
 	
