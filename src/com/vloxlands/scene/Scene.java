@@ -47,10 +47,10 @@ public abstract class Scene
 	
 	static Container userZone, userZoneContent;
 	static Label user, username;
+	static ImageButton friendList;
 	static int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
 	static int selectedZoneButton;
 	static boolean collapse;
-	static ImageButton friendList;
 	
 	boolean showUserZone = false;
 	
@@ -323,6 +323,15 @@ public abstract class Scene
 			if (i instanceof ClickableGui)
 			{
 				((ClickableGui) i).setEnabled(false);
+			}
+	}
+	
+	protected void unlockScene()
+	{
+		for (IGuiElement i : content)
+			if (i instanceof ClickableGui)
+			{
+				((ClickableGui) i).setEnabled(true);
 			}
 	}
 }

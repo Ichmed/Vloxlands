@@ -24,6 +24,7 @@ public class SceneGame extends Scene
 	@Override
 	public void init()
 	{
+		setUserZone();
 		Game.currentGame.resetCamera();
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;
@@ -31,8 +32,11 @@ public class SceneGame extends Scene
 		Label l = new Label(0, 100, Display.getWidth(), 60, Tr._("pause"));
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
-		TextButton mainmenu = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 65, Tr._("mainmenu"));
-		mainmenu.setClickEvent(new IGuiEvent()
+		
+		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3);
+		
+		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("mainmenu"));
+		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
@@ -41,10 +45,21 @@ public class SceneGame extends Scene
 				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
-		content.add(mainmenu);
+		c.add(b);
 		
-		TextButton quit = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 10, Tr._("quitGame"));
-		quit.setClickEvent(new IGuiEvent()
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 120, Tr._("settings"));
+		b.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				Game.currentGame.addScene(new SceneSettings());
+			}
+		});
+		c.add(b);
+		
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("quitGame"));
+		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
@@ -52,9 +67,11 @@ public class SceneGame extends Scene
 				Vloxlands.exit();
 			}
 		});
-		content.add(quit);
+		c.add(b);
 		
-		content.add(new Container(Display.getWidth() / 2 - 170, Display.getHeight() / 2 - 100, 340, 200));
+		content.add(c);
+		
+		unlockScene();
 	}
 	
 	@Override
@@ -62,10 +79,8 @@ public class SceneGame extends Scene
 	{
 		super.onTick();
 		
-		content.get(0).setVisible(paused); // Title label
-		content.get(1).setVisible(paused); // mainmenu button
-		content.get(2).setVisible(paused); // quit button
 		worldActive = !paused;
+		uiActive = paused;
 	}
 	
 	@Override
@@ -101,7 +116,7 @@ public class SceneGame extends Scene
 		glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 		
-		renderContent();
+		super.render();
 		
 		glDisable(GL_BLEND);
 	}

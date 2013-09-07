@@ -59,7 +59,7 @@ public abstract class IGuiElement implements IRendering
 	@Override
 	public String toString()
 	{
-		return getClass() + ", z=" + zIndex;
+		return getClass() + ", z=" + zIndex + ", " + enabled;
 	}
 	
 	public void setZIndex(int zIndex)
