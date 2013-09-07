@@ -29,6 +29,7 @@ import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
+import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 import de.dakror.universion.UniVersion;
@@ -224,9 +225,6 @@ public class Game
 		currentGame = new Game();
 		currentGame.resetCamera();
 		
-		client = new Client("localhost");
-		client.start();
-		
 		new UpdateThread();
 	}
 	
@@ -397,5 +395,13 @@ public class Game
 			glLineWidth(1);
 		}
 		glPopMatrix();
+	}
+	
+	public static void initMultiplayer()
+	{
+		user = new User(NetworkAssistant.getPlayerDataFromDatabase("DrTest"));
+		CFG.p(user.getIP());
+		client = new Client(user.getIP());
+		client.start();
 	}
 }

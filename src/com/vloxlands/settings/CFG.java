@@ -17,6 +17,7 @@ public class CFG
 	
 	// -- settings -- //
 	public static final int SERVER_PORT = 1551;
+	public static final int CLIENT_PORT = 1552;
 	
 	public static boolean SAVE_USER = false;
 	public static String USERNAME = "";

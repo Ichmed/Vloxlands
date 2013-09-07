@@ -20,7 +20,7 @@ public class Client extends Thread
 	{
 		try
 		{
-			socket = new DatagramSocket();
+			socket = new DatagramSocket(CFG.CLIENT_PORT);
 			this.ipAddress = InetAddress.getByName(ipAddress);
 		}
 		catch (Exception e)

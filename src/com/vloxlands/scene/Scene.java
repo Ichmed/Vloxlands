@@ -69,6 +69,7 @@ public abstract class Scene
 	
 	public void initUserZone()
 	{
+		
 		// NetworkAssistant.pullUserLogo(CFG.USERNAME);
 		/* new URL("http://dakror.de/vloxlands/api/userlogo.php?user=" + name) */
 		collapse = false;
@@ -204,6 +205,7 @@ public abstract class Scene
 	
 	protected void setUserZone()
 	{
+		if (Game.client == null) Game.initMultiplayer();
 		// if (!CFG.INTERNET) return;
 		//
 		// if (user == null) initUserZone();
