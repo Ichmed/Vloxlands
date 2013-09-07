@@ -9,9 +9,10 @@ import java.util.Comparator;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.settings.CFG;
+import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ClickableGui;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiElement;
@@ -41,10 +42,11 @@ public abstract class Scene
 	// -- userZone -- //
 	final int SPEED = 10;
 	
-	Container userZone;
+	Container userZone, userZoneContent;
 	
 	int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
 	int selectedZoneButton;
+	boolean collapse;
 	
 	protected void setBackground()
 	{
@@ -63,6 +65,7 @@ public abstract class Scene
 		
 		NetworkAssistant.pullUserLogo();
 		
+		collapse = false;
 		Label user = new Label(15, 15, 70, 70, "");
 		user.setZIndex(4);
 		user.setTexture("USER_LOGO");
@@ -76,6 +79,10 @@ public abstract class Scene
 		defaultUserZoneHeight = userZoneWantedHeight = 100;
 		selectedZoneButton = -1;
 		content.add(userZone);
+		userZoneContent = new Container(0, 90, userZone.getWidth(), 0);
+		userZoneContent.border = false;
+		userZoneContent.setWantsRender(false);
+		userZone.add(userZoneContent);
 		
 		ImageButton friendList = new ImageButton(95, 53, 32, 32);
 		friendList.setZIndex(4);
@@ -85,50 +92,30 @@ public abstract class Scene
 			@Override
 			public void trigger()
 			{
-				final int wanted = Display.getHeight() / 3 * 2;
-				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
+				if (selectedZoneButton == 0)
+				{
+					collapse = true;
+					userZoneWantedHeight = defaultUserZoneHeight;
+				}
 				else
 				{
+					userZoneContent.components.clear();
+					TextButton add = new TextButton(userZoneContent.getWidth() / 2, 0, new Action(Tr._("title.addfriend"), new IGuiEvent()
+					{
+						@Override
+						public void trigger()
+						{
+							// add dialog
+							CFG.p("clicked");
+						}
+					}));
+					add.setWidth(userZoneContent.getWidth() - 30);
+					add.setHeight((int) (TextButton.HEIGHT / (float) TextButton.WIDTH * add.getWidth()));
+					
+					userZoneContent.add(add);
+					userZoneContent.pack(false, true);
 					selectedZoneButton = 0;
-					userZoneWantedHeight = wanted;
-				}
-			}
-		});
-		content.add(friendList);
-		
-		friendList = new ImageButton(95 + 32, 53, 32, 32);
-		friendList.setZIndex(4);
-		friendList.setTexture("/graphics/textures/ui/FriendList.png");
-		friendList.setClickEvent(new IGuiEvent()
-		{
-			@Override
-			public void trigger()
-			{
-				final int wanted = Display.getHeight() / 3;
-				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
-				else
-				{
-					selectedZoneButton = 1;
-					userZoneWantedHeight = wanted;
-				}
-			}
-		});
-		content.add(friendList);
-		
-		friendList = new ImageButton(95 + 64, 53, 32, 32);
-		friendList.setZIndex(4);
-		friendList.setTexture("/graphics/textures/ui/FriendList.png");
-		friendList.setClickEvent(new IGuiEvent()
-		{
-			@Override
-			public void trigger()
-			{
-				final int wanted = Display.getHeight() / 3 + 20;
-				if (userZoneWantedHeight == wanted) userZoneWantedHeight = defaultUserZoneHeight;
-				else
-				{
-					selectedZoneButton = 2;
-					userZoneWantedHeight = wanted;
+					userZoneWantedHeight = userZoneContent.getHeight() + 100;
 				}
 			}
 		});
@@ -161,9 +148,22 @@ public abstract class Scene
 		
 		if (userZone != null)
 		{
-			float dif = userZoneWantedHeight - userZone.getSize().y;
-			if (Math.abs(dif) >= Math.abs(dif) / SPEED) userZone.setSize(new Vector2f(userZone.getSize().x, userZone.getSize().y + dif / SPEED));
-			else if (Math.abs(dif) != 0) userZone.setSize(new Vector2f(userZone.getSize().x, userZoneWantedHeight));
+			float dif = userZoneWantedHeight - userZone.getHeight();
+			if (Math.abs(dif) > Math.abs(dif) / SPEED)
+			{
+				if (dif > 0) userZone.setHeight((int) Math.ceil(userZone.getHeight() + dif / SPEED));
+				else userZone.setHeight((int) Math.floor(userZone.getHeight() + dif / SPEED));
+				
+				if (userZone.getHeight() == defaultUserZoneHeight)
+				{
+					selectedZoneButton = -1;
+					userZoneContent.components.clear();
+				}
+			}
+			else if (Math.abs(dif) != 0)
+			{
+				userZone.setHeight(userZoneWantedHeight);
+			}
 		}
 	}
 	
@@ -178,13 +178,12 @@ public abstract class Scene
 			glEnable(GL_BLEND);
 			RenderAssistant.renderRect(84, 38, 19, 26, 787 / 1024f, 409 / 1024f, 19 / 1024f, 26 / 1024f);
 			glDisable(GL_BLEND);
-			if (userZone.getSize().y > defaultUserZoneHeight)
+			if (userZone.getHeight() > defaultUserZoneHeight)
 			{
 				if (selectedZoneButton > -1)
 				{
 					RenderAssistant.renderLine(10, 83, 72, true, false);
 					
-					glEnable(GL_BLEND);
 					if (selectedZoneButton > 0)
 					{
 						RenderAssistant.renderLine(85, 83, 13 + selectedZoneButton * 32, true, false);
@@ -192,20 +191,39 @@ public abstract class Scene
 						RenderAssistant.renderRect(77, 76, 26, 19, 780 / 1024f, 450 / 1024f, 26 / 1024f, 19 / 1024f);
 						glDisable(GL_BLEND);
 					}
-					else RenderAssistant.renderRect(77, 76, 19, 19, 982 / 1024f, 498 / 1024f, 19 / 1024f, 19 / 1024f);
-					RenderAssistant.renderLine(95 + (selectedZoneButton + 1) * 32, 83, userZoneWidth - (selectedZoneButton + 1) * 32 - 68, true, false);
-					glDisable(GL_BLEND);
+					else
+					{
+						glEnable(GL_BLEND);
+						RenderAssistant.renderRect(77, 76, 19, 19, 982 / 1024f, 498 / 1024f, 19 / 1024f, 19 / 1024f);
+						glDisable(GL_BLEND);
+					}
+					RenderAssistant.renderLine(90 + (selectedZoneButton + 1) * 32, 83, userZoneWidth - (selectedZoneButton + 1) * 32 - 62, true, false);
+					glEnable(GL_SCISSOR_TEST);
+					glScissor(userZone.getX() + 15, Display.getHeight() - userZone.getY() - userZone.getHeight() + 15, userZone.getWidth() - 30, userZone.getHeight() - 30 - 75);
+					
+					// render container content
+					userZoneContent.render();
+					switch (selectedZoneButton)
+					{
+						case 0: // friendList
+						{
+							break;
+						}
+					}
+					
+					
+					glDisable(GL_SCISSOR_TEST);
 				}
 			}
 		}
-		if (titled) RenderAssistant.renderLine((int) ((userZone != null) ? userZone.getPos().x + userZoneWidth + 30 : 0), 83, Display.getWidth(), true, true);
+		if (titled) RenderAssistant.renderLine((userZone != null) ? userZone.getX() + userZoneWidth + 30 : 0, 83, Display.getWidth(), true, true);
 	}
 	
 	public void renderContent()
 	{
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		for (IGuiElement g : sorted)
-			if (g.isVisible()) g.render();
+			if (g.isVisible() && g.wantsRender()) g.render();
 	}
 	
 	public void handleMouse()
@@ -242,7 +260,7 @@ public abstract class Scene
 		ClickableGui iG = getObjectUnderCursor();
 		if (iG != null && iG.isVisible() && iG.isEnabled())
 		{
-			iG.handleMouse(posX - (int) iG.getPos().x, posY - (int) iG.getPos().y, flag);
+			iG.handleMouse(posX - iG.getX(), posY - iG.getY(), flag);
 			return true;
 		}
 		return false;
@@ -250,7 +268,9 @@ public abstract class Scene
 	
 	private ClickableGui getObjectUnderCursor()
 	{
-		for (IGuiElement i : getSortedContent())
+		ArrayList<IGuiElement> sorted = getSortedContent();
+		Collections.reverse(sorted);
+		for (IGuiElement i : sorted)
 			if (i instanceof ClickableGui)
 			{
 				ClickableGui iG = (ClickableGui) i;

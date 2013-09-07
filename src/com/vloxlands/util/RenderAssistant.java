@@ -375,6 +375,13 @@ public class RenderAssistant
 		glDisable(GL_BLEND);
 	}
 	
+	public static void renderShadow(int x, int y, int width, int height, float rotInDegrees)
+	{
+		glEnable(GL_BLEND);
+		bindTexture("/graphics/textures/ui/gui.png");
+		glDisable(GL_BLEND);
+	}
+	
 	public static String[] wrap(String raw, Font f, int width)
 	{
 		ArrayList<String> lines = new ArrayList<>();

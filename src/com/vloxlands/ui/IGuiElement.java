@@ -1,13 +1,12 @@
 package com.vloxlands.ui;
 
-import org.lwjgl.util.vector.Vector2f;
-
 import com.vloxlands.render.IRendering;
 
 public abstract class IGuiElement implements IRendering
 {
 	protected int x, y, width, height, zIndex;
 	protected boolean visible;
+	protected boolean wantsRender;
 	protected boolean enabled;
 	protected String texture;
 	
@@ -15,6 +14,7 @@ public abstract class IGuiElement implements IRendering
 	{
 		visible = true;
 		enabled = true;
+		wantsRender = true;
 		texture = null;
 		zIndex = 1;
 	}
@@ -51,31 +51,15 @@ public abstract class IGuiElement implements IRendering
 		this.texture = texture;
 	}
 	
-	public Vector2f getPos()
-	{
-		return new Vector2f(x, y);
-	}
-	
-	public Vector2f getSize()
-	{
-		return new Vector2f(width, height);
-	}
-	
-	public void setPos(Vector2f pos)
-	{
-		x = (int) pos.x;
-		y = (int) pos.y;
-	}
-	
-	public void setSize(Vector2f size)
-	{
-		width = (int) size.x;
-		height = (int) size.y;
-	}
-	
 	public int getZIndex()
 	{
 		return zIndex;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass() + ", z=" + zIndex;
 	}
 	
 	public void setZIndex(int zIndex)
@@ -86,4 +70,55 @@ public abstract class IGuiElement implements IRendering
 	// not abstract so that implementing won't be forced
 	public void handleKeyboard(int key, char chr, boolean down)
 	{}
+	
+	public boolean wantsRender()
+	{
+		return wantsRender;
+	}
+	
+	public void setWantsRender(boolean wantsRender)
+	{
+		this.wantsRender = wantsRender;
+	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+	public void setY(int y)
+	{
+		this.y = y;
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public void setWidth(int width)
+	{
+		x = x + this.width / 2 - width / 2;
+		this.width = width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	public void setHeight(int height)
+	{
+		this.height = height;
+	}
 }

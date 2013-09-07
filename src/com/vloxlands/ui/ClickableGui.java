@@ -23,9 +23,14 @@ public abstract class ClickableGui extends IGuiElement
 	
 	public boolean isUnderCursor()
 	{
+		return isUnderCursor(0, 0);
+	}
+	
+	public boolean isUnderCursor(int tX, int tY)
+	{
 		int x = Mouse.getX();
 		int y = Display.getHeight() - Mouse.getY();
 		
-		return this.x < x && this.x + width >= x && this.y < y && this.y + height >= y;
+		return this.x + tX < x && this.x + width + tX >= x && this.y + tY < y && this.y + height + tY >= y;
 	}
 }

@@ -25,7 +25,9 @@ public class SceneMainMenu extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		TextButton b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 - 70, Tr._("title.play"));
+		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3, true);
+		
+		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("title.play"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -34,9 +36,9 @@ public class SceneMainMenu extends Scene
 				Game.currentGame.addScene(new SceneNewGame());
 			}
 		});
-		content.add(b);
+		c.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2, Tr._("title.settings"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 120, Tr._("title.settings"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -45,9 +47,9 @@ public class SceneMainMenu extends Scene
 				Game.currentGame.addScene(new SceneSettings());
 			}
 		});
-		content.add(b);
+		c.add(b);
 		
-		b = new TextButton(Display.getWidth() / 2, Display.getHeight() / 2 + 70, Tr._("title.quitGame"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("title.quitGame"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -56,8 +58,8 @@ public class SceneMainMenu extends Scene
 				Vloxlands.exit();
 			}
 		});
-		content.add(b);
+		c.add(b);
 		
-		content.add(new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3, true));
+		content.add(c);
 	}
 }
