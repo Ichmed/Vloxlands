@@ -78,6 +78,7 @@ public class SceneLogin extends Scene
 			@Override
 			public void trigger()
 			{
+				lockScene();
 				if (NetworkAssistant.login(username.getText(), Assistant.MD5(password.getText().getBytes())))
 				{
 					CFG.USERNAME = username.getText();
@@ -94,7 +95,7 @@ public class SceneLogin extends Scene
 		login.setEnabled(false);
 		content.add(login);
 		
-		if (CFG.USERNAME.length() > 0)
+		if (CFG.PASSWORD.length() > 0)
 		{
 			if (NetworkAssistant.login(CFG.USERNAME, CFG.PASSWORD))
 			{
@@ -109,7 +110,7 @@ public class SceneLogin extends Scene
 	{
 		super.render();
 		
-		if (CFG.USERNAME.length() > 0)
+		if (CFG.PASSWORD.length() > 0 || !remember.isEnabled())
 		{
 			glEnable(GL_BLEND);
 			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);

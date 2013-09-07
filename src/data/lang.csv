@@ -6,6 +6,8 @@ settings;Settings;Optionen
 login;Login;Anmelden
 register;Register;Registrieren
 pause;Game Paused;Pausiert
+yes;Yes;Ja
+no;No;Nein
 abort;Abort;Abbrechen
 add;Add;Hinzufuegen
 next;Next;Weiter
@@ -30,3 +32,5 @@ logindesc;Please login with your dakror.de-Account.;Bitte melde dich mit deinem 
 loginerror;Wrong Username or Password;Falscher Benutzername oder Passwort
 searcherror;No user having the name "%name%" could be found;Es konnte kein Benutzer mit dem Name "%name%" gefunden werden
 searchself;Don't you have friends, or why are you trying to add yourself as a friend?;Hast du keine Freunde, oder warum versuchst du, dich selbst als Freund hinzuzufuegen?
+logout;Logout;Abmelden
+logoutquestion;Do you really want to logout?;Willst du dich wirklich abmelden?

@@ -117,7 +117,7 @@ public class Game
 			rerender = false;
 		}
 		
-		this.viewFrustum.render();
+		viewFrustum.render();
 		
 		if (regenerate)
 		{
@@ -208,7 +208,9 @@ public class Game
 	{
 		for (Scene scene : sceneStack)
 		{
+			
 			scene.content.clear();
+			scene.initUserZone();
 			scene.init();
 		}
 	}
