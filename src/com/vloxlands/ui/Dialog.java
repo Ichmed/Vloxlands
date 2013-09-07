@@ -46,6 +46,10 @@ public class Dialog extends Scene
 		rawMessage = message;
 		rawActions = buttons;
 		
+		container = new Container(x, y, width, 0);
+		container.border = false;
+		content.add(container);
+		
 		init();
 	}
 	
@@ -85,14 +89,19 @@ public class Dialog extends Scene
 	@Override
 	public void init()
 	{
+		content.clear();
 		title = rawTitle;
 		centered = true;
 		
 		width = TextButton.WIDTH * 2 + 20;
 		lines = RenderAssistant.wrap(rawMessage, messageFont, width - 60);
-		height = 90 + lines.length * FontAssistant.getFont(messageFont).getHeight();
+		height = 90 + lines.length * FontAssistant.getFont(messageFont).getHeight() + container.getHeight();
 		x = Display.getWidth() / 2 - width / 2;
 		y = Display.getHeight() / 2 - height / 2;
+		
+		container.setWidth(width - 30);
+		container.setX(x + 15);
+		container.setY(y + lines.length * FontAssistant.getFont(messageFont).getHeight() + 70);
 		
 		if (rawActions.length > 0) height += TextButton.HEIGHT;
 		
@@ -104,17 +113,58 @@ public class Dialog extends Scene
 			buttons[0] = new TextButton(x + width / 4 + 10, y + height - 20 - TextButton.HEIGHT, rawActions[0]);
 			buttons[1] = new TextButton(x + width / 4 * 3 - 10, y + height - 20 - TextButton.HEIGHT, rawActions[1]);
 		}
+		
 		for (TextButton b : buttons)
-		{
 			content.add(b);
-		}
-		container = new Container(x, y, width, height);
-		container.border = false;
+		
 		content.add(container);
 	}
 	
 	public void addComponent(IGuiElement g)
 	{
 		container.add(g);
+		container.pack(false, true);
+		container.setHeight(container.getHeight() + 30);
+		init();
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public void setWidth(int width)
+	{
+		this.width = width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
+	}
+	
+	public void setHeight(int height)
+	{
+		this.height = height;
+	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public void setX(int x)
+	{
+		this.x = x;
+	}
+	
+	public int getY()
+	{
+		return y;
+	}
+	
+	public void setY(int y)
+	{
+		this.y = y;
 	}
 }

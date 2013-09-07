@@ -20,6 +20,7 @@ import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.ImageButton;
+import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.FontAssistant;
@@ -44,11 +45,14 @@ public abstract class Scene
 	// -- userZone -- //
 	final int SPEED = 10;
 	
-	Container userZone, userZoneContent;
+	static Container userZone, userZoneContent;
+	static Label user, username;
+	static int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
+	static int selectedZoneButton;
+	static boolean collapse;
+	static ImageButton friendList;
 	
-	int userZoneWidth, defaultUserZoneHeight, userZoneWantedHeight;
-	int selectedZoneButton;
-	boolean collapse;
+	boolean showUserZone = false;
 	
 	protected void setBackground()
 	{
@@ -61,32 +65,26 @@ public abstract class Scene
 		content.add(bg);
 	}
 	
-	protected void setUserZone()
+	private void initUserZone()
 	{
-		if (!CFG.INTERNET) return;
-		
 		NetworkAssistant.pullUserLogo();
 		
 		collapse = false;
-		Label user = new Label(15, 15, 70, 70, "");
+		user = new Label(15, 15, 70, 70, "");
 		user.setZIndex(4);
 		user.setTexture("USER_LOGO");
-		content.add(user);
-		Label username = new Label(100, 10, 10, 30, CFG.USERNAME, false);
+		username = new Label(100, 10, 10, 30, CFG.USERNAME, false);
 		username.setZIndex(4);
 		userZoneWidth = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
-		content.add(username);
 		userZone = new Container(0, 0, (userZoneWidth > TextButton.WIDTH) ? userZoneWidth : TextButton.WIDTH, 100, true);
 		userZone.setZIndex(3);
 		defaultUserZoneHeight = userZoneWantedHeight = 100;
 		selectedZoneButton = -1;
-		content.add(userZone);
 		userZoneContent = new Container(0, 90, userZone.getWidth(), 0);
 		userZoneContent.border = false;
 		userZoneContent.setWantsRender(false);
 		userZone.add(userZoneContent);
-		
-		ImageButton friendList = new ImageButton(95, 53, 32, 32);
+		friendList = new ImageButton(95, 53, 32, 32);
 		friendList.setZIndex(4);
 		friendList.setTexture("/graphics/textures/ui/FriendList.png");
 		friendList.setClickEvent(new IGuiEvent()
@@ -109,6 +107,8 @@ public abstract class Scene
 						{
 							// add dialog
 							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), Dialog.CLOSE_EVENT));
+							InputField input = new InputField(0, 0, addDialog.getWidth() - 50, "", Tr._("username"));
+							addDialog.addComponent(input);
 							Game.currentGame.addScene(addDialog);
 						}
 					}));
@@ -122,6 +122,18 @@ public abstract class Scene
 				}
 			}
 		});
+	}
+	
+	protected void setUserZone()
+	{
+		if (!CFG.INTERNET) return;
+		
+		if (user == null) initUserZone();
+		
+		showUserZone = true;
+		content.add(user);
+		content.add(username);
+		content.add(userZone);
 		content.add(friendList);
 	}
 	
@@ -149,7 +161,7 @@ public abstract class Scene
 	{
 		onTickContent();
 		
-		if (userZone != null)
+		if (userZone != null && showUserZone)
 		{
 			float dif = userZoneWantedHeight - userZone.getHeight();
 			if (Math.abs(dif) > Math.abs(dif) / SPEED)
@@ -174,7 +186,7 @@ public abstract class Scene
 	{
 		renderContent();
 		
-		if (userZone != null)
+		if (userZone != null && showUserZone)
 		{
 			RenderAssistant.renderLine(96, 10, 80, false, false);
 			RenderAssistant.renderLine(90, 45, userZoneWidth - 62, true, false);
@@ -282,7 +294,7 @@ public abstract class Scene
 		return null;
 	}
 	
-	private ArrayList<IGuiElement> getSortedContent()
+	protected ArrayList<IGuiElement> getSortedContent()
 	{
 		@SuppressWarnings("unchecked")
 		final ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();

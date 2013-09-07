@@ -60,6 +60,15 @@ public class Container extends ClickableGui
 	}
 	
 	@Override
+	public void handleKeyboard(int key, char chr, boolean down)
+	{
+		for (IGuiElement g : components)
+		{
+			g.handleKeyboard(key, chr, down);
+		}
+	}
+	
+	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
 		for (IGuiElement g : components)
