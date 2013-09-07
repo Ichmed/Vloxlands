@@ -88,7 +88,7 @@ public class SceneLogin extends Scene
 					
 					Game.currentGame.setScene(new SceneMainMenu());
 				}
-				else Game.currentGame.addScene(new Dialog(Tr._("loginerror2"), Tr._("loginerror"), new Action("OK", Dialog.CLOSE_EVENT)));
+				else Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("loginerror"), new Action("OK", Dialog.CLOSE_EVENT)));
 			}
 		});
 		login.setEnabled(false);

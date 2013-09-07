@@ -6,10 +6,9 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.json.JSONObject;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.BufferedImageUtil;
-
-import com.vloxlands.settings.CFG;
 
 /**
  * @author Dakror
@@ -42,17 +41,30 @@ public class NetworkAssistant
 		}
 	}
 	
-	public static void pullUserLogo()
+	public static void pullUserLogo(String user)
 	{
-		if (RenderAssistant.textures.containsKey("USER_LOGO")) return;
+		if (RenderAssistant.textures.containsKey(user + "_LOGO")) return;
 		try
 		{
-			Texture t = BufferedImageUtil.getTexture("USER_LOGO", RenderAssistant.toBufferedImage(ImageIO.read(new URL("http://dakror.de/vloxlands/api/userlogo.php?user=" + CFG.USERNAME)).getScaledInstance(256, 256, BufferedImage.SCALE_SMOOTH)));
-			RenderAssistant.textures.put("USER_LOGO", t);
+			Texture t = BufferedImageUtil.getTexture(user + "_LOGO", RenderAssistant.toBufferedImage(ImageIO.read(new URL("http://dakror.de/vloxlands/api/userlogo.php?user=" + user)).getScaledInstance(256, 256, BufferedImage.SCALE_SMOOTH)));
+			RenderAssistant.textures.put(user + "_LOGO", t);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}
+	
+	public static JSONObject searchFriend(String name)
+	{
+		try
+		{
+			return new JSONObject(Assistant.getURLContent(new URL("http://dakror.de/vloxlands/api/friend.php?search=" + name)));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

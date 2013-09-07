@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.json.JSONObject;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
@@ -67,12 +68,12 @@ public abstract class Scene
 	
 	private void initUserZone()
 	{
-		NetworkAssistant.pullUserLogo();
+		NetworkAssistant.pullUserLogo(CFG.USERNAME);
 		
 		collapse = false;
 		user = new Label(15, 15, 70, 70, "");
 		user.setZIndex(4);
-		user.setTexture("USER_LOGO");
+		user.setTexture(CFG.USERNAME + "_LOGO");
 		username = new Label(100, 10, 10, 30, CFG.USERNAME, false);
 		username.setZIndex(4);
 		userZoneWidth = 140 + FontAssistant.getFont(username.font).getWidth(CFG.USERNAME);
@@ -105,9 +106,22 @@ public abstract class Scene
 						@Override
 						public void trigger()
 						{
-							// add dialog
-							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), Dialog.CLOSE_EVENT));
-							InputField input = new InputField(0, 0, addDialog.getWidth() - 50, "", Tr._("username"));
+							final InputField input = new InputField(0, 0, 0, "", Tr._("username"));
+							Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), new IGuiEvent()
+							{
+								@Override
+								public void trigger()
+								{
+									if (input.getText().equals(CFG.USERNAME))
+									{
+										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searchself"), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										return;
+									}
+									JSONObject data = NetworkAssistant.searchFriend(input.getText());
+									if (data.length() == 0) Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("searcherror").replace("%name%", input.getText()) + ".", new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+								}
+							}));
+							input.setWidth(addDialog.getWidth() - 50);
 							addDialog.addComponent(input);
 							Game.currentGame.addScene(addDialog);
 						}

@@ -108,7 +108,6 @@ public abstract class IGuiElement implements IRendering
 	
 	public void setWidth(int width)
 	{
-		x = x + this.width / 2 - width / 2;
 		this.width = width;
 	}
 	

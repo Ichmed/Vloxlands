@@ -64,6 +64,13 @@ public class TextButton extends ClickableGui
 	}
 	
 	@Override
+	public void setWidth(int width)
+	{
+		x = x + this.width / 2 - width / 2;
+		this.width = width;
+	}
+	
+	@Override
 	public void onTick()
 	{
 		if (!enabled) texY = 358;

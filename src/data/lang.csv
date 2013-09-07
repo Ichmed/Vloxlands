@@ -13,6 +13,8 @@ back;Back;Zurueck
 save;Save;Speichern
 start;Start;Start
 play;Play;Spiel starten
+error;Error!;Fehler!
+close;Close;Schliessen
 username;Username;Benutzername
 password;Password;Passwort
 addfriend;+ Friend;+ Freund
@@ -26,4 +28,5 @@ fov;Field of View;Sichtfeld
 fps;FPS Cap;FPS Begrenzung
 logindesc;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
 loginerror;Wrong Username or Password;Falscher Benutzername oder Passwort
-loginerror2;Login failed!;Anmeldung fehlgeschlagen!
+searcherror;No user having the name "%name%" could be found;Es konnte kein Benutzer mit dem Name "%name%" gefunden werden
+searchself;Don't you have friends, or why are you trying to add yourself as a friend?;Hast du keine Freunde, oder warum versuchst du, dich selbst als Freund hinzuzufuegen?
