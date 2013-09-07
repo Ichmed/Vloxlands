@@ -57,6 +57,8 @@ public abstract class Scene
 	
 	protected void setUserZone()
 	{
+		if (!CFG.INTERNET) return;
+		
 		NetworkAssistant.pullUserLogo();
 		
 		Label user = new Label(15, 15, 70, 70, "");
