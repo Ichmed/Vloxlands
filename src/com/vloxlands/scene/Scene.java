@@ -173,7 +173,7 @@ public abstract class Scene
 		
 		if (userZone != null)
 		{
-			RenderAssistant.renderLine(96, 10, 72, false, false);
+			RenderAssistant.renderLine(96, 10, 80, false, false);
 			RenderAssistant.renderLine(90, 45, userZoneWidth - 62, true, false);
 			glEnable(GL_BLEND);
 			RenderAssistant.renderRect(84, 38, 19, 26, 787 / 1024f, 409 / 1024f, 19 / 1024f, 26 / 1024f);
