@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.lwjgl.opengl.Display;
 
@@ -12,7 +11,6 @@ import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet04ServerInfo;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.GuiRotation;
@@ -126,7 +124,6 @@ public class SceneNewGame extends Scene
 		}
 		for (int i = 0; i < players.size(); i++)
 		{
-			CFG.p(i);
 			LobbySlot slot = new LobbySlot(players.get(i));
 			slot.setX(15);
 			slot.setY(15 + index * LobbySlot.HEIGHT + i * LobbySlot.HEIGHT);
@@ -143,7 +140,7 @@ public class SceneNewGame extends Scene
 		// lobby.add(slot);
 		// }
 		
-		CFG.p("should update to this user table: " + Arrays.toString(pl));
+		// CFG.p("should update to this user table: " + Arrays.toString(pl));
 	}
 	
 	@Override
