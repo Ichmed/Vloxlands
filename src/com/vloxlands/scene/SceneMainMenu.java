@@ -8,6 +8,8 @@ import org.lwjgl.opengl.Display;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
+import com.vloxlands.net.Client;
+import com.vloxlands.net.Player;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
@@ -53,19 +55,30 @@ public class SceneMainMenu extends Scene
 			@Override
 			public void trigger()
 			{
-				final InputField ip = new InputField(0, 0, 0, "", "");
+				final InputField ip = new InputField(0, 0, 0, "", Tr._("ip"));
+				final InputField name = new InputField(0, 50, 0, "", Tr._("username"));
 				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent()
 				{
 					@Override
 					public void trigger()
 					{
+						if (name.getText().length() == 0 || ip.getText().length() == 0) return;
+						
+						if (Game.client == null)
+						{
+							Player player = new Player(name.getText());
+							Game.client = new Client(player);
+						}
+						
 						if (Game.client.isConnectedToLocalhost()) Game.client.disconnect();
 						
 						new LoginThread(ip.getText()).start();
 					}
 				}));
 				ip.setWidth(dialog.getWidth() - 50);
+				name.setWidth(dialog.getWidth() - 50);
 				dialog.addComponent(ip);
+				if (Game.client == null) dialog.addComponent(name);
 				Game.currentGame.addScene(dialog);
 			}
 		});

@@ -114,7 +114,11 @@ public class Client extends Thread
 			case DISCONNECT:
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
-				if (packet.getUsername().equals(player.getUsername())) connected = false;
+				if (packet.getUsername().equals(player.getUsername()))
+				{
+					CFG.p("[CLIENT]: I'm outta here!");
+					connected = false;
+				}
 				else CFG.p(packet.getUsername() + " left the game");
 				break;
 			}
