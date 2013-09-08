@@ -96,6 +96,7 @@ public class Server extends Thread
 						try
 						{
 							sendPacket(new Packet05UsernameTaken(), player);
+							sendPacket(new Packet01Disconnect(p.getUsername()), player);
 							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ").");
 							return;
 						}
