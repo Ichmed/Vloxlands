@@ -62,9 +62,8 @@ public class SceneMainMenu extends Scene
 					{
 						if (name.getText().length() == 0 || ip.getText().length() == 0) return;
 						
-						Game.client.renameClient(name.getText());
-						
 						if (Game.client.isConnected()) Game.client.disconnect();
+						Game.client.renameClient(name.getText());
 						
 						new LoginThread(ip.getText()).start();
 					}
