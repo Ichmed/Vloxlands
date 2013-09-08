@@ -14,6 +14,6 @@ public class Packet05UsernameTaken extends Packet
 	@Override
 	public byte[] getData()
 	{
-		return null;
+		return "05".getBytes();
 	}
 }
