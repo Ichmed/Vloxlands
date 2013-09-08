@@ -33,3 +33,4 @@ errno;An error has occurred!;Ein Fehler ist aufgetreten!
 mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.
+mp.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.

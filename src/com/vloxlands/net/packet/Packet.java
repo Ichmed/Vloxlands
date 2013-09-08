@@ -15,6 +15,7 @@ public abstract class Packet
 		RENAME(02),
 		CHATMESSAGE(03),
 		SERVERINFO(04),
+		USERNAMETAKEN(05),
 		
 		;
 		

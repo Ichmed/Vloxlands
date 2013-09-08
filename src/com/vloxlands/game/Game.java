@@ -441,11 +441,15 @@ public class Game
 		else
 		{
 			IP = ip;
-			server = new Server(IP);
 			
 			Player player = new Player("Player");
 			Game.client = new Client(player);
 		}
+	}
+	
+	public void onClientMessage(String message)
+	{
+		if (sceneStack.size() > 0) getActiveScene().onClientMessage(message);
 	}
 	
 	public void onClientReveivedPacket(Packet packet)

@@ -405,6 +405,15 @@ public class RenderAssistant
 			}
 		}
 		lines.add(line);
-		return lines.toArray(new String[] {});
+		
+		ArrayList<String> realLines = new ArrayList<>();
+		for (String s : lines)
+		{
+			String[] nls = s.split("\n");
+			for (String nl : nls)
+				realLines.add(nl);
+		}
+		
+		return realLines.toArray(new String[] {});
 	}
 }

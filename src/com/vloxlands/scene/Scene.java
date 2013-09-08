@@ -416,6 +416,10 @@ public abstract class Scene
 	}
 	
 	// not abstract so that implementing won't be forced
+	public void onClientMessage(String message)
+	{}
+	
+	// not abstract so that implementing won't be forced
 	public void onClientReveivedPacket(Packet packet)
 	{}
 }

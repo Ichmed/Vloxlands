@@ -17,6 +17,7 @@ import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet02Rename;
 import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
+import com.vloxlands.net.packet.Packet05UsernameTaken;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -87,8 +88,25 @@ public class Server extends Thread
 			case CONNECT:
 			{
 				Packet00Connect packet = new Packet00Connect(data);
+				Player player = new Player(packet.getUsername(), address, port);
+				for (Player p : clients)
+				{
+					if (p.getUsername().equals(packet.getUsername()))
+					{
+						try
+						{
+							sendPacket(new Packet05UsernameTaken(), player);
+							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ").");
+							return;
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
-				clients.add(new Player(packet.getUsername(), address, port));
+				clients.add(player);
 				try
 				{
 					sendPacketToAllClients(packet);
