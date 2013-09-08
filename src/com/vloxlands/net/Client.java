@@ -176,8 +176,8 @@ public class Client extends Thread
 	
 	public void renameClient(String newName)
 	{
-		if (!connected) player.setUsername(newName);
-		else
+		player.setUsername(newName);
+		if (connected)
 		{
 			try
 			{
