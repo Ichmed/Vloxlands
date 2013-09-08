@@ -131,6 +131,7 @@ public class Client extends Thread
 			System.err.println("Client is already connected to a server. Disconnect first!");
 			return false;
 		}
+		usernameTaken = false;
 		
 		serverIP = ip;
 		try
@@ -148,7 +149,7 @@ public class Client extends Thread
 	public void disconnect()
 	{
 		if (!connected) return;
-		
+		usernameTaken = false;
 		try
 		{
 			sendPacket(new Packet01Disconnect(player.getUsername()));

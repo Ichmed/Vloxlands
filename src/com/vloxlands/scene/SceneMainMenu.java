@@ -178,7 +178,6 @@ public class SceneMainMenu extends Scene
 			d.buttons[1].setEnabled(true);
 		}
 		
-		
 		void showErrorDialog()
 		{
 			resetButtons();
