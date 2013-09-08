@@ -79,6 +79,7 @@ public class Client extends Thread
 				Packet00Connect packet = new Packet00Connect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = true;
 				else CFG.p(Tr._("mp.connect").replace("%player%", packet.getUsername()));
+				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case DISCONNECT:
@@ -86,6 +87,7 @@ public class Client extends Thread
 				Packet01Disconnect packet = new Packet01Disconnect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = false;
 				else CFG.p(Tr._("mp.disconnect").replace("%player%", packet.getUsername()));
+				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case RENAME:
@@ -93,18 +95,21 @@ public class Client extends Thread
 				Packet02Rename packet = new Packet02Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
 				else CFG.p(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()));
+				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case CHATMESSAGE:
 			{
 				Packet03ChatMessage packet = new Packet03ChatMessage(data);
 				if (!packet.getUsername().equals(player.getUsername())) CFG.p(packet.getUsername() + ": " + packet.getMessage());
+				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case SERVERINFO:
 			{
 				Packet04ServerInfo packet = new Packet04ServerInfo(data);
 				CFG.p("Connected players: " + Arrays.toString(packet.getPlayers()));
+				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 		}

@@ -3,12 +3,15 @@ package com.vloxlands.scene;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet04ServerInfo;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.GuiRotation;
@@ -95,8 +98,10 @@ public class SceneNewGame extends Scene
 		content.add(zSize);
 	}
 	
-	private void updateLobby()
-	{}
+	private void updateLobby(String[] players)
+	{
+		CFG.p("should update to this user table: " + Arrays.toString(players));
+	}
 	
 	@Override
 	public void onTick()
@@ -121,6 +126,21 @@ public class SceneNewGame extends Scene
 			progress.setValue(Game.mapGenerator.progress);
 			progress.render();
 			glDisable(GL_BLEND);
+		}
+	}
+	
+	@Override
+	public void onClientReveivedPacket(Packet packet)
+	{
+		switch (packet.getType())
+		{
+			case SERVERINFO:
+			{
+				updateLobby(((Packet04ServerInfo) packet).getPlayers());
+				break;
+			}
+			default:
+				break;
 		}
 	}
 }

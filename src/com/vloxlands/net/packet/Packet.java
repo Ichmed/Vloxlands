@@ -47,6 +47,11 @@ public abstract class Packet
 		return message.substring(2);
 	}
 	
+	public PacketTypes getType()
+	{
+		return Packet.lookupPacket(packetID);
+	}
+	
 	public static PacketTypes lookupPacket(int id)
 	{
 		for (PacketTypes pt : PacketTypes.values())

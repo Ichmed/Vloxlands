@@ -23,6 +23,7 @@ import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
+import com.vloxlands.net.packet.Packet;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -445,5 +446,10 @@ public class Game
 			Player player = new Player("Player");
 			Game.client = new Client(player);
 		}
+	}
+	
+	public void onClientReveivedPacket(Packet packet)
+	{
+		if (sceneStack.size() > 0) getActiveScene().onClientReveivedPacket(packet);
 	}
 }
