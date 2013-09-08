@@ -33,5 +33,4 @@ public class Packet00Connect extends Packet
 	{
 		return username;
 	}
-	
 }

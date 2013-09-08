@@ -2,10 +2,13 @@ package com.vloxlands.scene;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.io.IOException;
+
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.GuiRotation;
@@ -21,22 +24,36 @@ public class SceneNewGame extends Scene
 {
 	ProgressBar progress;
 	Spinner xSize, zSize, radius;
+	Container lobby;
 	
 	@Override
 	public void init()
 	{
-		if (Game.client != null && !Game.client.isConnected()) Game.client.connectToServer(Game.IP);
+		if (!Game.client.isConnected())
+		{
+			Game.client.connectToServer(Game.IP);
+		}
+		
+		try
+		{
+			Game.client.sendPacket(new Packet04ServerInfo());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		setBackground();
 		// setUserZone();
 		
 		setTitle(Tr._("newGame"));
 		
-		content.add(new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220 - TextButton.HEIGHT - 30)); // lobby
+		lobby = new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220);
+		content.add(lobby);
 		
-		Container lobbyButtons = new Container(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 30, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 30, false, false);
+		Container chatContainer = new Container(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150, false, true);
 		
-		content.add(lobbyButtons);
+		content.add(chatContainer);
 		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		
@@ -76,9 +93,10 @@ public class SceneNewGame extends Scene
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("islands") + ":", false));
 		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
 		content.add(zSize);
-		
-		
 	}
+	
+	private void updateLobby()
+	{}
 	
 	@Override
 	public void onTick()

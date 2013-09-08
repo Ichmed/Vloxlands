@@ -8,8 +8,6 @@ import org.lwjgl.opengl.Display;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
-import com.vloxlands.net.Client;
-import com.vloxlands.net.Player;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
@@ -64,13 +62,9 @@ public class SceneMainMenu extends Scene
 					{
 						if (name.getText().length() == 0 || ip.getText().length() == 0) return;
 						
-						if (Game.client == null)
-						{
-							Player player = new Player(name.getText());
-							Game.client = new Client(player);
-						}
+						Game.client.renameClient(name.getText());
 						
-						if (Game.client.isConnectedToLocalhost()) Game.client.disconnect();
+						if (Game.client.isConnected()) Game.client.disconnect();
 						
 						new LoginThread(ip.getText()).start();
 					}
@@ -78,7 +72,7 @@ public class SceneMainMenu extends Scene
 				ip.setWidth(dialog.getWidth() - 50);
 				name.setWidth(dialog.getWidth() - 50);
 				dialog.addComponent(ip);
-				if (Game.client == null) dialog.addComponent(name);
+				dialog.addComponent(name);
 				Game.currentGame.addScene(dialog);
 			}
 		});
@@ -157,8 +151,8 @@ public class SceneMainMenu extends Scene
 					}
 					else
 					{
-						CFG.p("valid server. YAY");
-						// TODO: connect
+						Game.currentGame.removeActiveScene();
+						Game.currentGame.addScene(new SceneNewGame());
 						break;
 					}
 				}

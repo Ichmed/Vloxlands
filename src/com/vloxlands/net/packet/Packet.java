@@ -11,7 +11,12 @@ public abstract class Packet
 	{
 		INVALID(-1),
 		CONNECT(00),
-		DISCONNECT(01);
+		DISCONNECT(01),
+		RENAME(02),
+		CHATMESSAGE(03),
+		SERVERINFO(04),
+		
+		;
 		
 		private int packetID;
 		

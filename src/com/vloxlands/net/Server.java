@@ -14,6 +14,9 @@ import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet00Connect;
 import com.vloxlands.net.packet.Packet01Disconnect;
+import com.vloxlands.net.packet.Packet02Rename;
+import com.vloxlands.net.packet.Packet03ChatMessage;
+import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -118,6 +121,51 @@ public class Server extends Thread
 				}
 				break;
 			}
+			case RENAME:
+			{
+				Packet02Rename packet = new Packet02Rename(data);
+				CFG.p("[SERVER]: " + packet.getOldUsername() + " changed their name to " + packet.getNewUsername() + ".");
+				try
+				{
+					sendPacketToAllClients(packet);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
+			case CHATMESSAGE:
+			{
+				Packet03ChatMessage packet = new Packet03ChatMessage(data);
+				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): " + packet.getMessage());
+				try
+				{
+					sendPacketToAllClients(packet);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
+			case SERVERINFO:
+			{
+				String[] players = new String[clients.size()];
+				for (int i = 0; i < clients.size(); i++)
+				{
+					players[i] = clients.get(i).getUsername();
+				}
+				try
+				{
+					sendPacketToAllClients(new Packet04ServerInfo(players));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
 		}
 	}
 	
@@ -133,7 +181,6 @@ public class Server extends Thread
 		socket.send(packet);
 		
 	}
-	
 	
 	public void sendPacketToAllClients(Packet packet) throws IOException
 	{

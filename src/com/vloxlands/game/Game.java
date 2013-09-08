@@ -21,6 +21,7 @@ import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Client;
+import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
@@ -440,6 +441,9 @@ public class Game
 		{
 			IP = ip;
 			server = new Server(IP);
+			
+			Player player = new Player("Player");
+			Game.client = new Client(player);
 		}
 	}
 }
