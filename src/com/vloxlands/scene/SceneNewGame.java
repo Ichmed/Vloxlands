@@ -77,13 +77,26 @@ public class SceneNewGame extends Scene
 		progress.setVisible(false);
 		content.add(progress);
 		
+		TextButton disco = new TextButton((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f), Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
+		disco.setEnabled(!Game.client.isConnectedToLocalhost());
+		disco.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				Game.client.disconnect();
+				Game.currentGame.removeActiveScene();
+			}
+		});
+		content.add(disco);
+		
 		TextButton back = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.removeScene(SceneNewGame.this);
+				Game.currentGame.removeActiveScene();
 			}
 		});
 		content.add(back);

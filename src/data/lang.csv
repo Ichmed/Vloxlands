@@ -17,6 +17,7 @@ start;Start;Start
 play;Play;Spiel starten
 join;Join Game;Spiel betreten
 connect;Connect;Verbinden
+disconnect;Disconnect;Trennen
 error;Error!;Fehler!
 close;Close;Schliessen
 unlimited;Unlimited;Unbegrenzt
