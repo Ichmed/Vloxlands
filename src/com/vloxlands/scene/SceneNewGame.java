@@ -12,6 +12,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
+import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.ChatContainer;
@@ -204,6 +205,10 @@ public class SceneNewGame extends Scene
 		{
 			case DISCONNECT:
 			{
+				if (((Packet01Disconnect) packet).getUsername().equals(Game.client.getUsername()))
+				{
+					Game.currentGame.removeActiveScene();
+				}
 				try
 				{
 					Game.client.sendPacket(new Packet04ServerInfo());

@@ -86,11 +86,7 @@ public class Client extends Thread
 			case DISCONNECT:
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
-				if (packet.getUsername().equals(player.getUsername()))
-				{
-					CFG.p("im out of here");
-					connected = false;
-				}
+				if (packet.getUsername().equals(player.getUsername())) connected = false;
 				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()), "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
@@ -148,6 +144,11 @@ public class Client extends Thread
 			return false;
 		}
 		return true;
+	}
+	
+	public String getUsername()
+	{
+		return player.getUsername();
 	}
 	
 	public void disconnect()
