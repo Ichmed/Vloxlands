@@ -3,8 +3,6 @@ package com.vloxlands.scene;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.net.Server;
-import com.vloxlands.net.packet.Packet00Connect;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
 import com.vloxlands.settings.Tr;
@@ -23,7 +21,7 @@ public class SceneSettings extends Scene
 	public void init()
 	{
 		setBackground();
-		setUserZone();
+		// setUserZone();
 		setTitle(Tr._("settings"));
 		
 		content.add(new Container(0, 115, Display.getWidth() / 2, Display.getHeight() - 220));
@@ -78,33 +76,33 @@ public class SceneSettings extends Scene
 		});
 		content.add(s);
 		
-		TextButton sv = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT * 2, "Enable server");
-		sv.setClickEvent(new IGuiEvent()
-		{
-			
-			@Override
-			public void trigger()
-			{
-				if (Game.server == null)
-				{
-					Game.server = new Server();
-					Game.server.start();
-				}
-			}
-		});
-		content.add(sv);
-		
-		TextButton cl = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Enable client");
-		cl.setClickEvent(new IGuiEvent()
-		{
-			
-			@Override
-			public void trigger()
-			{
-				Packet00Connect packet = new Packet00Connect(System.getProperty("user.name"));
-				packet.writeData(Game.client);
-			}
-		});
-		content.add(cl);
+		// TextButton sv = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT * 2, "Enable server");
+		// sv.setClickEvent(new IGuiEvent()
+		// {
+		//
+		// @Override
+		// public void trigger()
+		// {
+		// if (Game.server == null)
+		// {
+		// Game.server = new Server();
+		// Game.server.start();
+		// }
+		// }
+		// });
+		// content.add(sv);
+		//
+		// TextButton cl = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Enable client");
+		// cl.setClickEvent(new IGuiEvent()
+		// {
+		//
+		// @Override
+		// public void trigger()
+		// {
+		// Packet00Connect packet = new Packet00Connect(System.getProperty("user.name"));
+		// packet.writeData(Game.client);
+		// }
+		// });
+		// content.add(cl);
 	}
 }

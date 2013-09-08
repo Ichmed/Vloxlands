@@ -17,9 +17,6 @@ import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
-import com.vloxlands.net.Client;
-import com.vloxlands.net.Server;
-import com.vloxlands.net.User;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -29,16 +26,15 @@ import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
-import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 import de.dakror.universion.UniVersion;
 
 public class Game
 {
-	public static Server server;
-	public static Client client;
-	public static User user;
+	// public static Server server;
+	// public static Client client;
+	// public static User user;
 	
 	public static Game currentGame;
 	public static Map currentMap;
@@ -213,7 +209,7 @@ public class Game
 		{
 			
 			scene.content.clear();
-			scene.initUserZone();
+			// scene.initUserZone();
 			scene.init();
 		}
 	}
@@ -397,11 +393,11 @@ public class Game
 		glPopMatrix();
 	}
 	
-	public static void initMultiplayer()
-	{
-		user = new User(NetworkAssistant.getPlayerDataFromDatabase("DrTest"));
-		CFG.p(user.getIP());
-		client = new Client(user.getIP());
-		client.start();
-	}
+	// public static void initMultiplayer()
+	// {
+	// // user = new User(NetworkAssistant.getPlayerDataFromDatabase("DrTest"));
+	// // CFG.p(user.getIP());
+	// client = new Client("25.98.224.211");
+	// client.start();
+	// }
 }

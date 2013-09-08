@@ -24,7 +24,7 @@ public class SceneGame extends Scene
 	@Override
 	public void init()
 	{
-		setUserZone();
+		// setUserZone();
 		Game.currentGame.resetCamera();
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;

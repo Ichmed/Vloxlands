@@ -27,7 +27,7 @@ public class SceneNewGame extends Scene
 	{
 		setBackground();
 		
-		setUserZone();
+		// setUserZone();
 		
 		setTitle(Tr._("newGame"));
 		
