@@ -25,7 +25,7 @@ public class SceneNewGame extends Scene
 	@Override
 	public void init()
 	{
-		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
+		if (Game.client != null && !Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		setBackground();
 		// setUserZone();
