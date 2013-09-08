@@ -59,73 +59,9 @@ public class SceneMainMenu extends Scene
 					@Override
 					public void trigger()
 					{
-						new Thread()
-						{
-							Dialog d;
-							boolean abort = false;
-							
-							@Override
-							public void run()
-							{
-								d = ((Dialog) Game.currentGame.getActiveScene());
-								d.buttons[1].setEnabled(false);
-								d.buttons[0].setClickEvent(new IGuiEvent()
-								{
-									@Override
-									public void trigger()
-									{
-										abort = true;
-										d.buttons[1].setEnabled(true);
-									}
-								});
-								try
-								{
-									boolean response = Game.client.connectToServer(InetAddress.getByName(ip.getText()));
-									if (!response) CFG.p("catch that error you fool");
-									
-									while (!abort)
-									{
-										if (!Game.client.isConnected())
-										{
-											try
-											{
-												Thread.sleep(100);
-											}
-											catch (InterruptedException e)
-											{
-												e.printStackTrace();
-											}
-										}
-										else
-										{
-											CFG.p("valid server. YAY");
-											// TODO: connect
-											break;
-										}
-									}
-								}
-								catch (UnknownHostException e)
-								{
-									showErrorDialog();
-								}
-								
-								resetButtons();
-							}
-							
-							
-							void resetButtons()
-							{
-								d.buttons[0].setClickEvent(Dialog.CLOSE_EVENT);
-								d.buttons[1].setEnabled(true);
-							}
-							
-							
-							void showErrorDialog()
-							{
-								resetButtons();
-								Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("iperror").replace("%ip%", ip.getText()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
-							}
-						}.start();
+						if (Game.client.isConnectedToLocalhost()) Game.client.disconnect();
+						
+						new LoginThread(ip.getText()).start();
 					}
 				}));
 				ip.setWidth(dialog.getWidth() - 50);
@@ -158,5 +94,83 @@ public class SceneMainMenu extends Scene
 		c.add(b);
 		
 		content.add(c);
+	}
+	
+	class LoginThread extends Thread
+	{
+		Dialog d;
+		boolean abort = false;
+		
+		String ip;
+		
+		LoginThread(String ip)
+		{
+			this.ip = ip;
+		}
+		
+		@Override
+		public void run()
+		{
+			d = ((Dialog) Game.currentGame.getActiveScene());
+			d.lockScene();
+			
+			d.buttons[0].setEnabled(true);
+			d.buttons[0].setClickEvent(new IGuiEvent()
+			{
+				@Override
+				public void trigger()
+				{
+					abort = true;
+					d.buttons[1].setEnabled(true);
+				}
+			});
+			try
+			{
+				boolean response = Game.client.connectToServer(InetAddress.getByName(ip));
+				if (!response) CFG.p("catch that error you fool");
+				
+				while (!abort)
+				{
+					if (!Game.client.isConnected())
+					{
+						try
+						{
+							Thread.sleep(100);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+					}
+					else
+					{
+						CFG.p("valid server. YAY");
+						// TODO: connect
+						break;
+					}
+				}
+			}
+			catch (UnknownHostException e)
+			{
+				showErrorDialog();
+			}
+			
+			resetButtons();
+		}
+		
+		
+		void resetButtons()
+		{
+			d.unlockScene();
+			d.buttons[0].setClickEvent(Dialog.CLOSE_EVENT);
+			d.buttons[1].setEnabled(true);
+		}
+		
+		
+		void showErrorDialog()
+		{
+			resetButtons();
+			Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("iperror").replace("%ip%", ip), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+		}
 	}
 }

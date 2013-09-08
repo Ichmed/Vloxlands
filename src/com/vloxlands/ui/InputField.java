@@ -70,7 +70,7 @@ public class InputField extends ClickableGui
 	@Override
 	public void handleKeyboard(int key, char chr, boolean down)
 	{
-		if (!down || !isFocused()) return;
+		if (!down || !isFocused() || !enabled) return;
 		switch (Keyboard.getKeyName(key))
 		{
 			case "TAB":
@@ -100,23 +100,22 @@ public class InputField extends ClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
-		if((flag & 1) != 0) currentInputfield = this;
+		if ((flag & 1) != 0) currentInputfield = this;
 	}
 	
 	public boolean isFocused()
 	{
 		return currentInputfield == this;
 	}
-
+	
 	@Override
 	public void resetElement()
 	{
 		super.resetElement();
 		currentInputfield = null;
 	}
-
+	
 	@Override
 	public void onTick()
-	{		
-	}
+	{}
 }

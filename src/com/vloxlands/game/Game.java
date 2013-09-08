@@ -446,12 +446,4 @@ public class Game
 			client = new Client(player);
 		}
 	}
-	
-	// public static void initMultiplayer()
-	// {
-	// // user = new User(NetworkAssistant.getPlayerDataFromDatabase("DrTest"));
-	// // CFG.p(user.getIP());
-	// client = new Client("25.98.224.211");
-	// client.start();
-	// }
 }

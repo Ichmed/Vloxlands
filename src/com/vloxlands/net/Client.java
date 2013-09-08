@@ -6,9 +6,11 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import com.vloxlands.Vloxlands;
+import com.vloxlands.game.Game;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet00Connect;
+import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -65,18 +67,30 @@ public class Client extends Thread
 		}
 		
 		serverIP = ip;
-		Packet00Connect p = new Packet00Connect(player.getUsername());
 		try
 		{
-			sendPacket(p);
+			sendPacket(new Packet00Connect(player.getUsername()));
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 			return false;
-			
 		}
 		return true;
+	}
+	
+	public void disconnect()
+	{
+		if (!connected) return;
+		
+		try
+		{
+			sendPacket(new Packet01Disconnect(player.getUsername()));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void parsePacket(byte[] data)
@@ -99,6 +113,9 @@ public class Client extends Thread
 			}
 			case DISCONNECT:
 			{
+				Packet01Disconnect packet = new Packet01Disconnect(data);
+				if (packet.getUsername().equals(player.getUsername())) connected = false;
+				else CFG.p(packet.getUsername() + " left the game");
 				break;
 			}
 		}
@@ -107,6 +124,11 @@ public class Client extends Thread
 	public boolean isConnected()
 	{
 		return connected;
+	}
+	
+	public boolean isConnectedToLocalhost()
+	{
+		return connected && serverIP.equals(Game.IP);
 	}
 	
 	public void sendPacket(Packet p) throws IOException

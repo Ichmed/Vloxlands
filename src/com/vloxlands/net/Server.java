@@ -13,6 +13,7 @@ import com.vloxlands.Vloxlands;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet00Connect;
+import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -93,12 +94,28 @@ public class Server extends Thread
 				{
 					e.printStackTrace();
 				}
-				// PlayerMP playerMP = new PlayerMP(address, port, packet.getUsername());
-				// connectedPlayers.add(playerMP);
 				break;
 			}
 			case DISCONNECT:
 			{
+				Packet01Disconnect packet = new Packet01Disconnect(data);
+				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected.");
+				try
+				{
+					sendPacketToAllClients(packet);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				for (int i = 0; i < clients.size(); i++)
+				{
+					if (clients.get(i).getIP().equals(address))
+					{
+						clients.remove(i);
+						break;
+					}
+				}
 				break;
 			}
 		}
