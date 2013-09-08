@@ -3,6 +3,7 @@ package com.vloxlands.scene;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.lwjgl.opengl.Display;
@@ -15,8 +16,10 @@ import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.GuiRotation;
+import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
+import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
@@ -27,7 +30,7 @@ public class SceneNewGame extends Scene
 {
 	ProgressBar progress;
 	Spinner xSize, zSize, radius;
-	Container lobby;
+	static Container lobby;
 	
 	@Override
 	public void init()
@@ -51,7 +54,10 @@ public class SceneNewGame extends Scene
 		
 		setTitle(Tr._("newGame"));
 		
-		lobby = new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220);
+		if (lobby == null)
+		{
+			lobby = new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220);
+		}
 		content.add(lobby);
 		
 		Container chatContainer = new Container(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150, false, true);
@@ -98,9 +104,46 @@ public class SceneNewGame extends Scene
 		content.add(zSize);
 	}
 	
-	private void updateLobby(String[] players)
+	private void updateLobby(String[] pl)
 	{
-		CFG.p("should update to this user table: " + Arrays.toString(players));
+		ArrayList<String> players = new ArrayList<>();
+		for (String p : pl)
+			players.add(p);
+		
+		ArrayList<IGuiElement> lobbyCopy = (ArrayList<IGuiElement>) lobby.components.clone();
+		lobby.components.clear();
+		
+		int index = 0;
+		for (IGuiElement iG : lobbyCopy)
+		{
+			if (players.indexOf(((LobbySlot) iG).getUsername()) > -1)
+			{
+				iG.setY(15 + index * LobbySlot.HEIGHT);
+				lobby.add(iG);
+				players.remove(((LobbySlot) iG).getUsername());
+				index++;
+			}
+		}
+		for (int i = 0; i < players.size(); i++)
+		{
+			CFG.p(i);
+			LobbySlot slot = new LobbySlot(players.get(i));
+			slot.setX(15);
+			slot.setY(15 + index * LobbySlot.HEIGHT + i * LobbySlot.HEIGHT);
+			slot.setWidth(lobby.getWidth() - 30);
+			lobby.add(slot);
+		}
+		// for (int i = 0; i < players.length; i++)
+		// {
+		// LobbySlot slot = new LobbySlot(players[i]);
+		// slot.setX(15);
+		// slot.setY(15 + i * LobbySlot.HEIGHT);
+		// slot.setWidth(lobby.getWidth() - 30);
+		//
+		// lobby.add(slot);
+		// }
+		
+		CFG.p("should update to this user table: " + Arrays.toString(pl));
 	}
 	
 	@Override
@@ -134,6 +177,18 @@ public class SceneNewGame extends Scene
 	{
 		switch (packet.getType())
 		{
+			case DISCONNECT:
+			{
+				try
+				{
+					Game.client.sendPacket(new Packet04ServerInfo());
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
 			case SERVERINFO:
 			{
 				updateLobby(((Packet04ServerInfo) packet).getPlayers());

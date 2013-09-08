@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Arrays;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
@@ -107,9 +106,7 @@ public class Client extends Thread
 			}
 			case SERVERINFO:
 			{
-				Packet04ServerInfo packet = new Packet04ServerInfo(data);
-				CFG.p("Connected players: " + Arrays.toString(packet.getPlayers()));
-				Game.currentGame.onClientReveivedPacket(packet);
+				Game.currentGame.onClientReveivedPacket(new Packet04ServerInfo(data));
 				break;
 			}
 		}
