@@ -1,4 +1,4 @@
-package com.vloxlands.net.udp;
+package com.vloxlands.net;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -10,9 +10,9 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.vloxlands.Vloxlands;
-import com.vloxlands.net.udp.packet.Packet;
-import com.vloxlands.net.udp.packet.Packet.PacketTypes;
-import com.vloxlands.net.udp.packet.Packet00Connect;
+import com.vloxlands.net.packet.Packet;
+import com.vloxlands.net.packet.Packet00Connect;
+import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.settings.CFG;
 
 /**

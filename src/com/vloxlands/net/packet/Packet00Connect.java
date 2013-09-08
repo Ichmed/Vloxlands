@@ -1,7 +1,7 @@
-package com.vloxlands.net.udp.packet;
+package com.vloxlands.net.packet;
 
-import com.vloxlands.net.udp.Client;
-import com.vloxlands.net.udp.Server;
+import com.vloxlands.net.Client;
+import com.vloxlands.net.Server;
 
 
 

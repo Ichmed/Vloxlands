@@ -1,4 +1,4 @@
-package com.vloxlands.net.udp;
+package com.vloxlands.net;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -6,7 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import com.vloxlands.Vloxlands;
-import com.vloxlands.net.udp.packet.Packet00Connect;
+import com.vloxlands.net.packet.Packet00Connect;
 import com.vloxlands.settings.CFG;
 
 /**

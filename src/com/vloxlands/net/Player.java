@@ -1,4 +1,4 @@
-package com.vloxlands.net.udp;
+package com.vloxlands.net;
 
 import java.net.InetAddress;
 
