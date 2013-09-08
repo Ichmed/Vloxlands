@@ -76,7 +76,7 @@ public class Server extends Thread
 		{
 			try
 			{
-				sendPacket(new Packet01Disconnect(p.getUsername(), "mp.serverclosed"), p);
+				sendPacket(new Packet01Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
 			}
 			catch (IOException e)
 			{
@@ -130,7 +130,7 @@ public class Server extends Thread
 			case DISCONNECT:
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
-				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected.");
+				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected. (" + packet.getReason() + ")");
 				for (int i = 0; i < clients.size(); i++)
 				{
 					if (clients.get(i).getIP().equals(address))

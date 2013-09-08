@@ -157,7 +157,7 @@ public class Client extends Thread
 		usernameTaken = false;
 		try
 		{
-			sendPacket(new Packet01Disconnect(player.getUsername(), "mp.disconnect"));
+			sendPacket(new Packet01Disconnect(player.getUsername(), "mp.reason.disconnect"));
 		}
 		catch (IOException e)
 		{
