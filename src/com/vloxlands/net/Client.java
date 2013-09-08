@@ -87,7 +87,7 @@ public class Client extends Thread
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = false;
-				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()), "INFO");
+				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
