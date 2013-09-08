@@ -26,12 +26,16 @@ public class SceneNewGame extends Scene
 	public void init()
 	{
 		setBackground();
-		
 		// setUserZone();
 		
 		setTitle(Tr._("newGame"));
 		
-		// content.add(new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220));
+		content.add(new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220 - TextButton.HEIGHT - 30)); // lobby
+		
+		Container lobbyButtons = new Container(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 30, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 30, false, false);
+		
+		content.add(lobbyButtons);
+		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		
 		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, true);

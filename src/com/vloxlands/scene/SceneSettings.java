@@ -6,7 +6,6 @@ import com.vloxlands.game.Game;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
 import com.vloxlands.settings.Tr;
-import com.vloxlands.ui.Checkbox;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.FlagButton;
 import com.vloxlands.ui.GuiRotation;
@@ -43,10 +42,10 @@ public class SceneSettings extends Scene
 		fps.addCustomTitle(121, Tr._("unlimited"));
 		fps.setIntegerMode(true);
 		content.add(fps);
-		
-		content.add(new Label(20, 298, 0, 25, Tr._("rememberuser") + ":", false));
-		final Checkbox remember = new Checkbox(Display.getWidth() / 2 - 60, 300, CFG.SAVE_USER);
-		content.add(remember);
+		//
+		// content.add(new Label(20, 298, 0, 25, Tr._("rememberuser") + ":", false));
+		// final Checkbox remember = new Checkbox(Display.getWidth() / 2 - 60, 300, CFG.SAVE_USER);
+		// content.add(remember);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
@@ -69,7 +68,7 @@ public class SceneSettings extends Scene
 			{
 				CFG.FOV = (int) fov.getValue();
 				CFG.FPS = (int) fps.getValue();
-				CFG.SAVE_USER = remember.isSelected();
+				// CFG.SAVE_USER = remember.isSelected();
 				
 				Settings.saveSettings();
 			}

@@ -17,6 +17,8 @@ public class SceneMainMenu extends Scene
 	@Override
 	public void init()
 	{
+		Game.currentGame.initMultiplayer();
+		
 		setBackground();
 		
 		// setUserZone();

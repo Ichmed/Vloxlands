@@ -17,23 +17,10 @@ start;Start;Start
 play;Play;Spiel starten
 error;Error!;Fehler!
 close;Close;Schliessen
-username;Username;Benutzername
-password;Password;Passwort
-addfriend;+ Friend;+ Freund
-addfriend2;Add a Friend;Freund hinzufuegen
-addfriend3;You can add a Friend with his Username;Du kannst einen Freund mithilfe seines Benutzernamens hinzufuegen
 unlimited;Unlimited;Unbegrenzt
 islands;Islands;Inseln
 language;Language;Sprache
-rememberuser;Remember login;Anmeldung speichern
 fov;Field of View;Sichtfeld
 fps;FPS Cap;FPS Begrenzung
-logindesc;Please login with your dakror.de-Account.;Bitte melde dich mit deinem dakror.de-Konto an.
-loginerror;Wrong Username or Password;Falscher Benutzername oder Passwort
-searchemtpy;Please enter an username;Bitte gib einen Benutzernamen an
-searcherror;No user having the name "%name%" could be found;Es konnte kein Benutzer mit dem Namen "%name%" gefunden werden
-searchself;Don't you have friends, or why are you trying to add yourself as a friend?;Hast du keine Freunde, oder warum versuchst du, dich selbst als Freund hinzuzufuegen?
-searchexists;"%name%" is already a friend of yours;"%name%" ist bereits dein Freund
-logout;Logout;Abmelden
+hamachierror;It seeems that you don't have "LogMeIn Hamachi" installed on your computer. In order to beeing able to play in Multiplayer you have to install it. Do you want to install it now? If you've installed "LogMeIn Hamachi", please restart the game.;Es scheint, dass du "LogMeIn Hamachi" nicht auf deinem Computer installiert hast. Du musst es installieren, um Mehrspieler-Spiele spielen zu koennen. Moechtest du es nun installieren? Nachdem du "LogMeIn Hamachi" installiert hast, starte das Spiel bitte neu.
 errno;An error has occurred!;Ein Fehler ist aufgetreten!
-logoutquestion;Do you really want to logout?;Willst du dich wirklich abmelden?

@@ -3,6 +3,9 @@ package com.vloxlands.game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
 
+import java.awt.Desktop;
+import java.net.InetAddress;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
@@ -24,17 +27,20 @@ import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
+import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
+import com.vloxlands.ui.Dialog;
+import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
+import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 import de.dakror.universion.UniVersion;
 
 public class Game
 {
-	// public static Server server;
-	// public static Client client;
-	// public static User user;
+	public static InetAddress IP;
 	
 	public static Game currentGame;
 	public static Map currentMap;
@@ -55,6 +61,7 @@ public class Game
 	boolean fullscreenToggled = false;
 	boolean rerender = false;
 	boolean regenerate = false;
+	boolean hamachiInstallationDialogShown = false;
 	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	
@@ -207,7 +214,6 @@ public class Game
 	{
 		for (Scene scene : sceneStack)
 		{
-			
 			scene.content.clear();
 			// scene.initUserZone();
 			scene.init();
@@ -391,6 +397,45 @@ public class Game
 			glLineWidth(1);
 		}
 		glPopMatrix();
+	}
+	
+	public void initMultiplayer()
+	{
+		if (sceneStack.size() == 0 || !CFG.INTERNET || IP != null || hamachiInstallationDialogShown) return;
+		InetAddress ip = NetworkAssistant.getMyHamachiIP();
+		if (ip == null)
+		{
+			addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("abort"), new IGuiEvent()
+			{
+				
+				@Override
+				public void trigger()
+				{
+					hamachiInstallationDialogShown = true;
+					Game.currentGame.removeActiveScene();
+				}
+			}), new Action(Tr._("yes"), new IGuiEvent()
+			{
+				@Override
+				public void trigger()
+				{
+					hamachiInstallationDialogShown = true;
+					Game.currentGame.removeActiveScene();
+					try
+					{
+						Desktop.getDesktop().browse(new URL("https://secure.logmein.com/products/hamachi/download.aspx").toURI());
+					}
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			})));
+		}
+		else
+		{
+			IP = ip;
+		}
 	}
 	
 	// public static void initMultiplayer()
