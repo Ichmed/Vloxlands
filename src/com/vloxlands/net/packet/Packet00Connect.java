@@ -1,7 +1,5 @@
 package com.vloxlands.net.packet;
 
-import com.vloxlands.net.Client;
-import com.vloxlands.net.Server;
 
 
 
@@ -23,19 +21,6 @@ public class Packet00Connect extends Packet
 	{
 		super(00);
 		this.username = username;
-	}
-	
-	
-	@Override
-	public void writeData(Client client)
-	{
-		client.sendData(getData());
-	}
-	
-	@Override
-	public void writeData(Server server)
-	{
-		server.sendDataToAllClients(getData());
 	}
 	
 	@Override

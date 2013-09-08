@@ -11,8 +11,8 @@ import java.util.ArrayList;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.net.packet.Packet;
-import com.vloxlands.net.packet.Packet00Connect;
 import com.vloxlands.net.packet.Packet.PacketTypes;
+import com.vloxlands.net.packet.Packet00Connect;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -83,8 +83,16 @@ public class Server extends Thread
 			case CONNECT:
 			{
 				Packet00Connect packet = new Packet00Connect(data);
-				CFG.p("[" + address.getHostAddress() + ":" + port + "]: " + packet.getUsername() + " has connected.");
+				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
 				clients.add(new Player(packet.getUsername(), address, port));
+				try
+				{
+					sendPacketToAllClients(packet);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 				// PlayerMP playerMP = new PlayerMP(address, port, packet.getUsername());
 				// connectedPlayers.add(playerMP);
 				break;
@@ -96,24 +104,30 @@ public class Server extends Thread
 		}
 	}
 	
-	public void sendData(byte[] data, InetAddress ipAddress, int port)
+	public void sendPacket(Packet p, Player client) throws IOException
 	{
-		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-		try
-		{
-			socket.send(packet);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		sendData(p.getData(), client);
 	}
 	
-	public void sendDataToAllClients(byte[] data)
+	public void sendData(byte[] data, Player client) throws IOException
 	{
-		// for (PlayerMP p : connectedPlayers)
-		// {
-		// sendData(data, p.getIPAddress(), p.getPort());
-		// }
+		DatagramPacket packet = new DatagramPacket(data, data.length, client.getIP(), client.getPort());
+		
+		socket.send(packet);
+		
+	}
+	
+	
+	public void sendPacketToAllClients(Packet packet) throws IOException
+	{
+		sendDataToAllClients(packet.getData());
+	}
+	
+	public void sendDataToAllClients(byte[] data) throws IOException
+	{
+		for (Player p : clients)
+		{
+			sendData(data, p);
+		}
 	}
 }

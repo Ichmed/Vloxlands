@@ -1,7 +1,5 @@
 package com.vloxlands.net.packet;
 
-import com.vloxlands.net.Client;
-import com.vloxlands.net.Server;
 
 
 /**
@@ -34,10 +32,6 @@ public abstract class Packet
 	{
 		this.packetID = (byte) packetID;
 	}
-	
-	public abstract void writeData(Client client);
-	
-	public abstract void writeData(Server server);
 	
 	public abstract byte[] getData();
 	

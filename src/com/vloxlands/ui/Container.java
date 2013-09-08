@@ -93,6 +93,16 @@ public class Container extends ClickableGui
 		height = h;
 	}
 	
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		super.setEnabled(enabled);
+		for (IGuiElement ig : components)
+		{
+			ig.setEnabled(enabled);
+		}
+	}
+	
 	public void add(IGuiElement g)
 	{
 		components.add(g);

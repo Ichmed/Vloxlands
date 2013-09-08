@@ -29,7 +29,7 @@ public class Dialog extends Scene
 	String title;
 	String[] lines;
 	public boolean centered;
-	TextButton[] buttons;
+	public TextButton[] buttons;
 	Container container;
 	
 	int width, height, x, y;
@@ -42,6 +42,7 @@ public class Dialog extends Scene
 	
 	public Dialog(String title, String message, Action... buttons)
 	{
+		width = TextButton.WIDTH * 2 + 20;
 		rawTitle = title;
 		rawMessage = message;
 		rawActions = buttons;
@@ -49,8 +50,6 @@ public class Dialog extends Scene
 		container = new Container(x, y, width, 0);
 		container.border = false;
 		content.add(container);
-		
-		init();
 	}
 	
 	@Override
@@ -93,7 +92,6 @@ public class Dialog extends Scene
 		title = rawTitle;
 		centered = true;
 		
-		width = TextButton.WIDTH * 2 + 20;
 		lines = RenderAssistant.wrap(rawMessage, messageFont, width - 60);
 		height = 90 + lines.length * FontAssistant.getFont(messageFont).getHeight() + container.getHeight();
 		x = Display.getWidth() / 2 - width / 2;
@@ -125,7 +123,6 @@ public class Dialog extends Scene
 		container.add(g);
 		container.pack(false, true);
 		container.setHeight(container.getHeight() + 30);
-		init();
 	}
 	
 	public int getWidth()
