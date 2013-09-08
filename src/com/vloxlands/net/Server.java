@@ -72,6 +72,17 @@ public class Server extends Thread
 			}
 			parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
+		for (Player p : clients)
+		{
+			try
+			{
+				sendPacket(new Packet01Disconnect(p.getUsername()), p);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void parsePacket(byte[] data, InetAddress address, int port)
@@ -80,7 +91,6 @@ public class Server extends Thread
 		PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
 		switch (type)
 		{
-			default:
 			case INVALID:
 			{
 				break;
@@ -184,6 +194,8 @@ public class Server extends Thread
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	
