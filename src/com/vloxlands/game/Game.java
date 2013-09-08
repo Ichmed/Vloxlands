@@ -20,6 +20,9 @@ import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.net.udp.Client;
+import com.vloxlands.net.udp.Player;
+import com.vloxlands.net.udp.Server;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -41,6 +44,8 @@ import de.dakror.universion.UniVersion;
 public class Game
 {
 	public static InetAddress IP;
+	public static Server server;
+	public static Client client;
 	
 	public static Game currentGame;
 	public static Map currentMap;
@@ -435,6 +440,10 @@ public class Game
 		else
 		{
 			IP = ip;
+			server = new Server(IP);
+			
+			Player player = new Player("Dakror");
+			client = new Client(player);
 		}
 	}
 	

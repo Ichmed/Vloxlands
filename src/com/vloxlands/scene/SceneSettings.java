@@ -91,17 +91,16 @@ public class SceneSettings extends Scene
 		// });
 		// content.add(sv);
 		//
-		// TextButton cl = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Enable client");
-		// cl.setClickEvent(new IGuiEvent()
-		// {
-		//
-		// @Override
-		// public void trigger()
-		// {
-		// Packet00Connect packet = new Packet00Connect(System.getProperty("user.name"));
-		// packet.writeData(Game.client);
-		// }
-		// });
-		// content.add(cl);
+		TextButton cl = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Enable client");
+		cl.setClickEvent(new IGuiEvent()
+		{
+			
+			@Override
+			public void trigger()
+			{
+				Game.client.connectToServer(Game.server.getIP());
+			}
+		});
+		content.add(cl);
 	}
 }
