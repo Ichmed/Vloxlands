@@ -410,7 +410,7 @@ public class Game
 		InetAddress ip = NetworkAssistant.getMyHamachiIP();
 		if (ip == null)
 		{
-			addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("abort"), new IGuiEvent()
+			addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("cancel"), new IGuiEvent()
 			{
 				
 				@Override

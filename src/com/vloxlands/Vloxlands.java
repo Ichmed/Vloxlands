@@ -69,14 +69,13 @@ public class Vloxlands
 				
 				Game.currentGame.gameLoop();
 			}
-			running = false;
+			exit();
+			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		Display.destroy();
-		exit();
 	}
 	
 	public static void setFullscreen()
@@ -115,6 +114,8 @@ public class Vloxlands
 	
 	public static void exit()
 	{
+		if (Game.client != null && Game.client.isConnected()) Game.client.disconnect();
+		running = false;
 		UpdateThread.requestStop = true;
 		Settings.saveSettings();
 		

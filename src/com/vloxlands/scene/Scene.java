@@ -93,7 +93,7 @@ public abstract class Scene
 	// public void trigger()
 	// {
 	// final InputField input = new InputField(0, 0, 0, "", Tr._("username"));
-	// Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), new IGuiEvent()
+	// Dialog addDialog = new Dialog(Tr._("addfriend2"), Tr._("addfriend3") + ".", new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("add"), new IGuiEvent()
 	// {
 	// @Override
 	// public void trigger()
@@ -170,7 +170,7 @@ public abstract class Scene
 	// }
 	// else
 	// {
-	// Game.currentGame.addScene(new Dialog(Tr._("logout") + "?", Tr._("logoutquestion"), new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("yes"), new IGuiEvent()
+	// Game.currentGame.addScene(new Dialog(Tr._("logout") + "?", Tr._("logoutquestion"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("yes"), new IGuiEvent()
 	// {
 	// @Override
 	// public void trigger()

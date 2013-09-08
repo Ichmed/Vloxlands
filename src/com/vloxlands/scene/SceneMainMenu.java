@@ -54,7 +54,7 @@ public class SceneMainMenu extends Scene
 			public void trigger()
 			{
 				final InputField ip = new InputField(0, 0, 0, "", "");
-				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("abort"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent()
+				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent()
 				{
 					@Override
 					public void trigger()
