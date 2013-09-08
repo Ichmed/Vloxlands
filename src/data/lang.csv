@@ -16,6 +16,7 @@ save;Save;Speichern
 start;Start;Start
 play;Play;Spiel starten
 join;Join Game;Spiel betreten
+info;Information;Information
 connect;Connect;Verbinden
 disconnect;Disconnect;Trennen
 error;Error!;Fehler!
@@ -35,3 +36,6 @@ mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.
 mp.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.
+mp.disconnect;Disconnect by user;Verlassen
+mp.serverclosed;Server shutdown;Server geschlossen
+mp.kicked;Kicked;Gekickt

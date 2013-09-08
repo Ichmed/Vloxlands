@@ -76,7 +76,7 @@ public class Server extends Thread
 		{
 			try
 			{
-				sendPacket(new Packet01Disconnect(p.getUsername()), p);
+				sendPacket(new Packet01Disconnect(p.getUsername(), "mp.serverclosed"), p);
 			}
 			catch (IOException e)
 			{

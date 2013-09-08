@@ -15,8 +15,10 @@ import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
@@ -205,9 +207,20 @@ public class SceneNewGame extends Scene
 		{
 			case DISCONNECT:
 			{
-				if (((Packet01Disconnect) packet).getUsername().equals(Game.client.getUsername()))
+				Packet01Disconnect p = (Packet01Disconnect) packet;
+				if (p.getUsername().equals(Game.client.getUsername()))
 				{
-					Game.currentGame.removeActiveScene();
+					if (!p.getReason().equals("mp.disconnect"))
+					{
+						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent()
+						{
+							@Override
+							public void trigger()
+							{
+								Game.currentGame.setScene(new SceneMainMenu());
+							}
+						})));
+					}
 				}
 				try
 				{
