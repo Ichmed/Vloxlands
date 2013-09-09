@@ -109,6 +109,7 @@ public class Server extends Thread
 				{
 					try
 					{
+						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated client");
 						sendPacket(new Packet05Reject(Cause.OUTDATEDCLIENT), player);
 						return;
 					}
@@ -121,6 +122,7 @@ public class Server extends Thread
 				{
 					try
 					{
+						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated server");
 						sendPacket(new Packet05Reject(Cause.OUTDATEDSERVER), player);
 						return;
 					}
