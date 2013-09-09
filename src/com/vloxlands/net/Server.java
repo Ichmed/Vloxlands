@@ -157,6 +157,21 @@ public class Server extends Thread
 			case RENAME:
 			{
 				Packet02Rename packet = new Packet02Rename(data);
+				for (int i = 0; i < clients.size(); i++)
+				{
+					if (clients.get(i).getUsername().equals(packet.getNewUsername()))
+					{
+						try
+						{
+							sendPacket(new Packet05UsernameTaken(), new Player(packet.getOldUsername(), address, port));
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+						return;
+					}
+				}
 				CFG.p("[SERVER]: " + packet.getOldUsername() + " changed their name to " + packet.getNewUsername() + ".");
 				for (int i = 0; i < clients.size(); i++)
 				{

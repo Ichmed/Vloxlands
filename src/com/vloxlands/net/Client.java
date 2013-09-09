@@ -95,9 +95,7 @@ public class Client extends Thread
 			{
 				Packet02Rename packet = new Packet02Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
-				CFG.p("here i am");
 				print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
-				CFG.p("here i was");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -171,6 +169,11 @@ public class Client extends Thread
 	public boolean isUsernameTaken()
 	{
 		return usernameTaken;
+	}
+	
+	public void setUsernameTaken(boolean b)
+	{
+		usernameTaken = b;
 	}
 	
 	public boolean isConnected()
