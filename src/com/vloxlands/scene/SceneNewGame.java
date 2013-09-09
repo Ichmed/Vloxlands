@@ -72,7 +72,14 @@ public class SceneNewGame extends Scene
 		lobby.setHeight(Display.getHeight() - 220);
 		content.add(lobby);
 		
-		chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
+		if (chat == null)
+		{
+			chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
+		}
+		chat.setX(0);
+		chat.setY(115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150);
+		chat.setWidth(Display.getWidth() - TextButton.WIDTH - 90);
+		chat.setHeight(TextButton.HEIGHT + 150);
 		content.add(chat);
 		
 		final InputField chatInput = new InputField(5, Display.getHeight() - 115 - InputField.HEIGHT - 15, Display.getWidth() - TextButton.WIDTH - 120, "", "");

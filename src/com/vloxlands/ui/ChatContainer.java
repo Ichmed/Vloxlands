@@ -36,15 +36,15 @@ public class ChatContainer extends Container
 		}
 		glEnable(GL_SCISSOR_TEST);
 		glScissor(x + 15, (Display.getHeight() - y) - height + 15, width - 30, height - 30);
-		int dif = height - 30 - lastY;
-		if (lastY > height - 30) glTranslatef(x, y + dif, 0);
+		int dif = height - 65 - lastY;
+		if (lastY > height - 65) glTranslatef(x, y + dif, 0);
 		else glTranslatef(x, y, 0);
 		for (IGuiElement g : components)
 		{
 			if (g.isVisible() && g.wantsRender()) g.render();
 		}
 		
-		if (lastY > height - 30) glTranslatef(-x, -y - dif, 0);
+		if (lastY > height - 65) glTranslatef(-x, -y - dif, 0);
 		else glTranslatef(-x, -y, 0);
 		glDisable(GL_SCISSOR_TEST);
 	}
