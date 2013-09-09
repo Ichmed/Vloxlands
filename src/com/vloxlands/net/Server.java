@@ -39,7 +39,7 @@ public class Server extends Thread
 		catch (BindException e)
 		{
 			CFG.p("There is a server running at that port already!");
-			Vloxlands.exit();
+			return;
 		}
 		catch (SocketException e)
 		{

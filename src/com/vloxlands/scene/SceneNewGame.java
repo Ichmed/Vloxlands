@@ -13,6 +13,7 @@ import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet01Disconnect;
+import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
@@ -22,6 +23,7 @@ import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
+import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
@@ -72,6 +74,29 @@ public class SceneNewGame extends Scene
 		
 		chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
 		content.add(chat);
+		
+		final InputField chatInput = new InputField(5, Display.getHeight() - 115 - InputField.HEIGHT - 15, Display.getWidth() - TextButton.WIDTH - 120, "", "");
+		chatInput.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				String msg = chatInput.getText();
+				if (msg.length() > 0)
+				{
+					try
+					{
+						Game.client.sendPacket(new Packet03ChatMessage(Game.client.getUsername(), msg));
+						chatInput.setText("");
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		content.add(chatInput);
 		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		

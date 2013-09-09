@@ -15,8 +15,11 @@ import com.vloxlands.util.RenderAssistant;
  */
 public class InputField extends ClickableGui
 {
+	public static final int HEIGHT = 35;
+	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 30f);
 	boolean hidden;
+	public boolean doubled = false;
 	String text, hint, hiddenShowText;
 	public static InputField currentInputfield;
 	
@@ -35,7 +38,7 @@ public class InputField extends ClickableGui
 		this.x = x;
 		this.y = y;
 		this.width = width;
-		height = 35;
+		height = HEIGHT;
 		this.text = text;
 		this.hint = hint;
 		hidden = false;
@@ -50,7 +53,7 @@ public class InputField extends ClickableGui
 	@Override
 	public void render()
 	{
-		RenderAssistant.renderContainer(x, y, width + 20, height + 20, false);
+		RenderAssistant.renderContainer(x, y, width + 20, height + 20, doubled);
 		if (text.length() == 0 && hint.length() > 0)
 		{
 			glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
@@ -74,7 +77,9 @@ public class InputField extends ClickableGui
 		switch (Keyboard.getKeyName(key))
 		{
 			case "TAB":
+				return;
 			case "RETURN":
+				if (clickEvent != null) clickEvent.trigger();
 				return;
 		}
 		if (Keyboard.getKeyName(key).equals("BACK"))
@@ -95,6 +100,11 @@ public class InputField extends ClickableGui
 	public String getText()
 	{
 		return text;
+	}
+	
+	public void setText(String t)
+	{
+		text = t;
 	}
 	
 	@Override

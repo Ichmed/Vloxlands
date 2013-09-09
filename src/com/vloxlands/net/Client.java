@@ -102,7 +102,7 @@ public class Client extends Thread
 			case CHATMESSAGE:
 			{
 				Packet03ChatMessage packet = new Packet03ChatMessage(data);
-				if (!packet.getUsername().equals(player.getUsername())) print(packet.getUsername() + ": " + packet.getMessage(), "");
+				print(packet.getUsername() + ": " + packet.getMessage(), "");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
