@@ -36,7 +36,10 @@ public class LobbySlot extends Container
 	@Override
 	public void render()
 	{
+		if (username.equals(Game.client.getUsername())) glColor3f(166 / 256f, 213 / 256f, 236 / 256f);
 		RenderAssistant.renderText(x + 15, y + height / 6, username, font);
+		if (username.equals(Game.client.getUsername())) glColor3f(1, 1, 1);
+		
 		RenderAssistant.renderLine(x, y + height - 20, width, true, false);
 		RenderAssistant.renderLine(x + width - 128, y + height / 2 - 15, 128, true, false);
 		RenderAssistant.renderLine(x + width - 122, y - 5, 30, false, false);
