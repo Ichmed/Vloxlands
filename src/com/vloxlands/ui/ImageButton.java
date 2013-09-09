@@ -23,6 +23,7 @@ public class ImageButton extends ClickableGui
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		stackTexture = false;
 		texW = 0;
 		texH = 0;
 		disabledColor = activeColor = hoverColor = new Vector4f(1, 1, 1, 1);

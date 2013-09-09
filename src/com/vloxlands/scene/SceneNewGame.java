@@ -196,6 +196,7 @@ public class SceneNewGame extends Scene
 			
 			slot.initButtons();
 			slot.components.get(0).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // rename
+			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !slot.getUsername().equals(Game.client.getUsername())); // kick
 		}
 	}
 	

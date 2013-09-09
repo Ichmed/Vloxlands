@@ -3,8 +3,10 @@ package com.vloxlands.ui;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
+import java.io.IOException;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -50,7 +52,7 @@ public class LobbySlot extends Container
 	}
 	
 	/**
-	 * Should have set te slot's width first
+	 * Should have set the slot's width first
 	 */
 	public void initButtons()
 	{
@@ -108,6 +110,37 @@ public class LobbySlot extends Container
 			}
 		});
 		add(rename);
+		
+		ImageButton kick = new ImageButton(width - 124, 36, 45, 45);
+		kick.setTexture("/graphics/textures/ui/Logout.png");
+		kick.disabledColor = IGuiElement.gray;
+		kick.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", username), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
+				{
+					@Override
+					public void trigger()
+					{
+						try
+						{
+							Game.client.sendPacket(new Packet01Disconnect(username, "mp.reason.kicked"));
+							Game.currentGame.removeActiveScene();
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				}));
+				Game.currentGame.addScene(dialog);
+			}
+		});
+		add(kick);
+		
+		
 	}
 	
 	@Override
