@@ -2,6 +2,8 @@ package com.vloxlands.util;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.settings.CFG;
+
 
 /*
  * @author Felix Schmidt
@@ -31,7 +33,7 @@ public class Plane
 	
 	public Plane(Vector3f a, Vector3f b, Vector3f c)
 	{
-		this(Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(c, a, null), null), a);
+		this(Vector3f.cross(Vector3f.sub(a, b, null), Vector3f.sub(a, c, null), null), a);
 	}
 	
 	public Vector3f getNormal()
@@ -68,7 +70,7 @@ public class Plane
 	
 	public void transformToHesseNormalForm()
 	{
-		normal.normalise();
+		normal = MathHelper.normalise(normal);
 		// last factor of the coordinate-form
 		// float lastFactor = Vector3f.dot(normal, (Vector3f) MathHelper.cloneVector(startingPoint).negate());
 		// if(lastFactor > 0)
@@ -108,6 +110,8 @@ public class Plane
 	
 	public double getSignedDistanceToPoint(Vector3f point)
 	{
-		return ((point.x * normal.x) + (point.y * normal.y) + (point.z * normal.z) + d) / Math.sqrt(Math.pow(normal.x, 2) + Math.pow(normal.y, 2) + Math.pow(normal.z, 2));
+		float f = Vector3f.dot(this.normal, Vector3f.sub(point, startingPoint, null));
+		CFG.p(f);
+		return f;
 	}
 }

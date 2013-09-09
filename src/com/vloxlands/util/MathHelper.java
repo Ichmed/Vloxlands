@@ -111,4 +111,15 @@ public class MathHelper
 		
 		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
+	
+	public static Vector3f normalise (Vector3f v)
+	{
+		double l = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
+		Vector3f w = new Vector3f(v);
+		w.x = (float) (v.x / l);
+		w.y = (float) (v.y/ l);		
+		w.z = (float) (v.z / l);
+		
+		return w;
+	}
 }
