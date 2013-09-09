@@ -27,6 +27,7 @@ public class Client extends Thread
 	private Player player;
 	
 	boolean connected;
+	boolean usernameTaken;
 	
 	public Client(Player player)
 	{
@@ -35,6 +36,7 @@ public class Client extends Thread
 			this.player = player;
 			socket = new DatagramSocket();
 			connected = false;
+			usernameTaken = false;
 		}
 		catch (Exception e)
 		{
@@ -77,7 +79,7 @@ public class Client extends Thread
 			{
 				Packet00Connect packet = new Packet00Connect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = true;
-				else CFG.p(Tr._("mp.connect").replace("%player%", packet.getUsername()));
+				else print(Tr._("mp.connect").replace("%player%", packet.getUsername()), "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -85,7 +87,7 @@ public class Client extends Thread
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = false;
-				else CFG.p(Tr._("mp.disconnect").replace("%player%", packet.getUsername()));
+				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -93,14 +95,14 @@ public class Client extends Thread
 			{
 				Packet02Rename packet = new Packet02Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
-				else CFG.p(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()));
+				else print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case CHATMESSAGE:
 			{
 				Packet03ChatMessage packet = new Packet03ChatMessage(data);
-				if (!packet.getUsername().equals(player.getUsername())) CFG.p(packet.getUsername() + ": " + packet.getMessage());
+				if (!packet.getUsername().equals(player.getUsername())) print(packet.getUsername() + ": " + packet.getMessage(), "");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -109,7 +111,17 @@ public class Client extends Thread
 				Game.currentGame.onClientReveivedPacket(new Packet04ServerInfo(data));
 				break;
 			}
+			case USERNAMETAKEN:
+			{
+				usernameTaken = true;
+				break;
+			}
 		}
+	}
+	
+	public void print(String message, String level)
+	{
+		Game.currentGame.onClientMessage(level + "$" + message);
 	}
 	
 	public boolean connectToServer(InetAddress ip)
@@ -119,6 +131,7 @@ public class Client extends Thread
 			System.err.println("Client is already connected to a server. Disconnect first!");
 			return false;
 		}
+		usernameTaken = false;
 		
 		serverIP = ip;
 		try
@@ -133,18 +146,29 @@ public class Client extends Thread
 		return true;
 	}
 	
+	public String getUsername()
+	{
+		return player.getUsername();
+	}
+	
 	public void disconnect()
 	{
 		if (!connected) return;
 		
+		usernameTaken = false;
 		try
 		{
-			sendPacket(new Packet01Disconnect(player.getUsername()));
+			sendPacket(new Packet01Disconnect(player.getUsername(), "mp.reason.disconnect"));
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isUsernameTaken()
+	{
+		return usernameTaken;
 	}
 	
 	public boolean isConnected()
@@ -159,8 +183,8 @@ public class Client extends Thread
 	
 	public void renameClient(String newName)
 	{
-		if (!connected) player.setUsername(newName);
-		else
+		player.setUsername(newName);
+		if (connected)
 		{
 			try
 			{

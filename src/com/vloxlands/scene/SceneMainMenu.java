@@ -47,7 +47,7 @@ public class SceneMainMenu extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("join"));
-		b.setEnabled(CFG.INTERNET);
+		if (!CFG.INTERNET || Game.client.isConnected()) b.setEnabled(false);
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -62,9 +62,8 @@ public class SceneMainMenu extends Scene
 					{
 						if (name.getText().length() == 0 || ip.getText().length() == 0) return;
 						
-						Game.client.renameClient(name.getText());
-						
 						if (Game.client.isConnected()) Game.client.disconnect();
+						Game.client.renameClient(name.getText());
 						
 						new LoginThread(ip.getText()).start();
 					}
@@ -140,6 +139,12 @@ public class SceneMainMenu extends Scene
 				{
 					if (!Game.client.isConnected())
 					{
+						if (Game.client.isUsernameTaken())
+						{
+							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.usernametaken"), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+							resetButtons();
+							break;
+						}
 						try
 						{
 							Thread.sleep(100);
@@ -172,7 +177,6 @@ public class SceneMainMenu extends Scene
 			d.buttons[0].setClickEvent(Dialog.CLOSE_EVENT);
 			d.buttons[1].setEnabled(true);
 		}
-		
 		
 		void showErrorDialog()
 		{

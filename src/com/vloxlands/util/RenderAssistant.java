@@ -25,6 +25,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.ui.IGuiElement;
 
 //import render.Model;
 //import util.math.MathHelper;
@@ -315,7 +316,7 @@ public class RenderAssistant
 		glPushMatrix();
 		{
 			glEnable(GL_BLEND);
-			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			TextureImpl.unbind();
 			TextureImpl.bindNone();
@@ -405,6 +406,15 @@ public class RenderAssistant
 			}
 		}
 		lines.add(line);
-		return lines.toArray(new String[] {});
+		
+		ArrayList<String> realLines = new ArrayList<>();
+		for (String s : lines)
+		{
+			String[] nls = s.split("\n");
+			for (String nl : nls)
+				realLines.add(nl);
+		}
+		
+		return realLines.toArray(new String[] {});
 	}
 }

@@ -16,7 +16,9 @@ save;Save;Speichern
 start;Start;Start
 play;Play;Spiel starten
 join;Join Game;Spiel betreten
+info;Information;Information
 connect;Connect;Verbinden
+disconnect;Disconnect;Trennen
 error;Error!;Fehler!
 close;Close;Schliessen
 unlimited;Unlimited;Unbegrenzt
@@ -33,3 +35,7 @@ errno;An error has occurred!;Ein Fehler ist aufgetreten!
 mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.
+mp.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.
+mp.reason.disconnect;Disconnect by user;Verlassen
+mp.reason.serverclosed;Server shutdown;Server geschlossen
+mp.reason.kicked;Kicked;Gekickt

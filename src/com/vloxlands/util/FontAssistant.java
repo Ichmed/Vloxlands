@@ -16,7 +16,7 @@ public class FontAssistant
 		if (fonts.containsKey(f)) return fonts.get(f);
 		else
 		{
-			TrueTypeFont uf = new TrueTypeFont(f, false);
+			TrueTypeFont uf = new TrueTypeFont(f, f.getSize() < 20);
 			fonts.put(f, uf);
 			return uf;
 		}

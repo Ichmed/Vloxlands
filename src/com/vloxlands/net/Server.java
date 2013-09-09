@@ -17,6 +17,7 @@ import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet02Rename;
 import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
+import com.vloxlands.net.packet.Packet05UsernameTaken;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -71,6 +72,22 @@ public class Server extends Thread
 			}
 			parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
+		shotdown();
+	}
+	
+	public void shotdown()
+	{
+		for (Player p : clients)
+		{
+			try
+			{
+				sendPacket(new Packet01Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void parsePacket(byte[] data, InetAddress address, int port)
@@ -79,7 +96,6 @@ public class Server extends Thread
 		PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
 		switch (type)
 		{
-			default:
 			case INVALID:
 			{
 				break;
@@ -87,8 +103,25 @@ public class Server extends Thread
 			case CONNECT:
 			{
 				Packet00Connect packet = new Packet00Connect(data);
+				Player player = new Player(packet.getUsername(), address, port);
+				for (Player p : clients)
+				{
+					if (p.getUsername().equals(packet.getUsername()))
+					{
+						try
+						{
+							sendPacket(new Packet05UsernameTaken(), player);
+							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ").");
+							return;
+						}
+						catch (IOException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
-				clients.add(new Player(packet.getUsername(), address, port));
+				clients.add(player);
 				try
 				{
 					sendPacketToAllClients(packet);
@@ -102,15 +135,7 @@ public class Server extends Thread
 			case DISCONNECT:
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
-				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected.");
-				for (int i = 0; i < clients.size(); i++)
-				{
-					if (clients.get(i).getIP().equals(address))
-					{
-						clients.remove(i);
-						break;
-					}
-				}
+				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected. (" + packet.getReason() + ")");
 				try
 				{
 					sendPacketToAllClients(packet);
@@ -118,6 +143,14 @@ public class Server extends Thread
 				catch (IOException e)
 				{
 					e.printStackTrace();
+				}
+				for (int i = 0; i < clients.size(); i++)
+				{
+					if (clients.get(i).getUsername().equals(packet.getUsername()))
+					{
+						clients.remove(i);
+						break;
+					}
 				}
 				break;
 			}
@@ -166,6 +199,8 @@ public class Server extends Thread
 				}
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	

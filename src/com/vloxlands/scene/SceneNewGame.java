@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.gen.MapGenerator;
+import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
+import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
+import com.vloxlands.ui.ChatContainer;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
@@ -29,14 +35,16 @@ public class SceneNewGame extends Scene
 	ProgressBar progress;
 	Spinner xSize, zSize, radius;
 	static Container lobby;
+	static ChatContainer chat;
 	
 	@Override
 	public void init()
 	{
-		if (!Game.client.isConnected())
+		if (Game.server == null && !Game.client.isConnected())
 		{
-			Game.client.connectToServer(Game.IP);
+			Game.server = new Server(Game.IP);
 		}
+		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		try
 		{
@@ -56,11 +64,14 @@ public class SceneNewGame extends Scene
 		{
 			lobby = new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220);
 		}
+		lobby.setX(0);
+		lobby.setY(115);
+		lobby.setWidth(Display.getWidth() - TextButton.WIDTH - 90);
+		lobby.setHeight(Display.getHeight() - 220);
 		content.add(lobby);
 		
-		Container chatContainer = new Container(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150, false, true);
-		
-		content.add(chatContainer);
+		chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
+		content.add(chat);
 		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		
@@ -68,13 +79,25 @@ public class SceneNewGame extends Scene
 		progress.setVisible(false);
 		content.add(progress);
 		
+		TextButton disco = new TextButton((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f), Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
+		disco.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				Game.client.disconnect();
+				Game.currentGame.setScene(new SceneMainMenu());
+			}
+		});
+		content.add(disco);
+		
 		TextButton back = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.removeScene(SceneNewGame.this);
+				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
 		content.add(back);
@@ -108,6 +131,7 @@ public class SceneNewGame extends Scene
 		for (String p : pl)
 			players.add(p);
 		
+		@SuppressWarnings("unchecked")
 		ArrayList<IGuiElement> lobbyCopy = (ArrayList<IGuiElement>) lobby.components.clone();
 		lobby.components.clear();
 		
@@ -130,17 +154,6 @@ public class SceneNewGame extends Scene
 			slot.setWidth(lobby.getWidth() - 30);
 			lobby.add(slot);
 		}
-		// for (int i = 0; i < players.length; i++)
-		// {
-		// LobbySlot slot = new LobbySlot(players[i]);
-		// slot.setX(15);
-		// slot.setY(15 + i * LobbySlot.HEIGHT);
-		// slot.setWidth(lobby.getWidth() - 30);
-		//
-		// lobby.add(slot);
-		// }
-		
-		// CFG.p("should update to this user table: " + Arrays.toString(pl));
 	}
 	
 	@Override
@@ -159,7 +172,7 @@ public class SceneNewGame extends Scene
 		if (Game.mapGenerator != null)
 		{
 			glEnable(GL_BLEND);
-			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 			glColor4f(1, 1, 1, 1);
@@ -170,12 +183,43 @@ public class SceneNewGame extends Scene
 	}
 	
 	@Override
+	public void onClientMessage(String message)
+	{
+		String type = message.substring(0, message.indexOf("$"));
+		Vector3f color = new Vector3f(1, 1, 1);
+		switch (type)
+		{
+			case "INFO":
+			{
+				color = new Vector3f(0.9f, 0.9f, 0);
+				break;
+			}
+		}
+		chat.addMessage(message.substring(message.indexOf("$") + 1), color);
+	}
+	
+	@Override
 	public void onClientReveivedPacket(Packet packet)
 	{
 		switch (packet.getType())
 		{
 			case DISCONNECT:
 			{
+				Packet01Disconnect p = (Packet01Disconnect) packet;
+				if (p.getUsername().equals(Game.client.getUsername()))
+				{
+					if (!p.getReason().equals("mp.disconnect"))
+					{
+						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent()
+						{
+							@Override
+							public void trigger()
+							{
+								Game.currentGame.setScene(new SceneMainMenu());
+							}
+						})));
+					}
+				}
 				try
 				{
 					Game.client.sendPacket(new Packet04ServerInfo());
