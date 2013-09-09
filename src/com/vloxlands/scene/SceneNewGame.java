@@ -1,7 +1,5 @@
 package com.vloxlands.scene;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -29,7 +27,6 @@ import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
-import com.vloxlands.util.RenderAssistant;
 
 
 public class SceneNewGame extends Scene
@@ -134,8 +131,8 @@ public class SceneNewGame extends Scene
 		});
 		content.add(back);
 		
-		TextButton skip = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
-		skip.setClickEvent(new IGuiEvent()
+		TextButton start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
+		start.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
@@ -146,14 +143,17 @@ public class SceneNewGame extends Scene
 				progress.setVisible(true);
 			}
 		});
-		content.add(skip);
+		start.setEnabled(Game.client.isConnectedToLocalhost());
+		content.add(start);
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		xSize.setEnabled(Game.client.isConnectedToLocalhost());
 		content.add(xSize);
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("islands") + ":", false));
 		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		zSize.setEnabled(Game.client.isConnectedToLocalhost());
 		content.add(zSize);
 	}
 	
@@ -213,17 +213,17 @@ public class SceneNewGame extends Scene
 	{
 		super.render();
 		
-		if (Game.mapGenerator != null)
-		{
-			glEnable(GL_BLEND);
-			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-			glColor4f(1, 1, 1, 1);
-			progress.setValue(Game.mapGenerator.progress);
-			progress.render();
-			glDisable(GL_BLEND);
-		}
+		// if (Game.mapGenerator != null)
+		// {
+		// glEnable(GL_BLEND);
+		// glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
+		// glBindTexture(GL_TEXTURE_2D, 0);
+		// RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
+		// glColor4f(1, 1, 1, 1);
+		// progress.setValue(Game.mapGenerator.progress);
+		// progress.render();
+		// glDisable(GL_BLEND);
+		// }
 	}
 	
 	@Override
