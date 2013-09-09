@@ -11,9 +11,9 @@ public class Packet01Disconnect extends Packet
 	public Packet01Disconnect(byte[] data)
 	{
 		super(01);
-		String s = readData(data);
-		username = s.substring(0, s.indexOf(":"));
-		reason = s.substring(s.indexOf(":") + 1);
+		String[] s = readData(data).split(":");
+		username = s[0];
+		reason = s[1];
 	}
 	
 	public Packet01Disconnect(String username, String reason)

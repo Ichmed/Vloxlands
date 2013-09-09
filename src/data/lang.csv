@@ -39,7 +39,9 @@ errno;An error has occurred!;Ein Fehler ist aufgetreten!
 mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.
-mp.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.
+mp.reject.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.
+mp.reject.outdatedclient;Your client's version is out of date. Please update your game.;Dein Client hat eine veraltete Version. Bitte aktualisiere dein Spiel.
+mp.reject.outdatedserver;The server's version is out of date.;Der Server hat eine veraltete Version.
 mp.reason.disconnect;Disconnect by user;Verlassen
 mp.reason.serverclosed;Server shutdown;Server geschlossen
 mp.reason.kicked;Kicked;Gekickt

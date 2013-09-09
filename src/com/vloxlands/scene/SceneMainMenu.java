@@ -139,9 +139,9 @@ public class SceneMainMenu extends Scene
 				{
 					if (!Game.client.isConnected())
 					{
-						if (Game.client.isUsernameTaken())
+						if (Game.client.isRejected())
 						{
-							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.usernametaken"), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 							resetButtons();
 							break;
 						}

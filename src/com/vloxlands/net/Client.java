@@ -14,6 +14,8 @@ import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet02Rename;
 import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
+import com.vloxlands.net.packet.Packet05Reject;
+import com.vloxlands.net.packet.Packet05Reject.Cause;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -27,7 +29,7 @@ public class Client extends Thread
 	private Player player;
 	
 	boolean connected;
-	boolean usernameTaken;
+	Cause rejectionCause;
 	
 	public Client(Player player)
 	{
@@ -36,7 +38,7 @@ public class Client extends Thread
 			this.player = player;
 			socket = new DatagramSocket();
 			connected = false;
-			usernameTaken = false;
+			rejectionCause = null;
 		}
 		catch (Exception e)
 		{
@@ -111,9 +113,10 @@ public class Client extends Thread
 				Game.currentGame.onClientReveivedPacket(new Packet04ServerInfo(data));
 				break;
 			}
-			case USERNAMETAKEN:
+			case REJECT:
 			{
-				usernameTaken = true;
+				Packet05Reject packet = new Packet05Reject(data);
+				rejectionCause = packet.getCause();
 				break;
 			}
 		}
@@ -131,12 +134,12 @@ public class Client extends Thread
 			System.err.println("Client is already connected to a server. Disconnect first!");
 			return false;
 		}
-		usernameTaken = false;
+		rejectionCause = null;
 		
 		serverIP = ip;
 		try
 		{
-			sendPacket(new Packet00Connect(player.getUsername()));
+			sendPacket(new Packet00Connect(player.getUsername(), CFG.VERSION));
 		}
 		catch (IOException e)
 		{
@@ -155,7 +158,7 @@ public class Client extends Thread
 	{
 		if (!connected) return;
 		
-		usernameTaken = false;
+		rejectionCause = null;
 		try
 		{
 			sendPacket(new Packet01Disconnect(player.getUsername(), "mp.reason.disconnect"));
@@ -166,14 +169,19 @@ public class Client extends Thread
 		}
 	}
 	
-	public boolean isUsernameTaken()
+	public boolean isRejected()
 	{
-		return usernameTaken;
+		return rejectionCause != null;
 	}
 	
-	public void setUsernameTaken(boolean b)
+	public void resetRejection()
 	{
-		usernameTaken = b;
+		rejectionCause = null;
+	}
+	
+	public Cause getRejectionCause()
+	{
+		return rejectionCause;
 	}
 	
 	public boolean isConnected()

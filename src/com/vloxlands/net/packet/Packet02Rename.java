@@ -17,9 +17,9 @@ public class Packet02Rename extends Packet
 	public Packet02Rename(byte[] data)
 	{
 		super(02);
-		String s = readData(data);
-		oldUsername = s.substring(0, s.indexOf(":"));
-		newUsername = s.substring(s.indexOf(":") + 1);
+		String[] s = readData(data).split(":");
+		oldUsername = s[0];
+		newUsername = s[1];
 	}
 	
 	@Override

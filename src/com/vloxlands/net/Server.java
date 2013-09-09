@@ -17,7 +17,8 @@ import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet02Rename;
 import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
-import com.vloxlands.net.packet.Packet05UsernameTaken;
+import com.vloxlands.net.packet.Packet05Reject;
+import com.vloxlands.net.packet.Packet05Reject.Cause;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -104,14 +105,38 @@ public class Server extends Thread
 			{
 				Packet00Connect packet = new Packet00Connect(data);
 				Player player = new Player(packet.getUsername(), address, port);
+				if (packet.getVersion() < CFG.VERSION)
+				{
+					try
+					{
+						sendPacket(new Packet05Reject(Cause.OUTDATEDCLIENT), player);
+						return;
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				else if (packet.getVersion() > CFG.VERSION)
+				{
+					try
+					{
+						sendPacket(new Packet05Reject(Cause.OUTDATEDSERVER), player);
+						return;
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
 				for (Player p : clients)
 				{
 					if (p.getUsername().equals(packet.getUsername()))
 					{
 						try
 						{
-							sendPacket(new Packet05UsernameTaken(), player);
-							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ").");
+							sendPacket(new Packet05Reject(Cause.USERNAMETAKEN), player);
+							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): username taken");
 							return;
 						}
 						catch (IOException e)
@@ -163,7 +188,7 @@ public class Server extends Thread
 					{
 						try
 						{
-							sendPacket(new Packet05UsernameTaken(), new Player(packet.getOldUsername(), address, port));
+							sendPacket(new Packet05Reject(Cause.USERNAMETAKEN), new Player(packet.getOldUsername(), address, port));
 						}
 						catch (IOException e)
 						{

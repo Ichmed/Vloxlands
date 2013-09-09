@@ -85,11 +85,11 @@ public class LobbySlot extends Container
 								Game.client.renameClient(name.getText());
 								while (Game.client.getUsername().equals(oldUsername))
 								{
-									if (Game.client.isUsernameTaken())
+									if (Game.client.isRejected())
 									{
 										Game.currentGame.getActiveScene().unlockScene();
-										Game.client.setUsernameTaken(false);
-										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.usernametaken"), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										Game.client.resetRejection();
+										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 										return;
 									}
 									try

@@ -17,9 +17,9 @@ public class Packet03ChatMessage extends Packet
 	public Packet03ChatMessage(byte[] data)
 	{
 		super(03);
-		String s = readData(data);
-		username = s.substring(0, s.indexOf(":"));
-		message = s.substring(s.indexOf(":") + 1);
+		String[] s = readData(data).split(":");
+		username = s[0];
+		message = s[1];
 	}
 	
 	public String getUsername()
