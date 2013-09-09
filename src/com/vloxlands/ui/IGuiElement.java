@@ -1,9 +1,13 @@
 package com.vloxlands.ui;
 
+import org.lwjgl.util.vector.Vector4f;
+
 import com.vloxlands.render.IRendering;
 
 public abstract class IGuiElement implements IRendering
 {
+	public static final Vector4f gray = new Vector4f(0, 0, 0, 0.5f);
+	
 	protected int x, y, width, height, zIndex;
 	protected boolean visible;
 	protected boolean wantsRender;

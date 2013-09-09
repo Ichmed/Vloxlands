@@ -174,7 +174,7 @@ public class SceneNewGame extends Scene
 		if (Game.mapGenerator != null)
 		{
 			glEnable(GL_BLEND);
-			glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 			glColor4f(1, 1, 1, 1);

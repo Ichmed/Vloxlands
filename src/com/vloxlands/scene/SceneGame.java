@@ -12,6 +12,7 @@ import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
+import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
@@ -112,7 +113,7 @@ public class SceneGame extends Scene
 		if (!paused) return;
 		
 		glEnable(GL_BLEND);
-		glColor4f(0.4f, 0.4f, 0.4f, 0.6f);
+		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 		
