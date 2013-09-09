@@ -46,7 +46,6 @@ public class SceneNewGame extends Scene
 		}
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
-		
 		try
 		{
 			Game.client.sendPacket(new Packet04ServerInfo());

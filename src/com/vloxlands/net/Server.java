@@ -72,6 +72,11 @@ public class Server extends Thread
 			}
 			parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
+		shotdown();
+	}
+	
+	public void shotdown()
+	{
 		for (Player p : clients)
 		{
 			try
