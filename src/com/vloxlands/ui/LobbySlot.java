@@ -1,24 +1,28 @@
 package com.vloxlands.ui;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Font;
 
+import com.vloxlands.game.Game;
+import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 /**
  * @author Dakror
  */
-public class LobbySlot extends ClickableGui
+public class LobbySlot extends Container
 {
 	public static final int HEIGHT = 80;
+	public static final int HEIGHT2 = 68;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 40f);
 	String username;
+	public Container parent;
 	
 	public LobbySlot(String username)
 	{
-		x = 0;
-		y = 0;
-		height = HEIGHT;
+		super(0, 0, 0, HEIGHT, false, false);
 		this.username = username;
 	}
 	
@@ -32,14 +36,82 @@ public class LobbySlot extends ClickableGui
 	{
 		RenderAssistant.renderText(x + 15, y + height / 6, username, font);
 		RenderAssistant.renderLine(x, y + height - 20, width, true, false);
+		RenderAssistant.renderLine(x + width - 128, y + height / 2 - 15, 128, true, false);
+		RenderAssistant.renderLine(x + width - 122, y - 5, 30, false, false);
+		RenderAssistant.renderLine(x + width - 122, y + 35, 30, false, false);
+		glEnable(GL_BLEND);
+		RenderAssistant.bindTexture("/graphics/textures/ui/gui.png");
+		RenderAssistant.renderRect(x + width - 134, y + 18, 19, 26, 787 / 1024f, 409 / 1024f, 19 / 1024f, 26 / 1024f);
+		
+		RenderAssistant.renderRect(x + width - 141, y + height - 27, 26, 19, 780 / 1024f, 450 / 1024f, 26 / 1024f, 19 / 1024f);
+		glDisable(GL_BLEND);
+		
+		renderContent();
+	}
+	
+	/**
+	 * Should have set te slot's width first
+	 */
+	public void initButtons()
+	{
+		components.clear();
+		
+		ImageButton rename = new ImageButton(width - 124, 0, 45, 45);
+		rename.setTexture("/graphics/textures/ui/Rename.png");
+		rename.disabledColor = IGuiElement.gray;
+		rename.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				final InputField name = new InputField(0, 0, 0, Game.client.getUsername(), Tr._("username"));
+				Dialog dialog = new Dialog(Tr._("namechange"), "", new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
+				{
+					@Override
+					public void trigger()
+					{
+						new Thread()
+						{
+							@Override
+							public void run()
+							{
+								Game.currentGame.getActiveScene().lockScene();
+								String oldUsername = Game.client.getUsername();
+								Game.client.renameClient(name.getText());
+								while (Game.client.getUsername().equals(oldUsername))
+								{
+									try
+									{
+										Thread.sleep(100);
+									}
+									catch (InterruptedException e)
+									{
+										e.printStackTrace();
+									}
+								}
+								Game.currentGame.getActiveScene().unlockScene();
+								Game.currentGame.removeActiveScene();
+							}
+						}.start();
+					}
+				}));
+				name.setWidth(dialog.getWidth() - 50);
+				dialog.addComponent(name);
+				Game.currentGame.addScene(dialog);
+			}
+		});
+		add(rename);
 	}
 	
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
-	{}
-	
-	@Override
-	public void onTick()
-	{}
-	
+	{
+		for (IGuiElement g : components)
+		{
+			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x + parent.x, y + parent.y))
+			{
+				((ClickableGui) g).handleMouse(posX, posY, flag);
+			}
+		}
+	}
 }

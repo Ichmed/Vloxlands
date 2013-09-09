@@ -72,10 +72,10 @@ public class Server extends Thread
 			}
 			parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 		}
-		shotdown();
+		shutdown();
 	}
 	
-	public void shotdown()
+	public void shutdown()
 	{
 		for (Player p : clients)
 		{
@@ -158,6 +158,14 @@ public class Server extends Thread
 			{
 				Packet02Rename packet = new Packet02Rename(data);
 				CFG.p("[SERVER]: " + packet.getOldUsername() + " changed their name to " + packet.getNewUsername() + ".");
+				for (int i = 0; i < clients.size(); i++)
+				{
+					if (clients.get(i).getUsername().equals(packet.getOldUsername()))
+					{
+						clients.get(i).setUsername(packet.getNewUsername());
+						break;
+					}
+				}
 				try
 				{
 					sendPacketToAllClients(packet);
@@ -225,8 +233,6 @@ public class Server extends Thread
 	public void sendDataToAllClients(byte[] data) throws IOException
 	{
 		for (Player p : clients)
-		{
 			sendData(data, p);
-		}
 	}
 }

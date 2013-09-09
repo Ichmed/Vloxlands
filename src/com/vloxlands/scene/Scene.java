@@ -397,7 +397,7 @@ public abstract class Scene
 	public void handleMouseWorld(int x, int y, int flag)
 	{}
 	
-	protected void lockScene()
+	public void lockScene()
 	{
 		for (IGuiElement i : content)
 			if (i instanceof ClickableGui)
@@ -406,7 +406,7 @@ public abstract class Scene
 			}
 	}
 	
-	protected void unlockScene()
+	public void unlockScene()
 	{
 		for (IGuiElement i : content)
 			if (i instanceof ClickableGui)

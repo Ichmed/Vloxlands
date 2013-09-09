@@ -449,11 +449,33 @@ public class Game
 	
 	public void onClientMessage(String message)
 	{
-		if (sceneStack.size() > 0) getActiveScene().onClientMessage(message);
+		if (sceneStack.size() > 0)
+		{
+			try
+			{
+				for (Scene s : sceneStack)
+				{
+					s.onClientMessage(message);
+				}
+			}
+			catch (ConcurrentModificationException e)
+			{}
+		}
 	}
 	
 	public void onClientReveivedPacket(Packet packet)
 	{
-		if (sceneStack.size() > 0) getActiveScene().onClientReveivedPacket(packet);
+		if (sceneStack.size() > 0)
+		{
+			try
+			{
+				for (Scene s : sceneStack)
+				{
+					s.onClientReveivedPacket(packet);
+				}
+			}
+			catch (ConcurrentModificationException e)
+			{}
+		}
 	}
 }

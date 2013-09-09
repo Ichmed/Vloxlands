@@ -95,7 +95,9 @@ public class Client extends Thread
 			{
 				Packet02Rename packet = new Packet02Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
-				else print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
+				CFG.p("here i am");
+				print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
+				CFG.p("here i was");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -183,7 +185,6 @@ public class Client extends Thread
 	
 	public void renameClient(String newName)
 	{
-		player.setUsername(newName);
 		if (connected)
 		{
 			try
@@ -195,6 +196,7 @@ public class Client extends Thread
 				e.printStackTrace();
 			}
 		}
+		else player.setUsername(newName);
 	}
 	
 	public void sendPacket(Packet p) throws IOException

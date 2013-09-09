@@ -48,15 +48,6 @@ public class SceneNewGame extends Scene
 		}
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
-		try
-		{
-			Game.client.sendPacket(new Packet04ServerInfo());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
 		setBackground();
 		// setUserZone();
 		
@@ -71,6 +62,15 @@ public class SceneNewGame extends Scene
 		lobby.setWidth(Display.getWidth() - TextButton.WIDTH - 90);
 		lobby.setHeight(Display.getHeight() - 220);
 		content.add(lobby);
+		
+		try
+		{
+			Game.client.sendPacket(new Packet04ServerInfo());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		if (chat == null)
 		{
@@ -172,7 +172,9 @@ public class SceneNewGame extends Scene
 		{
 			if (players.indexOf(((LobbySlot) iG).getUsername()) > -1)
 			{
-				iG.setY(15 + index * LobbySlot.HEIGHT);
+				iG.setY(15 + index * LobbySlot.HEIGHT2);
+				iG.setWidth(lobby.getWidth() - 20);
+				iG.setX(10);
 				lobby.add(iG);
 				players.remove(((LobbySlot) iG).getUsername());
 				index++;
@@ -181,10 +183,19 @@ public class SceneNewGame extends Scene
 		for (int i = 0; i < players.size(); i++)
 		{
 			LobbySlot slot = new LobbySlot(players.get(i));
-			slot.setX(15);
-			slot.setY(15 + index * LobbySlot.HEIGHT + i * LobbySlot.HEIGHT);
-			slot.setWidth(lobby.getWidth() - 30);
+			slot.parent = lobby;
+			slot.setX(10);
+			slot.setY(15 + index * LobbySlot.HEIGHT2 + i * LobbySlot.HEIGHT2);
+			slot.setWidth(lobby.getWidth() - 20);
 			lobby.add(slot);
+		}
+		
+		for (IGuiElement iG : lobby.components)
+		{
+			LobbySlot slot = (LobbySlot) iG;
+			
+			slot.initButtons();
+			slot.components.get(0).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // rename
 		}
 	}
 	
@@ -252,6 +263,18 @@ public class SceneNewGame extends Scene
 						})));
 					}
 				}
+				try
+				{
+					Game.client.sendPacket(new Packet04ServerInfo());
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
+			case RENAME:
+			{
 				try
 				{
 					Game.client.sendPacket(new Packet04ServerInfo());

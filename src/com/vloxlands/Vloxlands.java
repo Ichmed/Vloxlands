@@ -115,7 +115,7 @@ public class Vloxlands
 	public static void exit()
 	{
 		if (Game.client != null && Game.client.isConnected()) Game.client.disconnect();
-		if (Game.server != null) Game.server.shotdown();
+		if (Game.server != null) Game.server.shutdown();
 		running = false;
 		UpdateThread.requestStop = true;
 		Settings.saveSettings();

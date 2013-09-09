@@ -42,6 +42,11 @@ public class Container extends ClickableGui
 			if (filled) RenderAssistant.renderContainer(x, y, width, height, doubled);
 			else RenderAssistant.renderOutline(x, y, width, height, doubled);
 		}
+		renderContent();
+	}
+	
+	protected void renderContent()
+	{
 		glTranslatef(x, y, 0);
 		for (IGuiElement g : components)
 		{
@@ -73,7 +78,10 @@ public class Container extends ClickableGui
 	{
 		for (IGuiElement g : components)
 		{
-			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x, y)) ((ClickableGui) g).handleMouse(posX, posY, flag);
+			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x, y))
+			{
+				((ClickableGui) g).handleMouse(posX, posY, flag);
+			}
 		}
 	}
 	
