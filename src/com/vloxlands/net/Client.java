@@ -154,6 +154,7 @@ public class Client extends Thread
 	public void disconnect()
 	{
 		if (!connected) return;
+		
 		usernameTaken = false;
 		try
 		{

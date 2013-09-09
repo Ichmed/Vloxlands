@@ -47,7 +47,7 @@ public class SceneMainMenu extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("join"));
-		b.setEnabled(CFG.INTERNET);
+		if (!CFG.INTERNET || Game.client.isConnected()) b.setEnabled(false);
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override

@@ -131,14 +131,6 @@ public class Server extends Thread
 			{
 				Packet01Disconnect packet = new Packet01Disconnect(data);
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected. (" + packet.getReason() + ")");
-				for (int i = 0; i < clients.size(); i++)
-				{
-					if (clients.get(i).getIP().equals(address))
-					{
-						clients.remove(i);
-						break;
-					}
-				}
 				try
 				{
 					sendPacketToAllClients(packet);
@@ -146,6 +138,14 @@ public class Server extends Thread
 				catch (IOException e)
 				{
 					e.printStackTrace();
+				}
+				for (int i = 0; i < clients.size(); i++)
+				{
+					if (clients.get(i).getUsername().equals(packet.getUsername()))
+					{
+						clients.remove(i);
+						break;
+					}
 				}
 				break;
 			}

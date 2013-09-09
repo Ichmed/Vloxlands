@@ -40,7 +40,7 @@ public class SceneNewGame extends Scene
 	@Override
 	public void init()
 	{
-		if (Game.server == null)
+		if (Game.server == null && !Game.client.isConnected())
 		{
 			Game.server = new Server(Game.IP);
 		}
@@ -81,14 +81,13 @@ public class SceneNewGame extends Scene
 		content.add(progress);
 		
 		TextButton disco = new TextButton((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f), Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
-		disco.setEnabled(!Game.client.isConnectedToLocalhost());
 		disco.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
 				Game.client.disconnect();
-				Game.currentGame.removeActiveScene();
+				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
 		content.add(disco);
@@ -99,7 +98,7 @@ public class SceneNewGame extends Scene
 			@Override
 			public void trigger()
 			{
-				Game.currentGame.removeActiveScene();
+				Game.currentGame.setScene(new SceneMainMenu());
 			}
 		});
 		content.add(back);
