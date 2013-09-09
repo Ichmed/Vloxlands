@@ -3,6 +3,8 @@ package com.vloxlands.ui;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.opengl.TextureImpl;
@@ -74,6 +76,22 @@ public class InputField extends ClickableGui
 	public void handleKeyboard(int key, char chr, boolean down)
 	{
 		if (!down || !isFocused() || !enabled) return;
+		if (key == Keyboard.KEY_V && (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)))
+		{
+			try
+			{
+				String string = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+				if (string.length() > 0)
+				{
+					setText(string);
+					return;
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 		switch (Keyboard.getKeyName(key))
 		{
 			case "TAB":
