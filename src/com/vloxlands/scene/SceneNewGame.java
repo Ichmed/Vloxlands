@@ -7,12 +7,12 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet01Disconnect;
 import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
+import com.vloxlands.net.packet.Packet06Ready;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
@@ -32,6 +32,7 @@ import com.vloxlands.ui.TextButton;
 public class SceneNewGame extends Scene
 {
 	ProgressBar progress;
+	TextButton start;
 	Spinner xSize, zSize, radius;
 	static Container lobby;
 	static ChatContainer chat;
@@ -108,7 +109,7 @@ public class SceneNewGame extends Scene
 		progress.setVisible(false);
 		content.add(progress);
 		
-		TextButton disco = new TextButton((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f), Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
+		TextButton disco = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
 		disco.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -120,7 +121,7 @@ public class SceneNewGame extends Scene
 		});
 		content.add(disco);
 		
-		TextButton back = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
+		TextButton back = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -131,20 +132,27 @@ public class SceneNewGame extends Scene
 		});
 		content.add(back);
 		
-		TextButton start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
-		start.setClickEvent(new IGuiEvent()
+		start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
+		if (Game.client.isConnectedToLocalhost())
 		{
-			@Override
-			public void trigger()
-			{
-				Game.mapGenerator = new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24);
-				Game.mapGenerator.start();
-				lockScene();
-				progress.setVisible(true);
-			}
-		});
-		start.setEnabled(Game.client.isConnectedToLocalhost());
-		content.add(start);
+			start.setEnabled(false);
+			back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
+			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
+			content.add(start);
+		}
+		// start.setClickEvent(new IGuiEvent()
+		// {
+		// @Override
+		// public void trigger()
+		// {
+		// Game.mapGenerator = new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24);
+		// Game.mapGenerator.start();
+		// lockScene();
+		// progress.setVisible(true);
+		// }
+		// });
+		
+		
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
@@ -197,6 +205,7 @@ public class SceneNewGame extends Scene
 			slot.initButtons();
 			slot.components.get(0).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // rename
 			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !slot.getUsername().equals(Game.client.getUsername())); // kick
+			slot.components.get(2).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // ready
 		}
 	}
 	
@@ -289,6 +298,46 @@ public class SceneNewGame extends Scene
 			case SERVERINFO:
 			{
 				updateLobby(((Packet04ServerInfo) packet).getPlayers());
+				break;
+			}
+			case READY:
+			{
+				Packet06Ready p = (Packet06Ready) packet;
+				if (p.getUsername().equals("$$$"))
+				{
+					start.setEnabled(p.getReady());
+					return;
+				}
+				for (IGuiElement iG : lobby.components)
+				{
+					LobbySlot slot = (LobbySlot) iG;
+					if (slot.getUsername().equals(p.getUsername()))
+					{
+						TextButton tb = (TextButton) slot.components.get(2);
+						tb.setActive(p.getReady());
+						if (p.getReady())
+						{
+							tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
+							if (Game.client.isConnectedToLocalhost())
+							{
+								try
+								{
+									Game.client.sendPacket(new Packet06Ready());
+								}
+								catch (IOException e)
+								{
+									e.printStackTrace();
+								}
+							}
+						}
+						else
+						{
+							start.setEnabled(false);
+							tb.textColor = new Vector3f(1, 1, 1);
+						}
+						break;
+					}
+				}
 				break;
 			}
 			default:

@@ -10,6 +10,7 @@ public class Player
 	String username;
 	InetAddress ip;
 	int port;
+	boolean ready;
 	
 	public Player(String username)
 	{
@@ -51,6 +52,16 @@ public class Player
 	public void setPort(int port)
 	{
 		this.port = port;
+	}
+	
+	public boolean isReady()
+	{
+		return ready;
+	}
+	
+	public void setReady(boolean ready)
+	{
+		this.ready = ready;
 	}
 	
 }

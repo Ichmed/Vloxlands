@@ -16,6 +16,7 @@ public abstract class Packet
 		CHATMESSAGE(03),
 		SERVERINFO(04),
 		REJECT(05),
+		READY(06),
 		
 		;
 		

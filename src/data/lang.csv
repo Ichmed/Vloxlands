@@ -31,6 +31,7 @@ ip;IP-Address;IP-Adresse
 namechange;Rename;Name aendern
 kick;Kick Player;Spieler hinauswerfen
 ok;OK;OK
+ready;Ready;Bereit
 kickquestion;Are you sure that you want to kick %player%?;Bist du sicher, dass du %player% hinauswerfen willst?
 joindesc;Please enter the IP of the Server you want to connect to.;Bitte gib die IP des Servers ein, zu dem du verbinden willst.
 iperror;"%ip%" is no valid IP Address!;"%ip%" ist keine gueltige IP Adresse!

@@ -19,6 +19,7 @@ import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.net.packet.Packet05Reject;
 import com.vloxlands.net.packet.Packet05Reject.Cause;
+import com.vloxlands.net.packet.Packet06Ready;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -246,6 +247,57 @@ public class Server extends Thread
 				catch (IOException e)
 				{
 					e.printStackTrace();
+				}
+				break;
+			}
+			case READY:
+			{
+				Packet06Ready packet = new Packet06Ready(data);
+				if (!packet.getUsername().equals("$$$"))
+				{
+					for (Player p : clients)
+					{
+						if (p.getUsername().equals(packet.getUsername()))
+						{
+							p.setReady(packet.getReady());
+							break;
+						}
+					}
+					try
+					{
+						sendPacketToAllClients(packet);
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				else
+				{
+					Player player = new Player("", address, port);
+					for (Player p : clients)
+					{
+						if (!p.isReady())
+						{
+							try
+							{
+								sendPacket(new Packet06Ready("$$$", false), player);
+								return;
+							}
+							catch (IOException e)
+							{
+								e.printStackTrace();
+							}
+						}
+					}
+					try
+					{
+						sendPacket(new Packet06Ready("$$$", true), player);
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
 				}
 				break;
 			}

@@ -19,11 +19,14 @@ public class InputField extends ClickableGui
 {
 	public static final int HEIGHT = 35;
 	
+	public static InputField currentInputfield;
+	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 30f);
 	boolean hidden;
 	public boolean doubled = false;
 	String text, hint, hiddenShowText;
-	public static InputField currentInputfield;
+	public String allowedChars = "";
+	
 	
 	public InputField(int x, int y, int width)
 	{
@@ -108,7 +111,7 @@ public class InputField extends ClickableGui
 				if (hidden) hiddenShowText = hiddenShowText.substring(0, hiddenShowText.length() - 1);
 			}
 		}
-		else if (font.canDisplay(chr) && FontAssistant.getFont(font).getWidth((hidden ? hiddenShowText + "*" : text + chr)) < width - 10)
+		else if (font.canDisplay(chr) && FontAssistant.getFont(font).getWidth((hidden ? hiddenShowText + "*" : text + chr)) < width - 10 && (allowedChars.length() == 0 || allowedChars.indexOf(chr) > -1))
 		{
 			text += chr;
 			if (hidden) hiddenShowText += "*";

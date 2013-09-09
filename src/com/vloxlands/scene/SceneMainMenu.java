@@ -55,6 +55,7 @@ public class SceneMainMenu extends Scene
 			{
 				final InputField ip = new InputField(0, 0, 0, "", Tr._("ip"));
 				final InputField name = new InputField(0, 50, 0, "", Tr._("username"));
+				name.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#0123456789_";
 				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent()
 				{
 					@Override

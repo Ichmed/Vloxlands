@@ -16,6 +16,7 @@ import com.vloxlands.net.packet.Packet03ChatMessage;
 import com.vloxlands.net.packet.Packet04ServerInfo;
 import com.vloxlands.net.packet.Packet05Reject;
 import com.vloxlands.net.packet.Packet05Reject.Cause;
+import com.vloxlands.net.packet.Packet06Ready;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -119,6 +120,12 @@ public class Client extends Thread
 				rejectionCause = packet.getCause();
 				break;
 			}
+			case READY:
+			{
+				Packet06Ready packet = new Packet06Ready(data);
+				Game.currentGame.onClientReveivedPacket(packet);
+				break;
+			}
 		}
 	}
 	
@@ -191,7 +198,7 @@ public class Client extends Thread
 	
 	public boolean isConnectedToLocalhost()
 	{
-		return connected && serverIP.equals(Game.IP);
+		return connected && serverIP.equals(Game.IP) && Game.server != null;
 	}
 	
 	public void renameClient(String newName)

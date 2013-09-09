@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.net.packet.Packet01Disconnect;
+import com.vloxlands.net.packet.Packet06Ready;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -88,8 +89,8 @@ public class LobbySlot extends Container
 									if (Game.client.isRejected())
 									{
 										Game.currentGame.getActiveScene().unlockScene();
-										Game.client.resetRejection();
 										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										Game.client.resetRejection();
 										return;
 									}
 									try
@@ -143,7 +144,28 @@ public class LobbySlot extends Container
 		});
 		add(kick);
 		
-		
+		int nw = 190;
+		float ratio = TextButton.HEIGHT / (float) TextButton.WIDTH;
+		final TextButton ready = new TextButton(width - 128 - nw / 2, 15, Tr._("ready"));
+		ready.setWidth(nw);
+		ready.setHeight((int) (ratio * nw));
+		ready.setToggleMode(true);
+		ready.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				try
+				{
+					Game.client.sendPacket(new Packet06Ready(username, ready.isActive()));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+		add(ready);
 	}
 	
 	@Override
