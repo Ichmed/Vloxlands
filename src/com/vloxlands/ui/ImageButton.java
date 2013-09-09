@@ -48,6 +48,7 @@ public class ImageButton extends ClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
+		if (!enabled) return;
 		this.flag = flag;
 		if (flag == 2 && clickEvent != null) clickEvent.trigger();
 	}
