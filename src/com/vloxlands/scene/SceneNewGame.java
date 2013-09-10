@@ -65,15 +65,6 @@ public class SceneNewGame extends Scene
 		lobby.setHeight(Display.getHeight() - 220);
 		content.add(lobby);
 		
-		try
-		{
-			Game.client.sendPacket(new Packet4ServerInfo());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		
 		if (chat == null)
 		{
 			chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
@@ -162,7 +153,7 @@ public class SceneNewGame extends Scene
 			{
 				try
 				{
-					Game.server.sendPacketToAllClients(new Packet7Settings("xSize", xSize.getValue() + ""));
+					Game.client.sendPacket(new Packet7Settings("xSize", xSize.getValue() + ""));
 				}
 				catch (IOException e)
 				{
@@ -182,7 +173,7 @@ public class SceneNewGame extends Scene
 			{
 				try
 				{
-					Game.server.sendPacketToAllClients(new Packet7Settings("zSize", zSize.getValue() + ""));
+					Game.client.sendPacket(new Packet7Settings("zSize", zSize.getValue() + ""));
 				}
 				catch (IOException e)
 				{
@@ -192,6 +183,15 @@ public class SceneNewGame extends Scene
 		});
 		zSize.setEnabled(Game.client.isConnectedToLocalhost());
 		content.add(zSize);
+		
+		try
+		{
+			Game.client.sendPacket(new Packet4ServerInfo());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void updateLobby(String[] pl)

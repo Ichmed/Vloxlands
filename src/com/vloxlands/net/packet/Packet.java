@@ -19,6 +19,7 @@ public abstract class Packet
 		READY,
 		SETTINGS,
 		LOADING,
+		ISLAND,
 		
 		;
 		public int getID()

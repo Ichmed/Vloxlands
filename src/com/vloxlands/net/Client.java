@@ -55,7 +55,7 @@ public class Client extends Thread
 	{
 		while (Vloxlands.running)
 		{
-			byte[] data = new byte[1024];
+			byte[] data = new byte[Server.PACKETSIZE];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try
 			{

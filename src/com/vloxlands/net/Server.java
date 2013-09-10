@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.world.Map;
@@ -22,6 +23,7 @@ import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -29,9 +31,12 @@ import com.vloxlands.settings.CFG;
  */
 public class Server extends Thread
 {
+	public static final int PACKETSIZE = 4096;
+	
 	private DatagramSocket socket;
 	InetAddress ip;
 	private ArrayList<Player> clients = new ArrayList<>();
+	HashMap<String,String> settings = new HashMap<>();
 	Map map;
 	MapGenerator mapGenerator;
 	
@@ -67,7 +72,7 @@ public class Server extends Thread
 		CFG.p("[SERVER]: -------------------------------------------------");
 		while (Vloxlands.running)
 		{
-			byte[] data = new byte[1024];
+			byte[] data = new byte[PACKETSIZE];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try
 			{
@@ -264,6 +269,14 @@ public class Server extends Thread
 				try
 				{
 					sendPacketToAllClients(new Packet4ServerInfo(players));
+					for (Player p : clients)
+					{
+						sendPacketToAllClients(new Packet6Ready(p.getUsername(), p.isReady()));
+					}
+					for (String key : settings.keySet())
+					{
+						sendPacketToAllClients(new Packet7Settings(key, settings.get(key)));
+					}
 				}
 				catch (IOException e)
 				{
@@ -292,6 +305,19 @@ public class Server extends Thread
 				}
 				break;
 			}
+			case SETTINGS: {
+				Packet7Settings packet = new Packet7Settings(data);
+				settings.put(packet.getKey(), packet.getValue());
+				try
+				{
+					sendPacketToAllClients(packet);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
 			default:
 				CFG.p("[SERVER]: reveived unhandled packet (" + address.getHostAddress() + ":" + port + ") " + type + " [" + Packet.readData(data) + "]");
 		}
@@ -307,7 +333,6 @@ public class Server extends Thread
 		DatagramPacket packet = new DatagramPacket(data, data.length, client.getIP(), client.getPort());
 		
 		socket.send(packet);
-		
 	}
 	
 	public void sendPacketToAllClients(Packet packet) throws IOException

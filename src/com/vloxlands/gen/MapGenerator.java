@@ -8,6 +8,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.net.packet.Packet8Loading;
+import com.vloxlands.net.packet.Packet9Island;
 
 public class MapGenerator extends Thread
 {
@@ -60,7 +61,14 @@ public class MapGenerator extends Thread
 			{
 				Island i = gen.finishedIsland;
 				i.setPos(new Vector3f((int) (((index - 1) / z) * size * 2 + (Math.random() * spread * 2) - spread), cacheY, (int) (((index - 1) % z) * size * 2 + (Math.random() * spread * 2) - spread)));
-				
+				try
+				{
+					Game.server.sendPacketToAllClients(new Packet9Island(i));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 				map.addIsland(i);
 				gen = null;
 			}
