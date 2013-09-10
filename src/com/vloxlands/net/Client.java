@@ -9,14 +9,14 @@ import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
-import com.vloxlands.net.packet.Packet00Connect;
-import com.vloxlands.net.packet.Packet01Disconnect;
-import com.vloxlands.net.packet.Packet02Rename;
-import com.vloxlands.net.packet.Packet03ChatMessage;
-import com.vloxlands.net.packet.Packet04ServerInfo;
-import com.vloxlands.net.packet.Packet05Reject;
-import com.vloxlands.net.packet.Packet05Reject.Cause;
-import com.vloxlands.net.packet.Packet06Ready;
+import com.vloxlands.net.packet.Packet0Connect;
+import com.vloxlands.net.packet.Packet1Disconnect;
+import com.vloxlands.net.packet.Packet2Rename;
+import com.vloxlands.net.packet.Packet3ChatMessage;
+import com.vloxlands.net.packet.Packet4ServerInfo;
+import com.vloxlands.net.packet.Packet5Reject;
+import com.vloxlands.net.packet.Packet5Reject.Cause;
+import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -79,7 +79,7 @@ public class Client extends Thread
 			}
 			case CONNECT:
 			{
-				Packet00Connect packet = new Packet00Connect(data);
+				Packet0Connect packet = new Packet0Connect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = true;
 				else print(Tr._("mp.connect").replace("%player%", packet.getUsername()), "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
@@ -87,7 +87,7 @@ public class Client extends Thread
 			}
 			case DISCONNECT:
 			{
-				Packet01Disconnect packet = new Packet01Disconnect(data);
+				Packet1Disconnect packet = new Packet1Disconnect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = false;
 				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
@@ -95,7 +95,7 @@ public class Client extends Thread
 			}
 			case RENAME:
 			{
-				Packet02Rename packet = new Packet02Rename(data);
+				Packet2Rename packet = new Packet2Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
 				print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
 				Game.currentGame.onClientReveivedPacket(packet);
@@ -103,25 +103,25 @@ public class Client extends Thread
 			}
 			case CHATMESSAGE:
 			{
-				Packet03ChatMessage packet = new Packet03ChatMessage(data);
+				Packet3ChatMessage packet = new Packet3ChatMessage(data);
 				print(packet.getUsername() + ": " + packet.getMessage(), "");
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case SERVERINFO:
 			{
-				Game.currentGame.onClientReveivedPacket(new Packet04ServerInfo(data));
+				Game.currentGame.onClientReveivedPacket(new Packet4ServerInfo(data));
 				break;
 			}
 			case REJECT:
 			{
-				Packet05Reject packet = new Packet05Reject(data);
+				Packet5Reject packet = new Packet5Reject(data);
 				rejectionCause = packet.getCause();
 				break;
 			}
 			case READY:
 			{
-				Packet06Ready packet = new Packet06Ready(data);
+				Packet6Ready packet = new Packet6Ready(data);
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
@@ -145,7 +145,7 @@ public class Client extends Thread
 		serverIP = ip;
 		try
 		{
-			sendPacket(new Packet00Connect(player.getUsername(), CFG.VERSION));
+			sendPacket(new Packet0Connect(player.getUsername(), CFG.VERSION));
 		}
 		catch (IOException e)
 		{
@@ -167,7 +167,7 @@ public class Client extends Thread
 		rejectionCause = null;
 		try
 		{
-			sendPacket(new Packet01Disconnect(player.getUsername(), "mp.reason.disconnect"));
+			sendPacket(new Packet1Disconnect(player.getUsername(), "mp.reason.disconnect"));
 		}
 		catch (IOException e)
 		{
@@ -206,7 +206,7 @@ public class Client extends Thread
 		{
 			try
 			{
-				sendPacket(new Packet02Rename(player.getUsername(), newName));
+				sendPacket(new Packet2Rename(player.getUsername(), newName));
 			}
 			catch (IOException e)
 			{

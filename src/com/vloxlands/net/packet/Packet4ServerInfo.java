@@ -3,24 +3,24 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet04ServerInfo extends Packet
+public class Packet4ServerInfo extends Packet
 {
 	String[] players;
 	
-	public Packet04ServerInfo(String[] players)
+	public Packet4ServerInfo(String[] players)
 	{
-		super(04);
+		super(4);
 		this.players = players;
 	}
 	
-	public Packet04ServerInfo()
+	public Packet4ServerInfo()
 	{
-		super(04);
+		super(4);
 	}
 	
-	public Packet04ServerInfo(byte[] data)
+	public Packet4ServerInfo(byte[] data)
 	{
-		super(04);
+		super(4);
 		String s = readData(data);
 		if (s.length() > 0) players = s.split(":");
 	}

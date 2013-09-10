@@ -12,14 +12,14 @@ import java.util.ArrayList;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
-import com.vloxlands.net.packet.Packet00Connect;
-import com.vloxlands.net.packet.Packet01Disconnect;
-import com.vloxlands.net.packet.Packet02Rename;
-import com.vloxlands.net.packet.Packet03ChatMessage;
-import com.vloxlands.net.packet.Packet04ServerInfo;
-import com.vloxlands.net.packet.Packet05Reject;
-import com.vloxlands.net.packet.Packet05Reject.Cause;
-import com.vloxlands.net.packet.Packet06Ready;
+import com.vloxlands.net.packet.Packet0Connect;
+import com.vloxlands.net.packet.Packet1Disconnect;
+import com.vloxlands.net.packet.Packet2Rename;
+import com.vloxlands.net.packet.Packet3ChatMessage;
+import com.vloxlands.net.packet.Packet4ServerInfo;
+import com.vloxlands.net.packet.Packet5Reject;
+import com.vloxlands.net.packet.Packet5Reject.Cause;
+import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -83,7 +83,7 @@ public class Server extends Thread
 		{
 			try
 			{
-				sendPacket(new Packet01Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
+				sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
 			}
 			catch (IOException e)
 			{
@@ -103,14 +103,14 @@ public class Server extends Thread
 			}
 			case CONNECT:
 			{
-				Packet00Connect packet = new Packet00Connect(data);
+				Packet0Connect packet = new Packet0Connect(data);
 				Player player = new Player(packet.getUsername(), address, port);
 				if (packet.getVersion() < CFG.VERSION)
 				{
 					try
 					{
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated client");
-						sendPacket(new Packet05Reject(Cause.OUTDATEDCLIENT), player);
+						sendPacket(new Packet5Reject(Cause.OUTDATEDCLIENT), player);
 						return;
 					}
 					catch (IOException e)
@@ -123,7 +123,7 @@ public class Server extends Thread
 					try
 					{
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated server");
-						sendPacket(new Packet05Reject(Cause.OUTDATEDSERVER), player);
+						sendPacket(new Packet5Reject(Cause.OUTDATEDSERVER), player);
 						return;
 					}
 					catch (IOException e)
@@ -137,7 +137,7 @@ public class Server extends Thread
 					{
 						try
 						{
-							sendPacket(new Packet05Reject(Cause.USERNAMETAKEN), player);
+							sendPacket(new Packet5Reject(Cause.USERNAMETAKEN), player);
 							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): username taken");
 							return;
 						}
@@ -161,7 +161,7 @@ public class Server extends Thread
 			}
 			case DISCONNECT:
 			{
-				Packet01Disconnect packet = new Packet01Disconnect(data);
+				Packet1Disconnect packet = new Packet1Disconnect(data);
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected. (" + packet.getReason() + ")");
 				try
 				{
@@ -183,14 +183,14 @@ public class Server extends Thread
 			}
 			case RENAME:
 			{
-				Packet02Rename packet = new Packet02Rename(data);
+				Packet2Rename packet = new Packet2Rename(data);
 				for (int i = 0; i < clients.size(); i++)
 				{
 					if (clients.get(i).getUsername().equals(packet.getNewUsername()))
 					{
 						try
 						{
-							sendPacket(new Packet05Reject(Cause.USERNAMETAKEN), new Player(packet.getOldUsername(), address, port));
+							sendPacket(new Packet5Reject(Cause.USERNAMETAKEN), new Player(packet.getOldUsername(), address, port));
 						}
 						catch (IOException e)
 						{
@@ -220,7 +220,7 @@ public class Server extends Thread
 			}
 			case CHATMESSAGE:
 			{
-				Packet03ChatMessage packet = new Packet03ChatMessage(data);
+				Packet3ChatMessage packet = new Packet3ChatMessage(data);
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): " + packet.getMessage());
 				try
 				{
@@ -241,7 +241,7 @@ public class Server extends Thread
 				}
 				try
 				{
-					sendPacketToAllClients(new Packet04ServerInfo(players));
+					sendPacketToAllClients(new Packet4ServerInfo(players));
 				}
 				catch (IOException e)
 				{
@@ -251,7 +251,7 @@ public class Server extends Thread
 			}
 			case READY:
 			{
-				Packet06Ready packet = new Packet06Ready(data);
+				Packet6Ready packet = new Packet6Ready(data);
 				if (!packet.getUsername().equals("$$$"))
 				{
 					for (Player p : clients)
@@ -280,7 +280,7 @@ public class Server extends Thread
 						{
 							try
 							{
-								sendPacket(new Packet06Ready("$$$", false), player);
+								sendPacket(new Packet6Ready("$$$", false), player);
 								return;
 							}
 							catch (IOException e)
@@ -291,7 +291,7 @@ public class Server extends Thread
 					}
 					try
 					{
-						sendPacket(new Packet06Ready("$$$", true), player);
+						sendPacket(new Packet6Ready("$$$", true), player);
 					}
 					catch (IOException e)
 					{

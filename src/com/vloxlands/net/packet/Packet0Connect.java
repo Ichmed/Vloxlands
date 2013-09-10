@@ -3,23 +3,23 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet00Connect extends Packet
+public class Packet0Connect extends Packet
 {
 	
 	private String username;
 	private int version;
 	
-	public Packet00Connect(byte[] data)
+	public Packet0Connect(byte[] data)
 	{
-		super(00);
+		super(0);
 		String[] s = readData(data).split(":");
 		username = s[0];
 		version = Integer.parseInt(s[1]);
 	}
 	
-	public Packet00Connect(String username, int version)
+	public Packet0Connect(String username, int version)
 	{
-		super(00);
+		super(0);
 		this.version = version;
 		this.username = username;
 	}

@@ -6,8 +6,8 @@ import java.awt.Font;
 import java.io.IOException;
 
 import com.vloxlands.game.Game;
-import com.vloxlands.net.packet.Packet01Disconnect;
-import com.vloxlands.net.packet.Packet06Ready;
+import com.vloxlands.net.packet.Packet1Disconnect;
+import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -130,7 +130,7 @@ public class LobbySlot extends Container
 					{
 						try
 						{
-							Game.client.sendPacket(new Packet01Disconnect(username, "mp.reason.kicked"));
+							Game.client.sendPacket(new Packet1Disconnect(username, "mp.reason.kicked"));
 							Game.currentGame.removeActiveScene();
 						}
 						catch (IOException e)
@@ -157,7 +157,7 @@ public class LobbySlot extends Container
 			{
 				try
 				{
-					Game.client.sendPacket(new Packet06Ready(username, ready.isActive()));
+					Game.client.sendPacket(new Packet6Ready(username, ready.isActive()));
 				}
 				catch (IOException e)
 				{

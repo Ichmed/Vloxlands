@@ -3,22 +3,22 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet01Disconnect extends Packet
+public class Packet1Disconnect extends Packet
 {
 	private String reason;
 	private String username;
 	
-	public Packet01Disconnect(byte[] data)
+	public Packet1Disconnect(byte[] data)
 	{
-		super(01);
+		super(1);
 		String[] s = readData(data).split(":");
 		username = s[0];
 		reason = s[1];
 	}
 	
-	public Packet01Disconnect(String username, String reason)
+	public Packet1Disconnect(String username, String reason)
 	{
-		super(01);
+		super(1);
 		this.username = username;
 		this.reason = reason;
 	}

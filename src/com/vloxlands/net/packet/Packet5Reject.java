@@ -3,7 +3,7 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet05Reject extends Packet
+public class Packet5Reject extends Packet
 {
 	public static enum Cause
 	{
@@ -16,15 +16,15 @@ public class Packet05Reject extends Packet
 	
 	private Cause cause;
 	
-	public Packet05Reject(Cause cause)
+	public Packet5Reject(Cause cause)
 	{
-		super(05);
+		super(5);
 		this.cause = cause;
 	}
 	
-	public Packet05Reject(byte[] data)
+	public Packet5Reject(byte[] data)
 	{
-		super(05);
+		super(5);
 		cause = Cause.values()[Integer.parseInt(readData(data))];
 	}
 	

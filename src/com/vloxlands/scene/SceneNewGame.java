@@ -9,10 +9,10 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.Game;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
-import com.vloxlands.net.packet.Packet01Disconnect;
-import com.vloxlands.net.packet.Packet03ChatMessage;
-import com.vloxlands.net.packet.Packet04ServerInfo;
-import com.vloxlands.net.packet.Packet06Ready;
+import com.vloxlands.net.packet.Packet1Disconnect;
+import com.vloxlands.net.packet.Packet3ChatMessage;
+import com.vloxlands.net.packet.Packet4ServerInfo;
+import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
@@ -63,7 +63,7 @@ public class SceneNewGame extends Scene
 		
 		try
 		{
-			Game.client.sendPacket(new Packet04ServerInfo());
+			Game.client.sendPacket(new Packet4ServerInfo());
 		}
 		catch (IOException e)
 		{
@@ -91,7 +91,7 @@ public class SceneNewGame extends Scene
 				{
 					try
 					{
-						Game.client.sendPacket(new Packet03ChatMessage(Game.client.getUsername(), msg));
+						Game.client.sendPacket(new Packet3ChatMessage(Game.client.getUsername(), msg));
 						chatInput.setText("");
 					}
 					catch (IOException e)
@@ -258,7 +258,7 @@ public class SceneNewGame extends Scene
 		{
 			case DISCONNECT:
 			{
-				Packet01Disconnect p = (Packet01Disconnect) packet;
+				Packet1Disconnect p = (Packet1Disconnect) packet;
 				if (p.getUsername().equals(Game.client.getUsername()))
 				{
 					if (!p.getReason().equals("mp.disconnect"))
@@ -275,7 +275,7 @@ public class SceneNewGame extends Scene
 				}
 				try
 				{
-					Game.client.sendPacket(new Packet04ServerInfo());
+					Game.client.sendPacket(new Packet4ServerInfo());
 				}
 				catch (IOException e)
 				{
@@ -287,7 +287,7 @@ public class SceneNewGame extends Scene
 			{
 				try
 				{
-					Game.client.sendPacket(new Packet04ServerInfo());
+					Game.client.sendPacket(new Packet4ServerInfo());
 				}
 				catch (IOException e)
 				{
@@ -297,12 +297,12 @@ public class SceneNewGame extends Scene
 			}
 			case SERVERINFO:
 			{
-				updateLobby(((Packet04ServerInfo) packet).getPlayers());
+				updateLobby(((Packet4ServerInfo) packet).getPlayers());
 				break;
 			}
 			case READY:
 			{
-				Packet06Ready p = (Packet06Ready) packet;
+				Packet6Ready p = (Packet6Ready) packet;
 				if (p.getUsername().equals("$$$"))
 				{
 					start.setEnabled(p.getReady());
@@ -322,7 +322,7 @@ public class SceneNewGame extends Scene
 							{
 								try
 								{
-									Game.client.sendPacket(new Packet06Ready());
+									Game.client.sendPacket(new Packet6Ready());
 								}
 								catch (IOException e)
 								{
