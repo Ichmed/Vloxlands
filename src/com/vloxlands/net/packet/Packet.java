@@ -2,8 +2,6 @@ package com.vloxlands.net.packet;
 
 import java.util.Arrays;
 
-
-
 /**
  * @author Dakror
  */
@@ -49,7 +47,7 @@ public abstract class Packet
 		return data;
 	}
 	
-	public String readData(byte[] data)
+	public static String readData(byte[] data)
 	{
 		return new String(Arrays.copyOfRange(data, 1, data.length)).trim();
 	}

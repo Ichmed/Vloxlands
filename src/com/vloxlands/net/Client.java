@@ -17,6 +17,7 @@ import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -72,7 +73,6 @@ public class Client extends Thread
 		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
 		{
-			default:
 			case INVALID:
 			{
 				break;
@@ -125,6 +125,14 @@ public class Client extends Thread
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
+			case SETTINGS:
+			{
+				Packet7Settings packet = new Packet7Settings(data);
+				Game.currentGame.onClientReveivedPacket(packet);
+				break;
+			}
+			default:
+				CFG.p("reveived unhandled packet: " + type + " [" + Packet.readData(data) + "]");
 		}
 	}
 	

@@ -45,6 +45,7 @@ public class Spinner extends ClickableGui
 			public void trigger()
 			{
 				value = (value >= Spinner.this.min + Spinner.this.step) ? value - Spinner.this.step : Spinner.this.min;
+				if (clickEvent != null) clickEvent.trigger();
 			}
 		});
 		plus = new ArrowButton(x + ((rot == GuiRotation.HORIZONTAL) ? width - ArrowButton.WIDTH : 0), y, (rot == GuiRotation.HORIZONTAL) ? ArrowButton.PLUS_HOR : ArrowButton.PLUS_VER);
@@ -55,6 +56,7 @@ public class Spinner extends ClickableGui
 			public void trigger()
 			{
 				value = (value <= Spinner.this.max - Spinner.this.step) ? value + Spinner.this.step : Spinner.this.max;
+				if (clickEvent != null) clickEvent.trigger();
 			}
 		});
 	}

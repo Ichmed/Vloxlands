@@ -20,6 +20,7 @@ import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -300,8 +301,20 @@ public class Server extends Thread
 				}
 				break;
 			}
-			default:
+			case SETTINGS:
+			{
+				try
+				{
+					sendPacketToAllClients(new Packet7Settings(data));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 				break;
+			}
+			default:
+				CFG.p("[SERVER]: reveived unhandled packet (" + address.getHostAddress() + ":" + port + ") " + type + " [" + Packet.readData(data) + "]");
 		}
 	}
 	

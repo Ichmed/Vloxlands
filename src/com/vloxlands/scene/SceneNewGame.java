@@ -13,6 +13,7 @@ import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
@@ -152,15 +153,43 @@ public class SceneNewGame extends Scene
 		// }
 		// });
 		
-		
-		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		xSize.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				try
+				{
+					Game.client.sendPacket(new Packet7Settings("xSize", xSize.getValue() + ""));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
 		xSize.setEnabled(Game.client.isConnectedToLocalhost());
 		content.add(xSize);
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("islands") + ":", false));
 		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		zSize.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				try
+				{
+					Game.client.sendPacket(new Packet7Settings("zSize", zSize.getValue() + ""));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
 		zSize.setEnabled(Game.client.isConnectedToLocalhost());
 		content.add(zSize);
 	}
@@ -335,6 +364,24 @@ public class SceneNewGame extends Scene
 							start.setEnabled(false);
 							tb.textColor = new Vector3f(1, 1, 1);
 						}
+						break;
+					}
+				}
+				break;
+			}
+			case SETTINGS:
+			{
+				Packet7Settings p = (Packet7Settings) packet;
+				switch (p.getKey())
+				{
+					case "xSize":
+					{
+						xSize.setValue(Integer.parseInt(p.getValue()));
+						break;
+					}
+					case "zSize":
+					{
+						zSize.setValue(Integer.parseInt(p.getValue()));
 						break;
 					}
 				}
