@@ -18,6 +18,7 @@ import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.net.packet.Packet7Settings;
+import com.vloxlands.net.packet.Packet8Loading;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -128,6 +129,12 @@ public class Client extends Thread
 			case SETTINGS:
 			{
 				Packet7Settings packet = new Packet7Settings(data);
+				Game.currentGame.onClientReveivedPacket(packet);
+				break;
+			}
+			case LOADING:
+			{
+				Packet8Loading packet = new Packet8Loading(data);
 				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}

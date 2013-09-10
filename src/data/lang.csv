@@ -37,6 +37,7 @@ joindesc;Please enter the IP of the Server you want to connect to.;Bitte gib die
 iperror;"%ip%" is no valid IP Address!;"%ip%" ist keine gueltige IP Adresse!
 hamachierror;It seeems that you don't have "LogMeIn Hamachi" installed on your computer. In order to beeing able to play in Multiplayer you have to install it. Do you want to install it now? If you've installed "LogMeIn Hamachi", please restart the game.;Es scheint, dass du "LogMeIn Hamachi" nicht auf deinem Computer installiert hast. Du musst es installieren, um Mehrspieler-Spiele spielen zu koennen. Moechtest du es nun installieren? Nachdem du "LogMeIn Hamachi" installiert hast, starte das Spiel bitte neu.
 errno;An error has occurred!;Ein Fehler ist aufgetreten!
+generatemap;Generating map...;Generiere Karte...
 mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.

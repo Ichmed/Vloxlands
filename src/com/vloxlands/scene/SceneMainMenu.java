@@ -27,8 +27,6 @@ public class SceneMainMenu extends Scene
 		
 		setBackground();
 		
-		// setUserZone();
-		
 		Label l = new Label(0, 100, Display.getWidth(), 60, "Vloxlands");
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);

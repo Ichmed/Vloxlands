@@ -10,6 +10,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.vloxlands.Vloxlands;
+import com.vloxlands.game.world.Map;
+import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet0Connect;
@@ -30,6 +32,8 @@ public class Server extends Thread
 	private DatagramSocket socket;
 	InetAddress ip;
 	private ArrayList<Player> clients = new ArrayList<>();
+	Map map;
+	MapGenerator mapGenerator;
 	
 	public Server(InetAddress ipAddress)
 	{
@@ -37,6 +41,7 @@ public class Server extends Thread
 		{
 			ip = ipAddress;
 			socket = new DatagramSocket(new InetSocketAddress(ipAddress, CFG.SERVER_PORT));
+			map = new Map();
 		}
 		catch (BindException e)
 		{
@@ -90,6 +95,12 @@ public class Server extends Thread
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void setMapGenerator(MapGenerator mg)
+	{
+		mapGenerator = mg;
+		mapGenerator.start();
 	}
 	
 	public boolean areAllClientsReady()

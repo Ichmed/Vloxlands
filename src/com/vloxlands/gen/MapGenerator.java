@@ -1,9 +1,13 @@
 package com.vloxlands.gen;
 
+import java.io.IOException;
+
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.net.packet.Packet8Loading;
 
 public class MapGenerator extends Thread
 {
@@ -41,9 +45,17 @@ public class MapGenerator extends Thread
 				index++;
 			}
 			
-			System.out.print(""); // don't why this is needed
-			
 			progress = gen.progress / (x * z) + progressBefore;
+			
+			try
+			{
+				Game.server.sendPacketToAllClients(new Packet8Loading("generatemap", Math.round(progress * 100)));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
 			if (gen.finishedIsland != null)
 			{
 				Island i = gen.finishedIsland;

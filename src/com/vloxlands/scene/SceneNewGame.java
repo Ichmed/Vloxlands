@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -7,6 +9,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet1Disconnect;
@@ -14,6 +17,7 @@ import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.net.packet.Packet7Settings;
+import com.vloxlands.net.packet.Packet8Loading;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
@@ -28,7 +32,7 @@ import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
-
+import com.vloxlands.util.RenderAssistant;
 
 public class SceneNewGame extends Scene
 {
@@ -48,7 +52,6 @@ public class SceneNewGame extends Scene
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		setBackground();
-		// setUserZone();
 		
 		setTitle(Tr._("newGame"));
 		
@@ -106,7 +109,7 @@ public class SceneNewGame extends Scene
 		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		
-		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, true);
+		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, false);
 		progress.setVisible(false);
 		content.add(progress);
 		
@@ -134,6 +137,14 @@ public class SceneNewGame extends Scene
 		content.add(back);
 		
 		start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
+		start.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24));
+			}
+		});
 		if (Game.client.isConnectedToLocalhost())
 		{
 			start.setEnabled(true);
@@ -141,17 +152,6 @@ public class SceneNewGame extends Scene
 			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
 			content.add(start);
 		}
-		// start.setClickEvent(new IGuiEvent()
-		// {
-		// @Override
-		// public void trigger()
-		// {
-		// Game.mapGenerator = new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 24);
-		// Game.mapGenerator.start();
-		// lockScene();
-		// progress.setVisible(true);
-		// }
-		// });
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
 		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
@@ -251,17 +251,16 @@ public class SceneNewGame extends Scene
 	{
 		super.render();
 		
-		// if (Game.mapGenerator != null)
-		// {
-		// glEnable(GL_BLEND);
-		// glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
-		// glBindTexture(GL_TEXTURE_2D, 0);
-		// RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-		// glColor4f(1, 1, 1, 1);
-		// progress.setValue(Game.mapGenerator.progress);
-		// progress.render();
-		// glDisable(GL_BLEND);
-		// }
+		if (!chat.isEnabled())
+		{
+			glEnable(GL_BLEND);
+			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
+			glBindTexture(GL_TEXTURE_2D, 0);
+			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
+			glColor4f(1, 1, 1, 1);
+			progress.render();
+			glDisable(GL_BLEND);
+		}
 	}
 	
 	@Override
@@ -364,6 +363,14 @@ public class SceneNewGame extends Scene
 						break;
 					}
 				}
+				break;
+			}
+			case LOADING:
+			{
+				Packet8Loading p = (Packet8Loading) packet;
+				lockScene();
+				progress.setValue(p.getPercentage() / 100f);
+				progress.title = Tr._(p.getAction());
 				break;
 			}
 			default:

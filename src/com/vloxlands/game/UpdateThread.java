@@ -62,7 +62,6 @@ public class UpdateThread extends Thread
 						if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
 						if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
 						if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) Game.currentGame.rerender = true;
-						if (Keyboard.getEventKey() == Keyboard.KEY_Z && Keyboard.getEventKeyState()) Game.currentGame.regenerate = true;
 						if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 						{
 							CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;

@@ -20,7 +20,6 @@ public class SceneSettings extends Scene
 	public void init()
 	{
 		setBackground();
-		// setUserZone();
 		setTitle(Tr._("settings"));
 		
 		content.add(new Container(0, 115, Display.getWidth() / 2, Display.getHeight() - 220));
@@ -42,10 +41,6 @@ public class SceneSettings extends Scene
 		fps.addCustomTitle(121, Tr._("unlimited"));
 		fps.setIntegerMode(true);
 		content.add(fps);
-		//
-		// content.add(new Label(20, 298, 0, 25, Tr._("rememberuser") + ":", false));
-		// final Checkbox remember = new Checkbox(Display.getWidth() / 2 - 60, 300, CFG.SAVE_USER);
-		// content.add(remember);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
@@ -74,33 +69,5 @@ public class SceneSettings extends Scene
 			}
 		});
 		content.add(s);
-		
-		// TextButton sv = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT * 2, "Enable server");
-		// sv.setClickEvent(new IGuiEvent()
-		// {
-		//
-		// @Override
-		// public void trigger()
-		// {
-		// if (Game.server == null)
-		// {
-		// Game.server = new Server();
-		// Game.server.start();
-		// }
-		// }
-		// });
-		// content.add(sv);
-		//
-		// TextButton cl = new TextButton(Display.getWidth() - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, "Enable client");
-		// cl.setClickEvent(new IGuiEvent()
-		// {
-		//
-		// @Override
-		// public void trigger()
-		// {
-		// Game.client.connectToServer(Game.server.getIP());
-		// }
-		// });
-		// content.add(cl);
 	}
 }

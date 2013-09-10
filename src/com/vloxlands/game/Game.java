@@ -19,7 +19,6 @@ import com.vloxlands.game.util.Camera;
 import com.vloxlands.game.util.ViewFrustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
-import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
@@ -55,7 +54,7 @@ public class Game
 	public float zNear = 0.01f, zFar = 10000;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
-	public static MapGenerator mapGenerator;
+	// public static MapGenerator mapGenerator;
 	
 	public Camera camera = new Camera();
 	
@@ -66,7 +65,6 @@ public class Game
 	
 	boolean fullscreenToggled = false;
 	boolean rerender = false;
-	boolean regenerate = false;
 	boolean hamachiInstallationDialogShown = false;
 	
 	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
@@ -103,13 +101,6 @@ public class Game
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
 		
-		if (mapGenerator != null && mapGenerator.isDone())
-		{
-			mapGenerator.map.initMap();
-			currentMap = mapGenerator.map;
-			mapGenerator = null;
-		}
-		
 		if (fullscreenToggled)
 		{
 			CFG.FULLSCREEN = !CFG.FULLSCREEN;
@@ -130,25 +121,7 @@ public class Game
 		}
 		
 		viewFrustum.render();
-		
-		if (regenerate)
-		{
-			if (currentMap != null && currentMap.islands.size() > 0)
-			{
-				Game.mapGenerator = new MapGenerator(1, 1, 20, 24);
-				Game.mapGenerator.start();
-			}
-			
-			regenerate = false;
-		}
 		// -- END -- //
-		
-		if (Game.mapGenerator != null && Game.mapGenerator.isDone())
-		{
-			Game.mapGenerator.map.initMap();
-			Game.currentMap = Game.mapGenerator.map;
-			Game.mapGenerator = null;
-		}
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
