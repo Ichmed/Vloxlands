@@ -33,7 +33,7 @@ public class Plane
 	
 	public Plane(Vector3f a, Vector3f b, Vector3f c)
 	{
-		this(Vector3f.cross(Vector3f.sub(a, b, null), Vector3f.sub(a, c, null), null), a);
+		this(Vector3f.cross(Vector3f.sub(b, a, null), Vector3f.sub(c, a, null), null), a);
 	}
 	
 	public Vector3f getNormal()
