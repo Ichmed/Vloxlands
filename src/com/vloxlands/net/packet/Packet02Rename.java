@@ -23,9 +23,9 @@ public class Packet02Rename extends Packet
 	}
 	
 	@Override
-	public byte[] getData()
+	public String getStringData()
 	{
-		return ("02" + oldUsername + ":" + newUsername).getBytes();
+		return oldUsername + ":" + newUsername;
 	}
 	
 	public String getOldUsername()

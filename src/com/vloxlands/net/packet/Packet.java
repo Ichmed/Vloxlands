@@ -1,5 +1,7 @@
 package com.vloxlands.net.packet;
 
+import java.util.Arrays;
+
 
 
 /**
@@ -9,27 +11,20 @@ public abstract class Packet
 {
 	public static enum PacketTypes
 	{
-		INVALID(-1),
-		CONNECT(00),
-		DISCONNECT(01),
-		RENAME(02),
-		CHATMESSAGE(03),
-		SERVERINFO(04),
-		REJECT(05),
-		READY(06),
+		INVALID,
+		CONNECT,
+		DISCONNECT,
+		RENAME,
+		CHATMESSAGE,
+		SERVERINFO,
+		REJECT,
+		READY,
+		SETTINGS,
 		
 		;
-		
-		private int packetID;
-		
-		private PacketTypes(int id)
-		{
-			packetID = id;
-		}
-		
 		public int getID()
 		{
-			return packetID;
+			return ordinal() - 1;
 		}
 	}
 	
@@ -40,13 +35,23 @@ public abstract class Packet
 		this.packetID = (byte) packetID;
 	}
 	
-	public abstract byte[] getData();
+	protected abstract String getStringData();
+	
+	public byte[] getData()
+	{
+		byte[] strData = getStringData().getBytes();
+		
+		byte[] data = new byte[strData.length + 1];
+		data[0] = packetID;
+		
+		System.arraycopy(strData, 0, data, 1, strData.length);
+		
+		return data;
+	}
 	
 	public String readData(byte[] data)
 	{
-		String message = new String(data).trim();
-		
-		return message.substring(2);
+		return new String(Arrays.copyOfRange(data, 1, data.length)).trim();
 	}
 	
 	public PacketTypes getType()
@@ -62,17 +67,5 @@ public abstract class Packet
 		}
 		
 		return PacketTypes.INVALID;
-	}
-	
-	public static PacketTypes lookupPacket(String id)
-	{
-		try
-		{
-			return lookupPacket(Integer.parseInt(id));
-		}
-		catch (NumberFormatException e)
-		{
-			return PacketTypes.INVALID;
-		}
 	}
 }

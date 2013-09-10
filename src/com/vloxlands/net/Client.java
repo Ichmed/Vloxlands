@@ -69,8 +69,7 @@ public class Client extends Thread
 	
 	private void parsePacket(byte[] data)
 	{
-		String message = new String(data).trim();
-		PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
+		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
 		{
 			default:

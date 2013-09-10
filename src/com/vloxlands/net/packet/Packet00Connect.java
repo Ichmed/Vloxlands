@@ -1,9 +1,5 @@
 package com.vloxlands.net.packet;
 
-
-
-
-
 /**
  * @author Dakror
  */
@@ -29,9 +25,9 @@ public class Packet00Connect extends Packet
 	}
 	
 	@Override
-	public byte[] getData()
+	public String getStringData()
 	{
-		return ("00" + username + ":" + version).getBytes();
+		return username + ":" + version;
 	}
 	
 	public int getVersion()

@@ -24,9 +24,9 @@ public class Packet01Disconnect extends Packet
 	}
 	
 	@Override
-	public byte[] getData()
+	public String getStringData()
 	{
-		return ("01" + username + ":" + reason).getBytes();
+		return username + ":" + reason;
 	}
 	
 	public String getUsername()

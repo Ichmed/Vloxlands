@@ -94,8 +94,7 @@ public class Server extends Thread
 	
 	private void parsePacket(byte[] data, InetAddress address, int port)
 	{
-		String message = new String(data).trim();
-		PacketTypes type = Packet.lookupPacket(message.substring(0, 2));
+		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
 		{
 			case INVALID:

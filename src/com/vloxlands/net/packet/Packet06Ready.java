@@ -40,8 +40,8 @@ public class Packet06Ready extends Packet
 	}
 	
 	@Override
-	public byte[] getData()
+	public String getStringData()
 	{
-		return ("06" + username + ":" + Boolean.toString(ready)).getBytes();
+		return username + ":" + Boolean.toString(ready);
 	}
 }
