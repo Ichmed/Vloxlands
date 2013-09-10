@@ -94,6 +94,7 @@ public class Server extends Thread
 	
 	public boolean areAllClientsReady()
 	{
+		if (clients.size() == 1) return true;
 		for (Player p : clients)
 		{
 			if (!p.isReady()) return false;

@@ -136,7 +136,7 @@ public class SceneNewGame extends Scene
 		start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
 		if (Game.client.isConnectedToLocalhost())
 		{
-			start.setEnabled(false);
+			start.setEnabled(true);
 			back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
 			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
 			content.add(start);
@@ -339,17 +339,10 @@ public class SceneNewGame extends Scene
 					{
 						TextButton tb = (TextButton) slot.components.get(2);
 						tb.setActive(p.getReady());
-						if (p.getReady())
-						{
-							tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
-							
-							if (Game.client.isConnectedToLocalhost()) start.setEnabled(Game.server.areAllClientsReady());
-						}
-						else
-						{
-							start.setEnabled(false);
-							tb.textColor = new Vector3f(1, 1, 1);
-						}
+						if (p.getReady()) tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
+						else tb.textColor = new Vector3f(1, 1, 1);
+						
+						if (Game.client.isConnectedToLocalhost()) start.setEnabled(Game.server.areAllClientsReady());
 						break;
 					}
 				}
