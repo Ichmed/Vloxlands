@@ -12,7 +12,7 @@ import com.vloxlands.settings.CFG;
 public class Island
 {
 	public static final int SIZE = 128;
-	public static final int CHUNKSIZE = 16;
+	public static final int CHUNKSIZE = 8;
 	
 	public static final int SNOWLEVEL = 50;
 	public static final float SNOW_PER_TICK = 0.2f;
