@@ -26,6 +26,7 @@ public class SceneGame extends Scene
 	public void init()
 	{
 		Game.currentGame.resetCamera();
+		worldActive = true;
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;
 		
@@ -79,13 +80,14 @@ public class SceneGame extends Scene
 	{
 		super.onTick();
 		
-		worldActive = !paused;
 		uiActive = paused;
 	}
 	
 	@Override
 	public void handleMouseWorld(int x, int y, int flag)
 	{
+		if (paused) return;
+		
 		if (Mouse.isButtonDown(1))
 		{
 			if (!Mouse.isGrabbed()) Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
