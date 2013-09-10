@@ -143,7 +143,6 @@ public class Client extends Thread
 			case ISLAND:
 			{
 				Packet9Island packet = new Packet9Island(data);
-				CFG.p(new String(packet.getData()));
 				Island island = packet.getIsland();
 				Game.currentMap.addIsland(island);
 				break;

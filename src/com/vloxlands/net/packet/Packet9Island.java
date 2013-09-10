@@ -38,7 +38,7 @@ public class Packet9Island extends Packet
 	
 	public Island getIsland()
 	{
-		return MapAssistant.loadIsland(Compressor.decompress(islandData));
+		return MapAssistant.loadIsland(Compressor.decompress(islandData), false);
 	}
 	
 	@Override

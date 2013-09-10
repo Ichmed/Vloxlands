@@ -43,13 +43,14 @@ public class MapAssistant
 		byte[] data = Compressor.decompress(Compressor.getFileContentAsByteArray(bin));
 		while (pos < data.length)
 		{
-			map.addIsland(loadIsland(data));
+			map.addIsland(loadIsland(data, true));
 		}
 		return map;
 	}
 	
-	public static Island loadIsland(byte[] data)
+	public static Island loadIsland(byte[] data, boolean posing)
 	{
+		int pos = (posing) ? MapAssistant.pos : 0;
 		Vector3f vec = new Vector3f();
 		ByteBuffer bb = ByteBuffer.wrap(data, pos, 12);
 		vec.x = bb.getFloat();
@@ -71,6 +72,8 @@ public class MapAssistant
 		byte[] mds = new byte[length2];
 		System.arraycopy(data, pos, mds, 0, length2);
 		pos += length2;
+		
+		if (posing) MapAssistant.pos += pos;
 		
 		return loadIsland(vec, ids, mds);
 	}
