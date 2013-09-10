@@ -13,7 +13,7 @@ import com.vloxlands.net.packet.Packet9Island;
 public class MapGenerator extends Thread
 {
 	public Map map;
-	public float progress, progressBefore;
+	public float progress, progressBefore, lastProgress;
 	
 	IslandGenerator gen;
 	int z, x, spread, size, index;
@@ -45,17 +45,21 @@ public class MapGenerator extends Thread
 				gen.start();
 				index++;
 			}
-			
+			lastProgress = new Float(progress); // stupid reference system :(
 			progress = gen.progress / (x * z) + progressBefore;
 			
-			try
+			if (progress != lastProgress)
 			{
-				Game.server.sendPacketToAllClients(new Packet8Loading("generatemap", Math.round(progress * 100)));
+				try
+				{
+					Game.server.sendPacketToAllClients(new Packet8Loading("generatemap", progress));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			
 			
 			if (gen.finishedIsland != null)
 			{
@@ -72,6 +76,7 @@ public class MapGenerator extends Thread
 				map.addIsland(i);
 				gen = null;
 			}
+			
 		}
 	}
 	

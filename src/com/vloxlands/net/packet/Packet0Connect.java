@@ -25,9 +25,9 @@ public class Packet0Connect extends Packet
 	}
 	
 	@Override
-	public String getStringData()
+	public byte[] getPacketData()
 	{
-		return username + ":" + version;
+		return (username + ":" + version).getBytes();
 	}
 	
 	public int getVersion()

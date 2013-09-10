@@ -35,11 +35,11 @@ public abstract class Packet
 		this.packetID = (byte) packetID;
 	}
 	
-	protected abstract String getStringData();
+	protected abstract byte[] getPacketData();
 	
 	public byte[] getData()
 	{
-		byte[] strData = getStringData().getBytes();
+		byte[] strData = getPacketData();
 		
 		byte[] data = new byte[strData.length + 1];
 		data[0] = packetID;

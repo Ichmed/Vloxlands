@@ -12,6 +12,7 @@ public class Map
 {
 	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
+	public boolean initialized = false;
 	
 	public static final int MAXHEIGHT = 512;
 	
@@ -52,6 +53,7 @@ public class Map
 			i.calculateWeight();
 			i.calculateUplift();
 		}
+		initialized = true;
 	}
 	
 	public static float calculateUplift(float height)

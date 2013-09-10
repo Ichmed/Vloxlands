@@ -34,8 +34,8 @@ public class Packet5Reject extends Packet
 	}
 	
 	@Override
-	public String getStringData()
+	public byte[] getPacketData()
 	{
-		return cause.ordinal() + "";
+		return (cause.ordinal() + "").getBytes();
 	}
 }

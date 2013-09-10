@@ -35,8 +35,8 @@ public class Packet7Settings extends Packet
 	}
 	
 	@Override
-	protected String getStringData()
+	protected byte[] getPacketData()
 	{
-		return key + ":" + value.toString();
+		return (key + ":" + value.toString()).getBytes();
 	}
 }

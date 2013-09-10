@@ -7,6 +7,7 @@ import java.net.InetAddress;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
+import com.vloxlands.game.world.Island;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet0Connect;
@@ -19,6 +20,7 @@ import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.net.packet.Packet8Loading;
+import com.vloxlands.net.packet.Packet9Island;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 
@@ -136,6 +138,13 @@ public class Client extends Thread
 			{
 				Packet8Loading packet = new Packet8Loading(data);
 				Game.currentGame.onClientReveivedPacket(packet);
+				break;
+			}
+			case ISLAND:
+			{
+				Packet9Island packet = new Packet9Island(data);
+				Island island = packet.getIsland();
+				Game.currentMap.addIsland(island);
 				break;
 			}
 			default:

@@ -125,10 +125,9 @@ public class Game
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		
-		if (currentMap != null)
+		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive())
 		{
 			glPushMatrix();
 			{
@@ -179,7 +178,7 @@ public class Game
 		}
 		RenderAssistant.set2DRenderMode(false);
 		
-		if (currentMap != null) currentMap.render();
+		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive()) currentMap.render();
 		
 		Display.update();
 		if (Display.wasResized()) updateViewport();

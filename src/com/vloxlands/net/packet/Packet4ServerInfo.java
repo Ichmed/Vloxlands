@@ -31,7 +31,7 @@ public class Packet4ServerInfo extends Packet
 	}
 	
 	@Override
-	public String getStringData()
+	public byte[] getPacketData()
 	{
 		String serialized = "";
 		if (players != null)
@@ -41,6 +41,6 @@ public class Packet4ServerInfo extends Packet
 			
 			serialized = serialized.substring(0, serialized.length() - 1);
 		}
-		return serialized;
+		return serialized.getBytes();
 	}
 }

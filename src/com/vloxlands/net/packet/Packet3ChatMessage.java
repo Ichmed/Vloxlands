@@ -33,8 +33,8 @@ public class Packet3ChatMessage extends Packet
 	}
 	
 	@Override
-	public String getStringData()
+	public byte[] getPacketData()
 	{
-		return username + ":" + message;
+		return (username + ":" + message).getBytes();
 	}
 }

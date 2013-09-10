@@ -1,6 +1,7 @@
 package com.vloxlands.net.packet;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 
 import com.vloxlands.game.world.Island;
 import com.vloxlands.util.Compressor;
@@ -29,9 +30,20 @@ public class Packet9Island extends Packet
 		}
 	}
 	
-	@Override
-	protected String getStringData()
+	public Packet9Island(byte[] data)
 	{
-		return new String(islandData);
+		super(9);
+		islandData = Arrays.copyOfRange(data, 1, data.length);
+	}
+	
+	public Island getIsland()
+	{
+		return MapAssistant.loadIsland(Compressor.decompress(islandData));
+	}
+	
+	@Override
+	protected byte[] getPacketData()
+	{
+		return islandData;
 	}
 }

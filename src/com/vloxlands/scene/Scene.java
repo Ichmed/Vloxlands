@@ -24,7 +24,7 @@ public abstract class Scene
 	
 	public abstract void init();
 	
-	boolean uiActive = true, worldActive = true;
+	boolean uiActive = true, worldActive = false;
 	
 	// -- title -- //
 	boolean titled = false;
@@ -185,6 +185,11 @@ public abstract class Scene
 			{
 				((ClickableGui) i).setEnabled(true);
 			}
+	}
+	
+	public boolean isWorldActive()
+	{
+		return worldActive;
 	}
 	
 	// not abstract so that implementing won't be forced

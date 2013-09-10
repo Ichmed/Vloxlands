@@ -36,7 +36,7 @@ public class Server extends Thread
 	private DatagramSocket socket;
 	InetAddress ip;
 	private ArrayList<Player> clients = new ArrayList<>();
-	HashMap<String,String> settings = new HashMap<>();
+	HashMap<String, String> settings = new HashMap<>();
 	Map map;
 	MapGenerator mapGenerator;
 	
@@ -305,7 +305,8 @@ public class Server extends Thread
 				}
 				break;
 			}
-			case SETTINGS: {
+			case SETTINGS:
+			{
 				Packet7Settings packet = new Packet7Settings(data);
 				settings.put(packet.getKey(), packet.getValue());
 				try

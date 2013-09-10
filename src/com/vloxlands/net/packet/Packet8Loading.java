@@ -6,9 +6,9 @@ package com.vloxlands.net.packet;
 public class Packet8Loading extends Packet
 {
 	String action;
-	int percentage;
+	float percentage;
 	
-	public Packet8Loading(String action, int percent)
+	public Packet8Loading(String action, float percent)
 	{
 		super(8);
 		this.action = action;
@@ -20,13 +20,13 @@ public class Packet8Loading extends Packet
 		super(8);
 		String[] s = readData(data).split(":");
 		action = s[0];
-		percentage = Integer.parseInt(s[1]);
+		percentage = Float.parseFloat(s[1]);
 	}
 	
 	@Override
-	protected String getStringData()
+	protected byte[] getPacketData()
 	{
-		return action + ":" + percentage;
+		return (action + ":" + percentage).getBytes();
 	}
 	
 	public String getAction()
@@ -34,7 +34,7 @@ public class Packet8Loading extends Packet
 		return action;
 	}
 	
-	public int getPercentage()
+	public float getPercentage()
 	{
 		return percentage;
 	}

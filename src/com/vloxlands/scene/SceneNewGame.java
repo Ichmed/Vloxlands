@@ -9,6 +9,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
@@ -49,6 +50,9 @@ public class SceneNewGame extends Scene
 		{
 			Game.server = new Server(Game.IP); // host
 		}
+		
+		Game.currentMap = new Map();
+		
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		setBackground();
@@ -239,14 +243,6 @@ public class SceneNewGame extends Scene
 	}
 	
 	@Override
-	public void onTick()
-	{
-		super.onTick();
-		
-		if (Game.currentMap != null) Game.currentGame.setScene(new SceneGame());
-	}
-	
-	@Override
 	public void render()
 	{
 		super.render();
@@ -261,6 +257,14 @@ public class SceneNewGame extends Scene
 			progress.render();
 			glDisable(GL_BLEND);
 		}
+		
+		if (progress.getValue() == 1 && !Game.currentMap.initialized && Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue())
+		{
+			progress.title = Tr._("renderchunks");
+			Game.currentMap.initMap();
+		}
+		
+		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
 	
 	@Override
@@ -369,7 +373,7 @@ public class SceneNewGame extends Scene
 			{
 				Packet8Loading p = (Packet8Loading) packet;
 				lockScene();
-				progress.setValue(p.getPercentage() / 100f);
+				progress.setValue(p.getPercentage());
 				progress.title = Tr._(p.getAction());
 				break;
 			}
