@@ -16,7 +16,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
-import com.vloxlands.game.util.ViewFrustum;
+import com.vloxlands.game.util.Frustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.net.Client;
@@ -47,9 +47,10 @@ public class Game
 	public static Server server;
 	public static Client client;
 	
+	public static Frustum frustum;
+	
 	public static Game currentGame;
 	public static Map currentMap;
-	public ViewFrustum viewFrustum = new ViewFrustum();
 	
 	public float zNear = 0.01f, zFar = 10000;
 	Vector3f up = new Vector3f(0, 1, 0);
@@ -99,7 +100,8 @@ public class Game
 		
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
-		viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
+		// viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
+		frustum.calculateFrustum();
 		
 		if (fullscreenToggled)
 		{
@@ -120,7 +122,7 @@ public class Game
 			rerender = false;
 		}
 		
-		viewFrustum.render();
+		// viewFrustum.render();
 		// -- END -- //
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -204,6 +206,8 @@ public class Game
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
 		currentGame.resetCamera();
+		
+		frustum = new Frustum();
 		
 		new UpdateThread();
 	}

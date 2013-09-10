@@ -43,13 +43,10 @@ public class Chunk
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return;
 		
-		for (Vector3f v : getCorners(i))
+		if (Game.frustum.cubeInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
 		{
-			if (Game.currentGame.viewFrustum.isPointInsideFrustum(v))
-			{
-				glCallList(opaque ? opaqueID : transparentID);
-				return;
-			}
+			glCallList(opaque ? opaqueID : transparentID);
+			return;
 		}
 	}
 	
@@ -61,14 +58,5 @@ public class Chunk
 			v.render();
 		glEndList();
 		glPopMatrix();
-	}
-	
-	public Vector3f[] getCorners(Island island)
-	{
-		int i = Island.CHUNKSIZE;
-		int x = (int) ((this.x * i) + island.getPos().x);
-		int y = (int) ((this.y * i) + island.getPos().y);
-		int z = (int) ((this.z * i) + island.getPos().z);
-		return new Vector3f[] { new Vector3f(x, y, z), new Vector3f(x + i, y, z), new Vector3f(x + i, y + i, z), new Vector3f(x + i, y, z + i), new Vector3f(x + i, y + i, z + i), new Vector3f(x, y + i, z), new Vector3f(x, y, z + i), new Vector3f(x, y + i, z + i) };
 	}
 }
