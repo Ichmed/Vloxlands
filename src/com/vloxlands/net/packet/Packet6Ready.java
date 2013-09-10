@@ -8,12 +8,6 @@ public class Packet6Ready extends Packet
 	private String username;
 	private boolean ready;
 	
-	public Packet6Ready()
-	{
-		super(6);
-		username = "$$$";
-	}
-	
 	public Packet6Ready(String username, boolean ready)
 	{
 		super(6);

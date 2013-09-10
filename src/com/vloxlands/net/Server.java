@@ -20,7 +20,6 @@ import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
-import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -91,6 +90,16 @@ public class Server extends Thread
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public boolean areAllClientsReady()
+	{
+		for (Player p : clients)
+		{
+			if (!p.isReady()) return false;
+		}
+		
+		return true;
 	}
 	
 	private void parsePacket(byte[] data, InetAddress address, int port)
@@ -253,59 +262,17 @@ public class Server extends Thread
 			case READY:
 			{
 				Packet6Ready packet = new Packet6Ready(data);
-				if (!packet.getUsername().equals("$$$"))
+				for (Player p : clients)
 				{
-					for (Player p : clients)
+					if (p.getUsername().equals(packet.getUsername()))
 					{
-						if (p.getUsername().equals(packet.getUsername()))
-						{
-							p.setReady(packet.getReady());
-							break;
-						}
-					}
-					try
-					{
-						sendPacketToAllClients(packet);
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
+						p.setReady(packet.getReady());
+						break;
 					}
 				}
-				else
-				{
-					Player player = new Player("", address, port);
-					for (Player p : clients)
-					{
-						if (!p.isReady())
-						{
-							try
-							{
-								sendPacket(new Packet6Ready("$$$", false), player);
-								return;
-							}
-							catch (IOException e)
-							{
-								e.printStackTrace();
-							}
-						}
-					}
-					try
-					{
-						sendPacket(new Packet6Ready("$$$", true), player);
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-				}
-				break;
-			}
-			case SETTINGS:
-			{
 				try
 				{
-					sendPacketToAllClients(new Packet7Settings(data));
+					sendPacketToAllClients(packet);
 				}
 				catch (IOException e)
 				{

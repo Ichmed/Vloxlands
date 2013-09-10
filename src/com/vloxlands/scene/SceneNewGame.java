@@ -43,7 +43,7 @@ public class SceneNewGame extends Scene
 	{
 		if (Game.server == null && !Game.client.isConnected())
 		{
-			Game.server = new Server(Game.IP);
+			Game.server = new Server(Game.IP); // host
 		}
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
@@ -162,7 +162,7 @@ public class SceneNewGame extends Scene
 			{
 				try
 				{
-					Game.client.sendPacket(new Packet7Settings("xSize", xSize.getValue() + ""));
+					Game.server.sendPacketToAllClients(new Packet7Settings("xSize", xSize.getValue() + ""));
 				}
 				catch (IOException e)
 				{
@@ -182,7 +182,7 @@ public class SceneNewGame extends Scene
 			{
 				try
 				{
-					Game.client.sendPacket(new Packet7Settings("zSize", zSize.getValue() + ""));
+					Game.server.sendPacketToAllClients(new Packet7Settings("zSize", zSize.getValue() + ""));
 				}
 				catch (IOException e)
 				{
@@ -332,11 +332,6 @@ public class SceneNewGame extends Scene
 			case READY:
 			{
 				Packet6Ready p = (Packet6Ready) packet;
-				if (p.getUsername().equals("$$$"))
-				{
-					start.setEnabled(p.getReady());
-					return;
-				}
 				for (IGuiElement iG : lobby.components)
 				{
 					LobbySlot slot = (LobbySlot) iG;
@@ -347,17 +342,8 @@ public class SceneNewGame extends Scene
 						if (p.getReady())
 						{
 							tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
-							if (Game.client.isConnectedToLocalhost())
-							{
-								try
-								{
-									Game.client.sendPacket(new Packet6Ready());
-								}
-								catch (IOException e)
-								{
-									e.printStackTrace();
-								}
-							}
+							
+							if (Game.client.isConnectedToLocalhost()) start.setEnabled(Game.server.areAllClientsReady());
 						}
 						else
 						{
