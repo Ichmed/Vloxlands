@@ -31,7 +31,7 @@ import com.vloxlands.settings.CFG;
  */
 public class Server extends Thread
 {
-	public static final int PACKETSIZE = 4096;
+	public static final int PACKETSIZE = 65536;
 	
 	private DatagramSocket socket;
 	InetAddress ip;

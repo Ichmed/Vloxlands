@@ -79,6 +79,7 @@ public class Game
 	
 	public void gameLoop()
 	{
+		
 		if (start == 0) start = System.currentTimeMillis();
 		
 		glMatrixMode(GL_PROJECTION);
@@ -89,18 +90,14 @@ public class Game
 		ShaderLoader.useProgram("/graphics/shaders/", "default");
 		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		else RenderAssistant.disable(GL_LIGHTING);
-		
 		// -- BEGIN: update stuff that needs the GL Context -- //
 		
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
-		// CFG.p("u: " + u);
-		
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
-		// viewFrustum.calculateViewFrustum(camera.getPosition(), v, CFG.FOV, up, zNear, zFar);
 		frustum.calculateFrustum();
 		
 		if (fullscreenToggled)
@@ -121,14 +118,11 @@ public class Game
 			if (currentMap != null && currentMap.islands.size() > 0) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			rerender = false;
 		}
-		
-		// viewFrustum.render();
 		// -- END -- //
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
-		
 		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive())
 		{
 			glPushMatrix();
@@ -141,8 +135,6 @@ public class Game
 					glVertex3f(lightPos.x, lightPos.y, lightPos.z);
 				}
 				glEnd();
-				
-				// this.viewFrustum.render();
 			}
 			glPopMatrix();
 		}
@@ -179,8 +171,6 @@ public class Game
 			glColor4f(1, 1, 1, 1);
 		}
 		RenderAssistant.set2DRenderMode(false);
-		
-		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive()) currentMap.render();
 		
 		Display.update();
 		if (Display.wasResized()) updateViewport();
