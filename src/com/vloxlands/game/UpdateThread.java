@@ -8,7 +8,6 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.Vloxlands;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.util.RenderAssistant;
 
 /**
  * @author Dakror
@@ -76,13 +75,13 @@ public class UpdateThread extends Thread
 				
 				if (Game.currentMap != null)
 				{
-					if (Keyboard.isKeyDown(Keyboard.KEY_R))
-					{
-						Game.currentGame.lightPos.x = Game.currentGame.camera.position.x;
-						Game.currentGame.lightPos.y = Game.currentGame.camera.position.y;
-						Game.currentGame.lightPos.z = Game.currentGame.camera.position.z;
-						RenderAssistant.setUniform3f("lightPosition", Game.currentGame.lightPos);
-					}
+					// if (Keyboard.isKeyDown(Keyboard.KEY_R))
+					// {
+					// Game.currentGame.lightPos.x = Game.currentGame.camera.position.x;
+					// Game.currentGame.lightPos.y = Game.currentGame.camera.position.y;
+					// Game.currentGame.lightPos.z = Game.currentGame.camera.position.z;
+					// RenderAssistant.setUniform3f("lightPosition", Game.currentGame.lightPos);
+					// }
 					if (Keyboard.isKeyDown(Keyboard.KEY_UP))
 					{
 						Game.currentGame.lightPos.z++;
