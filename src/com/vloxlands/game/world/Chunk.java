@@ -57,7 +57,7 @@ public class Chunk
 			renderDisplayList(false);
 			transparentUTD = true;
 		}
-		if (Game.frustum.cubePartiallyInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
+		if (Game.frustum.cubeInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
 		{
 			glCallList(opaque ? opaqueID : transparentID);
 		}
