@@ -149,7 +149,7 @@ public class SceneNewGame extends Scene
 		}
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
-		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 10, 1, 1, GuiRotation.HORIZONTAL);
 		xSize.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -169,7 +169,7 @@ public class SceneNewGame extends Scene
 		content.add(xSize);
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("islands") + ":", false));
-		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 4, 1, 1, GuiRotation.HORIZONTAL);
+		zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 10, 1, 1, GuiRotation.HORIZONTAL);
 		zSize.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -258,7 +258,7 @@ public class SceneNewGame extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (progress.getValue() == 1 && !Game.currentMap.initialized && Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue())
+		if (Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue())
 		{
 			progress.title = Tr._("renderchunks");
 			Game.currentMap.initMap();
