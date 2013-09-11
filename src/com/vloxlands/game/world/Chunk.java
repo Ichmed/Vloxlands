@@ -10,6 +10,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
+import com.vloxlands.settings.CFG;
 
 public class Chunk
 {
@@ -42,26 +43,27 @@ public class Chunk
 		
 		if (opaqueID == -1)
 		{
+			CFG.p("new list");
 			opaqueID = glGenLists(1);
 			transparentID = glGenLists(1);
 		}
 		
 		if (opaque && !opaqueUTD)
 		{
+			CFG.p("prerender opaque");
 			renderDisplayList(true);
 			opaqueUTD = true;
 		}
 		
 		if (!opaque && !transparentUTD)
 		{
+			CFG.p("prerender transparent");
 			renderDisplayList(false);
 			transparentUTD = true;
 		}
-		
-		if (Game.frustum.cubeInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
+		if (Game.frustum.cubePartiallyInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
 		{
 			glCallList(opaque ? opaqueID : transparentID);
-			return;
 		}
 	}
 	
