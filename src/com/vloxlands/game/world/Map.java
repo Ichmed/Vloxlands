@@ -13,6 +13,7 @@ public class Map
 	public ArrayList<Island> islands = new ArrayList<>();
 	List<Entity> entities = new ArrayList<>();
 	public boolean initialized = false;
+	public int initializedIslands = 0;
 	
 	public static final int MAXHEIGHT = 512;
 	
@@ -47,11 +48,13 @@ public class Map
 	
 	public void initMap()
 	{
+		initializedIslands = 0;
 		for (Island i : islands)
 		{
 			ChunkRenderer.renderChunks(i);
 			i.calculateWeight();
 			i.calculateUplift();
+			initializedIslands++;
 		}
 		initialized = true;
 	}

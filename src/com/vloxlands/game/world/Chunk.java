@@ -18,6 +18,8 @@ public class Chunk
 	HashMap<VoxelFaceKey, VoxelFace>[] meshes = new HashMap[2];
 	
 	int x, y, z, opaqueID = -1, transparentID = -1;
+	boolean opaqueUTD = false;
+	boolean transparentUTD = false;
 	
 	public Chunk(int x, int y, int z)
 	{
@@ -28,11 +30,6 @@ public class Chunk
 	
 	public void updateMesh(Island i)
 	{
-		if (opaqueID == -1)
-		{
-			opaqueID = glGenLists(1);
-			transparentID = glGenLists(1);
-		}
 		faces = ChunkRenderer.generateFaces(x, y, z, i);
 		
 		meshes[0] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[0]);
@@ -42,6 +39,24 @@ public class Chunk
 	public void render(Island i, boolean opaque)
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return;
+		
+		if (opaqueID == -1)
+		{
+			opaqueID = glGenLists(1);
+			transparentID = glGenLists(1);
+		}
+		
+		if (opaque && !opaqueUTD)
+		{
+			renderDisplayList(true);
+			opaqueUTD = true;
+		}
+		
+		if (!opaque && !transparentUTD)
+		{
+			renderDisplayList(false);
+			transparentUTD = true;
+		}
 		
 		if (Game.frustum.cubeInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
 		{

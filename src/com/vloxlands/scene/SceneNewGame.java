@@ -258,13 +258,24 @@ public class SceneNewGame extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue())
-		{
-			progress.title = Tr._("renderchunks");
-			Game.currentMap.initMap();
-		}
+		if (Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue()) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
+	}
+	
+	@Override
+	public void onTick()
+	{
+		super.onTick();
+		
+		if (Game.currentMap.islands.size() == xSize.getValue() * zSize.getValue())
+		{
+			if (!Game.currentMap.initialized)
+			{
+				progress.title = Tr._("renderchunks");
+				Game.currentMap.initMap();
+			}
+		}
 	}
 	
 	@Override
@@ -373,7 +384,7 @@ public class SceneNewGame extends Scene
 			{
 				Packet8Loading p = (Packet8Loading) packet;
 				lockScene();
-				progress.setValue(p.getPercentage());
+				progress.setValue(p.getPercentage() / 2);
 				progress.title = Tr._(p.getAction());
 				break;
 			}
