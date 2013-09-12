@@ -138,6 +138,7 @@ public class SceneNewGame extends Scene
 			public void trigger()
 			{
 				Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 16));
+				// Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.SMALL));
 			}
 		});
 		if (Game.client.isConnectedToLocalhost())

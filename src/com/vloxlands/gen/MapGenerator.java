@@ -107,3 +107,83 @@ public class MapGenerator extends Thread
 		return map.islands.size() == (x * z);
 	}
 }
+
+
+// TODO: Will be finished soon
+// package com.vloxlands.gen;
+//
+// import java.awt.Point;
+// import java.util.ArrayList;
+//
+// import com.vloxlands.game.world.Map;
+//
+// public class MapGenerator extends Thread
+// {
+// public static enum MapSize
+// {
+// TINY(3),
+// SMALL(5),
+// MEDIUM(7),
+// BIG(9),
+// HUGE(12);
+//
+// private int size;
+//
+// private MapSize(int size)
+// {
+// this.size = size;
+// }
+//
+// public int getSize()
+// {
+// return size;
+// }
+// }
+//
+// public Map map;
+// public float progress, progressBefore, lastProgress;
+//
+// IslandGenerator gen;
+// int index;
+// int playerCount;
+// int playableIslands;
+// MapSize size;
+// ArrayList<Point> takenSpots;
+//
+// public MapGenerator(int playerCount, MapSize size)
+// {
+// this.size = size;
+// this.playerCount = playerCount;
+// playableIslands = (int) (Math.random() * (playerCount / 5) + playerCount);
+// progress = 0;
+// progressBefore = 0;
+// setDaemon(true);
+// setName("MapGenerator-Thread");
+// takenSpots = new ArrayList<>();
+// }
+//
+// @Override
+// public void run()
+// {
+// for (int i = 0; i < playableIslands; i++)
+// {
+// gen = new IslandGenerator(8,16,(float) (Math.random() * 256));
+// while()
+// }
+// }
+//
+// private Point pickRandomSpot()
+// {
+// Point p = new Point();
+//
+// do
+// {
+// p.x = (int) (Math.random() * size.getSize());
+// p.y = (int) (Math.random() * size.getSize());
+// }
+// while (!takenSpots.contains(p));
+// takenSpots.add(p);
+//
+// return p;
+// }
+// }

@@ -346,4 +346,9 @@ public class Server extends Thread
 		for (Player p : clients)
 			sendData(data, p);
 	}
+	
+	public int getConnectedClientCount()
+	{
+		return clients.size();
+	}
 }
