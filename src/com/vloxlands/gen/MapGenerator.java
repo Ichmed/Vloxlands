@@ -12,6 +12,27 @@ import com.vloxlands.net.packet.Packet9Island;
 
 public class MapGenerator extends Thread
 {
+	public static enum MapSize
+	{
+		TINY(3),
+		SMALL(5),
+		MEDIUM(7),
+		BIG(9),
+		HUGE(12);
+		
+		private int size;
+		
+		private MapSize(int size)
+		{
+			this.size = size;
+		}
+		
+		public int getSize()
+		{
+			return size;
+		}
+	}
+	
 	public Map map;
 	public float progress, progressBefore, lastProgress;
 	

@@ -137,7 +137,7 @@ public class SceneNewGame extends Scene
 			@Override
 			public void trigger()
 			{
-				Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 48));
+				Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 16));
 			}
 		});
 		if (Game.client.isConnectedToLocalhost())
