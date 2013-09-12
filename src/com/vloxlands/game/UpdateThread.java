@@ -59,6 +59,11 @@ public class UpdateThread extends Thread
 					if (Game.currentMap != null)
 					{
 						if (Keyboard.getEventKey() == Keyboard.KEY_L && !Keyboard.getEventKeyState()) CFG.LIGHTING = !CFG.LIGHTING;
+						if (Keyboard.getEventKey() == Keyboard.KEY_Z && !Keyboard.getEventKeyState())
+						{
+							CFG.SHOW_WIREFRAME = !CFG.SHOW_WIREFRAME;
+							Game.currentGame.rerender = true;
+						}
 						if (Keyboard.getEventKey() == Keyboard.KEY_B && !Keyboard.getEventKeyState()) CFG.SHOW_CHUNK_BOUNDRIES = !CFG.SHOW_CHUNK_BOUNDRIES;
 						if (Keyboard.getEventKey() == Keyboard.KEY_T && Keyboard.getEventKeyState()) Game.currentGame.rerender = true;
 						if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
