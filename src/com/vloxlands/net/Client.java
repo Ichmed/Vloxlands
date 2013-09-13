@@ -14,12 +14,8 @@ import com.vloxlands.net.packet.Packet0Connect;
 import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet2Rename;
 import com.vloxlands.net.packet.Packet3ChatMessage;
-import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
-import com.vloxlands.net.packet.Packet6Ready;
-import com.vloxlands.net.packet.Packet7Settings;
-import com.vloxlands.net.packet.Packet8Loading;
 import com.vloxlands.net.packet.Packet9Island;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
@@ -78,14 +74,21 @@ public class Client extends Thread
 		{
 			case INVALID:
 			{
-				break;
+				CFG.p("[SERVER] recieved invalid packet: " + new String(data));
+				return;
 			}
+			
+			case SERVERINFO:
+			case READY:
+			case LOADING:
+			case ATTRIBUTE:
+				break;
+			
 			case CONNECT:
 			{
 				Packet0Connect packet = new Packet0Connect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = true;
 				else print(Tr._("mp.connect").replace("%player%", packet.getUsername()), "INFO");
-				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case DISCONNECT:
@@ -93,7 +96,6 @@ public class Client extends Thread
 				Packet1Disconnect packet = new Packet1Disconnect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = false;
 				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
-				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case RENAME:
@@ -101,43 +103,18 @@ public class Client extends Thread
 				Packet2Rename packet = new Packet2Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
 				print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
-				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case CHATMESSAGE:
 			{
 				Packet3ChatMessage packet = new Packet3ChatMessage(data);
 				print(packet.getUsername() + ": " + packet.getMessage(), "");
-				Game.currentGame.onClientReveivedPacket(packet);
-				break;
-			}
-			case SERVERINFO:
-			{
-				Game.currentGame.onClientReveivedPacket(new Packet4ServerInfo(data));
 				break;
 			}
 			case REJECT:
 			{
 				Packet5Reject packet = new Packet5Reject(data);
 				rejectionCause = packet.getCause();
-				break;
-			}
-			case READY:
-			{
-				Packet6Ready packet = new Packet6Ready(data);
-				Game.currentGame.onClientReveivedPacket(packet);
-				break;
-			}
-			case SETTINGS:
-			{
-				Packet7Settings packet = new Packet7Settings(data);
-				Game.currentGame.onClientReveivedPacket(packet);
-				break;
-			}
-			case LOADING:
-			{
-				Packet8Loading packet = new Packet8Loading(data);
-				Game.currentGame.onClientReveivedPacket(packet);
 				break;
 			}
 			case ISLAND:
@@ -150,6 +127,8 @@ public class Client extends Thread
 			default:
 				CFG.p("reveived unhandled packet: " + type + " [" + Packet.readData(data) + "]");
 		}
+		
+		Game.currentGame.onClientReveivedData(data);
 	}
 	
 	public void print(String message, String level)

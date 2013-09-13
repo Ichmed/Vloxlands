@@ -8,7 +8,6 @@ import java.util.Comparator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import com.vloxlands.net.packet.Packet;
 import com.vloxlands.ui.ClickableGui;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.Label;
@@ -197,6 +196,6 @@ public abstract class Scene
 	{}
 	
 	// not abstract so that implementing won't be forced
-	public void onClientReveivedPacket(Packet packet)
+	public void onClientReveivedData(byte[] data)
 	{}
 }

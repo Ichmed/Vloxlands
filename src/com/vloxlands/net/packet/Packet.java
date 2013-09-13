@@ -20,6 +20,7 @@ public abstract class Packet
 		SETTINGS,
 		LOADING,
 		ISLAND,
+		ATTRIBUTE,
 		
 		;
 		public int getID()

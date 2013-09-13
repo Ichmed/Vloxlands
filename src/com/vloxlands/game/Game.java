@@ -22,7 +22,6 @@ import com.vloxlands.game.world.Map;
 import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
-import com.vloxlands.net.packet.Packet;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
@@ -429,7 +428,7 @@ public class Game
 		}
 	}
 	
-	public void onClientReveivedPacket(Packet packet)
+	public void onClientReveivedData(byte[] data)
 	{
 		if (sceneStack.size() > 0)
 		{
@@ -437,7 +436,7 @@ public class Game
 			{
 				for (Scene s : sceneStack)
 				{
-					s.onClientReveivedPacket(packet);
+					s.onClientReveivedData(data);
 				}
 			}
 			catch (ConcurrentModificationException e)
