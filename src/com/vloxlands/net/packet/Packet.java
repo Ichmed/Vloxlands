@@ -18,9 +18,8 @@ public abstract class Packet
 		REJECT,
 		READY,
 		SETTINGS,
-		LOADING,
-		ISLAND,
 		ATTRIBUTE,
+		ISLAND,
 		
 		;
 		public int getID()

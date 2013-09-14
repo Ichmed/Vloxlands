@@ -121,8 +121,7 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
-import com.vloxlands.net.packet.Packet10Attribute;
-import com.vloxlands.net.packet.Packet8Loading;
+import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 
 public class MapGenerator extends Thread
@@ -169,7 +168,7 @@ public class MapGenerator extends Thread
 		setDaemon(true);
 		setName("MapGenerator-Thread");
 		takenSpots = new ArrayList<>();
-		factor = playableIslands;
+		factor = size.getSize() * size.getSize();
 	}
 	
 	@Override
@@ -178,7 +177,7 @@ public class MapGenerator extends Thread
 		map = new Map();
 		try
 		{
-			Game.server.sendPacketToAllClients(new Packet10Attribute("mapeditor_islands_int", playableIslands));
+			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_string", "generatemap"));
 		}
 		catch (IOException e1)
 		{
@@ -188,27 +187,7 @@ public class MapGenerator extends Thread
 		{
 			float y = (float) (Math.random() * 256);
 			Point spot = pickRandomSpot();
-			gen = new IslandGenerator(16, 24, y);
-			gen.start();
-			while (gen.finishedIsland == null)
-			{
-				lastProgress = new Float(progress);
-				
-				progress = (gen.progress / factor) + progressBefore;
-				
-				if (progress != lastProgress)
-				{
-					try
-					{
-						Game.server.sendPacketToAllClients(new Packet8Loading("generatemap", progress));
-					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-			progressBefore = new Float(progress);
+			generateIsland(y, 32, 48);
 			gen.finishedIsland.setPos(new Vector3f(spot.x * Island.SIZE, y, spot.y * Island.SIZE));
 			try
 			{
@@ -220,6 +199,51 @@ public class MapGenerator extends Thread
 			}
 			map.addIsland(gen.finishedIsland);
 		}
+		
+		for (int i = 0; i < size.getSize(); i++)
+		{
+			for (int j = 0; j < size.getSize(); j++)
+			{
+				if (takenSpots.contains(new Point(i, j))) continue;
+				float y = (float) (Math.random() * 256);
+				generateIsland(y, 12, 20);
+				gen.finishedIsland.setPos(new Vector3f(i * Island.SIZE, y, j * Island.SIZE));
+				try
+				{
+					Game.server.sendPacketToAllClients(new Packet9Island(gen.finishedIsland));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				map.addIsland(gen.finishedIsland);
+			}
+		}
+	}
+	
+	private void generateIsland(float y, int minSize, int maxSize)
+	{
+		gen = new IslandGenerator(minSize, maxSize, y);
+		gen.start();
+		while (gen.finishedIsland == null)
+		{
+			lastProgress = new Float(progress);
+			
+			progress = (gen.progress / factor) + progressBefore;
+			
+			if (progress != lastProgress)
+			{
+				try
+				{
+					Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", progress));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		progressBefore = new Float(progress);
 	}
 	
 	private Point pickRandomSpot()

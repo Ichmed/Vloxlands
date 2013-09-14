@@ -3,7 +3,7 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet10Attribute extends Packet
+public class Packet8Attribute extends Packet
 {
 	String key;
 	String value;
@@ -11,16 +11,16 @@ public class Packet10Attribute extends Packet
 	/**
 	 * Key format: class_field_type
 	 */
-	public Packet10Attribute(String key, Object value)
+	public Packet8Attribute(String key, Object value)
 	{
-		super(10);
+		super(8);
 		this.key = key;
 		this.value = value.toString();
 	}
 	
-	public Packet10Attribute(byte[] data)
+	public Packet8Attribute(byte[] data)
 	{
-		super(10);
+		super(8);
 		String[] s = readData(data).split(":");
 		key = s[0];
 		value = s[1];

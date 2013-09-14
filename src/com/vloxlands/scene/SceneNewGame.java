@@ -15,12 +15,11 @@ import com.vloxlands.gen.MapGenerator.MapSize;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
-import com.vloxlands.net.packet.Packet10Attribute;
 import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Ready;
-import com.vloxlands.net.packet.Packet8Loading;
+import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ChatContainer;
@@ -41,7 +40,7 @@ public class SceneNewGame extends Scene
 	// Spinner xSize, zSize, radius;
 	static Container lobby;
 	static ChatContainer chat;
-	int mapeditorIslands;
+	MapSize tempSize = MapSize.SMALL;
 	
 	@Override
 	public void init()
@@ -259,7 +258,7 @@ public class SceneNewGame extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == mapeditorIslands && mapeditorIslands != 0) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
+		if (Game.currentMap.islands.size() == (int) Math.pow(tempSize.getSize(), 2)) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
@@ -269,7 +268,7 @@ public class SceneNewGame extends Scene
 	{
 		super.onTick();
 		
-		if (Game.currentMap.islands.size() == mapeditorIslands && mapeditorIslands != 0)
+		if (Game.currentMap.islands.size() == (int) Math.pow(tempSize.getSize(), 2))
 		{
 			if (!Game.currentMap.initialized)
 			{
@@ -382,18 +381,19 @@ public class SceneNewGame extends Scene
 			// }
 			// break;
 			// }
-			case LOADING:
-			{
-				Packet8Loading p = new Packet8Loading(data);
-				lockScene();
-				progress.setValue(p.getPercentage() / 2);
-				progress.title = Tr._(p.getAction());
-				break;
-			}
 			case ATTRIBUTE:
 			{
-				Packet10Attribute p = new Packet10Attribute(data);
-				if (p.getKey().equals("mapeditor_islands_int")) mapeditorIslands = Integer.parseInt(p.getValue());
+				Packet8Attribute p = new Packet8Attribute(data);
+				if (p.getKey().equals("mapeditor_progress_float"))
+				{
+					progress.setValue(Float.parseFloat(p.getValue()) / 2);
+					lockScene();
+				}
+				if (p.getKey().equals("mapeditor_progress_string"))
+				{
+					progress.title = Tr._(p.getValue());
+					lockScene();
+				}
 				break;
 			}
 			default:

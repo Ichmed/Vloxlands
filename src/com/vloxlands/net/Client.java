@@ -74,13 +74,12 @@ public class Client extends Thread
 		{
 			case INVALID:
 			{
-				CFG.p("[SERVER] recieved invalid packet: " + new String(data));
+				CFG.p("received invalid packet: " + new String(data));
 				return;
 			}
 			
 			case SERVERINFO:
 			case READY:
-			case LOADING:
 			case ATTRIBUTE:
 				break;
 			
