@@ -10,8 +10,7 @@ public class Packet5Reject extends Packet
 		OUTDATEDCLIENT,
 		OUTDATEDSERVER,
 		USERNAMETAKEN,
-		
-		;
+		GAMERUNNING;
 	}
 	
 	private Cause cause;

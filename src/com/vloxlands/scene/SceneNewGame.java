@@ -15,17 +15,15 @@ import com.vloxlands.gen.MapGenerator.MapSize;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
-import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.settings.Tr;
-import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ArrowButton;
 import com.vloxlands.ui.ChatContainer;
 import com.vloxlands.ui.Container;
-import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
@@ -158,6 +156,21 @@ public class SceneNewGame extends Scene
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapsize") + ":", false));
 		mapsize = new Spinner(Display.getWidth() - TextButton.WIDTH - 70, 155, TextButton.WIDTH + 55, 0, MapSize.values().length, 1, 1, GuiRotation.HORIZONTAL);
 		mapsize.setArrowButtonTypes(ArrowButton.ARROW_L_HOR, ArrowButton.ARROW_R_HOR);
+		mapsize.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				try
+				{
+					Game.client.sendPacket(new Packet7Settings("mapsize", mapsize.getValue() + ""));
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
 		String[] titles = new String[MapSize.values().length];
 		for (int i = 0; i < titles.length; i++)
 		{
@@ -166,45 +179,6 @@ public class SceneNewGame extends Scene
 		}
 		mapsize.setTitles(titles);
 		content.add(mapsize);
-		// content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
-		// xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 10, 1, 1, GuiRotation.HORIZONTAL);
-		// xSize.setClickEvent(new IGuiEvent()
-		// {
-		// @Override
-		// public void trigger()
-		// {
-		// try
-		// {
-		// Game.client.sendPacket(new Packet7Settings("xSize", xSize.getValue() + ""));
-		// }
-		// catch (IOException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// }
-		// });
-		// xSize.setEnabled(Game.client.isConnectedToLocalhost());
-		// content.add(xSize);
-		//
-		// content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 175, (TextButton.WIDTH + 70) / 2, 25, "Z-" + Tr._("islands") + ":", false));
-		// zSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 170, (TextButton.WIDTH + 70) / 2, 1, 10, 1, 1, GuiRotation.HORIZONTAL);
-		// zSize.setClickEvent(new IGuiEvent()
-		// {
-		// @Override
-		// public void trigger()
-		// {
-		// try
-		// {
-		// Game.client.sendPacket(new Packet7Settings("zSize", zSize.getValue() + ""));
-		// }
-		// catch (IOException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// }
-		// });
-		// zSize.setEnabled(Game.client.isConnectedToLocalhost());
-		// content.add(zSize);
 		try
 		{
 			Game.client.sendPacket(new Packet4ServerInfo());
@@ -318,33 +292,6 @@ public class SceneNewGame extends Scene
 		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
 		{
-			case DISCONNECT:
-			{
-				Packet1Disconnect p = new Packet1Disconnect(data);
-				if (p.getUsername().equals(Game.client.getUsername()))
-				{
-					if (!p.getReason().equals("mp.disconnect"))
-					{
-						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent()
-						{
-							@Override
-							public void trigger()
-							{
-								Game.currentGame.setScene(new SceneMainMenu());
-							}
-						})));
-					}
-				}
-				try
-				{
-					Game.client.sendPacket(new Packet4ServerInfo());
-				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-				break;
-			}
 			case RENAME:
 			{
 				try
@@ -381,24 +328,19 @@ public class SceneNewGame extends Scene
 				}
 				break;
 			}
-			// case SETTINGS:
-			// {
-			// Packet7Settings p = (Packet7Settings) packet;
-			// switch (p.getKey())
-			// {
-			// case "xSize":
-			// {
-			// xSize.setValue(Integer.parseInt(p.getValue()));
-			// break;
-			// }
-			// case "zSize":
-			// {
-			// zSize.setValue(Integer.parseInt(p.getValue()));
-			// break;
-			// }
-			// }
-			// break;
-			// }
+			case SETTINGS:
+			{
+				Packet7Settings p = new Packet7Settings(data);
+				switch (p.getKey())
+				{
+					case "mapsize":
+					{
+						mapsize.setValue(Integer.parseInt(p.getValue()));
+						break;
+					}
+				}
+				break;
+			}
 			case ATTRIBUTE:
 			{
 				Packet8Attribute p = new Packet8Attribute(data);

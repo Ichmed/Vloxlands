@@ -8,7 +8,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
-import com.vloxlands.Vloxlands;
 import com.vloxlands.game.Game;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
@@ -36,14 +35,13 @@ public class SceneGame extends Scene
 		
 		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3);
 		
-		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("mainmenu"));
+		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
-				Game.currentMap = null;
-				Game.currentGame.setScene(new SceneMainMenu());
+				paused = false;
 			}
 		});
 		c.add(b);
@@ -59,13 +57,13 @@ public class SceneGame extends Scene
 		});
 		c.add(b);
 		
-		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("quitGame"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("disconnect"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
 			public void trigger()
 			{
-				Vloxlands.exit();
+				Game.client.disconnect();
 			}
 		});
 		c.add(b);

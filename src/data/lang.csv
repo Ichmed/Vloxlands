@@ -51,6 +51,7 @@ mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen N
 mp.reject.usernametaken;This username is already taken;Dieser Benutzername ist bereits vergeben.
 mp.reject.outdatedclient;Your client's version is out of date. Please update your game.;Dein Client hat eine veraltete Version. Bitte aktualisiere dein Spiel.
 mp.reject.outdatedserver;The server's version is out of date.;Der Server hat eine veraltete Version.
+mp.reject.gamerunning;The game has already started.;Das Spiel hat bereits begonnen.
 mp.reason.disconnect;Disconnect by user;Verlassen
 mp.reason.serverclosed;Server shutdown;Server geschlossen
 mp.reason.kicked;Kicked;Gekickt

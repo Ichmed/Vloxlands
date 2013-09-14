@@ -34,7 +34,7 @@ public class Packet4ServerInfo extends Packet
 	public byte[] getPacketData()
 	{
 		String serialized = "";
-		if (players != null)
+		if (players != null && players.length > 0)
 		{
 			for (String p : players)
 				serialized += p + ":";

@@ -80,6 +80,7 @@ public class Client extends Thread
 			
 			case SERVERINFO:
 			case READY:
+			case SETTINGS:
 			case ATTRIBUTE:
 				break;
 			

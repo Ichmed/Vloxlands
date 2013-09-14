@@ -39,6 +39,7 @@ public class Server extends Thread
 	HashMap<String, String> settings = new HashMap<>();
 	Map map;
 	MapGenerator mapGenerator;
+	boolean lobby;
 	
 	public Server(InetAddress ipAddress)
 	{
@@ -47,6 +48,7 @@ public class Server extends Thread
 			ip = ipAddress;
 			socket = new DatagramSocket(new InetSocketAddress(ipAddress, CFG.SERVER_PORT));
 			map = new Map();
+			lobby = true;
 		}
 		catch (BindException e)
 		{
@@ -106,6 +108,7 @@ public class Server extends Thread
 	{
 		mapGenerator = mg;
 		mapGenerator.start();
+		lobby = false;
 	}
 	
 	public boolean areAllClientsReady()
@@ -151,6 +154,19 @@ public class Server extends Thread
 					{
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated server");
 						sendPacket(new Packet5Reject(Cause.OUTDATEDSERVER), player);
+						return;
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+				else if (!lobby)
+				{
+					try
+					{
+						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): game already started");
+						sendPacket(new Packet5Reject(Cause.GAMERUNNING), player);
 						return;
 					}
 					catch (IOException e)

@@ -1,6 +1,7 @@
 package com.vloxlands.scene;
 
 import java.awt.Font;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -8,8 +9,17 @@ import java.util.Comparator;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
+import com.vloxlands.game.Game;
+import com.vloxlands.net.packet.Packet;
+import com.vloxlands.net.packet.Packet.PacketTypes;
+import com.vloxlands.net.packet.Packet1Disconnect;
+import com.vloxlands.net.packet.Packet4ServerInfo;
+import com.vloxlands.settings.Tr;
+import com.vloxlands.ui.Action;
 import com.vloxlands.ui.ClickableGui;
+import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.IGuiElement;
+import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.util.RenderAssistant;
 
@@ -197,5 +207,40 @@ public abstract class Scene
 	
 	// not abstract so that implementing won't be forced
 	public void onClientReveivedData(byte[] data)
-	{}
+	{
+		PacketTypes type = Packet.lookupPacket(data[0]);
+		switch (type)
+		{
+			case DISCONNECT:
+			{
+				Packet1Disconnect p = new Packet1Disconnect(data);
+				if (p.getUsername().equals(Game.client.getUsername()))
+				{
+					if (!p.getReason().equals("mp.reason.disconnect"))
+					{
+						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent()
+						{
+							@Override
+							public void trigger()
+							{
+								Game.currentGame.setScene(new SceneMainMenu());
+							}
+						})));
+					}
+					else Game.currentGame.setScene(new SceneMainMenu());
+				}
+				try
+				{
+					Game.client.sendPacket(new Packet4ServerInfo());
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+				break;
+			}
+			default:
+				break;
+		}
+	}
 }
