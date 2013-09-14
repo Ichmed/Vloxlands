@@ -258,7 +258,7 @@ public class SceneNewGame extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == (int) Math.pow(tempSize.getSize(), 2)) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
+		if (Game.currentMap.islands.size() == tempSize.getSizeSQ()) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
@@ -268,7 +268,7 @@ public class SceneNewGame extends Scene
 	{
 		super.onTick();
 		
-		if (Game.currentMap.islands.size() == (int) Math.pow(tempSize.getSize(), 2))
+		if (Game.currentMap.islands.size() == tempSize.getSizeSQ())
 		{
 			if (!Game.currentMap.initialized)
 			{

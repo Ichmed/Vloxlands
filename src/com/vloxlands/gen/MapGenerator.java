@@ -141,6 +141,11 @@ public class MapGenerator extends Thread
 			this.size = size;
 		}
 		
+		public int getSizeSQ()
+		{
+			return size * size;
+		}
+		
 		public int getSize()
 		{
 			return size;
@@ -168,7 +173,7 @@ public class MapGenerator extends Thread
 		setDaemon(true);
 		setName("MapGenerator-Thread");
 		takenSpots = new ArrayList<>();
-		factor = size.getSize() * size.getSize();
+		factor = size.getSizeSQ();
 	}
 	
 	@Override
