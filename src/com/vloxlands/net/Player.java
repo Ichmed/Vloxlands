@@ -64,4 +64,13 @@ public class Player
 		this.ready = ready;
 	}
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (!(obj instanceof Player)) return false;
+		
+		Player p = (Player) obj;
+		
+		return username.equals(p.username) && ip.equals(p.ip);
+	}
 }

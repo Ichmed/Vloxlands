@@ -23,6 +23,7 @@ public class SceneMainMenu extends Scene
 	@Override
 	public void init()
 	{
+		Game.currentMap = null;
 		Game.currentGame.initMultiplayer();
 		
 		setBackground();

@@ -121,6 +121,7 @@ public class MapGenerator extends Thread
 		{
 			e.printStackTrace();
 		}
+		Game.server.setMap(map);
 	}
 	
 	private void generateIsland(float y, int minSize, int maxSize)

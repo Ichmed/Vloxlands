@@ -24,6 +24,8 @@ import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
 import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.net.packet.Packet7Settings;
+import com.vloxlands.net.packet.Packet8Attribute;
+import com.vloxlands.net.packet.Packet9Island;
 import com.vloxlands.settings.CFG;
 
 /**
@@ -35,7 +37,8 @@ public class Server extends Thread
 	
 	private DatagramSocket socket;
 	InetAddress ip;
-	private ArrayList<Player> clients = new ArrayList<>();
+	ArrayList<Player> clients = new ArrayList<>();
+	ArrayList<Player> connectableClients = new ArrayList<>();
 	HashMap<String, String> settings = new HashMap<>();
 	Map map;
 	MapGenerator mapGenerator;
@@ -161,7 +164,7 @@ public class Server extends Thread
 						e.printStackTrace();
 					}
 				}
-				else if (!lobby)
+				else if (!lobby && !connectableClients.contains(player))
 				{
 					try
 					{
@@ -192,9 +195,11 @@ public class Server extends Thread
 				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
 				clients.add(player);
+				if (!connectableClients.contains(player)) connectableClients.add(player);
 				try
 				{
 					sendPacketToAllClients(packet);
+					if (!lobby && connectableClients.contains(player)) sendPacket(new Packet8Attribute("net_rejoin", "_"), player);
 				}
 				catch (IOException e)
 				{
@@ -335,6 +340,13 @@ public class Server extends Thread
 				}
 				break;
 			}
+			case ATTRIBUTE:
+			{
+				Packet8Attribute packet = new Packet8Attribute(data);
+				if (packet.getKey().equals("net_rejoin")) sendRejoinData(new Player("", address, port));
+				
+				break;
+			}
 			default:
 				CFG.p("[SERVER]: reveived unhandled packet (" + address.getHostAddress() + ":" + port + ") " + type + " [" + Packet.readData(data) + "]");
 		}
@@ -366,5 +378,28 @@ public class Server extends Thread
 	public int getConnectedClientCount()
 	{
 		return clients.size();
+	}
+	
+	private void sendRejoinData(Player player)
+	{
+		try
+		{
+			CFG.p(map.islands.size());
+			sendPacket(new Packet8Attribute("mapeditor_progress_float", 0), player);
+			for (int i = 0; i < map.islands.size(); i++)
+			{
+				sendPacket(new Packet9Island(map.islands.get(i)), player);
+				sendPacket(new Packet8Attribute("mapeditor_progress_float", i / (float) (map.islands.size() - 1)), player);
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void setMap(Map m)
+	{
+		map = m;
 	}
 }

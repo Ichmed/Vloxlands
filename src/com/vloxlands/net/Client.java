@@ -16,6 +16,7 @@ import com.vloxlands.net.packet.Packet2Rename;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
+import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
@@ -30,6 +31,7 @@ public class Client extends Thread
 	private Player player;
 	
 	boolean connected;
+	boolean rejoin;
 	Cause rejectionCause;
 	
 	public Client(Player player)
@@ -78,10 +80,16 @@ public class Client extends Thread
 				return;
 			}
 			
+			case ATTRIBUTE:
+			{
+				Packet8Attribute p = new Packet8Attribute(data);
+				if (p.getKey().equals("net_rejoin")) rejoin = true;
+				
+				break;
+			}
 			case SERVERINFO:
 			case READY:
 			case SETTINGS:
-			case ATTRIBUTE:
 				break;
 			
 			case CONNECT:
@@ -183,6 +191,16 @@ public class Client extends Thread
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isRejoined()
+	{
+		return rejoin;
+	}
+	
+	public void resetRejoined()
+	{
+		rejoin = false;
 	}
 	
 	public boolean isRejected()

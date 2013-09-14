@@ -46,6 +46,7 @@ public class SceneNewGame extends Scene
 	static ChatContainer chat;
 	static float progress;
 	static String progressString;
+	static boolean wasRejoining = false;
 	
 	@Override
 	public void init()
@@ -171,6 +172,7 @@ public class SceneNewGame extends Scene
 				}
 			}
 		});
+		mapsize.setEnabled(Game.client.isConnectedToLocalhost());
 		String[] titles = new String[MapSize.values().length];
 		for (int i = 0; i < titles.length; i++)
 		{
@@ -182,6 +184,14 @@ public class SceneNewGame extends Scene
 		try
 		{
 			Game.client.sendPacket(new Packet4ServerInfo());
+			
+			if (Game.client.isRejoined())
+			{
+				lockScene();
+				Game.client.sendPacket(new Packet8Attribute("net_rejoin", "_"));
+				wasRejoining = true;
+				Game.client.resetRejoined();
+			}
 		}
 		catch (IOException e)
 		{
@@ -236,7 +246,7 @@ public class SceneNewGame extends Scene
 	@Override
 	public void render()
 	{
-		super.render();
+		if (!wasRejoining) super.render();
 		if (!chat.isEnabled())
 		{
 			glEnable(GL_BLEND);
