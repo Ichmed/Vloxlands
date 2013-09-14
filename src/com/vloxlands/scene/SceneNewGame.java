@@ -35,11 +35,15 @@ import com.vloxlands.util.RenderAssistant;
 
 public class SceneNewGame extends Scene
 {
-	ProgressBar progress;
+	ProgressBar progressBar;
 	TextButton start;
 	// Spinner xSize, zSize, radius;
+	
 	static Container lobby;
 	static ChatContainer chat;
+	static float progress;
+	static String progressString;
+	
 	MapSize tempSize = MapSize.SMALL;
 	
 	@Override
@@ -103,9 +107,9 @@ public class SceneNewGame extends Scene
 		
 		content.add(new Container(Display.getWidth() - TextButton.WIDTH - 90, 115, TextButton.WIDTH + 90, Display.getHeight() - 220));
 		
-		progress = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, false);
-		progress.setVisible(false);
-		content.add(progress);
+		progressBar = new ProgressBar(Display.getWidth() / 2, Display.getHeight() / 2 - ProgressBar.HEIGHT / 2, 400, 0, false);
+		progressBar.setVisible(false);
+		content.add(progressBar);
 		
 		TextButton disco = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
 		disco.setClickEvent(new IGuiEvent()
@@ -246,7 +250,6 @@ public class SceneNewGame extends Scene
 	public void render()
 	{
 		super.render();
-		
 		if (!chat.isEnabled())
 		{
 			glEnable(GL_BLEND);
@@ -254,11 +257,13 @@ public class SceneNewGame extends Scene
 			glBindTexture(GL_TEXTURE_2D, 0);
 			RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 			glColor4f(1, 1, 1, 1);
-			progress.render();
+			progressBar.setValue(progress);
+			progressBar.title = progressString;
+			progressBar.render();
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == tempSize.getSizeSQ()) progress.setValue(0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2);
+		if (Game.currentMap.islands.size() == tempSize.getSizeSQ()) progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
@@ -272,7 +277,7 @@ public class SceneNewGame extends Scene
 		{
 			if (!Game.currentMap.initialized)
 			{
-				progress.title = Tr._("renderchunks");
+				progressString = Tr._("renderchunks");
 				Game.currentMap.initMap();
 			}
 		}
@@ -386,12 +391,12 @@ public class SceneNewGame extends Scene
 				Packet8Attribute p = new Packet8Attribute(data);
 				if (p.getKey().equals("mapeditor_progress_float"))
 				{
-					progress.setValue(Float.parseFloat(p.getValue()) / 2);
+					progress = Float.parseFloat(p.getValue()) / 2;
 					lockScene();
 				}
 				if (p.getKey().equals("mapeditor_progress_string"))
 				{
-					progress.title = Tr._(p.getValue());
+					progressString = Tr._(p.getValue());
 					lockScene();
 				}
 				break;

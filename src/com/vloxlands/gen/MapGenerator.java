@@ -224,6 +224,15 @@ public class MapGenerator extends Thread
 				map.addIsland(gen.finishedIsland);
 			}
 		}
+		
+		try
+		{
+			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", 1));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void generateIsland(float y, int minSize, int maxSize)
