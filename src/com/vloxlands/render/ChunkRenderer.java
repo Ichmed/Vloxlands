@@ -23,23 +23,11 @@ public class ChunkRenderer
 				for (int k = 0; k < island.chunks[0][0].length; k++)
 				{
 					island.chunks[i][j][k].updateMesh(island);
-					// island.chunks[i][j][k].renderDisplayList(true);
 				}
 			}
 		}
 		
-		// for (int i = 0; i < island.chunks.length; i++)
-		// {
-		// for (int j = 0; j < island.chunks[0].length; j++)
-		// {
-		// for (int k = 0; k < island.chunks[0][0].length; k++)
-		// {
-		// island.chunks[i][j][k].renderDisplayList(false);
-		// }
-		// }
-		// }
-		
-		CFG.p("[ChunkRenderer]: \\Rendered/ - Initialized meshes for chunks on Island " + island + ". Took " + (System.currentTimeMillis() - time) + "ms");
+		CFG.p("[ChunkRenderer]: Initialized meshes for chunks on Island " + island + ". Took " + (System.currentTimeMillis() - time) + "ms");
 	}
 	
 	@SuppressWarnings("unchecked")

@@ -118,9 +118,16 @@ public class Client extends Thread
 			}
 			case ISLAND:
 			{
-				Packet9Island packet = new Packet9Island(data);
-				Island island = packet.getIsland();
-				Game.currentMap.addIsland(island);
+				final Packet9Island packet = new Packet9Island(data);
+				new Thread()
+				{
+					@Override
+					public void run()
+					{
+						Island island = packet.getIsland();
+						Game.currentMap.addIsland(island);
+					}
+				}.start();
 				break;
 			}
 			default:

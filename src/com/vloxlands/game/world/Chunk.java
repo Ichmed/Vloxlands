@@ -34,6 +34,9 @@ public class Chunk
 		
 		meshes[0] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[0]);
 		meshes[1] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[1]);
+		
+		opaqueUTD = false;
+		transparentUTD = false;
 	}
 	
 	public void render(Island i, boolean opaque)
