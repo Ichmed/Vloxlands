@@ -1,11 +1,11 @@
-package com.vloxlands.gen;
+package com.vloxlands.gen.island;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
-import com.vloxlands.gen.island.CrystalGenerator;
-import com.vloxlands.gen.island.SpikeGenerator;
-import com.vloxlands.gen.island.TopLayerGenerator;
-import com.vloxlands.gen.island.TreeGenerator;
+import com.vloxlands.gen.structure.CrystalGenerator;
+import com.vloxlands.gen.structure.SpikeGenerator;
+import com.vloxlands.gen.structure.TopLayerGenerator;
+import com.vloxlands.gen.structure.TreeGenerator;
 
 public class IslandGenerator extends Thread
 {
@@ -132,4 +132,6 @@ public class IslandGenerator extends Thread
 		updateProgress();
 		return island;
 	}
+	
+	
 }

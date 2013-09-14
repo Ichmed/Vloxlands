@@ -1,8 +1,9 @@
-package com.vloxlands.gen.island;
+package com.vloxlands.gen.structure;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
-import com.vloxlands.gen.IslandGenerator;
+import com.vloxlands.gen.Generator;
+import com.vloxlands.gen.island.IslandGenerator;
 
 /**
  * @author Dakror
