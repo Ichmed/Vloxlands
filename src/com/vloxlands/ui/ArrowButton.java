@@ -62,4 +62,8 @@ public class ArrowButton extends ClickableGui
 		RenderAssistant.renderRect(x, y, width, height, type.x / 1024.0f, texY / 1024.0f, WIDTH / 1024.0f, HEIGHT / 1024.0f);
 	}
 	
+	public void setType(Vector2f type)
+	{
+		this.type = type;
+	}
 }

@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 
 import java.awt.Font;
 
+import org.lwjgl.util.vector.Vector2f;
+
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
@@ -16,6 +18,7 @@ public class Spinner extends ClickableGui
 	int min, max, value, step;
 	GuiRotation rot;
 	ArrowButton minus, plus;
+	String[] titles;
 	
 	public Spinner(int x, int y, int size, int min, int max, int val, int step, GuiRotation rot)
 	{
@@ -37,6 +40,8 @@ public class Spinner extends ClickableGui
 		this.step = step;
 		this.rot = rot;
 		
+		titles = new String[max - min];
+		
 		minus = new ArrowButton(x, y + ((rot == GuiRotation.HORIZONTAL) ? 0 : height - ArrowButton.HEIGHT), (rot == GuiRotation.HORIZONTAL) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
 		minus.setClickEvent(new IGuiEvent()
 		{
@@ -55,10 +60,26 @@ public class Spinner extends ClickableGui
 			@Override
 			public void trigger()
 			{
-				value = (value <= Spinner.this.max - Spinner.this.step) ? value + Spinner.this.step : Spinner.this.max;
+				value = (value < Spinner.this.max - Spinner.this.step) ? value + Spinner.this.step : Spinner.this.max - 1;
 				if (clickEvent != null) clickEvent.trigger();
 			}
 		});
+	}
+	
+	public void setArrowButtonTypes(Vector2f minus, Vector2f plus)
+	{
+		this.minus.setType(minus);
+		this.plus.setType(plus);
+	}
+	
+	public void setTitle(int index, String s)
+	{
+		titles[index] = s;
+	}
+	
+	public void setTitles(String... strings)
+	{
+		if (strings.length == titles.length) titles = strings;
 	}
 	
 	@Override
@@ -69,7 +90,7 @@ public class Spinner extends ClickableGui
 		else minus.setEnabled(enabled);
 		
 		plus.onTick();
-		if (value == max) plus.setEnabled(false);
+		if (value == max - step) plus.setEnabled(false);
 		else plus.setEnabled(enabled);
 	}
 	
@@ -88,19 +109,22 @@ public class Spinner extends ClickableGui
 		
 		if (enabled) glColor3f(1, 1, 1);
 		else glColor3f(0.5f, 0.5f, 0.5f);
+		
+		String title = (titles[Math.round(value - min)] != null) ? titles[Math.round(value - min)] : value + "";
+		
 		if (rot == GuiRotation.HORIZONTAL)
 		{
-			int tx = FontAssistant.getFont(font).getWidth(value + "");
+			int tx = FontAssistant.getFont(font).getWidth(title);
 			int mx = width / 2 - tx / 2;
-			RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), value + "", font);
+			RenderAssistant.renderText(x + ((width > -1) ? mx : 0), y + ((height > -1) ? height / 4f : 0), title, font);
 		}
 		else
 		{
-			int tx = FontAssistant.getFont(font).getWidth(value + "");
+			int tx = FontAssistant.getFont(font).getWidth(title);
 			int mx = width / 2 - tx / 2;
-			int ty = FontAssistant.getFont(font).getHeight(value + "");
+			int ty = FontAssistant.getFont(font).getHeight(title);
 			int my = height / 2 - ty / 2;
-			RenderAssistant.renderText(x + mx / 2, y + ((width > -1) ? my : 0), value + "", font);
+			RenderAssistant.renderText(x + mx / 2, y + ((width > -1) ? my : 0), title, font);
 		}
 	}
 	
@@ -109,19 +133,9 @@ public class Spinner extends ClickableGui
 		return min;
 	}
 	
-	public void setMin(int min)
-	{
-		this.min = min;
-	}
-	
 	public int getMax()
 	{
 		return max;
-	}
-	
-	public void setMax(int max)
-	{
-		this.max = max;
 	}
 	
 	public int getStep()

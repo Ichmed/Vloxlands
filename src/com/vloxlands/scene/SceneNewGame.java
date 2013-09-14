@@ -22,14 +22,18 @@ import com.vloxlands.net.packet.Packet6Ready;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Action;
+import com.vloxlands.ui.ArrowButton;
 import com.vloxlands.ui.ChatContainer;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.Dialog;
+import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.InputField;
+import com.vloxlands.ui.Label;
 import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
+import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.RenderAssistant;
 
@@ -38,13 +42,12 @@ public class SceneNewGame extends Scene
 	ProgressBar progressBar;
 	TextButton start;
 	// Spinner xSize, zSize, radius;
+	Spinner mapsize;
 	
 	static Container lobby;
 	static ChatContainer chat;
 	static float progress;
 	static String progressString;
-	
-	MapSize tempSize = MapSize.SMALL;
 	
 	@Override
 	public void init()
@@ -141,7 +144,7 @@ public class SceneNewGame extends Scene
 			public void trigger()
 			{
 				// Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 16));
-				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.SMALL));
+				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.values()[mapsize.getValue()]));
 			}
 		});
 		if (Game.client.isConnectedToLocalhost())
@@ -152,6 +155,17 @@ public class SceneNewGame extends Scene
 			content.add(start);
 		}
 		
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapsize") + ":", false));
+		mapsize = new Spinner(Display.getWidth() - TextButton.WIDTH - 70, 155, TextButton.WIDTH + 55, 0, MapSize.values().length, 1, 1, GuiRotation.HORIZONTAL);
+		mapsize.setArrowButtonTypes(ArrowButton.ARROW_L_HOR, ArrowButton.ARROW_R_HOR);
+		String[] titles = new String[MapSize.values().length];
+		for (int i = 0; i < titles.length; i++)
+		{
+			MapSize ms = MapSize.values()[i];
+			titles[i] = Tr._("mapsize." + ms.name().toLowerCase()) + " " + ms.getSize() + "x" + ms.getSize();
+		}
+		mapsize.setTitles(titles);
+		content.add(mapsize);
 		// content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, "X-" + Tr._("islands") + ":", false));
 		// xSize = new Spinner(Display.getWidth() - TextButton.WIDTH - 80 + (TextButton.WIDTH + 70) / 2, 125, (TextButton.WIDTH + 70) / 2, 1, 10, 1, 1, GuiRotation.HORIZONTAL);
 		// xSize.setClickEvent(new IGuiEvent()
@@ -191,7 +205,6 @@ public class SceneNewGame extends Scene
 		// });
 		// zSize.setEnabled(Game.client.isConnectedToLocalhost());
 		// content.add(zSize);
-		
 		try
 		{
 			Game.client.sendPacket(new Packet4ServerInfo());
@@ -263,7 +276,7 @@ public class SceneNewGame extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == tempSize.getSizeSQ()) progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
+		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ()) progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
@@ -273,7 +286,7 @@ public class SceneNewGame extends Scene
 	{
 		super.onTick();
 		
-		if (Game.currentMap.islands.size() == tempSize.getSizeSQ())
+		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ())
 		{
 			if (!Game.currentMap.initialized)
 			{
