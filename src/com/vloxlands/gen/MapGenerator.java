@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.gen.island.IslandGenerator;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 

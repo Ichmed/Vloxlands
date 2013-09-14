@@ -1,4 +1,4 @@
-package com.vloxlands.gen.island;
+package com.vloxlands.gen;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
-import com.vloxlands.gen.IslandGenerator;
+import com.vloxlands.gen.island.IslandGenerator;
 import com.vloxlands.util.MathHelper;
 
 /**
