@@ -4,8 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.HashMap;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import com.vloxlands.game.Game;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.VoxelFace;
@@ -60,7 +58,7 @@ public class Chunk
 			renderDisplayList(false);
 			transparentUTD = true;
 		}
-		if (Game.frustum.cubeInFrustum(new Vector3f(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z), Island.CHUNKSIZE / 2))
+		if (Game.frustum.sphereInFrustum(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z, Island.CHUNKSIZE * (float) Math.sqrt(2)))
 		{
 			glCallList(opaque ? opaqueID : transparentID);
 		}

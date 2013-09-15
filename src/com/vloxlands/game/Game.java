@@ -16,7 +16,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.game.util.Camera;
-import com.vloxlands.game.util.Frustum;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.net.Client;
@@ -37,6 +36,7 @@ import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
+import com.vloxlands.util.math.Frustum;
 
 import de.dakror.universion.UniVersion;
 
