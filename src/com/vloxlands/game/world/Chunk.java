@@ -29,12 +29,25 @@ public class Chunk
 	public void updateMesh(Island i)
 	{
 		faces = ChunkRenderer.generateFaces(x, y, z, i);
-		
+		if (faces[0].size() + faces[1].size() == 0)
+		{
+			meshes[0] = new HashMap<>();
+			meshes[1] = new HashMap<>();
+			return;
+		}
 		meshes[0] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[0]);
 		meshes[1] = ChunkRenderer.generateGreedyMesh(x, y, z, faces[1]);
 		
 		opaqueUTD = false;
 		transparentUTD = false;
+	}
+	
+	public void onTick(Island i)
+	{
+		if (meshes[0].size() + meshes[1].size() == 0 && faces[0].size() + faces[1].size() > 0)
+		{
+			updateMesh(i);
+		}
 	}
 	
 	public void render(Island i, boolean opaque)

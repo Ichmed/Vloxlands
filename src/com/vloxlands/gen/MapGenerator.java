@@ -1,7 +1,6 @@
 package com.vloxlands.gen;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -73,10 +72,8 @@ public class MapGenerator extends Thread
 		{
 			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_string", "generatemap"));
 		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-		}
+		catch (Exception e)
+		{}
 		for (int i = 0; i < playableIslands; i++)
 		{
 			float y = (float) (Math.random() * 256);
@@ -87,10 +84,8 @@ public class MapGenerator extends Thread
 			{
 				Game.server.sendPacketToAllClients(new Packet9Island(gen.finishedIsland));
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			catch (Exception e)
+			{}
 			map.addIsland(gen.finishedIsland);
 		}
 		
@@ -106,10 +101,8 @@ public class MapGenerator extends Thread
 				{
 					Game.server.sendPacketToAllClients(new Packet9Island(gen.finishedIsland));
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				map.addIsland(gen.finishedIsland);
 			}
 		}
@@ -118,10 +111,8 @@ public class MapGenerator extends Thread
 		{
 			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", 1));
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		catch (Exception e)
+		{}
 		Game.server.setMap(map);
 	}
 	
@@ -141,10 +132,8 @@ public class MapGenerator extends Thread
 				{
 					Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", progress));
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 			}
 		}
 		progressBefore = new Float(progress);

@@ -1,6 +1,5 @@
 package com.vloxlands.net;
 
-import java.io.IOException;
 import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -10,7 +9,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.vloxlands.Vloxlands;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.packet.Packet;
@@ -59,9 +57,7 @@ public class Server extends Thread
 			return;
 		}
 		catch (SocketException e)
-		{
-			e.printStackTrace();
-		}
+		{}
 		start();
 	}
 	
@@ -75,36 +71,33 @@ public class Server extends Thread
 	{
 		CFG.p("[SERVER]: Starting UDP");
 		CFG.p("[SERVER]: -------------------------------------------------");
-		while (Vloxlands.running)
+		while (!socket.isClosed())
 		{
 			byte[] data = new byte[PACKETSIZE];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
 			try
 			{
 				socket.receive(packet);
+				parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
+			catch (Exception e)
+			{}
 		}
 		shutdown();
 	}
 	
 	public void shutdown()
 	{
-		for (Player p : clients)
+		try
 		{
-			try
+			for (Player p : clients)
 			{
 				sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
 		}
+		catch (Exception e)
+		{}
+		socket.close();
 	}
 	
 	public void setMapGenerator(MapGenerator mg)
@@ -125,7 +118,7 @@ public class Server extends Thread
 		return true;
 	}
 	
-	private void parsePacket(byte[] data, InetAddress address, int port)
+	private void parsePacket(byte[] data, InetAddress address, int port) throws Exception
 	{
 		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
@@ -146,10 +139,8 @@ public class Server extends Thread
 						sendPacket(new Packet5Reject(Cause.OUTDATEDCLIENT), player);
 						return;
 					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
+					catch (Exception e)
+					{}
 				}
 				else if (packet.getVersion() > CFG.VERSION)
 				{
@@ -159,10 +150,8 @@ public class Server extends Thread
 						sendPacket(new Packet5Reject(Cause.OUTDATEDSERVER), player);
 						return;
 					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
+					catch (Exception e)
+					{}
 				}
 				else if (!lobby && !connectableClients.contains(player))
 				{
@@ -172,10 +161,8 @@ public class Server extends Thread
 						sendPacket(new Packet5Reject(Cause.GAMERUNNING), player);
 						return;
 					}
-					catch (IOException e)
-					{
-						e.printStackTrace();
-					}
+					catch (Exception e)
+					{}
 				}
 				for (Player p : clients)
 				{
@@ -187,10 +174,8 @@ public class Server extends Thread
 							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): username taken");
 							return;
 						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
+						catch (Exception e)
+						{}
 					}
 				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
@@ -201,10 +186,8 @@ public class Server extends Thread
 					sendPacketToAllClients(packet);
 					if (!lobby && connectableClients.contains(player)) sendPacket(new Packet8Attribute("net_rejoin", "_"), player);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case DISCONNECT:
@@ -215,10 +198,8 @@ public class Server extends Thread
 				{
 					sendPacketToAllClients(packet);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				for (int i = 0; i < clients.size(); i++)
 				{
 					if (clients.get(i).getUsername().equals(packet.getUsername()))
@@ -240,10 +221,8 @@ public class Server extends Thread
 						{
 							sendPacket(new Packet5Reject(Cause.USERNAMETAKEN), new Player(packet.getOldUsername(), address, port));
 						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
+						catch (Exception e)
+						{}
 						return;
 					}
 				}
@@ -260,10 +239,8 @@ public class Server extends Thread
 				{
 					sendPacketToAllClients(packet);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case CHATMESSAGE:
@@ -274,10 +251,8 @@ public class Server extends Thread
 				{
 					sendPacketToAllClients(packet);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case SERVERINFO:
@@ -299,10 +274,8 @@ public class Server extends Thread
 						sendPacketToAllClients(new Packet7Settings(key, settings.get(key)));
 					}
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case READY:
@@ -320,10 +293,8 @@ public class Server extends Thread
 				{
 					sendPacketToAllClients(packet);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case SETTINGS:
@@ -334,10 +305,8 @@ public class Server extends Thread
 				{
 					sendPacketToAllClients(packet);
 				}
-				catch (IOException e)
-				{
-					e.printStackTrace();
-				}
+				catch (Exception e)
+				{}
 				break;
 			}
 			case ATTRIBUTE:
@@ -352,24 +321,24 @@ public class Server extends Thread
 		}
 	}
 	
-	public void sendPacket(Packet p, Player client) throws IOException
+	public void sendPacket(Packet p, Player client) throws Exception
 	{
 		sendData(p.getData(), client);
 	}
 	
-	public void sendData(byte[] data, Player client) throws IOException
+	public void sendData(byte[] data, Player client) throws Exception
 	{
 		DatagramPacket packet = new DatagramPacket(data, data.length, client.getIP(), client.getPort());
 		
 		socket.send(packet);
 	}
 	
-	public void sendPacketToAllClients(Packet packet) throws IOException
+	public void sendPacketToAllClients(Packet packet) throws Exception
 	{
 		sendDataToAllClients(packet.getData());
 	}
 	
-	public void sendDataToAllClients(byte[] data) throws IOException
+	public void sendDataToAllClients(byte[] data) throws Exception
 	{
 		for (Player p : clients)
 			sendData(data, p);
@@ -392,10 +361,8 @@ public class Server extends Thread
 				sendPacket(new Packet8Attribute("mapeditor_progress_float", i / (float) (map.islands.size() - 1)), player);
 			}
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
+		catch (Exception e)
+		{}
 	}
 	
 	public void setMap(Map m)

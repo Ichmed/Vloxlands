@@ -23,7 +23,6 @@ public class Frustum
 	public static final int Z = 2;
 	public static final int D = 3;
 	Plane[] frustum = new Plane[6];
-	// float[][] m_Frustum = new float[6][4];
 	
 	FloatBuffer modelViewBuffer;
 	FloatBuffer projectionBuffer;
@@ -33,16 +32,6 @@ public class Frustum
 		modelViewBuffer = BufferUtils.createFloatBuffer(16);
 		projectionBuffer = BufferUtils.createFloatBuffer(16);
 	}
-	
-	//
-	// public void normalizePlane(float[][] frustum, int side)
-	// {
-	// float magnitude = (float) Math.sqrt(frustum[side][X] * frustum[side][X] + frustum[side][Y] * frustum[side][Y] + frustum[side][Z] * frustum[side][Z]);
-	// frustum[side][X] /= magnitude;
-	// frustum[side][Y] /= magnitude;
-	// frustum[side][Z] /= magnitude;
-	// frustum[side][D] /= magnitude;
-	// }
 	
 	public void calculateFrustum()
 	{
@@ -104,7 +93,7 @@ public class Frustum
 		return true;
 	}
 	
-	public boolean sphereInFrustum(float x, float y, float z, float radius)
+	public synchronized boolean sphereInFrustum(float x, float y, float z, float radius)
 	{
 		for (int i = 0; i < 6; i++)
 		{

@@ -89,6 +89,17 @@ public class Island
 	public void onTick()
 	{
 		pos.translate(0, ((int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100)) / 100f, 0);
+		
+		for (Chunk[][] c : chunks)
+		{
+			for (Chunk[] c1 : c)
+			{
+				for (Chunk c2 : c1)
+				{
+					c2.onTick(this);
+				}
+			}
+		}
 	}
 	
 	public void calculateWeight()
