@@ -7,15 +7,12 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 
 public class ChunkRenderer
 {
 	public static void renderChunks(Island island)
 	{
-		long time = System.currentTimeMillis();
-		
 		for (int i = 0; i < island.chunks.length; i++)
 		{
 			for (int j = 0; j < island.chunks[0].length; j++)
@@ -26,8 +23,6 @@ public class ChunkRenderer
 				}
 			}
 		}
-		
-		CFG.p("[ChunkRenderer]: Initialized meshes for chunks on Island " + island + ". Took " + (System.currentTimeMillis() - time) + "ms");
 	}
 	
 	@SuppressWarnings("unchecked")
