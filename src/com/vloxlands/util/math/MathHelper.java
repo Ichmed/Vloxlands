@@ -1,4 +1,4 @@
-package com.vloxlands.util;
+package com.vloxlands.util.math;
 
 import java.io.File;
 import java.nio.FloatBuffer;
@@ -7,6 +7,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+
+import com.vloxlands.util.Assistant;
 
 public class MathHelper
 {

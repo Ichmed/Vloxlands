@@ -33,10 +33,10 @@ import com.vloxlands.ui.Action;
 import com.vloxlands.ui.Dialog;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.util.FontAssistant;
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.Frustum;
+import com.vloxlands.util.math.MathHelper;
 
 import de.dakror.universion.UniVersion;
 

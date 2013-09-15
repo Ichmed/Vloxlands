@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
+import com.vloxlands.util.math.MathHelper;
 
 public class Slider extends ClickableGui
 {

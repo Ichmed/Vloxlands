@@ -9,8 +9,8 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.util.MathHelper;
 import com.vloxlands.util.RenderAssistant;
+import com.vloxlands.util.math.MathHelper;
 
 public class Model
 {
