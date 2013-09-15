@@ -93,7 +93,7 @@ public class Frustum
 		return true;
 	}
 	
-	public synchronized boolean sphereInFrustum(float x, float y, float z, float radius)
+	public boolean sphereInFrustum(float x, float y, float z, float radius)
 	{
 		for (int i = 0; i < 6; i++)
 		{

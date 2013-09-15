@@ -42,14 +42,6 @@ public class Chunk
 		transparentUTD = false;
 	}
 	
-	public void onTick(Island i)
-	{
-		if (meshes[0].size() + meshes[1].size() == 0 && faces[0].size() + faces[1].size() > 0)
-		{
-			updateMesh(i);
-		}
-	}
-	
 	public void render(Island i, boolean opaque)
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return;
