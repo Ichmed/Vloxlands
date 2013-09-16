@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Map;
@@ -247,6 +248,7 @@ public class SceneNewGame extends Scene
 		if (!wasRejoining) super.render();
 		if (!chat.isEnabled())
 		{
+			TextureImpl.bindNone();
 			glEnable(GL_BLEND);
 			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 			

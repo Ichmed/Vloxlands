@@ -24,11 +24,14 @@ public class ColorLabel extends Container
 	public void render()
 	{
 		super.render();
-		
+		glEnable(GL_BLEND);
+		int fac = 8;
 		TextureImpl.bindNone();
 		glColor3f(1, 0, 0);
-		int fac = 8;
 		RenderAssistant.drawRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
 		glColor3f(1, 1, 1);
+		// RenderAssistant.bindTexture("/graphics/textures/ui/colorMod.png");
+		RenderAssistant.drawRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
+		glDisable(GL_BLEND);
 	}
 }
