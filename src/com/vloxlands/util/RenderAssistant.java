@@ -165,12 +165,30 @@ public class RenderAssistant
 			GL11.glEnd();
 		}
 		glPopMatrix();
-		
+	}
+	
+	public static void drawRect(float posX, float posY, float sizeX, float sizeY)
+	{
+		glPushMatrix();
+		{
+			glDisable(GL_CULL_FACE);
+			GL11.glBegin(GL11.GL_QUADS);
+			{
+				GL11.glVertex2f(posX, posY + sizeY);
+				
+				GL11.glVertex2f(posX + sizeX, posY + sizeY);
+				
+				GL11.glVertex2f(posX + sizeX, posY);
+				
+				GL11.glVertex2f(posX, posY);
+			}
+			GL11.glEnd();
+		}
+		glPopMatrix();
 	}
 	
 	public static void renderText(float x, float y, String text, Font f)
 	{
-		TextureImpl.bindNone();
 		glEnable(GL_BLEND);
 		FloatBuffer fb = BufferUtils.createFloatBuffer(16);
 		glGetFloat(GL_CURRENT_COLOR, fb);

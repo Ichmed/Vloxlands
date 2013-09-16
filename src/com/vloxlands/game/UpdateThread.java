@@ -69,7 +69,7 @@ public class UpdateThread extends Thread
 						if (Keyboard.getEventKey() == Keyboard.KEY_V && !Keyboard.getEventKeyState())
 						{
 							CFG.SHOW_DIRECTIONS = !CFG.SHOW_DIRECTIONS;
-							Game.currentGame.directionalArrowsPos = new Vector3f(Game.currentGame.camera.getPosition());
+							Game.currentGame.directionalArrowsPos = new Vector3f(Game.camera.getPosition());
 						}
 					}
 					if (Game.currentGame.getActiveScene() != null)

@@ -113,7 +113,7 @@ public class SceneGame extends Scene
 		
 		glEnable(GL_BLEND);
 		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//glBindTexture(GL_TEXTURE_2D, 0);
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 		
 		super.render();

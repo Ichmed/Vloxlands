@@ -1,7 +1,5 @@
 package com.vloxlands.scene;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -68,26 +66,25 @@ public class SceneLogo extends Scene
 		alpha += 0.05f;
 		if (!update)
 		{
-			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(/* CFG.INTERNET ? new SceneLogin() : */new SceneMainMenu());
+			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneMainMenu());
 		}
 		else
 		{
 			download.setValue(downloader.progress / (float) downloader.fullsize);
-			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(/* CFG.INTERNET ? new SceneLogin() : */new SceneMainMenu());
+			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new SceneMainMenu());
 		}
 	}
 	
-	@Override
-	public void render()
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
-		glColor4f(1, 1, 1, val);
-		
-		super.renderContent();
-		
-		glDisable(GL_BLEND);
-	}
+	// @Override
+	// public void render()
+	// {
+	// // glEnable(GL_BLEND);
+	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// // float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
+	// // glColor4f(1, 1, 1, val);
+	//
+	// super.renderContent();
+	// // glDisable(GL_BLEND);
+	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	// }
 }

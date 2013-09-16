@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Font;
 import java.io.IOException;
 
+import org.newdawn.slick.Color;
+
 import com.vloxlands.game.Game;
 import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet6Ready;
@@ -166,6 +168,9 @@ public class LobbySlot extends Container
 			}
 		});
 		add(ready);
+		
+		ColorLabel c = new ColorLabel(width - 400, 1, height - 20, Color.red);
+		add(c);
 	}
 	
 	@Override

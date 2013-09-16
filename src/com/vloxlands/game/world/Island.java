@@ -133,6 +133,9 @@ public class Island
 		voxels[x][y][z] = id;
 		voxelMetadata[x][y][z] = metadata;
 		Voxel.getVoxelForId(id).onPlaced(x, y, z);
+		
+		chunks[(int) Math.floor(x / (float) chunks.length)][(int) Math.floor(y / (float) chunks.length)][(int) Math.floor(z / (float) chunks.length)].updateMesh(this);
+		
 		weight += Voxel.getVoxelForId(id).getWeight();
 		uplift += Voxel.getVoxelForId(id).getUplift();
 	}

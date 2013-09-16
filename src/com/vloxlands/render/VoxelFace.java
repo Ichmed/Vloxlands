@@ -192,7 +192,7 @@ public class VoxelFace
 	
 	public double getDistanceToCamera()
 	{
-		return Vector3f.sub(Game.currentGame.camera.position, pos, null).length();
+		return Vector3f.sub(Game.camera.position, pos, null).length();
 	}
 	
 	public static class VoxelFaceKey implements Comparable<VoxelFaceKey>

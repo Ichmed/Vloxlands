@@ -39,7 +39,6 @@ public class SceneNewGame extends Scene
 {
 	ProgressBar progressBar;
 	TextButton start;
-	// Spinner xSize, zSize, radius;
 	Spinner mapsize;
 	
 	static Container lobby;
@@ -142,7 +141,6 @@ public class SceneNewGame extends Scene
 			@Override
 			public void trigger()
 			{
-				// Game.server.setMapGenerator(new MapGenerator(xSize.getValue(), zSize.getValue(), 20, 16));
 				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.values()[mapsize.getValue()]));
 			}
 		});
