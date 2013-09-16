@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
@@ -75,16 +77,16 @@ public class SceneLogo extends Scene
 		}
 	}
 	
-	// @Override
-	// public void render()
-	// {
-	// // glEnable(GL_BLEND);
-	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	// // float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
-	// // glColor4f(1, 1, 1, val);
-	//
-	// super.renderContent();
-	// // glDisable(GL_BLEND);
-	// // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	// }
+	@Override
+	public void render()
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);
+		glColor4f(1, 1, 1, val);
+		
+		super.renderContent();
+		glDisable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	}
 }
