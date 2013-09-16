@@ -372,7 +372,7 @@ public class Game
 	
 	public void initMultiplayer()
 	{
-		if (sceneStack.size() == 0 || !CFG.INTERNET || IP != null || hamachiInstallationDialogShown) return;
+		if (sceneStack.size() == 0 || IP != null || hamachiInstallationDialogShown) return;
 		InetAddress ip = NetworkAssistant.getMyHamachiIP();
 		if (ip == null)
 		{

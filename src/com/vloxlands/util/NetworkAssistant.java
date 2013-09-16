@@ -5,6 +5,8 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
 
+import com.vloxlands.settings.CFG;
+
 /**
  * @author Dakror
  */
@@ -58,6 +60,8 @@ public class NetworkAssistant
 	{
 		try
 		{
+			if (!CFG.INTERNET) return InetAddress.getLocalHost();
+			
 			List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
 			for (NetworkInterface ni : interfaces)
 			{
