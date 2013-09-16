@@ -35,6 +35,5 @@ public abstract class ClickableGui extends IGuiElement
 	}
 	
 	public void resetElement()
-	{
-	}
+	{}
 }

@@ -335,8 +335,6 @@ public class RenderAssistant
 		{
 			glEnable(GL_BLEND);
 			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
-			glBindTexture(GL_TEXTURE_2D, 0);
-			TextureImpl.unbind();
 			TextureImpl.bindNone();
 			RenderAssistant.renderRect(x + 5, y + 5, width - 10, height - 10);
 			glColor4f(1, 1, 1, 1);

@@ -3,6 +3,7 @@ package com.vloxlands.ui;
 import static org.lwjgl.opengl.GL11.*;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.util.RenderAssistant;
 
@@ -23,7 +24,8 @@ public class ColorLabel extends Container
 	public void render()
 	{
 		super.render();
-		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		TextureImpl.bindNone();
 		glColor3f(1, 0, 0);
 		int fac = 8;
 		RenderAssistant.drawRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
