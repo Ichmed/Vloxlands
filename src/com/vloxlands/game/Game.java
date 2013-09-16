@@ -56,7 +56,7 @@ public class Game
 	
 	// public static MapGenerator mapGenerator;
 	
-	public Camera camera = new Camera();
+	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
 	
