@@ -189,6 +189,7 @@ public class RenderAssistant
 	
 	public static void renderText(float x, float y, String text, Font f)
 	{
+		TextureImpl.bindNone();
 		glEnable(GL_BLEND);
 		FloatBuffer fb = BufferUtils.createFloatBuffer(16);
 		glGetFloat(GL_CURRENT_COLOR, fb);
