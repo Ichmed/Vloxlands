@@ -167,6 +167,17 @@ public class Server extends Thread
 					catch (Exception e)
 					{}
 				}
+				else if (clients.size() == 4)
+				{
+					try
+					{
+						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): game full");
+						sendPacket(new Packet5Reject(Cause.FULL), player);
+						return;
+					}
+					catch (Exception e)
+					{}
+				}
 				for (Player p : clients)
 				{
 					if (p.getUsername().equals(packet.getUsername()))
@@ -184,10 +195,7 @@ public class Server extends Thread
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
 				ArrayList<Color> colors = Assistant.asList(Player.COLORS);
 				for (Player p : clients)
-				{
 					colors.remove(p.getColor());
-					CFG.p(colors.indexOf(p.getColor()));
-				}
 				
 				player.setColor(colors.get(0));
 				clients.add(player);
