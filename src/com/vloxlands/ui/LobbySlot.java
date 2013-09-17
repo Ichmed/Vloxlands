@@ -9,6 +9,7 @@ import com.vloxlands.game.Game;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet6Player;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -22,7 +23,6 @@ public class LobbySlot extends Container
 	public static final int HEIGHT2 = 68;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 40f);
 	Player p;
-	public Container parent;
 	
 	public LobbySlot(Player p)
 	{
@@ -170,18 +170,34 @@ public class LobbySlot extends Container
 		add(ready);
 		
 		ColorLabel c = new ColorLabel(width - 400, 1, height - 20, p.getColor());
-		add(c);
-	}
-	
-	@Override
-	public void handleMouse(int posX, int posY, int flag)
-	{
-		for (IGuiElement g : components)
+		
+		int size = 35;
+		int spacing = 5;
+		int inRow = 3;
+		
+		final Container otherColors = new Container(width - 400, c.height - 6, 30 + inRow * (size + spacing), 30 + (int) Math.ceil(Player.COLORS.length / (float) inRow) * (size + spacing), true, true);
+		otherColors.parent = this;
+		otherColors.setZIndex(10);
+		otherColors.setVisible(false);
+		
+		for (int i = 0; i < Player.COLORS.length; i++)
 		{
-			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x + parent.x, y + parent.y))
+			final ColorLabel cl = new ColorLabel(15 + (size + spacing) * (i % inRow), 15 + (size + spacing) * (i / inRow), size, Player.COLORS[i]);
+			cl.parent = otherColors;
+			cl.setZIndex(11);
+			cl.setClickEvent(new IGuiEvent()
 			{
-				((ClickableGui) g).handleMouse(posX, posY, flag);
-			}
+				@Override
+				public void trigger()
+				{
+					CFG.p(cl.getColor());
+					otherColors.setVisible(false);
+				}
+			});
+			otherColors.add(cl);
 		}
+		add(otherColors);
+		
+		add(c);
 	}
 }

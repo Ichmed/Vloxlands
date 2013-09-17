@@ -1,14 +1,17 @@
 package com.vloxlands.ui;
 
-import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.util.ArrayList;
+
+import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.util.RenderAssistant;
 
 public class Container extends ClickableGui
 {
 	public boolean filled, doubled, border;
+	public Container parent;
 	
 	public ArrayList<IGuiElement> components = new ArrayList<>();
 	
@@ -76,13 +79,34 @@ public class Container extends ClickableGui
 	@Override
 	public void handleMouse(int posX, int posY, int flag)
 	{
+		Vector2f off = getParentOffset();
+		// CFG.p(getClass(), Vector2f.add(off, getPosition(), null));
 		for (IGuiElement g : components)
 		{
-			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x, y))
+			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x + (int) off.x, y + (int) off.y))
 			{
 				((ClickableGui) g).handleMouse(posX, posY, flag);
 			}
 		}
+	}
+	
+	public Vector2f getParentOffset()
+	{
+		Vector2f offset = new Vector2f(0, 0);
+		
+		if (parent != null)
+		{
+			Vector2f p = parent.getParentOffset();
+			offset.x += parent.getX() + p.x;
+			offset.y += parent.getY() + p.y;
+		}
+		
+		return offset;
+	}
+	
+	public Vector2f getPosition()
+	{
+		return new Vector2f(x, y);
 	}
 	
 	public void pack(boolean hor, boolean ver)

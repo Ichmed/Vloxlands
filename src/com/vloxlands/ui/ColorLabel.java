@@ -21,10 +21,26 @@ public class ColorLabel extends Container
 	}
 	
 	@Override
+	public void handleMouse(int posX, int posY, int flag)
+	{
+		super.handleMouse(posX, posY, flag);
+		
+		if (clickEvent != null && flag == 2) clickEvent.trigger();
+	}
+	
+	public Color getColor()
+	{
+		return color;
+	}
+	
+	@Override
 	public void render()
 	{
+		if (!enabled) Color.gray.bind();
 		super.render();
 		glEnable(GL_BLEND);
+		glColor3f(1, 1, 1);
+		
 		int fac = 8;
 		TextureImpl.bindNone();
 		color.bind();
@@ -33,6 +49,11 @@ public class ColorLabel extends Container
 		glColor4f(1, 1, 1, 0.5f);
 		RenderAssistant.bindTexture("/graphics/textures/ui/colorMod.png");
 		RenderAssistant.renderRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
+		if (!enabled)
+		{
+			glColor4f(0.1f, 0.1f, 0.1f, 0.5f);
+			RenderAssistant.drawRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
+		}
 		glColor3f(1, 1, 1);
 		glDisable(GL_BLEND);
 	}

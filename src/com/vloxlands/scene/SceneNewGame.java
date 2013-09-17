@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.game.Game;
@@ -25,6 +26,7 @@ import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.ArrowButton;
 import com.vloxlands.ui.ChatContainer;
+import com.vloxlands.ui.ColorLabel;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.GuiRotation;
 import com.vloxlands.ui.IGuiElement;
@@ -35,6 +37,7 @@ import com.vloxlands.ui.LobbySlot;
 import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
+import com.vloxlands.util.Assistant;
 import com.vloxlands.util.RenderAssistant;
 
 public class SceneNewGame extends Scene
@@ -206,9 +209,7 @@ public class SceneNewGame extends Scene
 	
 	private void updateLobby(Player[] pl)
 	{
-		ArrayList<Player> players = new ArrayList<>();
-		for (Player p : pl)
-			players.add(p);
+		ArrayList<Player> players = Assistant.asList(pl);
 		
 		@SuppressWarnings("unchecked")
 		ArrayList<IGuiElement> lobbyCopy = (ArrayList<IGuiElement>) lobby.components.clone();
@@ -239,7 +240,7 @@ public class SceneNewGame extends Scene
 		
 		for (IGuiElement iG : lobby.components)
 		{
-			LobbySlot slot = (LobbySlot) iG;
+			final LobbySlot slot = (LobbySlot) iG;
 			
 			slot.initButtons();
 			boolean bool = slot.getPlayer().getUsername().equals(Game.client.getPlayer().getUsername());
@@ -247,6 +248,31 @@ public class SceneNewGame extends Scene
 			slot.components.get(0).setEnabled(bool); // rename
 			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !bool); // kick
 			slot.components.get(2).setEnabled(bool); // ready
+			slot.components.get(4).setEnabled(bool);
+			ColorLabel cl = (ColorLabel) slot.components.get(4); // colorLabel
+			
+			final Container otherColors = (Container) slot.components.get(3);
+			ArrayList<Color> colors = Assistant.asList(Player.COLORS);
+			for (IGuiElement g : otherColors.components)
+				g.setEnabled(true);
+			
+			for (Player player : pl)
+				otherColors.components.get(colors.indexOf(player.getColor())).setEnabled(false);
+			
+			cl.setClickEvent(new IGuiEvent()
+			{
+				@Override
+				public void trigger()
+				{
+					for (IGuiElement iG : lobby.components)
+					{
+						LobbySlot slot = (LobbySlot) iG;
+						slot.components.get(3).setVisible(false);
+					}
+					
+					slot.components.get(3).setVisible(true);
+				}
+			});
 		}
 	}
 	
