@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.security.InvalidParameterException;
 
 import org.lwjgl.opengl.Display;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.scene.Scene;
@@ -57,7 +58,7 @@ public class Dialog extends Scene
 	{
 		glEnable(GL_BLEND);
 		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
-		
+		TextureImpl.bindNone();
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
 		glColor4f(1, 1, 1, 1);
 		

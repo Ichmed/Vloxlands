@@ -88,7 +88,7 @@ public class Client extends Thread
 				break;
 			}
 			case SERVERINFO:
-			case READY:
+			case PLAYER:
 			case SETTINGS:
 				break;
 			
@@ -229,6 +229,11 @@ public class Client extends Thread
 	public boolean isConnected()
 	{
 		return connected;
+	}
+	
+	public Player getPlayer()
+	{
+		return player;
 	}
 	
 	public boolean isConnectedToLocalhost()

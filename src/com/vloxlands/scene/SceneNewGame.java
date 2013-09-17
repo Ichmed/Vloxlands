@@ -13,12 +13,13 @@ import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.gen.MapGenerator.MapSize;
+import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
-import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet6Player;
 import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.settings.Tr;
@@ -203,10 +204,10 @@ public class SceneNewGame extends Scene
 		}
 	}
 	
-	private void updateLobby(String[] pl)
+	private void updateLobby(Player[] pl)
 	{
-		ArrayList<String> players = new ArrayList<>();
-		for (String p : pl)
+		ArrayList<Player> players = new ArrayList<>();
+		for (Player p : pl)
 			players.add(p);
 		
 		@SuppressWarnings("unchecked")
@@ -216,13 +217,13 @@ public class SceneNewGame extends Scene
 		int index = 0;
 		for (IGuiElement iG : lobbyCopy)
 		{
-			if (players.indexOf(((LobbySlot) iG).getUsername()) > -1)
+			if (players.indexOf(((LobbySlot) iG).getPlayer()) > -1)
 			{
 				iG.setY(15 + index * LobbySlot.HEIGHT2);
 				iG.setWidth(lobby.getWidth() - 20);
 				iG.setX(10);
 				lobby.add(iG);
-				players.remove(((LobbySlot) iG).getUsername());
+				players.remove(((LobbySlot) iG).getPlayer());
 				index++;
 			}
 		}
@@ -241,9 +242,11 @@ public class SceneNewGame extends Scene
 			LobbySlot slot = (LobbySlot) iG;
 			
 			slot.initButtons();
-			slot.components.get(0).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // rename
-			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !slot.getUsername().equals(Game.client.getUsername())); // kick
-			slot.components.get(2).setEnabled(slot.getUsername().equals(Game.client.getUsername())); // ready
+			boolean bool = slot.getPlayer().getUsername().equals(Game.client.getPlayer().getUsername());
+			
+			slot.components.get(0).setEnabled(bool); // rename
+			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !bool); // kick
+			slot.components.get(2).setEnabled(bool); // ready
 		}
 	}
 	
@@ -324,17 +327,18 @@ public class SceneNewGame extends Scene
 				updateLobby(new Packet4ServerInfo(data).getPlayers());
 				break;
 			}
-			case READY:
+			case PLAYER:
 			{
-				Packet6Ready p = new Packet6Ready(data);
+				Packet6Player p = new Packet6Player(data);
+				Player player = p.getPlayer();
 				for (IGuiElement iG : lobby.components)
 				{
 					LobbySlot slot = (LobbySlot) iG;
-					if (slot.getUsername().equals(p.getUsername()))
+					if (slot.getPlayer().getUsername().equals(player.getUsername()))
 					{
 						TextButton tb = (TextButton) slot.components.get(2);
-						tb.setActive(p.getReady());
-						if (p.getReady()) tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
+						tb.setActive(player.isReady());
+						if (player.isReady()) tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
 						else tb.textColor = new Vector3f(1, 1, 1);
 						
 						if (Game.client.isConnectedToLocalhost()) start.setEnabled(Game.server.areAllClientsReady());

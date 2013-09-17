@@ -45,7 +45,6 @@ public class TextButton extends ClickableGui
 	@Override
 	public void render()
 	{
-		RenderAssistant.disable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glColor3f(1, 1, 1);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -60,6 +59,7 @@ public class TextButton extends ClickableGui
 		int my = height / 2 - ttf.getHeight() / 2;
 		if (enabled || toggleMode) glColor3f(textColor.x, textColor.y, textColor.z);
 		else glColor3f(0.5f, 0.5f, 0.5f);
+		
 		RenderAssistant.renderText(x + mx, y + my, title, font);
 		glColor3f(1, 1, 1);
 	}

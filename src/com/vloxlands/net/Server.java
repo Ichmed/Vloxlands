@@ -20,7 +20,7 @@ import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet5Reject;
 import com.vloxlands.net.packet.Packet5Reject.Cause;
-import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet6Player;
 import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
@@ -257,17 +257,12 @@ public class Server extends Thread
 			}
 			case SERVERINFO:
 			{
-				String[] players = new String[clients.size()];
-				for (int i = 0; i < clients.size(); i++)
-				{
-					players[i] = clients.get(i).getUsername();
-				}
 				try
 				{
-					sendPacketToAllClients(new Packet4ServerInfo(players));
+					sendPacketToAllClients(new Packet4ServerInfo(clients.toArray(new Player[] {})));
 					for (Player p : clients)
 					{
-						sendPacketToAllClients(new Packet6Ready(p.getUsername(), p.isReady()));
+						sendPacketToAllClients(new Packet6Player(p));
 					}
 					for (String key : settings.keySet())
 					{
@@ -278,14 +273,16 @@ public class Server extends Thread
 				{}
 				break;
 			}
-			case READY:
+			case PLAYER:
 			{
-				Packet6Ready packet = new Packet6Ready(data);
-				for (Player p : clients)
+				Packet6Player packet = new Packet6Player(data);
+				Player player = packet.getPlayer();
+				for (int i = 0; i < clients.size(); i++)
 				{
-					if (p.getUsername().equals(packet.getUsername()))
+					Player p = clients.get(i);
+					if (p.getIP().equals(player.getIP()) && p.getPort() == player.getPort())
 					{
-						p.setReady(packet.getReady());
+						clients.set(i, player);
 						break;
 					}
 				}

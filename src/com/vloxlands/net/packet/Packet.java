@@ -16,7 +16,7 @@ public abstract class Packet
 		CHATMESSAGE,
 		SERVERINFO,
 		REJECT,
-		READY,
+		PLAYER,
 		SETTINGS,
 		ATTRIBUTE,
 		ISLAND,

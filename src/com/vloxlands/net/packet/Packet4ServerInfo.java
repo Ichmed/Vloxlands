@@ -1,13 +1,19 @@
 package com.vloxlands.net.packet;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.vloxlands.net.Player;
+
 /**
  * @author Dakror
  */
 public class Packet4ServerInfo extends Packet
 {
-	String[] players;
+	Player[] players;
 	
-	public Packet4ServerInfo(String[] players)
+	public Packet4ServerInfo(Player[] players)
 	{
 		super(4);
 		this.players = players;
@@ -22,25 +28,43 @@ public class Packet4ServerInfo extends Packet
 	{
 		super(4);
 		String s = readData(data);
-		if (s.length() > 0) players = s.split(":");
+		try
+		{
+			JSONArray json = new JSONArray(s);
+			players = new Player[json.length()];
+			for (int i = 0; i < json.length(); i++)
+			{
+				players[i] = new Player(json.getJSONObject(i));
+			}
+		}
+		catch (JSONException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	public String[] getPlayers()
+	public Player[] getPlayers()
 	{
 		return players;
 	}
 	
 	@Override
-	public byte[] getPacketData()
+	protected byte[] getPacketData()
 	{
-		String serialized = "";
-		if (players != null && players.length > 0)
+		if (players == null) return "".getBytes();
+		
+		JSONArray json = new JSONArray();
+		for (Player p : players)
 		{
-			for (String p : players)
-				serialized += p + ":";
-			
-			serialized = serialized.substring(0, serialized.length() - 1);
+			try
+			{
+				json.put(new JSONObject(p.serialize()));
+			}
+			catch (JSONException e)
+			{
+				e.printStackTrace();
+			}
 		}
-		return serialized.getBytes();
+		return json.toString().getBytes();
 	}
 }

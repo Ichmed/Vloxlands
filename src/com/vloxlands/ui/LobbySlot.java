@@ -8,8 +8,9 @@ import java.io.IOException;
 import org.newdawn.slick.Color;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.net.Player;
 import com.vloxlands.net.packet.Packet1Disconnect;
-import com.vloxlands.net.packet.Packet6Ready;
+import com.vloxlands.net.packet.Packet6Player;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -22,26 +23,26 @@ public class LobbySlot extends Container
 	public static final int HEIGHT = 80;
 	public static final int HEIGHT2 = 68;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 40f);
-	String username;
+	Player p;
 	public Container parent;
 	
-	public LobbySlot(String username)
+	public LobbySlot(Player p)
 	{
 		super(0, 0, 0, HEIGHT, false, false);
-		this.username = username;
+		this.p = p;
 	}
 	
-	public String getUsername()
+	public Player getPlayer()
 	{
-		return username;
+		return p;
 	}
 	
 	@Override
 	public void render()
 	{
-		if (username.equals(Game.client.getUsername())) glColor3f(166 / 256f, 213 / 256f, 236 / 256f);
-		RenderAssistant.renderText(x + 15, y + height / 6, username, font);
-		if (username.equals(Game.client.getUsername())) glColor3f(1, 1, 1);
+		if (p.getUsername().equals(Game.client.getUsername())) glColor3f(166 / 256f, 213 / 256f, 236 / 256f);
+		RenderAssistant.renderText(x + 15, y + height / 6, p.getUsername(), font);
+		if (p.getUsername().equals(Game.client.getUsername())) glColor3f(1, 1, 1);
 		
 		RenderAssistant.renderLine(x, y + height - 20, width, true, false);
 		RenderAssistant.renderLine(x + width - 128, y + height / 2 - 15, 128, true, false);
@@ -125,14 +126,14 @@ public class LobbySlot extends Container
 			@Override
 			public void trigger()
 			{
-				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", username), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
+				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", p.getUsername()), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
 				{
 					@Override
 					public void trigger()
 					{
 						try
 						{
-							Game.client.sendPacket(new Packet1Disconnect(username, "mp.reason.kicked"));
+							Game.client.sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.kicked"));
 							Game.currentGame.removeActiveScene();
 						}
 						catch (IOException e)
@@ -159,7 +160,8 @@ public class LobbySlot extends Container
 			{
 				try
 				{
-					Game.client.sendPacket(new Packet6Ready(username, ready.isActive()));
+					p.setReady(ready.isActive());
+					Game.client.sendPacket(new Packet6Player(p));
 				}
 				catch (IOException e)
 				{
