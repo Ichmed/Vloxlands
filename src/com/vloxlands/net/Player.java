@@ -13,7 +13,7 @@ import com.vloxlands.util.Assistant;
  */
 public class Player
 {
-	public static final Color[] COLORS = { Color.black, Color.blue, Color.green, Color.magenta, Color.orange, Color.red, Color.white, Color.yellow };
+	public static final Color[] COLORS = { Color.gray, Color.blue, Color.green, Color.magenta, Color.orange, Color.red, Color.white, Color.yellow };
 	String username;
 	InetAddress ip;
 	int port;
