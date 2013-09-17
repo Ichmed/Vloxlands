@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.newdawn.slick.opengl.PNGDecoder;
@@ -168,5 +169,13 @@ public class Assistant
 		}
 		in.close();
 		out.close();
+	}
+	
+	public static <T> ArrayList<T> asList(T[] t)
+	{
+		ArrayList<T> list = new ArrayList<>();
+		for (T t1 : t)
+			list.add(t1);
+		return list;
 	}
 }

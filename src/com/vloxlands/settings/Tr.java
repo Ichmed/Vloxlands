@@ -1,8 +1,8 @@
 package com.vloxlands.settings;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
+import com.vloxlands.util.Assistant;
 import com.vloxlands.util.CSVReader;
 
 public class Tr
@@ -20,7 +20,7 @@ public class Tr
 		tr.clear();
 		CSVReader csv = new CSVReader("/data/lang.csv");
 		String[] langs = csv.readRow();
-		int lang = Arrays.asList(langs).indexOf(langName);
+		int lang = Assistant.asList(langs).indexOf(langName);
 		
 		String cell;
 		String key = "";

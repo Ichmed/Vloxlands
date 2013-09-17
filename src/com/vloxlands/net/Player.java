@@ -1,11 +1,12 @@
 package com.vloxlands.net;
 
 import java.net.InetAddress;
-import java.util.Arrays;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.newdawn.slick.Color;
+
+import com.vloxlands.util.Assistant;
 
 /**
  * @author Dakror
@@ -118,7 +119,7 @@ public class Player
 			o.put("ip", ip.getHostAddress());
 			o.put("port", port);
 			o.put("ready", ready);
-			o.put("color", Arrays.asList(COLORS).indexOf(color));
+			o.put("color", Assistant.asList(COLORS).indexOf(color));
 		}
 		catch (JSONException e)
 		{

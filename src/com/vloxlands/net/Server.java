@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.newdawn.slick.Color;
+
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.MapGenerator;
 import com.vloxlands.net.packet.Packet;
@@ -25,6 +27,7 @@ import com.vloxlands.net.packet.Packet7Settings;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.util.Assistant;
 
 /**
  * @author Dakror
@@ -179,6 +182,14 @@ public class Server extends Thread
 					}
 				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
+				ArrayList<Color> colors = Assistant.asList(Player.COLORS);
+				for (Player p : clients)
+				{
+					colors.remove(p.getColor());
+					CFG.p(colors.indexOf(p.getColor()));
+				}
+				
+				player.setColor(colors.get(0));
 				clients.add(player);
 				if (!connectableClients.contains(player)) connectableClients.add(player);
 				try
