@@ -1,7 +1,5 @@
 package com.vloxlands.util;
 
-import static org.lwjgl.opengl.GL11.*;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +24,7 @@ public class TextureAtlas
 				for (int j = 0; j < bi.getHeight() / ch; j++)
 				{
 					Texture t = BufferedImageUtil.getTexture(path, bi.getSubimage(i * cw, j * ch, cw, ch));
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					RenderAssistant.improveTexture(t);
 					tiles[i][j] = t;
 				}
 			}

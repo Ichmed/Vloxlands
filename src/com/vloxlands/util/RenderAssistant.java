@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +14,10 @@ import java.util.NoSuchElementException;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.EXTTextureFilterAnisotropic;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.glu.MipMap;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.Color;
@@ -122,7 +125,9 @@ public class RenderAssistant
 	{
 		try
 		{
-			return TextureLoader.getTexture(".png", RenderAssistant.class.getResourceAsStream(path));
+			Texture texture = TextureLoader.getTexture(".png", RenderAssistant.class.getResourceAsStream(path));
+			improveTexture(texture);
+			return texture;
 		}
 		catch (Exception e)
 		{
@@ -130,6 +135,27 @@ public class RenderAssistant
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void improveTexture(Texture texture)
+	{
+		texture.bind();
+		
+		int width = texture.getImageWidth();
+		int height = texture.getImageHeight();
+		
+		byte[] texbytes = texture.getTextureData();
+		int components = texbytes.length / (width * height);
+		
+		ByteBuffer texdata = BufferUtils.createByteBuffer(texbytes.length);
+		texdata.put(texbytes);
+		texdata.rewind();
+		
+		MipMap.gluBuild2DMipmaps(GL11.GL_TEXTURE_2D, components, width, height, components == 3 ? GL11.GL_RGB : GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, texdata);
+		
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 8);
 	}
 	
 	public static void renderRect(float posX, float posY, float sizeX, float sizeY)

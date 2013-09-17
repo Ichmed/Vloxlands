@@ -54,6 +54,11 @@ public class SceneNewGame extends Scene
 		if (Game.server == null && !Game.client.isConnected())
 		{
 			Game.server = new Server(Game.IP); // host
+			chat = null;
+			lobby = null;
+			progress = 0;
+			progressString = "";
+			wasRejoining = false;
 		}
 		
 		Game.currentMap = new Map();
