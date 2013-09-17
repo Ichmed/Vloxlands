@@ -8,6 +8,7 @@ import javax.swing.UIManager;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.UpdateThread;
@@ -58,7 +59,7 @@ public class Vloxlands
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			Display.setResizable(true);
-			Display.create();
+			Display.create(new PixelFormat(0, 8, 0, 4));
 			Game.initGLSettings();
 			
 			Game.initGame();
