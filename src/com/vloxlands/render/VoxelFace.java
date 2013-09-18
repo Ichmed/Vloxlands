@@ -14,14 +14,13 @@ import com.vloxlands.util.RenderAssistant;
 
 public class VoxelFace
 {
-	Direction dir;
-	Vector3f pos;
-	int textureIndex;
-	Vector3f tl, tr, bl, br;
+	public Direction dir;
+	public Vector3f pos, tl, tr, bl, br;
 	
-	int sizeX, sizeY, sizeZ;
+	public long textureIndex;
+	public int sizeX, sizeY, sizeZ;
 	
-	public VoxelFace(Direction dir, Vector3f pos, int texInd)
+	public VoxelFace(Direction dir, Vector3f pos, long texInd)
 	{
 		this(dir, pos, texInd, 1, 1, 1);
 	}
@@ -38,7 +37,7 @@ public class VoxelFace
 		updateVertices();
 	}
 	
-	public VoxelFace(Direction dir, Vector3f pos, int texInd, int sizeX, int sizeY, int sizeZ)
+	public VoxelFace(Direction dir, Vector3f pos, long texInd, int sizeX, int sizeY, int sizeZ)
 	{
 		super();
 		this.dir = dir;
@@ -128,8 +127,8 @@ public class VoxelFace
 	
 	public void render()
 	{
-		int texX = textureIndex % 32;
-		int texY = textureIndex / 32;
+		int texX = (int) textureIndex % 32;
+		int texY = (int) textureIndex / 32;
 		
 		glEnable(GL_CULL_FACE);
 		

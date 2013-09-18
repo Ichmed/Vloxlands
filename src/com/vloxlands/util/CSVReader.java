@@ -1,6 +1,8 @@
 package com.vloxlands.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -9,7 +11,7 @@ public class CSVReader
 {
 	BufferedReader br;
 	String path;
-	String sep;
+	public String sep;
 	
 	String[] segments;
 	int index, lIndex;
@@ -31,6 +33,22 @@ public class CSVReader
 		}
 	}
 	
+	public CSVReader(File path)
+	{
+		this.path = path.getPath();
+		
+		try
+		{
+			br = new BufferedReader(new FileReader(path));
+			loadSeparator();
+			index = 0;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	private void loadSeparator() throws Exception
 	{
 		String l = br.readLine();
@@ -38,7 +56,7 @@ public class CSVReader
 		else
 		{
 			sep = ";";
-			br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
+			br = new BufferedReader(path.startsWith("/") ? new InputStreamReader(getClass().getResourceAsStream(path)) : new FileReader(new File(path)));
 		}
 	}
 	
@@ -91,6 +109,15 @@ public class CSVReader
 					br.close();
 					return null;
 				}
+				while (l != null && l.length() == 0)
+					l = br.readLine();
+				
+				if (l == null)
+				{
+					br.close();
+					return null;
+				}
+				
 				segments = splitCells(l);
 				if (lineLength == -1)
 				{

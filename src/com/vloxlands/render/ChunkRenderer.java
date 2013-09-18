@@ -44,11 +44,16 @@ public class ChunkRenderer
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
 					for (Direction d : Direction.values())
 					{
-						Voxel w = Voxel.getVoxelForId(i.getVoxelId(posX + (int) d.dir.x, posY + (int) d.dir.y, posZ + (int) d.dir.z));
-						if (!w.isOpaque() && !(w == v))
+						int x1 = posX + (int) d.dir.x;
+						int y1 = posY + (int) d.dir.y;
+						int z1 = posZ + (int) d.dir.z;
+						Voxel w = null;
+						if (x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < Island.SIZE && y1 < Island.SIZE && z1 < Island.SIZE) w = Voxel.getVoxelForId(i.getVoxelId(x1, y1, z1));
+						
+						if (w == null || !w.isOpaque() && !(w == v))
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(posX, posY, posZ), v.getTextureIndex(posX, posY, posZ, d.ordinal(), i.getMetadata(posX, posY, posZ)));
-							if (v.isOpaque()) faces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
+							if (v.isOpaque() || w == null) faces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
 							else transparentFaces.put(new VoxelFaceKey(posX, posY, posZ, d.ordinal()), f);
 						}
 					}
@@ -130,27 +135,6 @@ public class ChunkRenderer
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips0.get(key);
 						
-						// if (activeStrips[i] != null)
-						// {
-						// if (val == null)
-						// {
-						// strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
-						// activeStrips[i] = null;
-						// }
-						// else if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.pos.z == activeStrips[i].pos.z)
-						// {
-						// activeStrips[i].increaseSize(1, 0, 0);
-						// }
-						// else
-						// {
-						// strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
-						// activeStrips[i] = new VoxelFace(val);
-						// }
-						// }
-						// else if (val != null)
-						// {
-						// activeStrips[i] = new VoxelFace(val);
-						// }
 						if (val != null)
 						{
 							if (activeStrips[i] == null)
@@ -234,6 +218,6 @@ public class ChunkRenderer
 				if (activeStrips[i] != null) strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 		}
 		
-		return strips1;
+		return strips2;
 	}
 }
