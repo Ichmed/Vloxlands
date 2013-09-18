@@ -80,10 +80,9 @@ public class Container extends ClickableGui
 	public void handleMouse(int posX, int posY, int flag)
 	{
 		Vector2f off = getParentOffset();
-		// CFG.p(getClass(), Vector2f.add(off, getPosition(), null));
 		for (IGuiElement g : components)
 		{
-			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x + (int) off.x, y + (int) off.y))
+			if (g instanceof ClickableGui && ((ClickableGui) g).isUnderCursor(x + (int) off.x, y + (int) off.y) && g.isEnabled() && g.isVisible())
 			{
 				((ClickableGui) g).handleMouse(posX, posY, flag);
 			}

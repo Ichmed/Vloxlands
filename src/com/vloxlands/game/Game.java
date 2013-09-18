@@ -405,7 +405,7 @@ public class Game
 		{
 			IP = ip;
 			
-			Player player = new Player("Player");
+			Player player = new Player("Player", IP, 0);
 			Game.client = new Client(player);
 		}
 	}

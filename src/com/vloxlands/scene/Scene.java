@@ -1,5 +1,7 @@
 package com.vloxlands.scene;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,6 +80,7 @@ public abstract class Scene
 	{
 		renderContent();
 		
+		glColor3f(1, 1, 1);
 		if (titled) RenderAssistant.renderLine(0, 83, Display.getWidth(), true, true);
 	}
 	

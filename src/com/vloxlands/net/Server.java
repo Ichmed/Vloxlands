@@ -198,6 +198,7 @@ public class Server extends Thread
 					colors.remove(p.getColor());
 				
 				player.setColor(colors.get(0));
+				player.setPort(port);
 				clients.add(player);
 				if (!connectableClients.contains(player)) connectableClients.add(player);
 				try
@@ -296,10 +297,11 @@ public class Server extends Thread
 			{
 				Packet6Player packet = new Packet6Player(data);
 				Player player = packet.getPlayer();
+				player.setPort(port);
 				for (int i = 0; i < clients.size(); i++)
 				{
 					Player p = clients.get(i);
-					if (p.getIP().equals(player.getIP()) && p.getPort() == player.getPort())
+					if (player.getUsername().equals(p.getUsername()))
 					{
 						clients.set(i, player);
 						break;

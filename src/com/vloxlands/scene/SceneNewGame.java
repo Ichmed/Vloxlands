@@ -48,6 +48,7 @@ public class SceneNewGame extends Scene
 	
 	static Container lobby;
 	static ChatContainer chat;
+	static Container otherColors;
 	static float progress;
 	static String progressString;
 	static boolean wasRejoining = false;
@@ -189,6 +190,43 @@ public class SceneNewGame extends Scene
 		}
 		mapsize.setTitles(titles);
 		content.add(mapsize);
+		
+		int size = 35;
+		int spacing = 5;
+		int inRow = 3;
+		// width - 400, height - 20 - 6
+		otherColors = new Container(0, 0, 30 + inRow * (size + spacing), 30 + (int) Math.ceil(Player.COLORS.length / (float) inRow) * (size + spacing), true, true);
+		otherColors.setZIndex(10);
+		otherColors.setVisible(false);
+		
+		for (int i = 0; i < Player.COLORS.length; i++)
+		{
+			final ColorLabel cl = new ColorLabel(15 + (size + spacing) * (i % inRow), 15 + (size + spacing) * (i / inRow), size, Player.COLORS[i]);
+			cl.parent = otherColors;
+			cl.setZIndex(11);
+			cl.setClickEvent(new IGuiEvent()
+			{
+				@Override
+				public void trigger()
+				{
+					otherColors.setVisible(false);
+					otherColors.components.get(Assistant.asList(Player.COLORS).indexOf(Game.client.getPlayer().getColor())).setEnabled(true);
+					Game.client.getPlayer().setColor(cl.getColor());
+					cl.setEnabled(false);
+					try
+					{
+						Game.client.sendPacket(new Packet6Player(Game.client.getPlayer()));
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				}
+			});
+			otherColors.add(cl);
+		}
+		content.add(otherColors);
+		
 		try
 		{
 			Game.client.sendPacket(new Packet4ServerInfo());
@@ -248,10 +286,9 @@ public class SceneNewGame extends Scene
 			slot.components.get(0).setEnabled(bool); // rename
 			slot.components.get(1).setEnabled(Game.client.isConnectedToLocalhost() && !bool); // kick
 			slot.components.get(2).setEnabled(bool); // ready
-			slot.components.get(4).setEnabled(bool);
-			ColorLabel cl = (ColorLabel) slot.components.get(4); // colorLabel
+			ColorLabel cl = (ColorLabel) slot.components.get(3); // colorLabel
+			cl.setEnabled(bool);
 			
-			final Container otherColors = (Container) slot.components.get(3);
 			ArrayList<Color> colors = Assistant.asList(Player.COLORS);
 			for (IGuiElement g : otherColors.components)
 				g.setEnabled(true);
@@ -264,13 +301,9 @@ public class SceneNewGame extends Scene
 				@Override
 				public void trigger()
 				{
-					for (IGuiElement iG : lobby.components)
-					{
-						LobbySlot slot = (LobbySlot) iG;
-						slot.components.get(3).setVisible(false);
-					}
-					
-					slot.components.get(3).setVisible(true);
+					otherColors.setVisible(!otherColors.isVisible());
+					otherColors.setX(slot.getX() + slot.getWidth() - 400 + lobby.getX());
+					otherColors.setY(slot.getY() + slot.getHeight() - 26 + lobby.getY());
 				}
 			});
 		}
@@ -362,10 +395,12 @@ public class SceneNewGame extends Scene
 					LobbySlot slot = (LobbySlot) iG;
 					if (slot.getPlayer().getUsername().equals(player.getUsername()))
 					{
-						TextButton tb = (TextButton) slot.components.get(2);
+						TextButton tb = (TextButton) slot.components.get(2); // ready
 						tb.setActive(player.isReady());
 						if (player.isReady()) tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
 						else tb.textColor = new Vector3f(1, 1, 1);
+						ColorLabel cl = (ColorLabel) slot.components.get(3); // colorLabel
+						cl.setColor(player.getColor());
 						
 						if (Game.client.isConnectedToLocalhost()) start.setEnabled(Game.server.areAllClientsReady());
 						break;

@@ -13,6 +13,7 @@ import com.vloxlands.util.RenderAssistant;
 public class ColorLabel extends Container
 {
 	Color color;
+	public boolean grayOnDisable = true;
 	
 	public ColorLabel(int x, int y, int size, Color color)
 	{
@@ -33,13 +34,17 @@ public class ColorLabel extends Container
 		return color;
 	}
 	
+	public void setColor(Color c)
+	{
+		color = c;
+	}
+	
 	@Override
 	public void render()
 	{
-		if (!enabled) Color.gray.bind();
+		if (!enabled && grayOnDisable) Color.gray.bind();
 		super.render();
 		glEnable(GL_BLEND);
-		glColor3f(1, 1, 1);
 		
 		int fac = 8;
 		TextureImpl.bindNone();
@@ -49,7 +54,7 @@ public class ColorLabel extends Container
 		glColor4f(1, 1, 1, 0.5f);
 		RenderAssistant.bindTexture("/graphics/textures/ui/colorMod.png");
 		RenderAssistant.renderRect(x + fac, y + fac, width - fac * 2, height - fac * 2);
-		if (!enabled)
+		if (!enabled && grayOnDisable)
 		{
 			glColor4f(0.1f, 0.1f, 0.1f, 0.5f);
 			RenderAssistant.drawRect(x + fac, y + fac, width - fac * 2, height - fac * 2);

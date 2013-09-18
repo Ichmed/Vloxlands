@@ -9,7 +9,6 @@ import com.vloxlands.game.Game;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.packet.Packet1Disconnect;
 import com.vloxlands.net.packet.Packet6Player;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
@@ -170,34 +169,7 @@ public class LobbySlot extends Container
 		add(ready);
 		
 		ColorLabel c = new ColorLabel(width - 400, 1, height - 20, p.getColor());
-		
-		int size = 35;
-		int spacing = 5;
-		int inRow = 3;
-		
-		final Container otherColors = new Container(width - 400, c.height - 6, 30 + inRow * (size + spacing), 30 + (int) Math.ceil(Player.COLORS.length / (float) inRow) * (size + spacing), true, true);
-		otherColors.parent = this;
-		otherColors.setZIndex(10);
-		otherColors.setVisible(false);
-		
-		for (int i = 0; i < Player.COLORS.length; i++)
-		{
-			final ColorLabel cl = new ColorLabel(15 + (size + spacing) * (i % inRow), 15 + (size + spacing) * (i / inRow), size, Player.COLORS[i]);
-			cl.parent = otherColors;
-			cl.setZIndex(11);
-			cl.setClickEvent(new IGuiEvent()
-			{
-				@Override
-				public void trigger()
-				{
-					CFG.p(cl.getColor());
-					otherColors.setVisible(false);
-				}
-			});
-			otherColors.add(cl);
-		}
-		add(otherColors);
-		
+		c.grayOnDisable = false;
 		add(c);
 	}
 }
