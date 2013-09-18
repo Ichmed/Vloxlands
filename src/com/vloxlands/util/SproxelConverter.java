@@ -1,6 +1,10 @@
 package com.vloxlands.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
@@ -12,6 +16,7 @@ import org.newdawn.slick.Color;
 
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
+import com.vloxlands.settings.CFG;
 
 /**
  * @author Dakror
@@ -69,6 +74,10 @@ public class SproxelConverter
 		
 		String cell;
 		int index = 0;
+		
+		CFG.p("> reading cell data");
+		
+		
 		while ((cell = csv.readNext()) != null)
 		{
 			int x = index / (blocks.length * blocks[0].length);
@@ -84,10 +93,16 @@ public class SproxelConverter
 			}
 			index++;
 		}
+		
+		CFG.p("> generating faces");
 		HashMap<VoxelFaceKey, VoxelFace>[] faces = generateFaces(blocks);
+		
+		CFG.p("> running greedy meshing");
 		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces[0], blocks.length, blocks[0].length, blocks[0][0].length);
 		
+		CFG.p("> saving obj file");
 		saveOBJ(new File(f.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
+		CFG.p("> DONE");
 	}
 	
 	public static long parseLong(String hex)
@@ -295,9 +310,70 @@ public class SproxelConverter
 	
 	public static void saveOBJ(File f, int width, int height, int depth, HashMap<VoxelFaceKey, VoxelFace> meshes)
 	{
-		// TODO: save here
-		
-		// f is the reference to the target .obj file
-		// the needed .mtl file has yet to be created
+		try
+		{
+			String br = "\r\n";
+			String mtlTemplate = "newmtl mtl%i%" + br //
+					+ "illum 4" + br //
+					+ "Kd %r% %g% %b% %a%" + br //
+					+ "Ka 0.00 0.00 0.00" + br //
+					+ "Tf 1.00 1.00 1.00" + br //
+					+ "Ni 1.00" + br + br;
+			
+			BufferedWriter obj = new BufferedWriter(new FileWriter(f));
+			BufferedWriter mtl = new BufferedWriter(new FileWriter(new File(f.getPath().replace(".obj", ".mtl"))));
+			
+			obj.write("mtllib " + f.getName().replace(".obj", ".mtl") + br);
+			
+			ArrayList<Vector3f> vertices = new ArrayList<>();
+			ArrayList<Color> materials = new ArrayList<>();
+			
+			CFG.p("  > sorting vertices & materials");
+			
+			for (VoxelFace vf : meshes.values())
+			{
+				if (!materials.contains(loadColor(vf.textureIndex))) materials.add(loadColor(vf.textureIndex));
+				
+				if (!vertices.contains(vf.bl)) vertices.add(vf.bl);
+				if (!vertices.contains(vf.br)) vertices.add(vf.br);
+				if (!vertices.contains(vf.tl)) vertices.add(vf.tl);
+				if (!vertices.contains(vf.tr)) vertices.add(vf.tr);
+			}
+			
+			CFG.p("  > writing vertices");
+			
+			for (Vector3f v : vertices)
+				obj.write("v " + (v.x / width) + " " + (v.y / height) + " " + (v.z / depth) + br);
+			
+			CFG.p("  > writing materials");
+			
+			for (int i = 0; i < materials.size(); i++)
+			{
+				Color c = materials.get(i);
+				mtl.write(mtlTemplate.replace("%i%", "" + i).replace("%r%", "" + c.r).replace("%g%", "" + c.g).replace("%b%", "" + c.b).replace("%a%", "" + c.a));
+			}
+			
+			obj.write(br);
+			
+			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
+			
+			CFG.p("  > writing faces");
+			
+			for (int i = 0; i < values.size(); i++)
+			{
+				VoxelFace face = values.get(i);
+				
+				obj.write("usemtl mtl" + materials.indexOf(loadColor(face.textureIndex)) + br);
+				obj.write("f " + (vertices.indexOf(face.bl) + 1) + " " + (vertices.indexOf(face.br) + 1) + " " + (vertices.indexOf(face.tl) + 1) + " " + (vertices.indexOf(face.tr) + 1) + br);
+			}
+			
+			
+			obj.close();
+			mtl.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
