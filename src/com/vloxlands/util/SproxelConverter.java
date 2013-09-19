@@ -12,7 +12,6 @@ import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.Color;
 
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
@@ -26,16 +25,15 @@ public class SproxelConverter
 	static class Block
 	{
 		int x, y, z;
-		long c;
-		Color color;
 		
-		Block(int x, int y, int z, long c)
+		boolean filled;
+		
+		Block(int x, int y, int z, boolean filled)
 		{
 			this.x = x;
 			this.y = y;
 			this.z = z;
-			this.c = c;
-			color = loadColor(c);
+			this.filled = filled;
 		}
 	}
 	
@@ -85,7 +83,7 @@ public class SproxelConverter
 			int z = index % blocks[0][0].length;
 			try
 			{
-				blocks[x][y][z] = new Block(x, y, z, parseLong(cell));
+				blocks[x][y][z] = new Block(x, y, z, !cell.equals("#00000000"));
 			}
 			catch (Exception e)
 			{
@@ -95,71 +93,44 @@ public class SproxelConverter
 		}
 		
 		CFG.p("> generating faces");
-		HashMap<VoxelFaceKey, VoxelFace>[] faces = generateFaces(blocks);
+		HashMap<VoxelFaceKey, VoxelFace> faces = generateFaces(blocks);
 		
 		CFG.p("> running greedy meshing");
-		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces[0], blocks.length, blocks[0].length, blocks[0][0].length);
+		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces, blocks.length, blocks[0].length, blocks[0][0].length);
 		
 		CFG.p("> saving obj file");
 		saveOBJ(new File(f.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
 		CFG.p("> DONE");
 	}
 	
-	public static long parseLong(String hex)
-	{
-		hex = hex.toLowerCase().replace("0x", "").replace("#", "");
-		
-		long value = 0;
-		for (int i = 0; i < hex.length(); i++)
-		{
-			value += Math.pow(16, hex.length() - i - 1) * Integer.parseInt(hex.substring(i, i + 1), 16);
-		}
-		
-		return value;
-	}
-	
-	public static Color loadColor(long value)
-	{
-		long r = (value & 0xFF000000) >> 24;
-		long g = (value & 0x00FF0000) >> 16;
-		long b = (value & 0x0000FF00) >> 8;
-		long a = (value & 0x000000FF);
-		
-		return new Color((int) r, (int) g, (int) b, (int) a);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static HashMap<VoxelFaceKey, VoxelFace>[] generateFaces(Block[][][] blocks)
+	public static HashMap<VoxelFaceKey, VoxelFace> generateFaces(Block[][][] blocks)
 	{
 		HashMap<VoxelFaceKey, VoxelFace> faces = new HashMap<>();
-		HashMap<VoxelFaceKey, VoxelFace> transparentFaces = new HashMap<>();
 		for (int x = 0; x < blocks.length; x++)
 		{
 			for (int y = 0; y < blocks[x].length; y++)
 			{
 				for (int z = 0; z < blocks[x][y].length; z++)
 				{
-					Color v = blocks[x][y][z].color;
 					for (Direction d : Direction.values())
 					{
 						int x1 = x + (int) d.dir.x;
 						int y1 = y + (int) d.dir.y;
 						int z1 = z + (int) d.dir.z;
-						Color w = null;
-						if (x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < blocks.length && y1 < blocks[x].length && z1 < blocks[x][y].length) w = blocks[x1][y1][z1].color;
+						boolean outOfBounds = !(x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < blocks.length && y1 < blocks[x].length && z1 < blocks[x][y].length);
 						
-						if (w == null || w.a != 1 && !w.equals(v))
+						boolean filled = (outOfBounds) ? true : blocks[x1][y1][z1].filled;
+						if (filled)
 						{
-							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), blocks[x][y][z].c);
-							if (v.a == 1 || w == null) faces.put(new VoxelFaceKey(x, y, z, d.ordinal()), f);
-							else transparentFaces.put(new VoxelFaceKey(x, y, z, d.ordinal()), f);
+							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), 0);
+							faces.put(new VoxelFaceKey(x, y, z, d.ordinal()), f);
 						}
 					}
 				}
 			}
 		}
 		
-		return new HashMap[] { faces, transparentFaces };
+		return faces;
 	}
 	
 	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(HashMap<VoxelFaceKey, VoxelFace> originalMap, int width, int height, int depth)
@@ -313,12 +284,6 @@ public class SproxelConverter
 		try
 		{
 			String br = "\r\n";
-			String mtlTemplate = "newmtl mtl%i%" + br //
-					+ "illum 4" + br //
-					+ "Kd %r% %g% %b% %a%" + br //
-					+ "Ka 0.00 0.00 0.00" + br //
-					+ "Tf 1.00 1.00 1.00" + br //
-					+ "Ni 1.00" + br + br;
 			
 			BufferedWriter obj = new BufferedWriter(new FileWriter(f));
 			BufferedWriter mtl = new BufferedWriter(new FileWriter(new File(f.getPath().replace(".obj", ".mtl"))));
@@ -326,14 +291,11 @@ public class SproxelConverter
 			obj.write("mtllib " + f.getName().replace(".obj", ".mtl") + br);
 			
 			ArrayList<Vector3f> vertices = new ArrayList<>();
-			ArrayList<Color> materials = new ArrayList<>();
 			
-			CFG.p("  > sorting vertices & materials");
+			CFG.p("  > sorting vertices");
 			
 			for (VoxelFace vf : meshes.values())
 			{
-				if (!materials.contains(loadColor(vf.textureIndex))) materials.add(loadColor(vf.textureIndex));
-				
 				if (!vertices.contains(vf.bl)) vertices.add(vf.bl);
 				if (!vertices.contains(vf.br)) vertices.add(vf.br);
 				if (!vertices.contains(vf.tl)) vertices.add(vf.tl);
@@ -345,28 +307,30 @@ public class SproxelConverter
 			for (Vector3f v : vertices)
 				obj.write("v " + (v.x / width) + " " + (v.y / height) + " " + (v.z / depth) + br);
 			
-			CFG.p("  > writing materials");
-			
-			for (int i = 0; i < materials.size(); i++)
-			{
-				Color c = materials.get(i);
-				mtl.write(mtlTemplate.replace("%i%", "" + i).replace("%r%", "" + c.r).replace("%g%", "" + c.g).replace("%b%", "" + c.b).replace("%a%", "" + c.a));
-			}
-			
 			obj.write(br);
 			
 			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
 			
 			CFG.p("  > writing faces");
 			
+			obj.write("usemtl mtl0" + br);
+			
+			mtl.write("newmtl mtl0" + br //
+					+ "Ns 0.000000" + br //
+					+ "Ka 0.000000 0.000000 0.000000" + br //
+					+ "Kd 0.000000 0.000000 0.000000" + br //
+					+ "Ks 0.000000 0.000000 0.000000" + br //
+					+ "Ni 0.000000" + br //
+					+ "d 0.000000" + br //
+					+ "illum 0" + br //
+					+ "map_Kd FILENAME");
+			
 			for (int i = 0; i < values.size(); i++)
 			{
 				VoxelFace face = values.get(i);
 				
-				obj.write("usemtl mtl" + materials.indexOf(loadColor(face.textureIndex)) + br);
 				obj.write("f " + (vertices.indexOf(face.bl) + 1) + " " + (vertices.indexOf(face.br) + 1) + " " + (vertices.indexOf(face.tl) + 1) + " " + (vertices.indexOf(face.tr) + 1) + br);
 			}
-			
 			
 			obj.close();
 			mtl.close();
