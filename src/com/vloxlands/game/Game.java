@@ -83,17 +83,21 @@ public class Game
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
+		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		// ShaderLoader.useProgram("/graphics/shaders/", "default");
 		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		// else RenderAssistant.disable(GL_LIGHTING);
+		
 		// -- BEGIN: update stuff that needs the GL Context -- //
 		
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
+		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { u.x, u.y, u.z, 1 }));
 		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		frustum.calculateFrustum();
@@ -138,6 +142,7 @@ public class Game
 		}
 		
 		RenderAssistant.set2DRenderMode(true);
+		glDisable(GL_LIGHTING);
 		
 		glPushMatrix();
 		{
@@ -255,19 +260,28 @@ public class Game
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_DEPTH_TEST);
 		
 		glShadeModel(GL_SMOOTH);
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_POINT_SMOOTH);
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 		glEnable(GL_LINE_SMOOTH);
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		
-		// glEnable(GL_LIGHTING);
-		// glEnable(GL_LIGHT0);
-		// glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1f }));
-		// glLight(GL_LIGHT0, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1.5f, 1.5f, 1.5f, 1 }));
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.75f, 0.75f, 0.75f, 1 }));
+		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
+		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
+		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
+		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { 0, 0, 0, 1 }));
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT, GL_DIFFUSE);
+		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
+		
 		// glEnable(GL_COLOR_MATERIAL);
 		// glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		// glMaterialf(GL_FRONT, GL_SHININESS, 100f);

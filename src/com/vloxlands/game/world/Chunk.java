@@ -65,7 +65,11 @@ public class Chunk
 		}
 		if (Game.frustum.sphereInFrustum(x * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.x, y * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.y, z * Island.CHUNKSIZE + Island.CHUNKSIZE / 2 + i.pos.z, Island.CHUNKSIZE * (float) Math.sqrt(2)))
 		{
-			glCallList(opaque ? opaqueID : transparentID);
+			glPushMatrix();
+			{
+				glCallList(opaque ? opaqueID : transparentID);
+			}
+			glPopMatrix();
 		}
 	}
 	

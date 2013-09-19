@@ -15,7 +15,7 @@ import com.vloxlands.util.RenderAssistant;
 public class VoxelFace
 {
 	public Direction dir;
-	public Vector3f pos, tl, tr, bl, br;
+	public Vector3f pos, tl, tr, bl, br, n;
 	
 	public int textureIndex;
 	public int sizeX, sizeY, sizeZ;
@@ -118,6 +118,8 @@ public class VoxelFace
 			default:
 				break;
 		}
+		
+		n = Vector3f.cross(br, tl, null).normalise(null);
 	}
 	
 	public void increaseSize(int sizeX, int sizeY, int sizeZ)
@@ -157,23 +159,23 @@ public class VoxelFace
 				int vertical = (dirVertical) ? 0 : 1 + ((sizeY > sizeX && sizeY > sizeZ) ? -1 : 0);
 				
 				glTexCoord2d(0, 0);
-				glNormal3d(0, 0, -1);
+				glNormal3d(n.x, n.y, n.z);
 				glVertex3f(tl.x, tl.y, tl.z);
 				
 				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], 0);
 				else glTexCoord2d(ints[1 + vertical], 0);
-				glNormal3d(0, 0, -1);
+				glNormal3d(n.x, n.y, n.z);
 				glVertex3f(tr.x, tr.y, tr.z);
 				
 				if (dirVertical && sizeX > sizeZ) glTexCoord2d(ints[2], ints[1]);
 				else glTexCoord2d(ints[1 + vertical], ints[2 - vertical]);
-				glNormal3d(0, 0, -1);
+				glNormal3d(n.x, n.y, n.z);
 				glVertex3f(br.x, br.y, br.z);
 				
 				
 				if ((dirVertical && sizeX > sizeZ)) glTexCoord2d(0, ints[1]);
 				else glTexCoord2d(0, ints[2 - vertical]);
-				glNormal3d(0, 0, -1);
+				glNormal3d(n.x, n.y, n.z);
 				glVertex3f(bl.x, bl.y, bl.z);
 			}
 			glEnd();

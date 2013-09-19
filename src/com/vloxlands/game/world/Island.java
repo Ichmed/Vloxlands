@@ -211,7 +211,6 @@ public class Island
 	
 	public void render()
 	{
-		glEnable(GL_CULL_FACE);
 		glTranslatef(pos.x, pos.y, pos.z);
 		
 		int s = SIZE / CHUNKSIZE;

@@ -115,7 +115,6 @@ public class SceneGame extends Scene
 		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 		
 		RenderAssistant.renderRect(0, 0, Display.getWidth(), Display.getHeight());
-		
 		super.render();
 		
 		glDisable(GL_BLEND);
