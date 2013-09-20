@@ -80,6 +80,7 @@ public class UpdateThread extends Thread
 				
 				if (Game.currentMap != null)
 				{
+					if (Game.currentMap != null && Game.currentMap.initialized) Game.currentMap.onTick();
 					// if (Keyboard.isKeyDown(Keyboard.KEY_R))
 					// {
 					// Game.currentGame.lightPos.x = Game.currentGame.camera.position.x;
