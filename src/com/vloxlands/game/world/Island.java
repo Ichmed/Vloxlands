@@ -334,16 +334,7 @@ public class Island
 	
 	public Chunk getChunk(int x, int y, int z)
 	{
-		try
-		{
-			
-			return chunks[x][y][z];
-		}
-		catch (Exception e)
-		{
-			CFG.p(x, y, z);
-			return null;
-		}
+		return chunks[x][y][z];
 	}
 	
 	public Vector3f getSmallestNonAirVoxel()
