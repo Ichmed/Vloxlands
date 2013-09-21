@@ -50,7 +50,7 @@ public class Game
 	public static Game currentGame;
 	public static Map currentMap;
 	
-	public static final float zNear = 0.01f, zFar = 200;
+	public static final float zNear = 0.01f;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	// public static MapGenerator mapGenerator;
@@ -83,7 +83,7 @@ public class Game
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
+		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -102,8 +102,8 @@ public class Game
 		glFog(GL_FOG_COLOR, fogColor);
 		glFogf(GL_FOG_DENSITY, 0.8f);
 		glHint(GL_FOG_HINT, GL_DONT_CARE);
-		glFogf(GL_FOG_START, zFar - 40);
-		glFogf(GL_FOG_END, zFar);
+		glFogf(GL_FOG_START, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 40);
+		glFogf(GL_FOG_END, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		
 		// ShaderLoader.useProgram("/graphics/shaders/", "default");
 		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);

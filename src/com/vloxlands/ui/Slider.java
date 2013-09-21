@@ -5,7 +5,6 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Font;
 import java.util.HashMap;
 
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.MathHelper;
@@ -164,7 +163,6 @@ public class Slider extends ClickableGui
 	public void setStepSize(float f)
 	{
 		stepSize = f / (maxValue - minValue) * 100;
-		CFG.p(stepSize);
 		stepMode = true;
 	}
 	

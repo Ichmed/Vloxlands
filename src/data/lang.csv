@@ -26,6 +26,13 @@ islands;Islands;Inseln
 language;Language;Sprache
 fov;Field of View;Sichtfeld
 fps;FPS Cap;FPS Begrenzung
+zfar;Render Distance;Sichtweite
+zfar.tiny;Tiny;Winzig
+zfar.short;Short;Kurz
+zfar.normal;Normal;Normal
+zfar.far;Far;Weit
+zfar.unlimited;Unlimited;Unbegrenzt
+zfar.extreme;Extreme;Extrem
 username;Username;Benutzername
 ip;IP-Address;IP-Adresse
 namechange;Rename;Name aendern

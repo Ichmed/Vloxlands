@@ -23,13 +23,12 @@ public class Settings
 			data.put("fullscreen", CFG.FULLSCREEN);
 			data.put("fov", CFG.FOV);
 			data.put("fps", CFG.FPS);
+			data.put("zfar", CFG.RENDER_DISTANCE);
 			
 			Assistant.setFileContent(file, data.toString());
 		}
 		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+		{}
 	}
 	
 	public static void loadSettings()
@@ -49,13 +48,9 @@ public class Settings
 			CFG.FULLSCREEN = data.getBoolean("fullscreen");
 			CFG.FOV = data.getInt("fov");
 			CFG.FPS = data.getInt("fps");
-			// CFG.USERNAME = data.getString("username");
-			// CFG.PASSWORD = data.getString("password");
-			// CFG.SAVE_USER = CFG.USERNAME.length() > 0;
+			CFG.RENDER_DISTANCE = data.getInt("zfar");
 		}
 		catch (JSONException e)
-		{
-			e.printStackTrace();
-		}
+		{}
 	}
 }

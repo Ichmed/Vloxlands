@@ -42,6 +42,19 @@ public class SceneSettings extends Scene
 		fps.setIntegerMode(true);
 		content.add(fps);
 		
+		content.add(new Label(20, 245, 0, 25, Tr._("zfar") + ":", false));
+		
+		final Slider zfar = new Slider(Display.getWidth() / 4, 320, Display.getWidth() / 4 - 20, 0, CFG.RENDER_DISTANCES.length - 1, CFG.RENDER_DISTANCE, GuiRotation.HORIZONTAL);
+		zfar.setIntegerMode(true);
+		zfar.setStepSize(1);
+		zfar.addCustomTitle(0, Tr._("zfar.tiny"));
+		zfar.addCustomTitle(1, Tr._("zfar.short"));
+		zfar.addCustomTitle(2, Tr._("zfar.normal"));
+		zfar.addCustomTitle(3, Tr._("zfar.far"));
+		zfar.addCustomTitle(4, Tr._("zfar.unlimited"));
+		
+		content.add(zfar);
+		
 		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
 		{
@@ -63,6 +76,7 @@ public class SceneSettings extends Scene
 			{
 				CFG.FOV = (int) fov.getValue();
 				CFG.FPS = (int) fps.getValue();
+				CFG.RENDER_DISTANCE = (int) zfar.getValue();
 				// CFG.SAVE_USER = remember.isSelected();
 				
 				Settings.saveSettings();

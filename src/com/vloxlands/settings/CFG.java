@@ -27,6 +27,12 @@ public class CFG
 	
 	public static int FOV = 30;
 	public static int FPS = 60;
+	
+	/**
+	 * tiny, short, normal, far, unlimited
+	 */
+	public static final int[] RENDER_DISTANCES = { 100, 350, 500, 800, 10000 };
+	public static int RENDER_DISTANCE = 2;
 	public static boolean LIGHTING = false;
 	public static boolean FULLSCREEN = false;
 	public static boolean SHOW_CHUNK_BOUNDRIES = false;
