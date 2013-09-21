@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.HashMap;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
@@ -19,11 +20,35 @@ public class Chunk
 	boolean opaqueUTD = false;
 	boolean transparentUTD = false;
 	
+	/**
+	 * Keeps track of which resources can be found on this Chunk
+	 */
+	int[] resources = new int[Voxel.VOXELS];
+	
+	
 	public Chunk(int x, int y, int z)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		for (int i = 0; i < resources.length; i++)
+			resources[i] = 0;
+		
+		resources[Voxel.get("AIR").getId() + 128] = (int) Math.pow(Island.CHUNKSIZE, 3);
+	}
+	
+	public int getResource(Voxel v)
+	{
+		return resources[v.getId() + 128];
+	}
+	
+	public void addResource(Voxel v, int val)
+	{
+		if (resources[v.getId() + 128] + val > -1)
+		{
+			resources[v.getId() + 128] += val;
+		}
 	}
 	
 	public void updateMesh(Island i)

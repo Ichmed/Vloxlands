@@ -42,5 +42,4 @@ public class SpikeGenerator extends Generator
 		Generator.generateBezier(island, BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
 		gen.updateProgress();
 	}
-	
 }

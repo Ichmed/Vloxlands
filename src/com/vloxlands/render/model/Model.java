@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.MathHelper;
@@ -24,6 +25,8 @@ public class Model
 	public boolean hasTextures = false;
 	public boolean usesMaterials = false;
 	
+	int displayListID;
+	
 	/**
 	 * A list of all faces that make up this model, divided into smaller groups for use with materials
 	 */
@@ -34,21 +37,25 @@ public class Model
 	public List<String> faceMaterials = new ArrayList<>();
 	
 	public Model()
-	{}
+	{
+		displayListID = glGenLists(1);
+	}
 	
 	/**
-	 * renders the Model with the textures, color, etc.
+	 * renders the Model with the textures, color, etc. into a displayList
 	 */
 	public void renderModel()
 	{
-		if (!this.usesMaterials) glDisable(GL_TEXTURE_2D);
+		glNewList(displayListID, GL_COMPILE);
+		
+		if (!usesMaterials) TextureImpl.bindNone();
 		for (int i = 0; i < faces.size(); i++)
 		{
-			if (this.usesMaterials)
+			if (usesMaterials)
 			{
 				Material m = materials.get(faceMaterials.get(i));
 				if (m.hasTexture) RenderAssistant.bindTexture(m.texturePath);
-				else glDisable(GL_TEXTURE_2D);
+				else TextureImpl.bindNone();
 				
 				// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
 				
@@ -58,29 +65,36 @@ public class Model
 				
 				glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);
 			}
-			glBegin(GL_TRIANGLES);
-			for (Face face : this.faces.get(i))
+			
+			for (Face face : faces.get(i))
 			{
+				glBegin((face.points.length == 3) ? GL_TRIANGLES : GL_QUADS);
 				for (int j = 0; j < face.points.length; j++)
 				{
-					if (this.hasNormals)
+					if (hasNormals)
 					{
-						Vector3f n1 = this.normals.get((int) face.points[j].z - 1);
+						Vector3f n1 = normals.get((int) face.points[j].z - 1);
 						glNormal3f(n1.x, n1.y, n1.z);
 					}
-					if (this.hasTextures)
+					if (hasTextures)
 					{
-						Vector2f t1 = this.tetxures.get((int) face.points[j].y - 1);
+						Vector2f t1 = tetxures.get((int) face.points[j].y - 1);
 						glTexCoord2f(t1.x, 1 - t1.y);
 					}
-					Vector3f v1 = this.vertices.get((int) face.points[j].x - 1);
+					Vector3f v1 = vertices.get((int) face.points[j].x - 1);
 					glVertex3f(v1.x, v1.y, v1.z);
 				}
 				
 			}
 			glEnd();
 		}
-		glEnable(GL_TEXTURE_2D);
+		
+		glEndList();
+	}
+	
+	public void render()
+	{
+		glCallList(displayListID);
 	}
 	
 	/**
@@ -89,7 +103,7 @@ public class Model
 	public List<Face> getFaceList()
 	{
 		List<Face> l = new ArrayList<>();
-		for (List<Face> p : this.faces)
+		for (List<Face> p : faces)
 		{
 			for (Face f : p)
 				l.add(f);
@@ -97,12 +111,12 @@ public class Model
 		return l;
 	}
 	
-	public Vector3f[] getVerteciesAsArray()
+	public Vector3f[] getVerticesAsArray()
 	{
-		Vector3f[] v = new Vector3f[this.vertices.size()];
-		for (int i = 0; i < this.vertices.size(); i++)
+		Vector3f[] v = new Vector3f[vertices.size()];
+		for (int i = 0; i < vertices.size(); i++)
 		{
-			Vector3f w = this.vertices.get(i);
+			Vector3f w = vertices.get(i);
 			v[i] = new Vector3f(w.x, w.y, w.z);
 		}
 		return v;

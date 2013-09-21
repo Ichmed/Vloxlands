@@ -22,8 +22,10 @@ public class Island
 	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	public Chunk[][][] chunks = new Chunk[SIZE / CHUNKSIZE][SIZE / CHUNKSIZE][SIZE / CHUNKSIZE];
 	
+	Vector3f smallestNonAirVoxel, biggestNonAirVoxel;
+	
 	/**
-	 * Keeps track of which 'special' resources can be found on this particular Island
+	 * Keeps track of which resources can be found on this Island
 	 */
 	boolean[] resources = new boolean[Voxel.VOXELS];
 	
@@ -163,13 +165,32 @@ public class Island
 	{
 		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return;
 		setResourceAvailable(Voxel.getVoxelForId(id), true);
+		
+		if (id != Voxel.get("AIR").getId())
+		{
+			chunks[(int) (x / (float) CHUNKSIZE)][(int) (y / (float) CHUNKSIZE)][(int) (z / (float) CHUNKSIZE)].addResource(Voxel.getVoxelForId(voxels[x][y][z]), -1);
+			chunks[(int) (x / (float) CHUNKSIZE)][(int) (y / (float) CHUNKSIZE)][(int) (z / (float) CHUNKSIZE)].addResource(Voxel.getVoxelForId(id), 1);
+		}
 		voxels[x][y][z] = id;
+		
+		if (id != Voxel.get("AIR").getId())
+		{
+			if (smallestNonAirVoxel == null || (x < smallestNonAirVoxel.x && y < smallestNonAirVoxel.y && z < smallestNonAirVoxel.z))
+			{
+				smallestNonAirVoxel = new Vector3f(x, y, z);
+			}
+			
+			if (biggestNonAirVoxel == null || (x > biggestNonAirVoxel.x && y > biggestNonAirVoxel.y && z > biggestNonAirVoxel.z))
+			{
+				biggestNonAirVoxel = new Vector3f(x, y, z);
+			}
+		}
 	}
 	
 	public void setVoxel(int x, int y, int z, byte id, byte metadata)
 	{
-		voxels[x][y][z] = id;
-		voxelMetadata[x][y][z] = metadata;
+		setVoxel(x, y, z, id);
+		setVoxelMetadata(x, y, z, metadata);
 	}
 	
 	public void setVoxelMetadata(int x, int y, int z, byte metadata)
@@ -309,5 +330,20 @@ public class Island
 		}
 		
 		return -1;
+	}
+	
+	public Chunk getChunk(int x, int y, int z)
+	{
+		return chunks[x][y][z];
+	}
+	
+	public Vector3f getSmallestNonAirVoxel()
+	{
+		return smallestNonAirVoxel;
+	}
+	
+	public Vector3f getBiggestNonAirVoxel()
+	{
+		return biggestNonAirVoxel;
 	}
 }

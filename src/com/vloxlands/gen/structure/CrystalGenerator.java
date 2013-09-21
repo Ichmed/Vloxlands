@@ -14,9 +14,9 @@ import com.vloxlands.gen.island.IslandGenerator;
 public class CrystalGenerator extends Generator
 {
 	public static final Voxel[] CRYSTALS = { Voxel.get("STRONG_CRYSTAL"), Voxel.get("MEDIUM_CRYSTAL"), Voxel.get("WEAK_CRYSTAL") };
-	int y;
+	float y;
 	
-	public CrystalGenerator(int y)
+	public CrystalGenerator(float y)
 	{
 		this.y = y;
 	}
@@ -27,10 +27,11 @@ public class CrystalGenerator extends Generator
 		island.calculateWeight();
 		
 		float weightNeededToUplift = island.weight / Map.calculateUplift(y);
+		
 		while (weightNeededToUplift > 100)
 		{
 			int index = (int) (Math.random() * CRYSTALS.length);
-			weightNeededToUplift -= createCrystalVein(island, index, y, weightNeededToUplift);
+			weightNeededToUplift -= createCrystalVein(island, index, weightNeededToUplift);
 		}
 		
 		int[] amounts = new int[CRYSTALS.length];
@@ -40,13 +41,12 @@ public class CrystalGenerator extends Generator
 			weightNeededToUplift %= CRYSTALS[i].getUplift();
 		}
 		
-		placeCrystals(island, amounts, y);
+		placeCrystals(island, amounts, (int) y);
 		
 		island.calculateWeight();
 		island.calculateUplift();
 		
 		island.initBalance = (island.uplift * Map.calculateUplift(0) - island.weight) / 100000f;
-		
 		gen.updateProgress();
 	}
 	
@@ -56,7 +56,7 @@ public class CrystalGenerator extends Generator
 		{
 			for (int i = 0; i < amounts[j]; i++)
 			{
-				Vector3f v = pickRandomNaturalVoxel(island, y);
+				Vector3f v = pickRandomNaturalVoxel(island);
 				island.setVoxel((int) v.x, (int) v.y, (int) v.z, CRYSTALS[j].getId());
 			}
 		}
@@ -65,12 +65,12 @@ public class CrystalGenerator extends Generator
 	/**
 	 * @return uplifted
 	 */
-	private float createCrystalVein(Island island, int index, int y, float maximum)
+	private float createCrystalVein(Island island, int index, float maximum)
 	{
 		int type = 0;// (int) (Math.random() * 3);
 		int width = 0, height = 0, depth = 0;
 		
-		Vector3f c = pickRandomNaturalVoxel(island, y);
+		Vector3f c = pickRandomNaturalVoxel(island);
 		
 		float uplifted = 0;
 		
