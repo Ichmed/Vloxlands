@@ -11,11 +11,12 @@ import com.vloxlands.render.ChunkRenderer;
 public class Map
 {
 	public ArrayList<Island> islands = new ArrayList<>();
-	List<Entity> entities = new ArrayList<>();
 	public boolean initialized = false;
 	public int initializedIslands = 0;
 	
 	public static final int MAXHEIGHT = 512;
+	
+	List<Entity> entities = new ArrayList<>();
 	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}
@@ -34,6 +35,8 @@ public class Map
 	{
 		for (Island i : islands)
 			i.onTick();
+		for(Entity e : entities)
+			e.onTick();
 	}
 	
 	public Island[] getIslands()
