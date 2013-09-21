@@ -18,6 +18,7 @@ import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
+import com.vloxlands.net.packet.Packet0Connect;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Player;
@@ -43,7 +44,7 @@ import com.vloxlands.util.RenderAssistant;
 public class SceneNewGame extends Scene
 {
 	ProgressBar progressBar;
-	TextButton start;
+	TextButton start, back, disco;
 	Spinner mapsize;
 	
 	static Container lobby;
@@ -67,8 +68,6 @@ public class SceneNewGame extends Scene
 		}
 		
 		Game.currentMap = new Map();
-		
-		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		setBackground();
 		
@@ -123,7 +122,7 @@ public class SceneNewGame extends Scene
 		progressBar.setVisible(false);
 		content.add(progressBar);
 		
-		TextButton disco = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
+		disco = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
 		disco.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -135,7 +134,7 @@ public class SceneNewGame extends Scene
 		});
 		content.add(disco);
 		
-		TextButton back = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
+		back = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
 		back.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -155,13 +154,6 @@ public class SceneNewGame extends Scene
 				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.values()[mapsize.getValue()]));
 			}
 		});
-		if (Game.client.isConnectedToLocalhost())
-		{
-			start.setEnabled(true);
-			back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
-			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
-			content.add(start);
-		}
 		
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapsize") + ":", false));
 		mapsize = new Spinner(Display.getWidth() - TextButton.WIDTH - 70, 155, TextButton.WIDTH + 55, 0, MapSize.values().length, 1, 1, GuiRotation.HORIZONTAL);
@@ -181,7 +173,6 @@ public class SceneNewGame extends Scene
 				}
 			}
 		});
-		mapsize.setEnabled(Game.client.isConnectedToLocalhost());
 		String[] titles = new String[MapSize.values().length];
 		for (int i = 0; i < titles.length; i++)
 		{
@@ -226,6 +217,8 @@ public class SceneNewGame extends Scene
 			otherColors.add(cl);
 		}
 		content.add(otherColors);
+		
+		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
 		
 		try
 		{
@@ -369,6 +362,23 @@ public class SceneNewGame extends Scene
 		PacketTypes type = Packet.lookupPacket(data[0]);
 		switch (type)
 		{
+			case CONNECT:
+			{
+				Packet0Connect p = new Packet0Connect(data);
+				if (p.getUsername().equals(Game.client.getUsername()))
+				{
+					if (Game.client.isConnectedToLocalhost())
+					{
+						start.setEnabled(true);
+						back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
+						disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
+						mapsize.setEnabled(Game.client.isConnectedToLocalhost());
+						content.add(start);
+					}
+					
+				}
+			}
+			
 			case RENAME:
 			{
 				try

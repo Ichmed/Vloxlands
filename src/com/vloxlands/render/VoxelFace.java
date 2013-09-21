@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.Arrays;
 
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.game.Game;
 import com.vloxlands.game.world.Island;
@@ -183,6 +184,8 @@ public class VoxelFace
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 		glPopMatrix();
+		
+		TextureImpl.bindNone();
 	}
 	
 	@Override
