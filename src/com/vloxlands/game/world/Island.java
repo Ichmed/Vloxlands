@@ -90,7 +90,7 @@ public class Island
 	
 	public void onTick()
 	{
-		pos.translate(0, ((int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100)) / 100f, 0);
+		pos.translate(0, (int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100f) / 100f, 0);
 	}
 	
 	public void calculateWeight()
@@ -334,7 +334,16 @@ public class Island
 	
 	public Chunk getChunk(int x, int y, int z)
 	{
-		return chunks[x][y][z];
+		try
+		{
+			
+			return chunks[x][y][z];
+		}
+		catch (Exception e)
+		{
+			CFG.p(x, y, z);
+			return null;
+		}
 	}
 	
 	public Vector3f getSmallestNonAirVoxel()

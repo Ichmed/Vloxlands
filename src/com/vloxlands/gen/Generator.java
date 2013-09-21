@@ -10,7 +10,6 @@ import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.gen.island.IslandGenerator;
-import com.vloxlands.settings.CFG;
 import com.vloxlands.util.math.MathHelper;
 
 /**
@@ -54,16 +53,14 @@ public abstract class Generator
 	public static Vector3f pickRandomNaturalChunk(Island island)
 	{
 		Vector3f v = new Vector3f();
-		Vector3f min = (Vector3f) island.getSmallestNonAirVoxel().scale(1.0f / Island.CHUNKSIZE);
-		Vector3f dif = (Vector3f) Vector3f.sub(island.getBiggestNonAirVoxel(), island.getSmallestNonAirVoxel(), null).scale(1.0f / Island.CHUNKSIZE);
-		
+		int s = Island.SIZE / Island.CHUNKSIZE;
 		do
 		{
-			v = new Vector3f((int) Math.round(Math.random() * dif.x), (int) Math.round(Math.random() * dif.y), (int) Math.round(Math.random() * dif.z));
+			v = new Vector3f((int) (Math.random() * s), (int) (Math.random() * s), (int) (Math.random() * s));
 		}
-		while (!hasNaturalVoxel(island.getChunk((int) (v.x + min.x), (int) (v.y + min.y), (int) (v.z + min.z))));
+		while (!hasNaturalVoxel(island.getChunk((int) v.x, (int) v.y, (int) v.z)));
 		
-		return Vector3f.add(v, min, null);
+		return v;
 	}
 	
 	public static boolean hasNaturalVoxel(Chunk c)
@@ -90,9 +87,7 @@ public abstract class Generator
 		
 		Vector3f chunk = pickRandomNaturalChunk(island);
 		
-		Integer[] types = new Integer[Voxel.VOXELS];
-		for (int i = 0; i < types.length; i++)
-			types[i] = 0;
+		ArrayList<Vector3f> chunkVoxels = new ArrayList<>();
 		
 		for (int i = 0; i < Island.CHUNKSIZE; i++)
 		{
@@ -100,39 +95,13 @@ public abstract class Generator
 			{
 				for (int k = 0; k < Island.CHUNKSIZE; k++)
 				{
-					int ind = island.getVoxelId((int) chunk.x * Island.CHUNKSIZE + i, (int) chunk.y * Island.CHUNKSIZE + j, (int) chunk.z * Island.CHUNKSIZE + k) + 128;
-					
-					types[ind]++;
+					byte id = island.getVoxelId((int) chunk.x * Island.CHUNKSIZE + i, (int) chunk.y * Island.CHUNKSIZE + j, (int) chunk.z * Island.CHUNKSIZE + k);
+					if (naturalVoxels.contains(id)) chunkVoxels.add(new Vector3f(i + chunk.x * Island.CHUNKSIZE, j + chunk.y * Island.CHUNKSIZE, k + chunk.z * Island.CHUNKSIZE));
 				}
 			}
 		}
 		
-		CFG.p(types[1], types[2], types[128]);
-		Vector3f v = new Vector3f();
-		int loops = 0;
-		// for (int i = 0; i < Island.CHUNKSIZE; i++)
-		// {
-		// for (int j = 0; j < Island.CHUNKSIZE; j++)
-		// {
-		// for (int k = 0; k < Island.CHUNKSIZE; k++)
-		// {
-		// if (naturalVoxels.contains(island.getVoxelId((int) chunk.x * Island.CHUNKSIZE + i, (int) chunk.y * Island.CHUNKSIZE + j, (int) chunk.z * Island.CHUNKSIZE + k)))
-		// {
-		// return new Vector3f(chunk.x * Island.CHUNKSIZE + i, chunk.y * Island.CHUNKSIZE + j, chunk.z * Island.CHUNKSIZE + k);
-		// }
-		// }
-		// }
-		// }
-		// CFG.p("lol wtf");
-		// return null;
-		do
-		{
-			v = new Vector3f((int) (Math.random() * Island.CHUNKSIZE), (int) (Math.random() * Island.CHUNKSIZE), (int) (Math.random() * Island.CHUNKSIZE));
-			// CFG.p("voxelloop", loops++);
-		}
-		while (!naturalVoxels.contains(island.getVoxelId((int) (v.x + chunk.x * Island.CHUNKSIZE), (int) (v.y + chunk.y * Island.CHUNKSIZE), (int) (v.z + chunk.z * Island.CHUNKSIZE))));
-		
-		return Vector3f.add(v, new Vector3f(chunk.x * Island.CHUNKSIZE, chunk.y * Island.CHUNKSIZE, chunk.z * Island.CHUNKSIZE), null);
+		return chunkVoxels.get((int) (Math.random() * chunkVoxels.size()));
 	}
 	
 	public static Vector2f getRandomCircleInCircle(Vector2f center, int radius, int rad2)
