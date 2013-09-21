@@ -6,9 +6,11 @@ import static org.lwjgl.util.glu.GLU.*;
 import java.awt.Desktop;
 import java.net.InetAddress;
 import java.net.URL;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -48,7 +50,7 @@ public class Game
 	public static Game currentGame;
 	public static Map currentMap;
 	
-	public float zNear = 0.01f, zFar = 500;
+	public static final float zNear = 0.01f, zFar = 200;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	// public static MapGenerator mapGenerator;
@@ -73,30 +75,41 @@ public class Game
 	
 	public void gameLoop()
 	{
-		
 		if (start == 0) start = System.currentTimeMillis();
-		
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		// ShaderLoader.useProgram("/graphics/shaders/", "default");
-		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
-		// else RenderAssistant.disable(GL_LIGHTING);
 		
-		// -- BEGIN: update stuff that needs the GL Context -- //
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
 		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { u.x, u.y, u.z, 1 }));
-		gluPerspective(CFG.FOV, Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		frustum.calculateFrustum();
+		
+		FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
+		fogColor.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
+		
+		glFogi(GL_FOG_MODE, GL_LINEAR);
+		glFog(GL_FOG_COLOR, fogColor);
+		glFogf(GL_FOG_DENSITY, 0.8f);
+		glHint(GL_FOG_HINT, GL_DONT_CARE);
+		glFogf(GL_FOG_START, zFar - 40);
+		glFogf(GL_FOG_END, zFar);
+		
+		// ShaderLoader.useProgram("/graphics/shaders/", "default");
+		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
+		// else RenderAssistant.disable(GL_LIGHTING);
+		
+		// -- BEGIN: update stuff that needs the GL Context -- //
 		
 		if (fullscreenToggled)
 		{
@@ -277,6 +290,8 @@ public class Game
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
+		
+		glEnable(GL_FOG);
 		
 		// glEnable(GL_COLOR_MATERIAL);
 		// glColorMaterial(GL_FRONT, GL_DIFFUSE);
