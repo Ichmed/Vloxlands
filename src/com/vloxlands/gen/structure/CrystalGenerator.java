@@ -7,7 +7,6 @@ import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.Generator;
 import com.vloxlands.gen.island.IslandGenerator;
-import com.vloxlands.settings.CFG;
 
 /**
  * @author Dakror
@@ -47,9 +46,8 @@ public class CrystalGenerator extends Generator
 		island.calculateWeight();
 		island.calculateUplift();
 		
-		
 		island.initBalance = (island.uplift * Map.calculateUplift(y) - island.weight) / 100000f;
-		CFG.p("my", y);
+		
 		gen.updateProgress();
 	}
 	

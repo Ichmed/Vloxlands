@@ -78,22 +78,18 @@ public class IslandGenerator extends Thread
 	 */
 	private Island generatePerfectIsland(int x, int y, int z, int radius)
 	{
-		// int radius = size == ISLAND_SMALL || size == ISLAND_MEDIUM || size == ISLAND_BIG ? getRandomRadius(size) : size;
 		int topLayers = (int) ((float) Math.random() * 3 + 3 + radius / 8.0f);
 		
 		Island island = new Island();
 		
-		// -- top Layers -- //
 		new TopLayerGenerator(x, y, z, radius, topLayers).generate(island, this);
 		
-		// -- Spikes -- //
 		for (int i = 0; i < radius; i++)
 		{
 			new SpikeGenerator(x, y, z, radius, topLayers).generate(island, this);
 		}
 		
 		// clearing upmost level
-		
 		for (int i = 0; i < Island.SIZE; i++) // x axis
 		{
 			for (int j = 0; j < Island.SIZE; j++) // z axis
@@ -102,7 +98,6 @@ public class IslandGenerator extends Thread
 				{
 					island.setVoxel(i, y, j, Voxel.get("DIRT").getId());
 				}
-				
 			}
 		}
 		updateProgress();
