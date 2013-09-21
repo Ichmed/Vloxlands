@@ -219,7 +219,14 @@ public class SceneNewGame extends Scene
 		content.add(otherColors);
 		
 		if (!Game.client.isConnected()) Game.client.connectToServer(Game.IP);
-		
+		if (Game.client.isConnectedToLocalhost())
+		{
+			start.setEnabled(true);
+			back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
+			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
+			mapsize.setEnabled(Game.client.isConnectedToLocalhost());
+			content.add(start);
+		}
 		try
 		{
 			Game.client.sendPacket(new Packet4ServerInfo());
@@ -375,7 +382,6 @@ public class SceneNewGame extends Scene
 						mapsize.setEnabled(Game.client.isConnectedToLocalhost());
 						content.add(start);
 					}
-					
 				}
 			}
 			
