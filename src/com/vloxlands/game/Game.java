@@ -22,8 +22,6 @@ import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
-import com.vloxlands.render.model.Model;
-import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -58,7 +56,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
-	Model m = ModelLoader.loadModel("/graphics/models/BlockMonster2.obj");
+	// Model m = ModelLoader.loadModel("/graphics/models/BlockMonster2.obj");
 	long start = 0;
 	public int frames = 0;
 	
@@ -81,7 +79,7 @@ public class Game
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
-		glDisable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);

@@ -57,6 +57,16 @@ public class Island
 		setResourceAvailable(Voxel.get("AIR"), true);
 	}
 	
+	/**
+	 * Call from client!
+	 */
+	public void calculateInitBalance()
+	{
+		calculateWeight();
+		calculateUplift();
+		initBalance = (uplift * Map.calculateUplift(pos.y) - weight) / 100000f;
+	}
+	
 	public void setResourceAvailable(Voxel v, boolean avail)
 	{
 		resources[v.getId() + 128] = avail;

@@ -52,8 +52,7 @@ public class Map
 		for (Island i : islands)
 		{
 			ChunkRenderer.renderChunks(i);
-			i.calculateWeight();
-			i.calculateUplift();
+			i.calculateInitBalance();
 			initializedIslands++;
 		}
 		initialized = true;

@@ -43,11 +43,6 @@ public class CrystalGenerator extends Generator
 		
 		placeCrystals(island, amounts, (int) y);
 		
-		island.calculateWeight();
-		island.calculateUplift();
-		
-		island.initBalance = (island.uplift * Map.calculateUplift(y) - island.weight) / 100000f;
-		
 		gen.updateProgress();
 	}
 	
