@@ -81,13 +81,13 @@ public class Game
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		// ShaderLoader.useProgram("/graphics/shaders/", "default");
-		if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
-		else RenderAssistant.disable(GL_LIGHTING);
+		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
+		// else RenderAssistant.disable(GL_LIGHTING);
 		
 		// -- BEGIN: update stuff that needs the GL Context -- //
 		

@@ -16,6 +16,7 @@ public class MapGenerator extends Thread
 {
 	public static enum MapSize
 	{
+		DEBUG(1),
 		TINY(3),
 		SMALL(5),
 		MEDIUM(7),

@@ -6,7 +6,6 @@ import com.vloxlands.gen.structure.CrystalGenerator;
 import com.vloxlands.gen.structure.SpikeGenerator;
 import com.vloxlands.gen.structure.TopLayerGenerator;
 import com.vloxlands.gen.structure.TreeGenerator;
-import com.vloxlands.settings.CFG;
 
 public class IslandGenerator extends Thread
 {
@@ -34,7 +33,6 @@ public class IslandGenerator extends Thread
 	
 	public IslandGenerator(int minSize, int maxSize, float yPos)
 	{
-		CFG.p(yPos);
 		this.minSize = minSize;
 		this.maxSize = maxSize;
 		progress = quotient = 0;

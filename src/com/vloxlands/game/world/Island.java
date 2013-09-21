@@ -90,7 +90,8 @@ public class Island
 	
 	public void onTick()
 	{
-		pos.translate(0, (int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100f) / 100f, 0);
+		float deltaY = (int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100f) / 100f;
+		pos.translate(0, deltaY, 0);
 	}
 	
 	public void calculateWeight()
