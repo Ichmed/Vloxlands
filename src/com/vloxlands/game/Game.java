@@ -48,7 +48,7 @@ public class Game
 	public static Game currentGame;
 	public static Map currentMap;
 	
-	public float zNear = 0.01f, zFar = 10000;
+	public float zNear = 0.01f, zFar = 500;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	// public static MapGenerator mapGenerator;
