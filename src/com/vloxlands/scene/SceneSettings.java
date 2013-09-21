@@ -42,7 +42,7 @@ public class SceneSettings extends Scene
 		fps.setIntegerMode(true);
 		content.add(fps);
 		
-		content.add(new Label(20, 245, 0, 25, Tr._("zfar") + ":", false));
+		content.add(new Label(20, 305, 0, 25, Tr._("zfar") + ":", false));
 		
 		final Slider zfar = new Slider(Display.getWidth() / 4, 320, Display.getWidth() / 4 - 20, 0, CFG.RENDER_DISTANCES.length - 1, CFG.RENDER_DISTANCE, GuiRotation.HORIZONTAL);
 		zfar.setIntegerMode(true);
