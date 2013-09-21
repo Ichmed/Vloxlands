@@ -96,13 +96,13 @@ public class Game
 		frustum.calculateFrustum();
 		
 		FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
-		fogColor.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
-		
+		fogColor.put(new float[] { 0.5f, 0.8f, 0.85f, 1 }).flip();
+		glEnable(GL_FOG);
 		glFogi(GL_FOG_MODE, GL_LINEAR);
 		glFog(GL_FOG_COLOR, fogColor);
-		glFogf(GL_FOG_DENSITY, 0.8f);
+		glFogf(GL_FOG_DENSITY, 1);
 		glHint(GL_FOG_HINT, GL_DONT_CARE);
-		glFogf(GL_FOG_START, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 40);
+		glFogf(GL_FOG_START, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 50);
 		glFogf(GL_FOG_END, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		
 		// ShaderLoader.useProgram("/graphics/shaders/", "default");
@@ -152,6 +152,7 @@ public class Game
 		
 		RenderAssistant.set2DRenderMode(true);
 		glDisable(GL_LIGHTING);
+		glDisable(GL_FOG);
 		
 		glPushMatrix();
 		{
