@@ -120,7 +120,7 @@ public class VoxelFace
 				break;
 		}
 		
-		n = Vector3f.cross(br, tl, null).normalise(null);
+		n = Vector3f.cross(Vector3f.sub(bl, br, null), Vector3f.sub(tr, br, null), null).normalise(null);
 	}
 	
 	public void increaseSize(int sizeX, int sizeY, int sizeZ)
