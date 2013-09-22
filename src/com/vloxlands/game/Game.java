@@ -24,6 +24,7 @@ import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
+import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -105,7 +106,7 @@ public class Game
 		glFogf(GL_FOG_START, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 50);
 		glFogf(GL_FOG_END, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		
-		// ShaderLoader.useProgram("/graphics/shaders/", "default");
+		ShaderLoader.useProgram("/graphics/shaders/", "default");
 		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		// else RenderAssistant.disable(GL_LIGHTING);
 		

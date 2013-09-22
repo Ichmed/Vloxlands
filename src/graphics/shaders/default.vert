@@ -1,38 +1,24 @@
-varying vec3 color;
-uniform float lighting;
-uniform float faceBrightness;
-uniform vec3 lightPosition;
-
+varying vec4 diffuse,ambientGlobal,ambient, ecPos;
+varying vec3 normal,halfVector;
+ 
 void main()
-{
-	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
-
-	if(lighting != 0f)
-	{
-		vec3 vertexPosition = (gl_ModelViewMatrix * gl_Vertex).xyz;
-		
-		vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);    
- 		vec3 surfaceNormal = (gl_NormalMatrix * gl_Normal).xyz;
-    
-		float diffuseLightIntensity = max(0.0, dot(surfaceNormal, lightDirection));
-    
-		color.rgb = diffuseLightIntensity * gl_FrontMaterial.diffuse.rgb;
- 		color += gl_FrontMaterial.ambient.rgb + gl_LightModel.ambient.rgb;
- 		color += faceBrightness;
-    
-		vec3 reflectionDirection = normalize(reflect(-lightDirection, surfaceNormal));
-		
-		float specular = max(0.0, dot(surfaceNormal, reflectionDirection));
-    
-		if(diffuseLightIntensity != 0.0)
-		{
-			float fspecular = pow(specular, gl_FrontMaterial.shininess);
-			color.rgb += (gl_FrontMaterial.specular.rgb * fspecular);
-		}
-    }
-    else
-    {
-    	color.rgb = gl_FrontMaterial.diffuse.rgb;
-    }
-    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-}
+{   
+    vec3 aux;
+     
+    /* first transform the normal into eye space and normalize the result */
+    normal = normalize(gl_NormalMatrix * gl_Normal);
+ 
+    /* compute the vertex position  in camera space. */
+    ecPos = gl_ModelViewMatrix * gl_Vertex;
+ 
+    /* Normalize the halfVector to pass it to the fragment shader */
+    halfVector = gl_LightSource[0].halfVector.xyz;
+     
+    /* Compute the diffuse, ambient and globalAmbient terms */
+    diffuse = gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse;
+    ambient = gl_FrontMaterial.ambient * gl_LightSource[0].ambient;
+    ambientGlobal = gl_LightModel.ambient * gl_FrontMaterial.ambient;
+     
+         
+    gl_Position = ftransform();
+} 
