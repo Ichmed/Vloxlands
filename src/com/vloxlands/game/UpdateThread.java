@@ -81,13 +81,13 @@ public class UpdateThread extends Thread
 				if (Game.currentMap != null)
 				{
 					if (Game.currentMap != null && Game.currentMap.initialized) Game.currentMap.onTick();
-					// if (Keyboard.isKeyDown(Keyboard.KEY_R))
-					// {
-					// Game.currentGame.lightPos.x = Game.currentGame.camera.position.x;
-					// Game.currentGame.lightPos.y = Game.currentGame.camera.position.y;
-					// Game.currentGame.lightPos.z = Game.currentGame.camera.position.z;
-					// RenderAssistant.setUniform3f("lightPosition", Game.currentGame.lightPos);
-					// }
+					if (Keyboard.isKeyDown(Keyboard.KEY_R))
+					{
+						Game.currentGame.lightPos.x = Game.camera.position.x;
+						Game.currentGame.lightPos.y = Game.camera.position.y;
+						Game.currentGame.lightPos.z = Game.camera.position.z;
+						// RenderAssistant.setUniform3f("lightPosition", Game.currentGame.lightPos);
+					}
 					if (Keyboard.isKeyDown(Keyboard.KEY_UP))
 					{
 						Game.currentGame.lightPos.z++;
