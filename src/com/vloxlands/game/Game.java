@@ -1,6 +1,7 @@
 package com.vloxlands.game;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 import java.awt.Desktop;
@@ -154,6 +155,7 @@ public class Game
 		RenderAssistant.set2DRenderMode(true);
 		glDisable(GL_LIGHTING);
 		glDisable(GL_FOG);
+		glUseProgram(0);
 		
 		glPushMatrix();
 		{
