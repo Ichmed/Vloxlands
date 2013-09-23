@@ -25,7 +25,6 @@ import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
-import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -78,10 +77,10 @@ public class Game
 	public void gameLoop()
 	{
 		if (start == 0) start = System.currentTimeMillis();
-		glEnable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
+		glEnable(GL_LIGHTING);
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -93,9 +92,11 @@ public class Game
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
 		
-		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { lightPos.x, lightPos.y, lightPos.z, 1 }));
+		
+		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		frustum.calculateFrustum();
+		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { lightPos.x, lightPos.y, lightPos.z, 1 }));
 		
 		FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
 		fogColor.put(new float[] { 0.5f, 0.8f, 0.85f, 1 }).flip();
@@ -107,7 +108,7 @@ public class Game
 		glFogf(GL_FOG_START, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 50);
 		glFogf(GL_FOG_END, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		
-		ShaderLoader.useProgram("/graphics/shaders/", "default");
+		// ShaderLoader.useProgram("/graphics/shaders/", "default");
 		// if (CFG.LIGHTING) RenderAssistant.enable(GL_LIGHTING);
 		// else RenderAssistant.disable(GL_LIGHTING);
 		
@@ -284,16 +285,19 @@ public class Game
 		
 		glEnable(GL_LIGHTING);
 		glEnable(GL_LIGHT0);
-		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.75f, 0.75f, 0.75f, 1 }));
+		
+		float amb = 0.5f;
+		
+		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { amb, amb, amb, 1 }));
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
-		glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
+		// glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
 		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { 0, 0, 0, 1 }));
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		// glEnable(GL_CULL_FACE);
+		// glCullFace(GL_BACK);
 		glEnable(GL_COLOR_MATERIAL);
-		glColorMaterial(GL_FRONT, GL_DIFFUSE);
-		glMaterialf(GL_FRONT, GL_SHININESS, 100f);
+		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+		glMaterialf(GL_FRONT, GL_SHININESS, 1f);
 		
 		glEnable(GL_FOG);
 		
