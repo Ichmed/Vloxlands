@@ -23,8 +23,7 @@ public class SceneMainMenu extends Scene
 	@Override
 	public void init()
 	{
-		Game.currentMap = null;
-		Game.currentGame.initMultiplayer();
+		if (Game.client == null) Game.currentGame.initMultiplayer();
 		
 		setBackground();
 		
@@ -46,7 +45,7 @@ public class SceneMainMenu extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("join"));
-		if (!CFG.INTERNET || Game.client.isConnected()) b.setEnabled(false);
+		if (!CFG.INTERNET || (Game.client != null && Game.client.isConnected())) b.setEnabled(false);
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -157,7 +156,7 @@ public class SceneMainMenu extends Scene
 					else
 					{
 						Game.currentGame.removeActiveScene();
-						Game.currentGame.addScene(new SceneNewGame());
+						Game.currentGame.addScene(new SceneLobby());
 						break;
 					}
 				}

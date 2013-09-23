@@ -7,6 +7,7 @@ import static org.lwjgl.util.glu.GLU.*;
 import java.awt.Desktop;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -409,43 +410,61 @@ public class Game
 	
 	public void initMultiplayer()
 	{
+		Player player = new Player("Player", null, 0);
+		Game.client = new Client(player);
+	}
+	
+	public void setIP(boolean lan)
+	{
 		if (sceneStack.size() == 0 || IP != null || hamachiInstallationDialogShown) return;
-		InetAddress ip = NetworkAssistant.getMyHamachiIP();
-		if (ip == null)
+		if (lan)
 		{
-			addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("cancel"), new IGuiEvent()
+			try
 			{
-				@Override
-				public void trigger()
-				{
-					hamachiInstallationDialogShown = true;
-					Game.currentGame.removeActiveScene();
-				}
-			}), new Action(Tr._("yes"), new IGuiEvent()
+				IP = InetAddress.getLocalHost();
+			}
+			catch (UnknownHostException e)
 			{
-				@Override
-				public void trigger()
-				{
-					hamachiInstallationDialogShown = true;
-					Game.currentGame.removeActiveScene();
-					try
-					{
-						Desktop.getDesktop().browse(new URL("https://secure.logmein.com/products/hamachi/download.aspx").toURI());
-					}
-					catch (Exception e)
-					{
-						e.printStackTrace();
-					}
-				}
-			})));
+				e.printStackTrace();
+			}
 		}
 		else
 		{
-			IP = ip;
-			
-			Player player = new Player("Player", IP, 0);
-			Game.client = new Client(player);
+			InetAddress ip = NetworkAssistant.getMyHamachiIP();
+			if (ip == null)
+			{
+				addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("cancel"), new IGuiEvent()
+				{
+					@Override
+					public void trigger()
+					{
+						hamachiInstallationDialogShown = true;
+						Game.currentGame.removeActiveScene();
+					}
+				}), new Action(Tr._("yes"), new IGuiEvent()
+				{
+					@Override
+					public void trigger()
+					{
+						hamachiInstallationDialogShown = true;
+						Game.currentGame.removeActiveScene();
+						try
+						{
+							Desktop.getDesktop().browse(new URL("https://secure.logmein.com/products/hamachi/download.aspx").toURI());
+						}
+						catch (Exception e)
+						{
+							e.printStackTrace();
+						}
+					}
+				})));
+			}
+			else
+			{
+				IP = ip;
+			}
 		}
+		Game.client.getPlayer().setIP(IP);
 	}
 	
 	public void onClientMessage(String message)

@@ -26,6 +26,8 @@ islands;Islands;Inseln
 language;Language;Sprache
 fov;Field of View;Sichtfeld
 fps;FPS Cap;FPS Begrenzung
+lan;LAN only;Nur im LAN
+global;Global;Global
 zfar;Render Distance;Sichtweite
 zfar.tiny;Tiny;Winzig
 zfar.short;Short;Kurz
@@ -39,6 +41,7 @@ namechange;Rename;Name aendern
 kick;Kick Player;Spieler hinauswerfen
 ok;OK;OK
 ready;Ready;Bereit
+spdesc;Please choose the type of game you want to create. If you want to play Singleplayer Mode, choose whatever you want, it doesn't matter at all.;Bitte waehle den gewuenschten Spieltyp. Falls du Einzelspieler spielen moechtest, ist es egal, welchen Typ du waehlst.
 kickquestion;Are you sure that you want to kick %player%?;Bist du sicher, dass du %player% hinauswerfen willst?
 joindesc;Please enter the IP of the Server you want to connect to.;Bitte gib die IP des Servers ein, zu dem du verbinden willst.
 iperror;"%ip%" is no valid IP Address!;"%ip%" ist keine gueltige IP Adresse!
