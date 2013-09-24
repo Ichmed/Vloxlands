@@ -143,13 +143,6 @@ public class Game
 			glPushMatrix();
 			{
 				currentMap.render();
-				
-				glPointSize(10);
-				glBegin(GL_POINTS);
-				{
-					glVertex3f(lightPos.x, lightPos.y, lightPos.z);
-				}
-				glEnd();
 			}
 			glPopMatrix();
 		}
@@ -183,6 +176,7 @@ public class Game
 		{
 			RenderAssistant.renderText(0, 0, "FPS: " + getFPS(), FontAssistant.GAMEFONT.deriveFont(30f));
 			RenderAssistant.renderText(0, 30, "Ticks: " + UpdateThread.currentUpdateThread.getTicksPS(), FontAssistant.GAMEFONT.deriveFont(30f));
+			if (currentMap != null) RenderAssistant.renderText(0, 60, "Rendered Chunks: " + currentMap.islands.get(0).renderedChunks, FontAssistant.GAMEFONT.deriveFont(30f));
 			
 			glColor4f(0.8f, 0.8f, 0.8f, 1);
 			RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));

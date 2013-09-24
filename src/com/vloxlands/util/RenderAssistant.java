@@ -193,6 +193,49 @@ public class RenderAssistant
 		glPopMatrix();
 	}
 	
+	public static void renderCuboid(float x, float y, float z, float sizeX, float sizeY, float sizeZ)
+	{
+		glBegin(GL_LINES);
+		{
+			glVertex3f(x, y, z);
+			glVertex3f(x + sizeX, y, z);
+			
+			glVertex3f(x, y + sizeY, z);
+			glVertex3f(x + sizeX, y + sizeY, z);
+			
+			glVertex3f(x, y, z + sizeZ);
+			glVertex3f(x + sizeX, y, z + sizeZ);
+			
+			glVertex3f(x, y + sizeY, z + sizeZ);
+			glVertex3f(x + sizeX, y + sizeY, z + sizeZ);
+			
+			glVertex3f(x, y, z);
+			glVertex3f(x, y, z + sizeZ);
+			
+			glVertex3f(x + sizeX, y, z);
+			glVertex3f(x + sizeX, y, z + sizeZ);
+			
+			glVertex3f(x + sizeX, y + sizeY, z);
+			glVertex3f(x + sizeX, y + sizeY, z + sizeZ);
+			
+			glVertex3f(x, y + sizeY, z);
+			glVertex3f(x, y + sizeY, z + sizeZ);
+			
+			glVertex3f(x, y, z);
+			glVertex3f(x, y + sizeY, z);
+			
+			glVertex3f(x + sizeX, y, z);
+			glVertex3f(x + sizeX, y + sizeY, z);
+			
+			glVertex3f(x, y, z + sizeZ);
+			glVertex3f(x, y + sizeY, z + sizeZ);
+			
+			glVertex3f(x + sizeX, y, z + sizeZ);
+			glVertex3f(x + sizeX, y + sizeY, z + sizeZ);
+		}
+		glEnd();
+	}
+	
 	public static void drawRect(float posX, float posY, float sizeX, float sizeY)
 	{
 		glPushMatrix();

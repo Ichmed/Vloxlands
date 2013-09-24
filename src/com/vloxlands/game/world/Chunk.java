@@ -19,6 +19,7 @@ public class Chunk
 	int x, y, z, opaqueID = -1, transparentID = -1;
 	boolean opaqueUTD = false;
 	boolean transparentUTD = false;
+	boolean empty;
 	
 	/**
 	 * Keeps track of which resources can be found on this Chunk
@@ -31,6 +32,7 @@ public class Chunk
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		empty = true;
 		
 		for (int i = 0; i < resources.length; i++)
 			resources[i] = 0;
@@ -67,10 +69,15 @@ public class Chunk
 		transparentUTD = false;
 	}
 	
-	public void render(Island i, boolean opaque)
+	public boolean render(Island i, boolean opaque)
 	{
-		if (meshes[0].size() + meshes[1].size() == 0) return;
+		if (meshes[0].size() + meshes[1].size() == 0)
+		{
+			empty = true;
+			return false;
+		}
 		
+		empty = false;
 		if (opaqueID == -1)
 		{
 			opaqueID = glGenLists(1);
@@ -95,7 +102,14 @@ public class Chunk
 				glCallList(opaque ? opaqueID : transparentID);
 			}
 			glPopMatrix();
+			return true;
 		}
+		return false;
+	}
+	
+	public boolean isEmpty()
+	{
+		return empty;
 	}
 	
 	public void renderDisplayList(boolean opaque)

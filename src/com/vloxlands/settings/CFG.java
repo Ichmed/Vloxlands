@@ -35,7 +35,7 @@ public class CFG
 	public static int RENDER_DISTANCE = 2;
 	public static boolean LIGHTING = false;
 	public static boolean FULLSCREEN = false;
-	public static boolean SHOW_CHUNK_BOUNDRIES = false;
+	public static boolean SHOW_CHUNK_BOUNDARIES = false;
 	public static boolean SHOW_DIRECTIONS = false;
 	public static boolean SHOW_WIREFRAME = false;
 	public static boolean SHOW_DEBUG = false;

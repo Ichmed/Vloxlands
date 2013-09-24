@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.util.RenderAssistant;
 
 public class Island
 {
@@ -32,6 +33,8 @@ public class Island
 	Vector3f pos;
 	
 	public float weight, uplift, initBalance = 0;
+	
+	public int renderedChunks = 0;
 	
 	public Island()
 	{
@@ -245,6 +248,8 @@ public class Island
 	{
 		glTranslatef(pos.x, pos.y, pos.z);
 		
+		renderedChunks = 0;
+		
 		int s = SIZE / CHUNKSIZE;
 		for (int i = 0; i < s; i++)
 		{
@@ -252,7 +257,7 @@ public class Island
 			{
 				for (int k = 0; k < s; k++)
 				{
-					chunks[i][j][k].render(this, true);
+					if (chunks[i][j][k].render(this, true)) renderedChunks++;
 				}
 			}
 		}
@@ -267,36 +272,33 @@ public class Island
 			}
 		}
 		
-		if (CFG.SHOW_CHUNK_BOUNDRIES)
+		glDisable(GL_LIGHTING);
+		if (CFG.SHOW_CHUNK_BOUNDARIES)
 		{
-			for (int x = 0; x < Island.SIZE; x += Island.CHUNKSIZE)
+			glPushMatrix();
 			{
-				for (int y = 0; y < Island.SIZE; y += Island.CHUNKSIZE)
+				glColor3f(1, 0, 0);
+				glLineWidth(1);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				for (int x = 0; x < SIZE; x += CHUNKSIZE)
 				{
-					for (int z = 0; z < Island.SIZE; z += Island.CHUNKSIZE)
+					for (int y = 0; y < SIZE; y += CHUNKSIZE)
 					{
-						glPushMatrix();
+						for (int z = 0; z < SIZE; z += CHUNKSIZE)
 						{
-							glLineWidth(1);
-							glColor3d(1, 0, 0);
-							glBegin(GL_LINES);
-							{
-								glVertex3d(x, y, z);
-								glVertex3d(x, y + Island.CHUNKSIZE, z);
-								glVertex3d(x, y, z);
-								glVertex3d(x, y, z + Island.CHUNKSIZE);
-								glVertex3d(x, y, z);
-								glVertex3d(x + Island.CHUNKSIZE, y, z);
-							}
-							glEnd();
-							glColor3d(1, 1, 1);
-							glLineWidth(1);
+							if (chunks[x / CHUNKSIZE][y / CHUNKSIZE][z / CHUNKSIZE].isEmpty()) continue;
+							RenderAssistant.renderCuboid(x, y, z, CHUNKSIZE, CHUNKSIZE, CHUNKSIZE);
 						}
-						glPopMatrix();
 					}
 				}
+				glColor3f(0, 0, 0);
+				RenderAssistant.renderCuboid(0, 0, 0, SIZE, SIZE, SIZE);
+				glColor3f(1, 1, 1);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
+			glPopMatrix();
 		}
+		glEnable(GL_LIGHTING);
 	}
 	
 	public Vector3f getPos()
