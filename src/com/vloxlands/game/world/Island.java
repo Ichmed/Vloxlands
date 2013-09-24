@@ -277,7 +277,6 @@ public class Island
 		{
 			glPushMatrix();
 			{
-				glColor3f(1, 0, 0);
 				glLineWidth(1);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 				for (int x = 0; x < SIZE; x += CHUNKSIZE)
@@ -287,6 +286,14 @@ public class Island
 						for (int z = 0; z < SIZE; z += CHUNKSIZE)
 						{
 							if (chunks[x / CHUNKSIZE][y / CHUNKSIZE][z / CHUNKSIZE].isEmpty()) continue;
+							glColor3f(1, 0, 0);
+							// if (Game.mouseRay.intersectsAABB(new AABB(new Vector3f(pos.x + x, pos.y + y, pos.z + z), new Vector3f(pos.x + x + CHUNKSIZE, pos.y + y + CHUNKSIZE, pos.z + z + CHUNKSIZE)))
+							// // .intersectsBox(new Vector3f(pos.x + x, pos.y + y, pos.z + z), new Vector3f(pos.x + x + CHUNKSIZE, pos.y + y + CHUNKSIZE, pos.z + z + CHUNKSIZE)
+							// )
+							// {
+							// glColor3f(0, 0, 1);
+							// }
+							
 							RenderAssistant.renderCuboid(x, y, z, CHUNKSIZE, CHUNKSIZE, CHUNKSIZE);
 						}
 					}

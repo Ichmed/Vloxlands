@@ -89,11 +89,11 @@ public class Game
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
+		
+		
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
 		Vector3f w = camera.getPosition().translate(v.x, v.y, v.z);
-		
-		
 		
 		gluLookAt(u.x, u.y, u.z, w.x, w.y, w.z, 0, 1, 0);
 		frustum.calculateFrustum();
