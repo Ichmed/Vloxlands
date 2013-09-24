@@ -17,6 +17,8 @@ public class SceneNewGame extends Scene
 	@Override
 	public void init()
 	{
+		if (Game.client.isConnected()) Game.currentGame.addScene(new SceneLobby());
+		
 		setBackground();
 		
 		setTitle(Tr._("newGame"));

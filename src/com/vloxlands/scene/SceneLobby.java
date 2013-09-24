@@ -129,7 +129,7 @@ public class SceneLobby extends Scene
 			public void trigger()
 			{
 				Game.client.disconnect();
-				Game.currentGame.setScene(new SceneMainMenu());
+				Game.currentGame.removeActiveScene();
 			}
 		});
 		content.add(disco);
@@ -140,6 +140,7 @@ public class SceneLobby extends Scene
 			@Override
 			public void trigger()
 			{
+				Game.currentGame.removeActiveScene();
 				Game.currentGame.removeActiveScene();
 			}
 		});
