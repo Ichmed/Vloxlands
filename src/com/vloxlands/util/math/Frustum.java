@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -104,5 +105,12 @@ public class Frustum
 		}
 		
 		return true;
+	}
+	
+	public static Vector2f calculate2DPlaneDimension(float fov, float dist, int width, int height)
+	{
+		float rad = (float) (Math.toRadians(fov) / 2f);
+		
+		return new Vector2f((float) Math.tan(rad) * width / 2f, (float) Math.tan(rad) * height / 2f);
 	}
 }

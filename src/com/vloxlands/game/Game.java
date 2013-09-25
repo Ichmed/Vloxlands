@@ -52,7 +52,7 @@ public class Game
 	public static Game currentGame;
 	public static Map currentMap;
 	
-	public static final float zNear = 0.01f;
+	public static final float zNear = 0.1f;
 	Vector3f up = new Vector3f(0, 1, 0);
 	
 	// public static MapGenerator mapGenerator;

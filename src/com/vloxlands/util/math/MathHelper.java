@@ -124,4 +124,14 @@ public class MathHelper
 		
 		return w;
 	}
+	
+	public static Vector3f mul(Vector3f l, Vector3f r)
+	{
+		return new Vector3f(l.x * r.x, l.y * r.y, l.z * r.z);
+	}
+	
+	public static Vector2f mul(Vector2f l, Vector2f r)
+	{
+		return new Vector2f(l.x * r.x, l.y * r.y);
+	}
 }
