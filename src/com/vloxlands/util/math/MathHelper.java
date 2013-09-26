@@ -134,4 +134,10 @@ public class MathHelper
 	{
 		return new Vector2f(l.x * r.x, l.y * r.y);
 	}
+	
+	// -- intersection methods -- //
+	public static boolean intersects(PickingRay ray, AABB aabb)
+	{
+		return false;
+	}
 }
