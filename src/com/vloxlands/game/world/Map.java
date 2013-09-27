@@ -18,7 +18,7 @@ public class Map
 	
 	public static final int MAXHEIGHT = 512;
 	
-	List<Entity> entities = new ArrayList<>();
+	public List<Entity> entities = new ArrayList<>();
 	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}

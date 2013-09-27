@@ -3,10 +3,12 @@ package com.vloxlands.game.entity;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.DamageType;
+import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
+import com.vloxlands.render.IRendering;
 
-public abstract class Entity
+public abstract class Entity implements IRendering
 {
 	public Island island = null;
 	
@@ -19,7 +21,6 @@ public abstract class Entity
 	private boolean canDie = true;
 	
 	int health = 100;
-	
 	
 	public void onTick()
 	{
@@ -54,14 +55,16 @@ public abstract class Entity
 	public void hurt(int strength, DamageType d)
 	{
 		// TODO: add resistances/weaknesses
+		this.onHurt();
 		health -= strength;
 	}
 	
 	private void die()
 	{
-		onDeath();
-		// TODO: remove entity from entity-list
+		this.onDeath();
+		Game.currentMap.entities.remove(this);
 	}
 	
 	protected abstract void onDeath();
+	protected abstract void onHurt();
 }
