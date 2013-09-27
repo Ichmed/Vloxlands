@@ -48,7 +48,11 @@ public class Model
 	 */
 	public void renderModel()
 	{
-		glNewList(displayListID, GL_COMPILE);
+		wantsRender = false;
+		
+		glEnable(GL_TEXTURE_2D);
+		
+		// glNewList(displayListID, GL_COMPILE);
 		
 		if (!usesMaterials) TextureImpl.bindNone();
 		for (int i = 0; i < faces.size(); i++)
@@ -91,16 +95,17 @@ public class Model
 			glEnd();
 		}
 		
-		glEndList();
-		
-		wantsRender = false;
+		// glEndList();
+		//
+		// wantsRender = false;
 	}
 	
 	public void render()
 	{
-		if (wantsRender) renderModel();
+		// if (wantsRender)
+		renderModel();
 		
-		glCallList(displayListID);
+		// glCallList(displayListID);
 	}
 	
 	/**

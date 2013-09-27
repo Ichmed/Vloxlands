@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.newdawn.slick.opengl.TextureImpl;
+
 import com.vloxlands.game.entity.Entity;
 import com.vloxlands.render.ChunkRenderer;
 
@@ -29,13 +31,15 @@ public class Map
 			i.render();
 			glPopMatrix();
 		}
+		
+		TextureImpl.bindNone();
 	}
 	
 	public void onTick()
 	{
 		for (Island i : islands)
 			i.onTick();
-		for(Entity e : entities)
+		for (Entity e : entities)
 			e.onTick();
 	}
 	
