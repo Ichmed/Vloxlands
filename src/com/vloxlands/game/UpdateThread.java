@@ -105,6 +105,7 @@ public class UpdateThread extends Thread
 						Game.currentGame.lightPos.x--;
 					}
 					if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) Game.currentGame.cameraSpeed = 0.5f;
+					else if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) Game.currentGame.cameraSpeed = 2f;
 					else Game.currentGame.cameraSpeed = 0.3f;
 				}
 				

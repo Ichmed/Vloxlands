@@ -26,6 +26,7 @@ public class Model
 	public boolean usesMaterials = false;
 	
 	int displayListID;
+	boolean wantsRender;
 	
 	/**
 	 * A list of all faces that make up this model, divided into smaller groups for use with materials
@@ -39,6 +40,7 @@ public class Model
 	public Model()
 	{
 		displayListID = glGenLists(1);
+		wantsRender = true;
 	}
 	
 	/**
@@ -90,10 +92,14 @@ public class Model
 		}
 		
 		glEndList();
+		
+		wantsRender = false;
 	}
 	
 	public void render()
 	{
+		if (wantsRender) renderModel();
+		
 		glCallList(displayListID);
 	}
 	

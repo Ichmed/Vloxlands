@@ -26,6 +26,8 @@ import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
+import com.vloxlands.render.model.Model;
+import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -60,7 +62,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
-	// Model m = ModelLoader.loadModel("/graphics/models/BlockMonster2.obj");
+	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
 	long start = 0;
 	public int frames = 0;
 	
@@ -143,6 +145,11 @@ public class Game
 			glPushMatrix();
 			{
 				currentMap.render();
+				
+				glDisable(GL_LIGHTING);
+				glDisable(GL_FOG);
+				glUseProgram(0);
+				m.render();
 			}
 			glPopMatrix();
 		}
@@ -296,8 +303,6 @@ public class Game
 		
 		glEnable(GL_FOG);
 		
-		// glEnable(GL_COLOR_MATERIAL);
-		// glColorMaterial(GL_FRONT, GL_DIFFUSE);
 		// glMaterialf(GL_FRONT, GL_SHININESS, 100f);
 		//
 		// glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[]
@@ -307,10 +312,8 @@ public class Game
 		// glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[]
 		// { 0.1f, 0.1f, 0.1f, 1 }));
 		//
-		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-		// GL_LINEAR_MIPMAP_LINEAR);
-		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-		// GL_LINEAR_MIPMAP_LINEAR);
+		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		//
 		// glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	}
