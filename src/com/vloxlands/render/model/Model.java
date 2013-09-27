@@ -49,10 +49,9 @@ public class Model
 	public void renderModel()
 	{
 		wantsRender = false;
+		glNewList(displayListID, GL_COMPILE_AND_EXECUTE);
 		
 		glEnable(GL_TEXTURE_2D);
-		
-		// glNewList(displayListID, GL_COMPILE);
 		
 		if (!usesMaterials) TextureImpl.bindNone();
 		for (int i = 0; i < faces.size(); i++)
@@ -61,7 +60,7 @@ public class Model
 			{
 				Material m = materials.get(faceMaterials.get(i));
 				if (m.hasTexture) RenderAssistant.bindTexture(m.texturePath);
-				else TextureImpl.bindNone();
+				// else TextureImpl.bindNone();
 				
 				// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
 				
@@ -95,17 +94,14 @@ public class Model
 			glEnd();
 		}
 		
-		// glEndList();
-		//
-		// wantsRender = false;
+		glEndList();
 	}
 	
 	public void render()
 	{
-		// if (wantsRender)
-		renderModel();
+		if (wantsRender) renderModel();
 		
-		// glCallList(displayListID);
+		glCallList(displayListID);
 	}
 	
 	/**
