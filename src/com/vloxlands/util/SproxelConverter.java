@@ -95,8 +95,12 @@ public class SproxelConverter
 		CFG.p("> generating faces");
 		HashMap<VoxelFaceKey, VoxelFace> faces = generateFaces(blocks);
 		
+		CFG.p("> got " + faces.size() + " faces");
+		
 		CFG.p("> running greedy meshing");
 		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces, blocks.length, blocks[0].length, blocks[0][0].length);
+		
+		CFG.p("> got " + meshes.size() + " meshes");
 		
 		CFG.p("> saving obj file");
 		saveOBJ(new File(f.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);

@@ -72,7 +72,7 @@ public class Model
 			
 			for (Face face : faces.get(i))
 			{
-				glBegin((face.points.length == 3) ? GL_TRIANGLES :GL_QUADS);
+				glBegin(GL_POLYGON);
 				for (int j = 0; j < face.points.length; j++)
 				{
 					if (hasNormals)
