@@ -62,7 +62,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
-	Model m = ModelLoader.loadModel("/graphics/models/crystal.obj");
+	Model m = ModelLoader.loadModel("/graphics/models/BlockMonster.obj");
 	long start = 0;
 	public int frames = 0;
 	
@@ -145,13 +145,11 @@ public class Game
 			glPushMatrix();
 			{
 				currentMap.render();
-				
-				glDisable(GL_LIGHTING);
-				glDisable(GL_FOG);
-				glUseProgram(0);
-				m.render();
 			}
 			glPopMatrix();
+			glTranslatef(64, 255/* + (float) (Math.cos((System.currentTimeMillis() - start) / 1000f) / 2f) */, 64);
+			// glRotatef((System.currentTimeMillis() - start) / 50f, 0, 1, 0);
+			m.render();
 		}
 		
 		RenderAssistant.set2DRenderMode(true);
@@ -183,7 +181,13 @@ public class Game
 		{
 			RenderAssistant.renderText(0, 0, "FPS: " + getFPS(), FontAssistant.GAMEFONT.deriveFont(30f));
 			RenderAssistant.renderText(0, 30, "Ticks: " + UpdateThread.currentUpdateThread.getTicksPS(), FontAssistant.GAMEFONT.deriveFont(30f));
-			if (currentMap != null) RenderAssistant.renderText(0, 60, "Rendered Chunks: " + currentMap.islands.get(0).renderedChunks, FontAssistant.GAMEFONT.deriveFont(30f));
+			if (currentMap != null)
+			{
+				RenderAssistant.renderText(0, 60, "Rendered Chunks: " + currentMap.islands.get(0).renderedChunks, FontAssistant.GAMEFONT.deriveFont(30f));
+				RenderAssistant.renderText(0, 100, "X: " + MathHelper.roundToDecimal(camera.getPosition().x, 2), FontAssistant.GAMEFONT.deriveFont(30f));
+				RenderAssistant.renderText(0, 130, "Y: " + MathHelper.roundToDecimal(camera.getPosition().y, 2), FontAssistant.GAMEFONT.deriveFont(30f));
+				RenderAssistant.renderText(0, 160, "Z: " + MathHelper.roundToDecimal(camera.getPosition().z, 2), FontAssistant.GAMEFONT.deriveFont(30f));
+			}
 			
 			glColor4f(0.8f, 0.8f, 0.8f, 1);
 			RenderAssistant.renderText(Display.getWidth() - 250, 0, UniVersion.prettyVersion(), FontAssistant.GAMEFONT.deriveFont(20f));

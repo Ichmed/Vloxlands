@@ -135,6 +135,11 @@ public class MathHelper
 		return new Vector2f(l.x * r.x, l.y * r.y);
 	}
 	
+	public static float roundToDecimal(float f, int decimals)
+	{
+		return (int) (f * Math.pow(10, decimals)) / (float) Math.pow(10, decimals);
+	}
+	
 	// -- intersection methods -- //
 	public static boolean intersects(PickingRay ray, AABB aabb)
 	{

@@ -272,7 +272,7 @@ public class Island
 			}
 		}
 		
-		// glDisable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 		if (CFG.SHOW_CHUNK_BOUNDARIES)
 		{
 			glPushMatrix();
@@ -305,7 +305,7 @@ public class Island
 			}
 			glPopMatrix();
 		}
-		// glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 		
 		glDisable(GL_TEXTURE_2D);
 	}

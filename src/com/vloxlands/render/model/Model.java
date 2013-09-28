@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.opengl.TextureImpl;
 
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.MathHelper;
@@ -53,14 +52,14 @@ public class Model
 		
 		glEnable(GL_TEXTURE_2D);
 		
-		if (!usesMaterials) TextureImpl.bindNone();
+		if (!usesMaterials) glDisable(GL_TEXTURE_2D);
 		for (int i = 0; i < faces.size(); i++)
 		{
 			if (usesMaterials)
 			{
 				Material m = materials.get(faceMaterials.get(i));
 				if (m.hasTexture) RenderAssistant.bindTexture(m.texturePath);
-				// else TextureImpl.bindNone();
+				else glDisable(GL_TEXTURE_2D);
 				
 				// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
 				
@@ -73,7 +72,7 @@ public class Model
 			
 			for (Face face : faces.get(i))
 			{
-				glBegin((face.points.length == 3) ? GL_TRIANGLES : GL_QUADS);
+				glBegin((face.points.length == 3) ? GL_TRIANGLES :GL_QUADS);
 				for (int j = 0; j < face.points.length; j++)
 				{
 					if (hasNormals)
@@ -95,6 +94,7 @@ public class Model
 		}
 		
 		glEndList();
+		glEnable(GL_TEXTURE_2D);
 	}
 	
 	public void render()
