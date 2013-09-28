@@ -1,21 +1,24 @@
 package com.vloxlands.util;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
 
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.util.math.MathHelper;
 
 /**
  * @author Dakror
@@ -71,15 +74,16 @@ public class SproxelConverter
 	static class Block
 	{
 		int x, y, z;
+		long c;
+		Color color;
 		
-		boolean filled;
-		
-		Block(int x, int y, int z, boolean filled)
+		Block(int x, int y, int z, long c)
 		{
 			this.x = x;
 			this.y = y;
 			this.z = z;
-			this.filled = filled;
+			this.c = c;
+			color = loadColor(c);
 		}
 	}
 	
@@ -109,6 +113,29 @@ public class SproxelConverter
 		}
 	}
 	
+	public static long parseLong(String hex)
+	{
+		hex = hex.toLowerCase().replace("0x", "").replace("#", "");
+		
+		long value = 0;
+		for (int i = 0; i < hex.length(); i++)
+		{
+			value += Math.pow(16, hex.length() - i - 1) * Integer.parseInt(hex.substring(i, i + 1), 16);
+		}
+		
+		return value;
+	}
+	
+	public static Color loadColor(long value)
+	{
+		long r = (value & 0xFF000000) >> 24;
+		long g = (value & 0x00FF0000) >> 16;
+		long b = (value & 0x0000FF00) >> 8;
+		long a = (value & 0x000000FF);
+		
+		return new Color((int) r, (int) g, (int) b, (int) a);
+	}
+	
 	public static void convertFile(File f)
 	{
 		CSVReader csv = new CSVReader(f);
@@ -129,7 +156,7 @@ public class SproxelConverter
 			int z = index % blocks[0][0].length;
 			try
 			{
-				blocks[x][y][z] = new Block(x, y, z, !cell.equals("#00000000"));
+				blocks[x][y][z] = new Block(x, y, z, parseLong(cell));
 			}
 			catch (Exception e)
 			{
@@ -162,19 +189,22 @@ public class SproxelConverter
 			{
 				for (int z = 0; z < blocks[x][y].length; z++)
 				{
-					if (!blocks[x][y][z].filled) continue;
+					if (blocks[x][y][z].c == 0) continue;
+					
+					Color v = blocks[x][y][z].color;
 					
 					for (Direction d : Direction.values())
 					{
 						int x1 = x + (int) d.dir.x;
 						int y1 = y + (int) d.dir.y;
 						int z1 = z + (int) d.dir.z;
+						
 						boolean outOfBounds = !(x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < blocks.length && y1 < blocks[x].length && z1 < blocks[x][y].length);
 						
-						boolean filled = (outOfBounds) ? true : !blocks[x1][y1][z1].filled;
+						boolean filled = (outOfBounds) ? true : !blocks[x1][y1][z1].color.equals(v);
 						if (filled)
 						{
-							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), 0);
+							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), blocks[x][y][z].c);
 							faces.put(new VoxelFaceKey(x, y, z, d.ordinal()), f);
 						}
 					}
@@ -342,9 +372,13 @@ public class SproxelConverter
 			
 			obj.write("mtllib " + f.getName().replace(".obj", ".mtl") + br);
 			
-			ArrayList<Vector> vertices = new ArrayList<>();
+			obj.write(br);
 			
-			CFG.p("  > sorting vertices");
+			ArrayList<Vector> vertices = new ArrayList<>();
+			ArrayList<Color> materials = new ArrayList<>();
+			ArrayList<Vector> normals = new ArrayList<>();
+			
+			CFG.p("  > sorting data");
 			
 			for (VoxelFace vf : meshes.values())
 			{
@@ -352,7 +386,15 @@ public class SproxelConverter
 				if (!vertices.contains(new Vector(vf.br).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.br).add(new Vector(vf.pos)));
 				if (!vertices.contains(new Vector(vf.tl).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tl).add(new Vector(vf.pos)));
 				if (!vertices.contains(new Vector(vf.tr).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tr).add(new Vector(vf.pos)));
+				
+				Color c = loadColor(vf.textureIndex);
+				if (!materials.contains(c)) materials.add(c);
+				
+				if (!normals.contains(new Vector(vf.dir.dir))) normals.add(new Vector(vf.dir.dir));
 			}
+			
+			int grid = (int) Math.ceil(Math.sqrt(materials.size()));
+			BufferedImage textureSheet = new BufferedImage(grid * 16, grid * 16, BufferedImage.TYPE_INT_ARGB);
 			
 			CFG.p("  > writing vertices");
 			
@@ -361,29 +403,82 @@ public class SproxelConverter
 			
 			obj.write(br);
 			
-			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
+			CFG.p("  > writing normals");
+			
+			for (Vector v : normals)
+				obj.write("vn " + v.x + " " + v.y + " " + v.z + br);
+			
+			obj.write(br);
+			
+			CFG.p("  > writing materials");
+			
+			mtl.write("newmtl mtl0" + br //
+					+ "Ns 0.000000" + br //
+					+ "Ka 0.000000 0.000000 0.000000" + br //
+					+ "Kd 0.000000 0.000000 0.000000" + br //
+					+ "Ks 0.000000 0.000000 0.000000" + br //
+					+ "Ni 1.000000" + br //
+					+ "d 0.000000" + br //
+					+ "illum 2" + br //
+					+ "map_Kd " + f.getName().replace(".obj", ".png") + br);
+			
+			CFG.p("  > writing texture vertices");
+			
+			Graphics g = textureSheet.getGraphics();
+			
+			ArrayList<Vector> textureVertices = new ArrayList<>();
+			
+			for (int i = 0; i < materials.size(); i++)
+			{
+				Color c = materials.get(i);
+				g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
+				g.fillRect((i % grid) * 16, (i / grid) * 16, 16, 16);
+				
+				for (int j = 0; j < 2; j++)
+				{
+					for (int k = 0; k < 2; k++)
+					{
+						float U = (((i % grid) + j) / (float) grid);
+						float V = (((i / grid) + k) / (float) grid);
+						
+						if (textureVertices.contains(new Vector(U, V, 0))) continue;
+						
+						obj.write("vt " + U + " " + V + br);
+						textureVertices.add(new Vector(U, V, 0));
+					}
+				}
+			}
+			
+			obj.write(br);
+			
+			
+			CFG.p("  > writing texture sheet");
+			ImageIO.write(textureSheet, "PNG", new File(f.getPath().replace(".obj", ".png")));
+			
 			
 			CFG.p("  > writing faces");
 			
+			obj.write("usemtl mtl0" + br);
+			
+			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
 			for (int i = 0; i < values.size(); i++)
 			{
 				VoxelFace face = values.get(i);
 				
-				// -- random colors -- //
-				obj.write("usemtl mtl" + i + br);
+				int material = materials.indexOf(loadColor(face.textureIndex));
 				
-				mtl.write("newmtl mtl" + i + br //
-						+ "Ns 0.000000" + br //
-						+ "Ka 0.000000 0.000000 0.000000" + br //
-						+ "Kd " + MathHelper.roundToDecimal((float) Math.random(), 6) + " " + MathHelper.roundToDecimal((float) Math.random(), 6) + " " + MathHelper.roundToDecimal((float) Math.random(), 6) + br //
-						+ "Ks 0.000000 0.000000 0.000000" + br //
-						+ "Ni 1.000000" + br //
-						+ "d 0.000000" + br //
-						+ "illum 2" + br);
+				float U = (((material % grid)) / (float) grid);
+				float V = (((material / grid)) / (float) grid);
 				
-				// -- two triangular sub-faces -- //
-				obj.write("f " + (vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1) + br);
-				obj.write("f " + (vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1) + br);
+				float step = 1 / (float) grid;
+				
+				int[] v = { vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1 };
+				int[] vt = { textureVertices.indexOf(new Vector(U, V, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V + step, 0)) + 1, textureVertices.indexOf(new Vector(U, V + step, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V, 0)) + 1, };
+				
+				int vn = normals.indexOf(new Vector(face.dir.dir)) + 1;
+				
+				obj.write("f " + v[0] + "/" + vt[0] + "/" + vn + " " + v[1] + "/" + vt[1] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + br);
+				obj.write("f " + v[0] + "/" + vt[0] + "/" + vn + " " + v[3] + "/" + vt[3] + "/" + vn + " " + v[1] + "/" + vt[1] + "/" + vn + br);
 			}
 			
 			obj.close();
