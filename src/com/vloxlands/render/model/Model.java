@@ -51,8 +51,10 @@ public class Model
 		glNewList(displayListID, GL_COMPILE_AND_EXECUTE);
 		
 		glEnable(GL_TEXTURE_2D);
+		glDisable(GL_FOG);
+		// glDisable(GL_CULL_FACE);
 		
-		if (!usesMaterials) glDisable(GL_TEXTURE_2D);
+		// if (!usesMaterials) glBindTexture(GL_TEXTURE_2D, 0);
 		for (int i = 0; i < faces.size(); i++)
 		{
 			if (usesMaterials)
@@ -72,7 +74,8 @@ public class Model
 			
 			for (Face face : faces.get(i))
 			{
-				glBegin(GL_POLYGON);
+				glBegin(GL_TRIANGLES);
+				
 				for (int j = 0; j < face.points.length; j++)
 				{
 					if (hasNormals)

@@ -3,7 +3,6 @@ package com.vloxlands.util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,12 +15,59 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.util.math.MathHelper;
 
 /**
  * @author Dakror
  */
 public class SproxelConverter
 {
+	static class Vector
+	{
+		public float x, y, z;
+		
+		public Vector(float x, float y, float z)
+		{
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+		
+		public Vector(Vector3f v)
+		{
+			x = v.x;
+			y = v.y;
+			z = v.z;
+		}
+		
+		public Vector add(Vector o)
+		{
+			x += o.x;
+			y += o.y;
+			z += o.z;
+			
+			return this;
+		}
+		
+		@Override
+		public boolean equals(Object obj)
+		{
+			if (obj instanceof Vector)
+			{
+				Vector o = (Vector) obj;
+				
+				return o.x == x && o.y == y && o.z == z;
+			}
+			return false;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return "[" + x + ", " + y + ", " + z + "]";
+		}
+	}
+	
 	static class Block
 	{
 		int x, y, z;
@@ -95,12 +141,12 @@ public class SproxelConverter
 		CFG.p("> generating faces");
 		HashMap<VoxelFaceKey, VoxelFace> faces = generateFaces(blocks);
 		
-		CFG.p("> got " + faces.size() + " faces");
+		CFG.p("  > got " + faces.size() + " faces");
 		
 		CFG.p("> running greedy meshing");
 		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces, blocks.length, blocks[0].length, blocks[0][0].length);
 		
-		CFG.p("> got " + meshes.size() + " meshes");
+		CFG.p("  > got " + meshes.size() + " meshes");
 		
 		CFG.p("> saving obj file");
 		saveOBJ(new File(f.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
@@ -116,6 +162,8 @@ public class SproxelConverter
 			{
 				for (int z = 0; z < blocks[x][y].length; z++)
 				{
+					if (!blocks[x][y][z].filled) continue;
+					
 					for (Direction d : Direction.values())
 					{
 						int x1 = x + (int) d.dir.x;
@@ -123,7 +171,7 @@ public class SproxelConverter
 						int z1 = z + (int) d.dir.z;
 						boolean outOfBounds = !(x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < blocks.length && y1 < blocks[x].length && z1 < blocks[x][y].length);
 						
-						boolean filled = (outOfBounds) ? true : blocks[x1][y1][z1].filled;
+						boolean filled = (outOfBounds) ? true : !blocks[x1][y1][z1].filled;
 						if (filled)
 						{
 							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), 0);
@@ -294,21 +342,21 @@ public class SproxelConverter
 			
 			obj.write("mtllib " + f.getName().replace(".obj", ".mtl") + br);
 			
-			ArrayList<Vector3f> vertices = new ArrayList<>();
+			ArrayList<Vector> vertices = new ArrayList<>();
 			
 			CFG.p("  > sorting vertices");
 			
 			for (VoxelFace vf : meshes.values())
 			{
-				if (!vertices.contains(vf.bl)) vertices.add(vf.bl);
-				if (!vertices.contains(vf.br)) vertices.add(vf.br);
-				if (!vertices.contains(vf.tl)) vertices.add(vf.tl);
-				if (!vertices.contains(vf.tr)) vertices.add(vf.tr);
+				if (!vertices.contains(new Vector(vf.bl).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.bl).add(new Vector(vf.pos)));
+				if (!vertices.contains(new Vector(vf.br).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.br).add(new Vector(vf.pos)));
+				if (!vertices.contains(new Vector(vf.tl).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tl).add(new Vector(vf.pos)));
+				if (!vertices.contains(new Vector(vf.tr).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tr).add(new Vector(vf.pos)));
 			}
 			
 			CFG.p("  > writing vertices");
 			
-			for (Vector3f v : vertices)
+			for (Vector v : vertices)
 				obj.write("v " + (v.x / width) + " " + (v.y / height) + " " + (v.z / depth) + br);
 			
 			obj.write(br);
@@ -317,29 +365,31 @@ public class SproxelConverter
 			
 			CFG.p("  > writing faces");
 			
-			obj.write("usemtl mtl0" + br);
-			
-			mtl.write("newmtl mtl0" + br //
-					+ "Ns 0.000000" + br //
-					+ "Ka 0.000000 0.000000 0.000000" + br //
-					+ "Kd 0.000000 0.000000 0.000000" + br //
-					+ "Ks 0.000000 0.000000 0.000000" + br //
-					+ "Ni 0.000000" + br //
-					+ "d 0.000000" + br //
-					+ "illum 0" + br //
-					+ "map_Kd FILENAME");
-			
 			for (int i = 0; i < values.size(); i++)
 			{
 				VoxelFace face = values.get(i);
 				
-				obj.write("f " + (vertices.indexOf(face.bl) + 1) + " " + (vertices.indexOf(face.br) + 1) + " " + (vertices.indexOf(face.tl) + 1) + " " + (vertices.indexOf(face.tr) + 1) + br);
+				// -- random colors -- //
+				obj.write("usemtl mtl" + i + br);
+				
+				mtl.write("newmtl mtl" + i + br //
+						+ "Ns 0.000000" + br //
+						+ "Ka 0.000000 0.000000 0.000000" + br //
+						+ "Kd " + MathHelper.roundToDecimal((float) Math.random(), 6) + " " + MathHelper.roundToDecimal((float) Math.random(), 6) + " " + MathHelper.roundToDecimal((float) Math.random(), 6) + br //
+						+ "Ks 0.000000 0.000000 0.000000" + br //
+						+ "Ni 1.000000" + br //
+						+ "d 0.000000" + br //
+						+ "illum 2" + br);
+				
+				// -- two triangular sub-faces -- //
+				obj.write("f " + (vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1) + br);
+				obj.write("f " + (vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1) + " " + (vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1) + br);
 			}
 			
 			obj.close();
 			mtl.close();
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
