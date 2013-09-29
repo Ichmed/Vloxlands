@@ -92,24 +92,24 @@ public class SproxelConverter
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			JFileChooser jfc = new JFileChooser(new File(SproxelConverter.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+			jfc.setFileFilter(new FileNameExtensionFilter("Sproxel CSV Files (*.csv)", "csv"));
+			jfc.setMultiSelectionEnabled(false);
+			jfc.setFileHidingEnabled(false);
+			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			
+			switch (jfc.showOpenDialog(null))
+			{
+				case JFileChooser.APPROVE_OPTION:
+				{
+					convertFile(jfc.getSelectedFile());
+					break;
+				}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-		JFileChooser jfc = new JFileChooser("C:/");
-		jfc.setFileFilter(new FileNameExtensionFilter("Sproxel CSV Files (*.csv)", "csv"));
-		jfc.setMultiSelectionEnabled(false);
-		jfc.setFileHidingEnabled(false);
-		jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		
-		switch (jfc.showOpenDialog(null))
-		{
-			case JFileChooser.APPROVE_OPTION:
-			{
-				convertFile(jfc.getSelectedFile());
-				break;
-			}
 		}
 	}
 	
