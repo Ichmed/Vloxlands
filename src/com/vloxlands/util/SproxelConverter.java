@@ -97,7 +97,7 @@ public class SproxelConverter
 		{
 			e.printStackTrace();
 		}
-		JFileChooser jfc = new JFileChooser("C:/");
+		JFileChooser jfc = new JFileChooser("E:\\Programmieren\\Eclipse\\Java\\Vloxlands\\src\\graphics\\models");
 		jfc.setFileFilter(new FileNameExtensionFilter("Sproxel CSV Files (*.csv)", "csv"));
 		jfc.setMultiSelectionEnabled(false);
 		jfc.setFileHidingEnabled(false);
@@ -147,7 +147,6 @@ public class SproxelConverter
 		int index = 0;
 		
 		CFG.p("> reading cell data");
-		
 		
 		while ((cell = csv.readNext()) != null)
 		{
@@ -365,6 +364,9 @@ public class SproxelConverter
 	{
 		try
 		{
+			int texSize = 128;
+			
+			
 			String br = "\r\n";
 			
 			BufferedWriter obj = new BufferedWriter(new FileWriter(f));
@@ -394,7 +396,7 @@ public class SproxelConverter
 			}
 			
 			int grid = (int) Math.ceil(Math.sqrt(materials.size()));
-			BufferedImage textureSheet = new BufferedImage(grid * 16, grid * 16, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage textureSheet = new BufferedImage(grid * texSize, grid * texSize, BufferedImage.TYPE_INT_ARGB);
 			
 			CFG.p("  > writing vertices");
 			
@@ -403,19 +405,12 @@ public class SproxelConverter
 			
 			obj.write(br);
 			
-			CFG.p("  > writing normals");
-			
-			for (Vector v : normals)
-				obj.write("vn " + v.x + " " + v.y + " " + v.z + br);
-			
-			obj.write(br);
-			
 			CFG.p("  > writing materials");
 			
 			mtl.write("newmtl mtl0" + br //
 					+ "Ns 0.000000" + br //
-					+ "Ka 0.000000 0.000000 0.000000" + br //
-					+ "Kd 0.000000 0.000000 0.000000" + br //
+					+ "Ka 0.500000 0.500000 0.500000" + br //
+					+ "Kd 1.000000 1.000000 1.000000" + br //
 					+ "Ks 0.000000 0.000000 0.000000" + br //
 					+ "Ni 1.000000" + br //
 					+ "d 0.000000" + br //
@@ -432,14 +427,14 @@ public class SproxelConverter
 			{
 				Color c = materials.get(i);
 				g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
-				g.fillRect((i % grid) * 16, (i / grid) * 16, 16, 16);
+				g.fillRect((i % grid) * texSize, (i / grid) * texSize, texSize, texSize);
 				
 				for (int j = 0; j < 2; j++)
 				{
 					for (int k = 0; k < 2; k++)
 					{
 						float U = (((i % grid) + j) / (float) grid);
-						float V = (((i / grid) + k) / (float) grid);
+						float V = 1 - (((i / grid) + k) / (float) grid);
 						
 						if (textureVertices.contains(new Vector(U, V, 0))) continue;
 						
@@ -448,6 +443,14 @@ public class SproxelConverter
 					}
 				}
 			}
+			
+			obj.write(br);
+			
+			CFG.p("  > writing normals");
+			
+			for (Vector v : normals)
+				obj.write(("vn " + v.x + " " + v.y + " " + v.z).replace("-0.0", "0.0") + br);
+			
 			
 			obj.write(br);
 			
@@ -467,18 +470,17 @@ public class SproxelConverter
 				
 				int material = materials.indexOf(loadColor(face.textureIndex));
 				
-				float U = (((material % grid)) / (float) grid);
-				float V = (((material / grid)) / (float) grid);
-				
 				float step = 1 / (float) grid;
+				float U = (((material % grid)) / (float) grid);
+				float V = 1 - (((material / grid)) / (float) grid);
 				
+				// tl, br, bl, tr
 				int[] v = { vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1 };
-				int[] vt = { textureVertices.indexOf(new Vector(U, V, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V + step, 0)) + 1, textureVertices.indexOf(new Vector(U, V + step, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V, 0)) + 1, };
+				int[] vt = { textureVertices.indexOf(new Vector(U, V, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V - step, 0)) + 1, textureVertices.indexOf(new Vector(U, V - step, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V, 0)) + 1, };
 				
 				int vn = normals.indexOf(new Vector(face.dir.dir)) + 1;
 				
-				obj.write("f " + v[0] + "/" + vt[0] + "/" + vn + " " + v[1] + "/" + vt[1] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + br);
-				obj.write("f " + v[0] + "/" + vt[0] + "/" + vn + " " + v[3] + "/" + vt[3] + "/" + vn + " " + v[1] + "/" + vt[1] + "/" + vn + br);
+				obj.write("f " + v[1] + "/" + vt[1] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + " " + v[0] + "/" + vt[0] + "/" + vn + " " + v[3] + "/" + vt[3] + "/" + vn + br);
 			}
 			
 			obj.close();

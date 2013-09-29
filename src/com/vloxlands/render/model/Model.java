@@ -74,7 +74,7 @@ public class Model
 			
 			for (Face face : faces.get(i))
 			{
-				glBegin(GL_TRIANGLES);
+				glBegin(GL_POLYGON);
 				
 				for (int j = 0; j < face.points.length; j++)
 				{
@@ -92,8 +92,8 @@ public class Model
 					glVertex3f(v1.x, v1.y, v1.z);
 				}
 				
+				glEnd();
 			}
-			glEnd();
 		}
 		
 		glEndList();
