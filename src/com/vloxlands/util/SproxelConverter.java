@@ -97,7 +97,7 @@ public class SproxelConverter
 		{
 			e.printStackTrace();
 		}
-		JFileChooser jfc = new JFileChooser("E:\\Programmieren\\Eclipse\\Java\\Vloxlands\\src\\graphics\\models");
+		JFileChooser jfc = new JFileChooser("C:/");
 		jfc.setFileFilter(new FileNameExtensionFilter("Sproxel CSV Files (*.csv)", "csv"));
 		jfc.setMultiSelectionEnabled(false);
 		jfc.setFileHidingEnabled(false);
