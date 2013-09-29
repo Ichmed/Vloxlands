@@ -364,8 +364,8 @@ public class SproxelConverter
 	{
 		try
 		{
-			int texSize = 128;
-			
+			int texSize = 16;
+			float texMalus = 0.4f / 32f; // 0.0125
 			
 			String br = "\r\n";
 			
@@ -433,8 +433,8 @@ public class SproxelConverter
 				{
 					for (int k = 0; k < 2; k++)
 					{
-						float U = (((i % grid) + j) / (float) grid);
-						float V = 1 - (((i / grid) + k) / (float) grid);
+						float U = (((i % grid) + j) / (float) grid) + (j == 0 ? texMalus : -texMalus);
+						float V = 1 - (((i / grid) + k) / (float) grid) + (k == 0 ? -texMalus : texMalus);
 						
 						if (textureVertices.contains(new Vector(U, V, 0))) continue;
 						
@@ -475,9 +475,19 @@ public class SproxelConverter
 				float V = 1 - (((material / grid)) / (float) grid);
 				
 				// tl, br, bl, tr
-				int[] v = { vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1, vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1 };
-				int[] vt = { textureVertices.indexOf(new Vector(U, V, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V - step, 0)) + 1, textureVertices.indexOf(new Vector(U, V - step, 0)) + 1, textureVertices.indexOf(new Vector(U + step, V, 0)) + 1, };
+				int[] v = { //
+				vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1,//
+				vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1,//
+				vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1,//
+				vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1 //
+				};
 				
+				int[] vt = { //
+				textureVertices.indexOf(new Vector(U + texMalus, V - texMalus, 0)) + 1, //
+				textureVertices.indexOf(new Vector(U + step - texMalus, V - step + texMalus, 0)) + 1, //
+				textureVertices.indexOf(new Vector(U + texMalus, V - step + texMalus, 0)) + 1, //
+				textureVertices.indexOf(new Vector(U + step - texMalus, V - texMalus, 0)) + 1, //
+				};
 				int vn = normals.indexOf(new Vector(face.dir.dir)) + 1;
 				
 				obj.write("f " + v[1] + "/" + vt[1] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + " " + v[0] + "/" + vt[0] + "/" + vn + " " + v[3] + "/" + vt[3] + "/" + vn + br);
