@@ -62,7 +62,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
-	Model m = ModelLoader.loadModel("/graphics/models/entity/BlockMonster/BlockMonster.obj");
+	Model m = ModelLoader.loadModel("/graphics/models/entity/BigBlock/BigBlock.obj");
 	long start = 0;
 	public int frames = 0;
 	
@@ -91,7 +91,6 @@ public class Game
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		
 		
 		Vector3f u = camera.getPosition();
 		Vector3f v = MathHelper.getNormalizedRotationVector(camera.getRotation());
