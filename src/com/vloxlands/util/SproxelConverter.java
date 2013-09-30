@@ -97,7 +97,6 @@ public class SproxelConverter
 			jfc.setMultiSelectionEnabled(false);
 			jfc.setFileHidingEnabled(false);
 			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			
 			switch (jfc.showOpenDialog(null))
 			{
 				case JFileChooser.APPROVE_OPTION:
@@ -111,6 +110,31 @@ public class SproxelConverter
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static void packFilesInFolder(File csvFile)
+	{
+		String name = csvFile.getName().substring(0, csvFile.getName().lastIndexOf("."));
+		if (csvFile.getParentFile().getName().equals(name))
+		{
+			CFG.p("  > already sorted");
+			return;
+		}
+		File dir = new File(csvFile.getParentFile(), name);
+		dir.mkdir();
+		
+		int sorted = 0;
+		for (File f : csvFile.getParentFile().listFiles())
+		{
+			if (f.isDirectory()) continue;
+			
+			if (f.getName().startsWith(name + "."))
+			{
+				sorted++;
+				f.renameTo(new File(dir, f.getName()));
+			}
+		}
+		CFG.p("  > sorted " + sorted + " files");
 	}
 	
 	public static long parseLong(String hex)
@@ -136,9 +160,9 @@ public class SproxelConverter
 		return new Color((int) r, (int) g, (int) b, (int) a);
 	}
 	
-	public static void convertFile(File f)
+	public static void convertFile(File csvFile)
 	{
-		CSVReader csv = new CSVReader(f);
+		CSVReader csv = new CSVReader(csvFile);
 		csv.sep = ",";
 		String[] d = csv.readRow();
 		Block[][][] blocks = new Block[Integer.parseInt(d[0])][Integer.parseInt(d[1])][Integer.parseInt(d[2])];
@@ -164,6 +188,8 @@ public class SproxelConverter
 			index++;
 		}
 		
+		System.gc();
+		
 		CFG.p("> generating faces");
 		HashMap<VoxelFaceKey, VoxelFace> faces = generateFaces(blocks);
 		
@@ -175,7 +201,11 @@ public class SproxelConverter
 		CFG.p("  > got " + meshes.size() + " meshes");
 		
 		CFG.p("> saving obj file");
-		saveOBJ(new File(f.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
+		saveOBJ(new File(csvFile.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
+		
+		CFG.p("> sorting files");
+		packFilesInFolder(csvFile);
+		
 		CFG.p("> DONE");
 	}
 	
@@ -451,9 +481,7 @@ public class SproxelConverter
 			for (Vector v : normals)
 				obj.write(("vn " + v.x + " " + v.y + " " + v.z).replace("-0.0", "0.0") + br);
 			
-			
 			obj.write(br);
-			
 			
 			CFG.p("  > writing texture sheet");
 			ImageIO.write(textureSheet, "PNG", new File(f.getPath().replace(".obj", ".png")));

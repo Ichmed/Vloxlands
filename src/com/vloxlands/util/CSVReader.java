@@ -36,7 +36,6 @@ public class CSVReader
 	public CSVReader(File path)
 	{
 		this.path = path.getPath();
-		
 		try
 		{
 			br = new BufferedReader(new FileReader(path));

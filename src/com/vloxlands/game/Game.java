@@ -62,7 +62,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
-	Model m = ModelLoader.loadModel("/graphics/models/entity/BlockMonster.obj");
+	Model m = ModelLoader.loadModel("/graphics/models/entity/BlockMonster/BlockMonster.obj");
 	long start = 0;
 	public int frames = 0;
 	
