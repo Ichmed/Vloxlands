@@ -204,12 +204,16 @@ public class Game
 	
 	public void updateViewport()
 	{
-		for (Scene scene : sceneStack)
+		try
 		{
-			scene.content.clear();
-			// scene.initUserZone();
-			scene.init();
+			for (Scene scene : sceneStack)
+			{
+				scene.content.clear();
+				scene.init();
+			}
 		}
+		catch (ConcurrentModificationException e)
+		{}
 	}
 	
 	public static void initGame()
