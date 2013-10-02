@@ -20,16 +20,22 @@ public class Map
 	
 	public List<Entity> entities = new ArrayList<>();
 	
+	public int renderedChunks = 0;
+	public int chunks = 0;
+	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}
 	
 	public void render()
 	{
+		renderedChunks = 0;
 		for (Island i : islands)
 		{
 			glPushMatrix();
 			i.render();
 			glPopMatrix();
+			
+			renderedChunks += i.renderedChunks;
 		}
 		
 		TextureImpl.bindNone();
@@ -51,6 +57,8 @@ public class Map
 	public void addIsland(Island i)
 	{
 		islands.add(i);
+		
+		chunks = (int) (Math.pow(Island.SIZE / Island.CHUNKSIZE, 3) * islands.size());
 	}
 	
 	public void initMap()

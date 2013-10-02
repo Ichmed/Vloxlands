@@ -34,7 +34,7 @@ public class Island
 	
 	public float weight, uplift, initBalance = 0;
 	
-	public int renderedChunks = 0;
+	int renderedChunks = 0;
 	
 	public Island()
 	{
