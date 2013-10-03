@@ -38,7 +38,7 @@ public class SpikeGenerator extends Generator
 		
 		Vector2f pos = getRandomCircleInCircle(new Vector2f(x, z), radiusAt0, rad);// (radius);
 		int h = (int) (((MAXRAD - rad) * (radiusAt0 - Vector2f.sub(pos, new Vector2f(x, z), null).length()) + topLayers) * 0.3f);
-		island.setVoxel((int) pos.x, Island.SIZE / 2 - 1, (int) pos.y, Voxel.get("STONE").getId());
+		island.setVoxel((int) pos.x, y - 1, (int) pos.y, Voxel.get("STONE").getId());
 		Generator.generateBezier(island, BEZIER, (int) pos.x, (int) pos.y /* Z */, rad, (int) (y - highest.x * topLayers), h, createRatio(new byte[] { Voxel.get("STONE").getId(), Voxel.get("DIRT").getId() }, new int[] { 5, 1 }), false);
 		gen.updateProgress();
 	}

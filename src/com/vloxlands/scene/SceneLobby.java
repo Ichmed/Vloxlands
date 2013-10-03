@@ -331,7 +331,10 @@ public class SceneLobby extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ()) progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
+		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ())
+		{
+			progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
+		}
 		
 		if (Game.currentMap.initialized) Game.currentGame.setScene(new SceneGame());
 	}
@@ -343,7 +346,7 @@ public class SceneLobby extends Scene
 		
 		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ())
 		{
-			if (!Game.currentMap.initialized)
+			if (!Game.currentMap.initialized && !progressString.equals(Tr._("renderchunks")))
 			{
 				progressString = Tr._("renderchunks");
 				Game.currentMap.initMap();

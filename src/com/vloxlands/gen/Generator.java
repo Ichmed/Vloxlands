@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk;
+import com.vloxlands.game.world.Chunk.ChunkKey;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.gen.island.IslandGenerator;
 import com.vloxlands.util.math.MathHelper;
@@ -50,17 +51,22 @@ public abstract class Generator
 		}
 	}
 	
-	public static Vector3f pickRandomNaturalChunk(Island island)
+	public static ChunkKey pickRandomNaturalChunk(Island island)
 	{
-		Vector3f v = new Vector3f();
-		int s = Island.SIZE / Island.CHUNKSIZE;
+		int i = 0;
+		int chunks = island.getChunks().size();
+		
 		do
 		{
-			v = new Vector3f((int) (Math.random() * s), (int) (Math.random() * s), (int) (Math.random() * s));
+			i = (int) (Math.random() * chunks);
 		}
-		while (!hasNaturalVoxel(island.getChunk((int) v.x, (int) v.y, (int) v.z)));
+		while (!hasNaturalVoxel(island.getChunk(i)));
 		
-		return v;
+		ArrayList<Voxel> naturalVoxels = new ArrayList<>();
+		naturalVoxels.add(Voxel.get("STONE"));
+		naturalVoxels.add(Voxel.get("DIRT"));
+		
+		return island.getChunk(i).getPos();
 	}
 	
 	public static boolean hasNaturalVoxel(Chunk c)
@@ -85,18 +91,19 @@ public abstract class Generator
 		naturalVoxels.add(Voxel.get("STONE").getId());
 		naturalVoxels.add(Voxel.get("DIRT").getId());
 		
-		Vector3f chunk = pickRandomNaturalChunk(island);
+		ChunkKey key = pickRandomNaturalChunk(island);
+		Chunk chunk = island.getChunk(key);
 		
 		ArrayList<Vector3f> chunkVoxels = new ArrayList<>();
 		
-		for (int i = 0; i < Island.CHUNKSIZE; i++)
+		for (int i = 0; i < Chunk.SIZE; i++)
 		{
-			for (int j = 0; j < Island.CHUNKSIZE; j++)
+			for (int j = 0; j < Chunk.SIZE; j++)
 			{
-				for (int k = 0; k < Island.CHUNKSIZE; k++)
+				for (int k = 0; k < Chunk.SIZE; k++)
 				{
-					byte id = island.getVoxelId((int) chunk.x * Island.CHUNKSIZE + i, (int) chunk.y * Island.CHUNKSIZE + j, (int) chunk.z * Island.CHUNKSIZE + k);
-					if (naturalVoxels.contains(id)) chunkVoxels.add(new Vector3f(i + chunk.x * Island.CHUNKSIZE, j + chunk.y * Island.CHUNKSIZE, k + chunk.z * Island.CHUNKSIZE));
+					byte id = chunk.getVoxelId(i, j, k);
+					if (naturalVoxels.contains(id)) chunkVoxels.add(new Vector3f(i + key.x * Chunk.SIZE, j + key.y * Chunk.SIZE, k + key.z * Chunk.SIZE));
 				}
 			}
 		}

@@ -24,7 +24,6 @@ public class SceneGame extends Scene
 	@Override
 	public void init()
 	{
-		// Game.currentGame.resetCamera();
 		worldActive = true;
 		glClearColor(0.5f, 0.8f, 0.85f, 1);
 		paused = false;

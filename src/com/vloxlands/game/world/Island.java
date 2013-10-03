@@ -2,33 +2,26 @@ package com.vloxlands.game.world;
 
 import static org.lwjgl.opengl.GL11.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.game.world.Chunk.ChunkKey;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.RenderAssistant;
 
 public class Island
 {
 	public static final int SIZE = 128;
-	public static final int CHUNKSIZE = 8;
-	
 	public static final int SNOWLEVEL = 50;
 	public static final float SNOW_PER_TICK = 0.2f;
 	public static final float SNOW_INCREASE = 16;
 	
-	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
-	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
-	public Chunk[][][] chunks = new Chunk[SIZE / CHUNKSIZE][SIZE / CHUNKSIZE][SIZE / CHUNKSIZE];
-	
-	Vector3f smallestNonAirVoxel, biggestNonAirVoxel;
-	
-	/**
-	 * Keeps track of which resources can be found on this Island
-	 */
-	boolean[] resources = new boolean[Voxel.VOXELS];
+	HashMap<ChunkKey, Chunk> chunks = new HashMap<>();
 	
 	Vector3f pos;
 	
@@ -39,25 +32,6 @@ public class Island
 	public Island()
 	{
 		pos = new Vector3f(0, 0, 0);
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				for (int k = 0; k < SIZE; k++)
-				{
-					voxels[i][j][k] = Voxel.get("AIR").getId();
-					voxelMetadata[i][j][k] = -128;
-					if (i % CHUNKSIZE == 0 && j % CHUNKSIZE == 0 && k % CHUNKSIZE == 0)
-					{
-						chunks[i / CHUNKSIZE][j / CHUNKSIZE][k / CHUNKSIZE] = new Chunk(i / CHUNKSIZE, j / CHUNKSIZE, k / CHUNKSIZE);
-					}
-				}
-			}
-		}
-		for (int i = 0; i < resources.length; i++)
-			resources[i] = false;
-		
-		setResourceAvailable(Voxel.get("AIR"), true);
 	}
 	
 	/**
@@ -70,35 +44,14 @@ public class Island
 		initBalance = (uplift * Map.calculateUplift(pos.y) - weight) / 100000f;
 	}
 	
-	public void setResourceAvailable(Voxel v, boolean avail)
-	{
-		resources[v.getId() + 128] = avail;
-	}
-	
 	public boolean isResourceAvailable(Voxel v)
 	{
-		return resources[v.getId() + 128];
-	}
-	
-	@Override
-	public Island clone()
-	{
-		Island island = new Island();
-		for (int i = 0; i < SIZE; i++)
+		for (Chunk c : chunks.values())
 		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				island.voxels[i][j] = Arrays.copyOf(voxels[i][j], SIZE);
-			}
+			if (c.getResource(v) > 0) return true;
 		}
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				island.voxelMetadata[i][j] = Arrays.copyOf(voxelMetadata[i][j], SIZE);
-			}
-		}
-		return island;
+		
+		return false;
 	}
 	
 	public void onTick()
@@ -110,166 +63,109 @@ public class Island
 	public void calculateWeight()
 	{
 		weight = 0;
-		for (int x = 0; x < 256; x++)
+		for (Chunk c : chunks.values())
 		{
-			for (int y = 0; y < 256; y++)
-			{
-				for (int z = 0; z < 256; z++)
-				{
-					if (getVoxelId(x, y, z) == 0) continue;
-					weight += Voxel.getVoxelForId(getVoxelId(x, y, z)).getWeight();
-				}
-			}
+			c.calculateWeight();
+			weight += c.weight;
 		}
 	}
 	
 	public void calculateUplift()
 	{
 		uplift = 0;
-		for (int x = 0; x < 256; x++)
+		for (Chunk c : chunks.values())
 		{
-			for (int y = 0; y < 256; y++)
-			{
-				for (int z = 0; z < 256; z++)
-				{
-					if (getVoxelId(x, y, z) == 0) continue;
-					uplift += Voxel.getVoxelForId(getVoxelId(x, y, z)).getUplift();
-				}
-			}
+			c.calculateUplift();
+			uplift += c.uplift;
 		}
 	}
 	
-	public void placeVoxel(int x, int y, int z, byte id)
-	{
-		placeVoxel(x, y, z, id, (byte) 0);
-	}
-	
-	public void placeVoxel(int x, int y, int z, byte id, byte metadata)
-	{
-		voxels[x][y][z] = id;
-		voxelMetadata[x][y][z] = metadata;
-		Voxel.getVoxelForId(id).onPlaced(x, y, z);
-		
-		chunks[(int) Math.floor(x / (float) chunks.length)][(int) Math.floor(y / (float) chunks.length)][(int) Math.floor(z / (float) chunks.length)].updateMesh(this);
-		
-		weight += Voxel.getVoxelForId(id).getWeight();
-		uplift += Voxel.getVoxelForId(id).getUplift();
-	}
-	
-	public void removeVoxel(int x, int y, int z)
-	{
-		Voxel v = Voxel.getVoxelForId(getVoxelId(x, y, z));
-		setVoxel(x, y, z, Voxel.get("AIR").getId());
-		weight -= v.getWeight();
-		uplift -= v.getUplift();
-	}
+	// public void placeVoxel(int x, int y, int z, byte id)
+	// {
+	// placeVoxel(x, y, z, id, (byte) 0);
+	// }
+	//
+	// public void placeVoxel(int x, int y, int z, byte id, byte metadata)
+	// {
+	// voxels[x][y][z] = id;
+	// voxelMetadata[x][y][z] = metadata;
+	// Voxel.getVoxelForId(id).onPlaced(x, y, z);
+	//
+	// chunks[(int) Math.floor(x / (float) chunks.length)][(int) Math.floor(y / (float) chunks.length)][(int) Math.floor(z / (float) chunks.length)].updateMesh(this);
+	//
+	// weight += Voxel.getVoxelForId(id).getWeight();
+	// uplift += Voxel.getVoxelForId(id).getUplift();
+	// }
+	//
+	// public void removeVoxel(int x, int y, int z)
+	// {
+	// Voxel v = Voxel.getVoxelForId(getVoxelId(x, y, z));
+	// setVoxel(x, y, z, Voxel.get("AIR").getId());
+	// weight -= v.getWeight();
+	// uplift -= v.getUplift();
+	// }
 	
 	public byte getVoxelId(int x, int y, int z)
 	{
-		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return 0;
-		return voxels[x][y][z];
+		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return 0;
+		
+		ChunkKey cp = getChunkPosForVoxel(x, y, z);
+		
+		if (!chunks.containsKey(cp)) return Voxel.get("AIR").getId();
+		
+		return chunks.get(cp).getVoxelId(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE);
 	}
 	
 	public byte getMetadata(int x, int y, int z)
 	{
-		return voxelMetadata[x][y][z];
+		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return 0;
+		
+		ChunkKey cp = getChunkPosForVoxel(x, y, z);
+		
+		if (!chunks.containsKey(cp)) return 0;
+		
+		return chunks.get(cp).getMetadata(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE);
 	}
 	
 	public void setVoxel(int x, int y, int z, byte id)
 	{
-		if (x >= Island.SIZE || y >= Island.SIZE || z >= Island.SIZE || x < 0 || y < 0 || z < 0) return;
-		setResourceAvailable(Voxel.getVoxelForId(id), true);
+		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return;
 		
-		if (id != Voxel.get("AIR").getId())
-		{
-			chunks[(int) (x / (float) CHUNKSIZE)][(int) (y / (float) CHUNKSIZE)][(int) (z / (float) CHUNKSIZE)].addResource(Voxel.getVoxelForId(voxels[x][y][z]), -1);
-			chunks[(int) (x / (float) CHUNKSIZE)][(int) (y / (float) CHUNKSIZE)][(int) (z / (float) CHUNKSIZE)].addResource(Voxel.getVoxelForId(id), 1);
-		}
-		voxels[x][y][z] = id;
+		ChunkKey cp = getChunkPosForVoxel(x, y, z);
 		
-		if (id != Voxel.get("AIR").getId())
-		{
-			if (smallestNonAirVoxel == null || (x < smallestNonAirVoxel.x && y < smallestNonAirVoxel.y && z < smallestNonAirVoxel.z))
-			{
-				smallestNonAirVoxel = new Vector3f(x, y, z);
-			}
-			
-			if (biggestNonAirVoxel == null || (x > biggestNonAirVoxel.x && y > biggestNonAirVoxel.y && z > biggestNonAirVoxel.z))
-			{
-				biggestNonAirVoxel = new Vector3f(x, y, z);
-			}
-		}
+		initChunkIfNeeded(cp);
+		
+		chunks.get(cp).setVoxel(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE, id);
 	}
 	
 	public void setVoxel(int x, int y, int z, byte id, byte metadata)
 	{
-		setVoxel(x, y, z, id);
-		setVoxelMetadata(x, y, z, metadata);
-	}
-	
-	public void setVoxelMetadata(int x, int y, int z, byte metadata)
-	{
-		voxelMetadata[x][y][z] = metadata;
-	}
-	
-	public byte[] getVoxels()
-	{
-		byte[] bytes = new byte[(int) Math.pow(SIZE, 3)];
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				for (int k = 0; k < SIZE; k++)
-				{
-					bytes[(i * SIZE + j) * SIZE + k] = voxels[i][j][k];
-				}
-			}
-		}
-		return bytes;
-	}
-	
-	public byte[] getVoxelMetadatas()
-	{
-		byte[] bytes = new byte[(int) Math.pow(SIZE, 3)];
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				for (int k = 0; k < SIZE; k++)
-				{
-					bytes[(i * SIZE + j) * SIZE + k] = voxelMetadata[i][j][k];
-				}
-			}
-		}
-		return bytes;
+		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return;
+		
+		ChunkKey cp = getChunkPosForVoxel(x, y, z);
+		
+		initChunkIfNeeded(cp);
+		
+		chunks.get(cp).setVoxel(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE, id);
+		chunks.get(cp).setMetadata(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE, metadata);
 	}
 	
 	public void render()
 	{
+		if (!Game.frustum.sphereInFrustum(pos.x, pos.y, pos.z, SIZE * (float) Math.sqrt(2))) return;
+		
 		glTranslatef(pos.x, pos.y, pos.z);
 		
 		renderedChunks = 0;
 		
-		int s = SIZE / CHUNKSIZE;
-		for (int i = 0; i < s; i++)
+		for (Chunk c : chunks.values())
 		{
-			for (int j = 0; j < s; j++)
-			{
-				for (int k = 0; k < s; k++)
-				{
-					if (chunks[i][j][k].render(this, true)) renderedChunks++;
-				}
-			}
+			if (c.render(this, true)) renderedChunks++;
 		}
-		for (int i = 0; i < s; i++)
+		
+		for (Chunk c : chunks.values())
 		{
-			for (int j = 0; j < s; j++)
-			{
-				for (int k = 0; k < s; k++)
-				{
-					chunks[i][j][k].render(this, false);
-				}
-			}
+			c.render(this, false);
 		}
 		
 		glDisable(GL_LIGHTING);
@@ -279,25 +175,24 @@ public class Island
 			{
 				glLineWidth(1);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				for (int x = 0; x < SIZE; x += CHUNKSIZE)
+				for (Chunk c : chunks.values())
 				{
-					for (int y = 0; y < SIZE; y += CHUNKSIZE)
+					if (c.getResource(Voxel.get("AIR")) == Math.pow(Chunk.SIZE, 3)) continue;
+					
+					glColor3f(1, 0, 0);
+					RenderAssistant.renderCuboid(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
+				}
+				
+				glColor3f(0, 0, 1);
+				for (int i = 0; i < SIZE; i++)
+				{
+					for (int j = 0; j < SIZE; j++)
 					{
-						for (int z = 0; z < SIZE; z += CHUNKSIZE)
-						{
-							if (chunks[x / CHUNKSIZE][y / CHUNKSIZE][z / CHUNKSIZE].isEmpty()) continue;
-							glColor3f(1, 0, 0);
-							// if (Game.mouseRay.intersectsAABB(new AABB(new Vector3f(pos.x + x, pos.y + y, pos.z + z), new Vector3f(pos.x + x + CHUNKSIZE, pos.y + y + CHUNKSIZE, pos.z + z + CHUNKSIZE)))
-							// // .intersectsBox(new Vector3f(pos.x + x, pos.y + y, pos.z + z), new Vector3f(pos.x + x + CHUNKSIZE, pos.y + y + CHUNKSIZE, pos.z + z + CHUNKSIZE)
-							// )
-							// {
-							// glColor3f(0, 0, 1);
-							// }
-							
-							RenderAssistant.renderCuboid(x, y, z, CHUNKSIZE, CHUNKSIZE, CHUNKSIZE);
-						}
+						int highest = getHighestVoxel(i, j);
+						RenderAssistant.renderCuboid(i, highest, j, 1, 1, 1);
 					}
 				}
+				
 				glColor3f(0, 0, 0);
 				RenderAssistant.renderCuboid(0, 0, 0, SIZE, SIZE, SIZE);
 				glColor3f(1, 1, 1);
@@ -323,22 +218,9 @@ public class Island
 	public int grassify()
 	{
 		int grassed = 0;
-		for (int i = 0; i < SIZE; i++)
+		for (Chunk c : chunks.values())
 		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				for (int k = 0; k < SIZE; k++)
-				{
-					if (getVoxelId(i, j, k) == Voxel.get("DIRT").getId())
-					{
-						if (getVoxelId(i, j + 1, k) == Voxel.get("AIR").getId())
-						{
-							grassed++;
-							setVoxel(i, j, k, Voxel.get("GRASS").getId());
-						}
-					}
-				}
-			}
+			grassed += c.grassify(this);
 		}
 		
 		return grassed;
@@ -346,9 +228,13 @@ public class Island
 	
 	public int getHighestVoxel(int x, int z)
 	{
-		for (int i = SIZE - 1; i > -1; i--)
+		ChunkKey key = getChunkPosForVoxel(x, 0, z);
+		for (int i = SIZE / Chunk.SIZE - 1; i > -1; i--)
 		{
-			if (voxels[x][i][z] != Voxel.get("AIR").getId()) return i;
+			if (chunks.containsKey(new ChunkKey(key.x, i, key.z)))
+			{
+				return chunks.get(new ChunkKey(key.x, i, key.z)).getHighestVoxel(x - key.x * Chunk.SIZE, z - key.z * Chunk.SIZE);
+			}
 		}
 		
 		return -1;
@@ -356,16 +242,57 @@ public class Island
 	
 	public Chunk getChunk(int x, int y, int z)
 	{
-		return chunks[x][y][z];
+		return getChunk(new ChunkKey(x, y, z));
 	}
 	
-	public Vector3f getSmallestNonAirVoxel()
+	public Chunk getChunk(int index)
 	{
-		return smallestNonAirVoxel;
+		return new ArrayList<>(chunks.values()).get(index);
 	}
 	
-	public Vector3f getBiggestNonAirVoxel()
+	public void addChunk(ChunkKey key, Chunk chunk)
 	{
-		return biggestNonAirVoxel;
+		if (chunks.containsKey(key)) return;
+		
+		chunks.put(key, chunk);
+	}
+	
+	public Chunk getChunk(ChunkKey v)
+	{
+		return chunks.get(v);
+	}
+	
+	public Collection<Chunk> getChunks()
+	{
+		return chunks.values();
+	}
+	
+	public ChunkKey getChunkPosForVoxel(int x, int y, int z)
+	{
+		return new ChunkKey((int) Math.floor(x / (float) Chunk.SIZE), (int) Math.floor(y / (float) Chunk.SIZE), (int) Math.floor(z / (float) Chunk.SIZE));
+	}
+	
+	public void initChunkIfNeeded(ChunkKey pos)
+	{
+		if (chunks.containsKey(pos)) return;
+		
+		chunks.put(pos, new Chunk(pos));
+	}
+	
+	public void removeEmptyChunks()
+	{
+		ArrayList<ChunkKey> removalKeys = new ArrayList<>();
+		for (ChunkKey key : chunks.keySet())
+		{
+			if (chunks.get(key).getResource(Voxel.get("AIR")) == (int) Math.pow(Chunk.SIZE, 3))
+			{
+				removalKeys.add(key);
+			}
+		}
+		
+		for (ChunkKey key : removalKeys)
+		{
+			chunks.remove(key);
+		}
 	}
 }

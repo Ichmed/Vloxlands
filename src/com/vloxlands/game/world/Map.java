@@ -58,7 +58,7 @@ public class Map
 	{
 		islands.add(i);
 		
-		chunks = (int) (Math.pow(Island.SIZE / Island.CHUNKSIZE, 3) * islands.size());
+		chunks = (int) (Math.pow(Island.SIZE / Chunk.SIZE, 3) * islands.size());
 	}
 	
 	public void initMap()

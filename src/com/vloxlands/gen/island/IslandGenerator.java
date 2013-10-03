@@ -53,7 +53,7 @@ public class IslandGenerator extends Thread
 		
 		quotient = radius + 2;
 		
-		Island L = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 2, Island.SIZE / 2, radius);
+		Island L = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 4 * 3, Island.SIZE / 2, radius);
 		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		// Island m = mergeIslandData(L, R, OVR_L);
 		
@@ -110,26 +110,24 @@ public class IslandGenerator extends Thread
 		return (int) (Math.random() * (maxSize - minSize)) + minSize;
 	}
 	
-	public Island mergeIslandData(Island L, Island R, boolean rule)
-	{
-		Island island = rule ? L.clone() : R.clone();
-		
-		Island ovr = rule ? R : L;
-		for (int x = 0; x < Island.SIZE; x++)
-		{
-			for (int y = 0; y < Island.SIZE; y++)
-			{
-				for (int z = 0; z < Island.SIZE; z++)
-				{
-					if (ovr.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
-					
-					island.setVoxel(x, y, z, ovr.getVoxelId(x, y, z));
-				}
-			}
-		}
-		updateProgress();
-		return island;
-	}
-	
-	
+	// public Island mergeIslandData(Island L, Island R, boolean rule)
+	// {
+	// Island island = rule ? L.clone() : R.clone();
+	//
+	// Island ovr = rule ? R : L;
+	// for (int x = 0; x < Island.SIZE; x++)
+	// {
+	// for (int y = 0; y < Island.SIZE; y++)
+	// {
+	// for (int z = 0; z < Island.SIZE; z++)
+	// {
+	// if (ovr.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
+	//
+	// island.setVoxel(x, y, z, ovr.getVoxelId(x, y, z));
+	// }
+	// }
+	// }
+	// updateProgress();
+	// return island;
+	// }
 }

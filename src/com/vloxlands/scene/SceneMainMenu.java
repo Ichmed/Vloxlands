@@ -27,6 +27,12 @@ public class SceneMainMenu extends Scene
 		
 		setBackground();
 		
+		if (Game.currentMap != null)
+		{
+			Game.currentMap = null;
+			System.gc();
+		}
+		
 		Label l = new Label(0, 100, Display.getWidth(), 60, "Vloxlands");
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);

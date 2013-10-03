@@ -1,10 +1,12 @@
 package com.vloxlands.render;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.game.world.Chunk;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
 import com.vloxlands.util.Direction;
@@ -13,15 +15,10 @@ public class ChunkRenderer
 {
 	public static void renderChunks(Island island)
 	{
-		for (int i = 0; i < island.chunks.length; i++)
+		ArrayList<Chunk> chunks = new ArrayList<>(island.getChunks());
+		for (int i = 0; i < chunks.size(); i++)
 		{
-			for (int j = 0; j < island.chunks[0].length; j++)
-			{
-				for (int k = 0; k < island.chunks[0][0].length; k++)
-				{
-					island.chunks[i][j][k].updateMesh(island);
-				}
-			}
+			chunks.get(i).updateMesh(island);
 		}
 	}
 	
@@ -30,15 +27,15 @@ public class ChunkRenderer
 	{
 		HashMap<VoxelFaceKey, VoxelFace> faces = new HashMap<>();
 		HashMap<VoxelFaceKey, VoxelFace> transparentFaces = new HashMap<>();
-		for (int x = 0; x < Island.CHUNKSIZE; x++)
+		for (int x = 0; x < Chunk.SIZE; x++)
 		{
-			for (int y = 0; y < Island.CHUNKSIZE; y++)
+			for (int y = 0; y < Chunk.SIZE; y++)
 			{
-				for (int z = 0; z < Island.CHUNKSIZE; z++)
+				for (int z = 0; z < Chunk.SIZE; z++)
 				{
-					int posX = cx * Island.CHUNKSIZE + x;
-					int posY = cy * Island.CHUNKSIZE + y;
-					int posZ = cz * Island.CHUNKSIZE + z;
+					int posX = cx * Chunk.SIZE + x;
+					int posY = cy * Chunk.SIZE + y;
+					int posZ = cz * Chunk.SIZE + z;
 					
 					if (i.getVoxelId(posX, posY, posZ) == Voxel.get("AIR").getId()) continue;
 					Voxel v = Voxel.getVoxelForId(i.getVoxelId(posX, posY, posZ));
@@ -71,19 +68,19 @@ public class ChunkRenderer
 		if (originalMap.size() == 0) return originalMap;
 		
 		// greedy-mode along Z - axis
-		for (int x = 0; x < Island.CHUNKSIZE; x++)
+		for (int x = 0; x < Chunk.SIZE; x++)
 		{
-			for (int y = 0; y < Island.CHUNKSIZE; y++)
+			for (int y = 0; y < Chunk.SIZE; y++)
 			{
 				VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-				for (int z = 0; z < Island.CHUNKSIZE; z++)
+				for (int z = 0; z < Chunk.SIZE; z++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
 						
-						int posX = cx * Island.CHUNKSIZE + x;
-						int posY = cy * Island.CHUNKSIZE + y;
-						int posZ = cz * Island.CHUNKSIZE + z;
+						int posX = cx * Chunk.SIZE + x;
+						int posY = cy * Chunk.SIZE + y;
+						int posZ = cz * Chunk.SIZE + z;
 						
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = originalMap.get(key);
@@ -119,18 +116,18 @@ public class ChunkRenderer
 		HashMap<VoxelFaceKey, VoxelFace> strips1 = new HashMap<>();
 		
 		// greedy-mode along X - axis
-		for (int y = 0; y < Island.CHUNKSIZE; y++)
+		for (int y = 0; y < Chunk.SIZE; y++)
 		{
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int z = 0; z < Island.CHUNKSIZE; z++)
+			for (int z = 0; z < Chunk.SIZE; z++)
 			{
-				for (int x = 0; x < Island.CHUNKSIZE; x++)
+				for (int x = 0; x < Chunk.SIZE; x++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
-						int posX = cx * Island.CHUNKSIZE + x;
-						int posY = cy * Island.CHUNKSIZE + y;
-						int posZ = cz * Island.CHUNKSIZE + z;
+						int posX = cx * Chunk.SIZE + x;
+						int posY = cy * Chunk.SIZE + y;
+						int posZ = cz * Chunk.SIZE + z;
 						
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips0.get(key);
@@ -170,18 +167,18 @@ public class ChunkRenderer
 		HashMap<VoxelFaceKey, VoxelFace> strips2 = new HashMap<>();
 		
 		// greedy-mode along Y - axis
-		for (int x = 0; x < Island.CHUNKSIZE; x++)
+		for (int x = 0; x < Chunk.SIZE; x++)
 		{
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int z = 0; z < Island.CHUNKSIZE; z++)
+			for (int z = 0; z < Chunk.SIZE; z++)
 			{
-				for (int y = 0; y < Island.CHUNKSIZE; y++)
+				for (int y = 0; y < Chunk.SIZE; y++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
-						int posX = cx * Island.CHUNKSIZE + x;
-						int posY = cy * Island.CHUNKSIZE + y;
-						int posZ = cz * Island.CHUNKSIZE + z;
+						int posX = cx * Chunk.SIZE + x;
+						int posY = cy * Chunk.SIZE + y;
+						int posZ = cz * Chunk.SIZE + z;
 						
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips1.get(key);
