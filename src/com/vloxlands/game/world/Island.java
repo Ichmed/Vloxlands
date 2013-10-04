@@ -233,7 +233,7 @@ public class Island
 		{
 			if (chunks.containsKey(new ChunkKey(key.x, i, key.z)))
 			{
-				return chunks.get(new ChunkKey(key.x, i, key.z)).getHighestVoxel(x - key.x * Chunk.SIZE, z - key.z * Chunk.SIZE);
+				return i * Chunk.SIZE + chunks.get(new ChunkKey(key.x, i, key.z)).getHighestVoxel(x - key.x * Chunk.SIZE, z - key.z * Chunk.SIZE);
 			}
 		}
 		
