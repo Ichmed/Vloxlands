@@ -31,7 +31,7 @@ public class Launcher
 		
 		UniVersion.offline = !CFG.INTERNET;
 		UniVersion.setAutoDownloadTarget(new File(CFG.DIR, "Vloxlands.jar"));
-		UniVersion.init(Vloxlands.class, CFG.VERSION - 1, CFG.PHASE);
+		UniVersion.init(Vloxlands.class, CFG.VERSION, CFG.PHASE);
 		File jar = new File(CFG.DIR, "Vloxlands.jar");
 		
 		if (!jar.exists() && !CFG.INTERNET)
