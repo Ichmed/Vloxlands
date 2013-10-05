@@ -32,6 +32,21 @@ public class Vector
 		return this;
 	}
 	
+	public float get(int dimension)
+	{
+		switch (dimension)
+		{
+			case 0:
+				return x;
+			case 1:
+				return y;
+			case 2:
+				return z;
+			default:
+				return -1;
+		}
+	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{

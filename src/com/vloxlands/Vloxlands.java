@@ -18,6 +18,8 @@ import com.vloxlands.settings.Settings;
 import com.vloxlands.util.Assistant;
 import com.vloxlands.util.MediaAssistant;
 
+import de.dakror.universion.UniVersion;
+
 public class Vloxlands
 {
 	public static boolean running;
@@ -38,8 +40,8 @@ public class Vloxlands
 		}
 		
 		// -- UniVersion & Reporter initialization -- //
-		// UniVersion.offline = !CFG.INTERNET;
-		// UniVersion.init(Vloxlands.class, CFG.VERSION, CFG.PHASE);
+		UniVersion.offline = !CFG.INTERNET;
+		UniVersion.init(Vloxlands.class, CFG.VERSION, CFG.PHASE);
 		
 		if (!CFG.DEBUG)
 		{

@@ -16,8 +16,8 @@ public class MathHelper
 	public static final Plane PITCH_PLANE = new Plane(new Vector3f(1, 0, 0), new Vector3f());
 	public static final Plane YAW_PLANE = new Plane(new Vector3f(0, 1, 0), new Vector3f());
 	public static final Plane ROLL_PLANE = new Plane(new Vector3f(0, 0, 1), new Vector3f());
-
-
+	
+	
 	public static float clamp(float x, float i, float j)
 	{
 		return Math.max(i, Math.min(x, j));
@@ -146,22 +146,15 @@ public class MathHelper
 		return (int) (f * Math.pow(10, decimals)) / (float) Math.pow(10, decimals);
 	}
 	
-	// -- intersection methods -- //
-	public static boolean intersects(PickingRay ray, AABB aabb)
-	{
-		return false;
-	}
-
-
 	/**
 	 * A method for rotating a vector in a plane (around its normal vector) about degree degree
 	 * 
 	 * @param vector
-	 *            the vector which should be rotated
+	 *          the vector which should be rotated
 	 * @param degree
-	 *            the degree about which the vector should be rotated
+	 *          the degree about which the vector should be rotated
 	 * @param rotationPlane
-	 *            the plane within the vector should be rotated
+	 *          the plane within the vector should be rotated
 	 */
 	public static Vector3f rotateVector(Vector3f vector, float degree, Plane rotationPlane)
 	{
@@ -183,13 +176,56 @@ public class MathHelper
 		Matrix3f.transform(rotationMatrix, temp, vector);
 		return vector;
 	}
-
+	
 	public static Vector3f rotateVectorByCameraRotation(Vector3f v)
 	{
 		v = rotateVector(v, Game.camera.rotation.x, PITCH_PLANE);
 		v = rotateVector(v, Game.camera.rotation.y, YAW_PLANE);
-		v = rotateVector(v, Game.camera.rotation.z, ROLL_PLANE);		
+		v = rotateVector(v, Game.camera.rotation.z, ROLL_PLANE);
 		return v;
 	}
 	
+	// -- intersection methods -- //
+	/**
+	 * @param fs: pointers
+	 */
+	private static boolean clipLine(int dimension, AABB aabb, PickingRay ray, float[] fs)
+	{
+		float fdLow, fdHigh;
+		
+		float dimLength = new Vector(ray.end).get(dimension) - new Vector(ray.start).get(dimension);
+		
+		fdLow = (new Vector(aabb.min).get(dimension) - new Vector(ray.start).get(dimension)) / dimLength;
+		fdHigh = (new Vector(aabb.max).get(dimension) - new Vector(ray.start).get(dimension)) / dimLength;
+		
+		if (fdHigh < fdLow)
+		{
+			// swap
+			Float temp = new Float(fdHigh);
+			fdHigh = fdLow;
+			fdLow = temp;
+		}
+		
+		if (fdHigh < fs[0]) return false;
+		
+		if (fdLow > fs[1]) return false;
+		
+		fs[0] = Math.max(fdLow, fs[0]);
+		fs[1] = Math.min(fdHigh, fs[1]);
+		
+		if (fs[0] > fs[1]) return false;
+		
+		return true;
+	}
+	
+	public static boolean intersects(PickingRay ray, AABB aabb)
+	{
+		float[] fs = new float[] { 0, 1 };
+		
+		if (!clipLine(0, aabb, ray, fs)) return false;
+		if (!clipLine(1, aabb, ray, fs)) return false;
+		if (!clipLine(2, aabb, ray, fs)) return false;
+		
+		return true;
+	}
 }

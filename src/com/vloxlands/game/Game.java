@@ -40,6 +40,7 @@ import com.vloxlands.util.NetworkAssistant;
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.Frustum;
 import com.vloxlands.util.math.MathHelper;
+import com.vloxlands.util.math.PickingRay;
 
 import de.dakror.universion.UniVersion;
 
@@ -50,6 +51,7 @@ public class Game
 	public static Client client;
 	
 	public static Frustum frustum;
+	public static PickingRay pickingRay;
 	
 	public static Game currentGame;
 	public static Map currentMap;
@@ -154,6 +156,18 @@ public class Game
 				kontor.render();
 			}
 			glPopMatrix();
+			
+			glPushMatrix();
+			{
+				glColor3f(1, 1, 0);
+				glBegin(GL_LINES);
+				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
+				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
+				
+				CFG.p(pickingRay.start, pickingRay.end);
+				glEnd();
+			}
+			glPopMatrix();
 		}
 		
 		RenderAssistant.set2DRenderMode(true);
@@ -216,6 +230,8 @@ public class Game
 				scene.content.clear();
 				scene.init();
 			}
+			
+			PickingRay.update();
 		}
 		catch (ConcurrentModificationException e)
 		{}

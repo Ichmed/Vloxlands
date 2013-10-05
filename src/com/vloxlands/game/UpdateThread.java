@@ -3,11 +3,14 @@ package com.vloxlands.game;
 import java.util.ConcurrentModificationException;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.Vloxlands;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
+import com.vloxlands.util.math.PickingRay;
 
 /**
  * @author Dakror
@@ -80,6 +83,8 @@ public class UpdateThread extends Thread
 				
 				if (Game.currentMap != null)
 				{
+					Game.pickingRay = PickingRay.getPickingRay(Mouse.getX(), Display.getHeight() - Mouse.getY());
+					
 					if (Game.currentMap != null && Game.currentMap.initialized) Game.currentMap.onTick();
 					if (Keyboard.isKeyDown(Keyboard.KEY_R))
 					{

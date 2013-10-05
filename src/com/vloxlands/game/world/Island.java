@@ -13,6 +13,8 @@ import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk.ChunkKey;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.util.RenderAssistant;
+import com.vloxlands.util.math.AABB;
+import com.vloxlands.util.math.MathHelper;
 
 public class Island
 {
@@ -179,18 +181,12 @@ public class Island
 				{
 					if (c.getResource(Voxel.get("AIR")) == Math.pow(Chunk.SIZE, 3)) continue;
 					
+					Vector3f pos = new Vector3f(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE);
+					
 					glColor3f(1, 0, 0);
-					RenderAssistant.renderCuboid(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
-				}
-				
-				glColor3f(0, 0, 1);
-				for (int i = 0; i < SIZE; i++)
-				{
-					for (int j = 0; j < SIZE; j++)
-					{
-						int highest = getHighestVoxel(i, j);
-						RenderAssistant.renderCuboid(i, highest, j, 1, 1, 1);
-					}
+					if (MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE))) glColor3f(0, 1, 1);
+					
+					RenderAssistant.renderCuboid(pos.x, pos.y, pos.z, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
 				}
 				
 				glColor3f(0, 0, 0);
