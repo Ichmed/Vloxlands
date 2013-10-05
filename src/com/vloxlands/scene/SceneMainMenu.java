@@ -27,8 +27,9 @@ public class SceneMainMenu extends Scene
 		
 		setBackground();
 		
-		if (Game.currentMap != null)
+		if (Game.currentMap != null && Game.currentGame.isActiveScene(this))
 		{
+			CFG.p("cleanup");
 			Game.currentMap = null;
 			System.gc();
 		}

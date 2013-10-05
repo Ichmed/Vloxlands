@@ -149,4 +149,9 @@ public class InputField extends ClickableGui
 	@Override
 	public void onTick()
 	{}
+	
+	public String getHint()
+	{
+		return hint;
+	}
 }

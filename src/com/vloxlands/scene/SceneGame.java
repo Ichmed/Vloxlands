@@ -15,6 +15,7 @@ import com.vloxlands.ui.IGuiElement;
 import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
+import com.vloxlands.util.MapAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 public class SceneGame extends Scene
@@ -32,9 +33,9 @@ public class SceneGame extends Scene
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - 120, TextButton.WIDTH + 80, 120 + TextButton.HEIGHT * 3);
+		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
 		
-		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 50, Tr._("back"));
+		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 40, Tr._("back"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -45,7 +46,19 @@ public class SceneGame extends Scene
 		});
 		c.add(b);
 		
-		b = new TextButton(TextButton.WIDTH / 2 + 40, 120, Tr._("settings"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("save"));
+		b.setClickEvent(new IGuiEvent()
+		{
+			@Override
+			public void trigger()
+			{
+				MapAssistant.saveMap(Game.currentMap);
+			}
+		});
+		b.setEnabled(Game.server.getConnectedClientCount() == 1);
+		c.add(b);
+		
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 180, Tr._("settings"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override
@@ -56,7 +69,7 @@ public class SceneGame extends Scene
 		});
 		c.add(b);
 		
-		b = new TextButton(TextButton.WIDTH / 2 + 40, 190, Tr._("disconnect"));
+		b = new TextButton(TextButton.WIDTH / 2 + 40, 250, Tr._("disconnect"));
 		b.setClickEvent(new IGuiEvent()
 		{
 			@Override

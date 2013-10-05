@@ -49,12 +49,14 @@ hamachierror;It seeems that you don't have "LogMeIn Hamachi" installed on your c
 errno;An error has occurred!;Ein Fehler ist aufgetreten!
 generatemap;Generating map...;Generiere Karte...
 renderchunks;Rendering chunks...;Rendere Chunks...
+map;Map;Karte
 mapsize;Mapsize;Kartengroesse
 mapsize.tiny;Tiny;Winzig
 mapsize.small;Small;Klein
 mapsize.medium;Medium;Mittel
 mapsize.big;Big;Gross
 mapsize.huge;Huge;Riesig
+mapname;Mapname;Kartenname
 mp.connect;%player% joined the game.;%player% ist dem Spiel beigetreten.
 mp.disconnect;%player% left the game.;%player% hat das Spiel verlassen.
 mp.rename;%oldname% changed their name to %newname%.;%oldname% hat den eigenen Namen zu %newname% geaendert.

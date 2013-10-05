@@ -58,6 +58,7 @@ public class Game
 	public static Camera camera = new Camera();
 	
 	public boolean mouseGrabbed = false;
+	public boolean updateViewport = false;
 	long start = 0;
 	public int frames = 0;
 	
@@ -118,6 +119,12 @@ public class Game
 			updateViewport();
 			Settings.saveSettings();
 			fullscreenToggled = false;
+		}
+		
+		if (updateViewport)
+		{
+			updateViewport();
+			updateViewport = false;
 		}
 		
 		glViewport(0, 0, Display.getWidth(), Display.getHeight());
@@ -252,6 +259,11 @@ public class Game
 	{
 		if (sceneStack.size() == 0) return;
 		sceneStack.remove(sceneStack.size() - 1);
+	}
+	
+	public boolean isActiveScene(Scene s)
+	{
+		return getActiveScene().equals(s);
 	}
 	
 	public Scene getActiveScene()

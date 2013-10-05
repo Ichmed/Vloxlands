@@ -7,12 +7,35 @@ import com.vloxlands.settings.CFG;
 
 public class MediaAssistant
 {
+	public static void init()
+	{
+		new File(CFG.DIR, "natives").mkdirs();
+		new File(CFG.DIR, "maps").mkdirs();
+	}
+	
+	public static String[] getMaps()
+	{
+		File file = new File(CFG.DIR, "maps");
+		if (!file.exists() || !file.isDirectory())
+		{
+			file.delete();
+			file.mkdir();
+		}
+		String[] names = new String[file.list().length];
+		
+		for (int i = 0; i < names.length; i++)
+		{
+			names[i] = file.list()[i].substring(0, file.list()[i].lastIndexOf("."));
+		}
+		
+		return names;
+	}
+	
 	public static void initNatives()
 	{
 		File natives = new File(CFG.DIR, "natives");
 		if (!natives.exists())
 		{
-			natives.mkdirs();
 			try
 			{
 				File tmpFile = new File(CFG.DIR, "tmp.zip");

@@ -49,6 +49,7 @@ public class Vloxlands
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
 		
+		MediaAssistant.init();
 		MediaAssistant.initNatives();
 		Thread.currentThread().setName("Main Thread");
 		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
@@ -59,7 +60,14 @@ public class Vloxlands
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			Display.setResizable(true);
-			Display.create(new PixelFormat(0, 8, 0, 4));
+			try
+			{
+				Display.create(new PixelFormat(0, 8, 0, 4));
+			}
+			catch (Exception e)
+			{
+				Display.create();
+			}
 			Game.initGLSettings();
 			
 			Game.initGame();

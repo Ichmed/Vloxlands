@@ -10,14 +10,14 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.world.Chunk;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
+import com.vloxlands.settings.CFG;
 
 public class MapAssistant
 {
 	private static int pos;
 	
-	public static void saveMap(Map m, String name)
+	public static void saveMap(Map m)
 	{
-		new File("src/test").mkdir();
 		try
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -26,7 +26,7 @@ public class MapAssistant
 				saveIsland(island, baos);
 			}
 			
-			Compressor.compressFile(new File("src/test/" + name + ".bin"), baos.toByteArray());
+			Compressor.compressFile(new File(CFG.DIR, "maps/" + m.getName() + ".map"), baos.toByteArray());
 			
 		}
 		catch (Exception e)
@@ -40,7 +40,7 @@ public class MapAssistant
 		pos = 0;
 		Map map = new Map();
 		// -- bin file -- //
-		File bin = new File("src/test/" + name + ".bin");
+		File bin = new File(CFG.DIR, "maps/" + name + ".map");
 		byte[] data = Compressor.decompress(Compressor.getFileContentAsByteArray(bin));
 		while (pos < data.length)
 		{

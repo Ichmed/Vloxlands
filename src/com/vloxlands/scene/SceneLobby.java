@@ -39,6 +39,7 @@ import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.ui.Spinner;
 import com.vloxlands.ui.TextButton;
 import com.vloxlands.util.Assistant;
+import com.vloxlands.util.MediaAssistant;
 import com.vloxlands.util.RenderAssistant;
 
 public class SceneLobby extends Scene
@@ -46,6 +47,7 @@ public class SceneLobby extends Scene
 	ProgressBar progressBar;
 	TextButton start, back, disco;
 	Spinner mapsize;
+	InputField mapname;
 	
 	static Container lobby;
 	static ChatContainer chat;
@@ -152,10 +154,12 @@ public class SceneLobby extends Scene
 			@Override
 			public void trigger()
 			{
+				Game.currentMap.setName(mapname.getText().length() > 0 ? mapname.getText() : mapname.getHint());
 				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.values()[mapsize.getValue()]));
 			}
 		});
 		
+		// -- settings -- //
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapsize") + ":", false));
 		mapsize = new Spinner(Display.getWidth() - TextButton.WIDTH - 70, 155, TextButton.WIDTH + 55, 0, MapSize.values().length, 1, 1, GuiRotation.HORIZONTAL);
 		mapsize.setArrowButtonTypes(ArrowButton.ARROW_L_HOR, ArrowButton.ARROW_R_HOR);
@@ -183,6 +187,12 @@ public class SceneLobby extends Scene
 		mapsize.setTitles(titles);
 		content.add(mapsize);
 		
+		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, Display.getHeight() - 210, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapname") + ":", false));
+		mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map") + (MediaAssistant.getMaps().length + 1));
+		mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZöüäÖÜÄ,.-0987654321ß'#+_; ";
+		content.add(mapname);
+		
+		// -- colors -- //
 		int size = 35;
 		int spacing = 5;
 		int inRow = 3;

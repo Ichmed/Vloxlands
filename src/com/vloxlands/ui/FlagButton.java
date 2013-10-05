@@ -29,7 +29,7 @@ public class FlagButton extends ClickableGui
 			public void trigger()
 			{
 				Tr.loadLanguage(lang);
-				Game.currentGame.updateViewport();
+				Game.currentGame.updateViewport = true;
 			}
 		};
 	}

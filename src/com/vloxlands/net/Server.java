@@ -72,7 +72,7 @@ public class Server extends Thread
 	@Override
 	public void run()
 	{
-		CFG.p("[SERVER]: Starting UDP");
+		CFG.p("[SERVER]: Starting server");
 		CFG.p("[SERVER]: -------------------------------------------------");
 		while (!socket.isClosed())
 		{
@@ -86,7 +86,6 @@ public class Server extends Thread
 			catch (Exception e)
 			{}
 		}
-		shutdown();
 	}
 	
 	public void shutdown()
@@ -101,6 +100,7 @@ public class Server extends Thread
 		catch (Exception e)
 		{}
 		socket.close();
+		CFG.p("[SERVER]: Server stopped\n");
 	}
 	
 	public void setMapGenerator(MapGenerator mg)
@@ -381,6 +381,11 @@ public class Server extends Thread
 		}
 		catch (Exception e)
 		{}
+	}
+	
+	public Map getMap()
+	{
+		return map;
 	}
 	
 	public void setMap(Map m)

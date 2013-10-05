@@ -22,6 +22,7 @@ public class Map
 	
 	public int renderedChunks = 0;
 	public int chunks = 0;
+	String name;
 	
 	public void placeVoxel(Island i, int x, int y, int z, int id)
 	{}
@@ -76,5 +77,15 @@ public class Map
 	public static float calculateUplift(float height)
 	{
 		return (1 - height / MAXHEIGHT) * 4 + 0.1f;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
 	}
 }
