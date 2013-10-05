@@ -113,4 +113,31 @@ public class Frustum
 		
 		return new Vector2f((float) Math.tan(rad) * width / 2f, (float) Math.tan(rad) * height / 2f);
 	}
+	
+	private static class Plane
+	{
+		public Vector3f n;
+		public float d;
+		
+		public Plane(float x, float y, float z, float d)
+		{
+			this(new Vector3f(x, y, z), d);
+		}
+		
+		public Plane(Vector3f n, float d)
+		{
+			this.n = n;
+			this.d = d;
+			
+			normalize();
+		}
+		
+		public void normalize()
+		{
+			float length = 1 / n.length();
+			n.normalise();
+			d *= length;
+		}
+	}
+
 }

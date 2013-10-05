@@ -8,10 +8,16 @@ import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.Game;
 import com.vloxlands.util.Assistant;
 
 public class MathHelper
 {
+	public static final Plane PITCH_PLANE = new Plane(new Vector3f(1, 0, 0), new Vector3f());
+	public static final Plane YAW_PLANE = new Plane(new Vector3f(0, 1, 0), new Vector3f());
+	public static final Plane ROLL_PLANE = new Plane(new Vector3f(0, 0, 1), new Vector3f());
+
+
 	public static float clamp(float x, float i, float j)
 	{
 		return Math.max(i, Math.min(x, j));
@@ -145,4 +151,45 @@ public class MathHelper
 	{
 		return false;
 	}
+
+
+	/**
+	 * A method for rotating a vector in a plane (around its normal vector) about degree degree
+	 * 
+	 * @param vector
+	 *            the vector which should be rotated
+	 * @param degree
+	 *            the degree about which the vector should be rotated
+	 * @param rotationPlane
+	 *            the plane within the vector should be rotated
+	 */
+	public static Vector3f rotateVector(Vector3f vector, float degree, Plane rotationPlane)
+	{
+		double tempDegree = Math.toRadians(degree);
+		rotationPlane.transformToHesseNormalForm();
+		// Creating a Matrix for rotating the Vector
+		Matrix3f rotationMatrix = new Matrix3f();
+		rotationMatrix.m00 = (float) (rotationPlane.getNormal().x * rotationPlane.getNormal().x * (1 - Math.cos(tempDegree)) + Math.cos(tempDegree));
+		rotationMatrix.m01 = (float) (rotationPlane.getNormal().y * rotationPlane.getNormal().x * (1 - Math.cos(tempDegree)) + rotationPlane.getNormal().z * Math.sin(tempDegree));
+		rotationMatrix.m02 = (float) (rotationPlane.getNormal().z * rotationPlane.getNormal().x * (1 - Math.cos(tempDegree)) - rotationPlane.getNormal().y * Math.sin(tempDegree));
+		rotationMatrix.m10 = (float) (rotationPlane.getNormal().x * rotationPlane.getNormal().y * (1 - Math.cos(tempDegree)) - rotationPlane.getNormal().z * Math.sin(tempDegree));
+		rotationMatrix.m11 = (float) (rotationPlane.getNormal().y * rotationPlane.getNormal().y * (1 - Math.cos(tempDegree)) + Math.cos(tempDegree));
+		rotationMatrix.m12 = (float) (rotationPlane.getNormal().z * rotationPlane.getNormal().y * (1 - Math.cos(tempDegree)) + rotationPlane.getNormal().x * Math.sin(tempDegree));
+		rotationMatrix.m20 = (float) (rotationPlane.getNormal().x * rotationPlane.getNormal().z * (1 - Math.cos(tempDegree)) + rotationPlane.getNormal().y * Math.sin(tempDegree));
+		rotationMatrix.m21 = (float) (rotationPlane.getNormal().y * rotationPlane.getNormal().z * (1 - Math.cos(tempDegree)) - rotationPlane.getNormal().x * Math.sin(tempDegree));
+		rotationMatrix.m22 = (float) (rotationPlane.getNormal().z * rotationPlane.getNormal().z * (1 - Math.cos(tempDegree)) + Math.cos(tempDegree));
+		Vector3f temp = new Vector3f(vector);
+		// adopt rotatoinMatrix on vector
+		Matrix3f.transform(rotationMatrix, temp, vector);
+		return vector;
+	}
+
+	public static Vector3f rotateVectorByCameraRotation(Vector3f v)
+	{
+		v = rotateVector(v, Game.camera.rotation.x, PITCH_PLANE);
+		v = rotateVector(v, Game.camera.rotation.y, YAW_PLANE);
+		v = rotateVector(v, Game.camera.rotation.z, ROLL_PLANE);		
+		return v;
+	}
+	
 }
