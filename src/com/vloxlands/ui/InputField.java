@@ -27,7 +27,6 @@ public class InputField extends ClickableGui
 	String text, hint, hiddenShowText;
 	public String allowedChars = "";
 	
-	
 	public InputField(int x, int y, int width)
 	{
 		this(x, y, width, "");

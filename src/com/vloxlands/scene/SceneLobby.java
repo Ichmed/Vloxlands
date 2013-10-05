@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -55,6 +57,8 @@ public class SceneLobby extends Scene
 	static float progress;
 	static String progressString;
 	static boolean wasRejoining = false;
+	
+	// TODO: Implement Multiplayer mapsaving + loading. Include player data into mapsave and demand the same setup when loadng the map again.
 	
 	@Override
 	public void init()
@@ -187,10 +191,13 @@ public class SceneLobby extends Scene
 		mapsize.setTitles(titles);
 		content.add(mapsize);
 		
-		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, Display.getHeight() - 210, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapname") + ":", false));
-		mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map") + (MediaAssistant.getMaps().length + 1));
-		mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZöüäÖÜÄ,.-0987654321ß'#+_; ";
-		content.add(mapname);
+		if (!Game.client.isConnected() || Game.client.isConnectedToLocalhost())
+		{
+			content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, Display.getHeight() - 210, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapname") + ":", false));
+			mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map") + (MediaAssistant.getMaps().length + 1));
+			mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZöüäÖÜÄ,.-0987654321ß'#+_; ";
+			content.add(mapname);
+		}
 		
 		// -- colors -- //
 		int size = 35;
@@ -361,6 +368,13 @@ public class SceneLobby extends Scene
 				progressString = Tr._("renderchunks");
 				Game.currentMap.initMap();
 			}
+		}
+		
+		if (mapname != null && mapname.isEnabled())
+		{
+			List<String> s = Arrays.asList(MediaAssistant.getMaps());
+			if (s.contains(mapname.getText())) start.setEnabled(false);
+			else start.setEnabled(true);
 		}
 	}
 	

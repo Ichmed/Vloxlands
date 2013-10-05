@@ -29,7 +29,6 @@ public class SceneMainMenu extends Scene
 		
 		if (Game.currentMap != null && Game.currentGame.isActiveScene(this))
 		{
-			CFG.p("cleanup");
 			Game.currentMap = null;
 			System.gc();
 		}
