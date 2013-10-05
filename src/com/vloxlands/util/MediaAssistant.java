@@ -3,6 +3,8 @@ package com.vloxlands.util;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.json.JSONArray;
+
 import com.vloxlands.settings.CFG;
 
 public class MediaAssistant
@@ -11,6 +13,13 @@ public class MediaAssistant
 	{
 		new File(CFG.DIR, "natives").mkdirs();
 		new File(CFG.DIR, "maps").mkdirs();
+		
+		File version = new File(CFG.DIR, "version.json");
+		JSONArray arr = new JSONArray();
+		arr.put(CFG.PHASE);
+		arr.put(CFG.VERSION);
+		
+		Assistant.setFileContent(version, arr.toString());
 	}
 	
 	public static String[] getMaps()
