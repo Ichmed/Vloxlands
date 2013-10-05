@@ -160,11 +160,12 @@ public class Game
 			glPushMatrix();
 			{
 				glColor3f(1, 1, 0);
+				glPointSize(10f);
 				glBegin(GL_LINES);
 				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
 				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
 				
-				CFG.p(pickingRay.start, pickingRay.end);
+				// CFG.p(camera.position, pickingRay.start, pickingRay.end);
 				glEnd();
 			}
 			glPopMatrix();
