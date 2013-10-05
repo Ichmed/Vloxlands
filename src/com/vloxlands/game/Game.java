@@ -152,17 +152,26 @@ public class Game
 			{
 				currentMap.render();
 				
-				glTranslatef(64, currentMap.islands.get(0).getPos().y + 97, 64);
-				kontor.render();
+				// glTranslatef(64, currentMap.islands.get(0).getPos().y + 97, 64);
+				// kontor.render();
 			}
 			glPopMatrix();
 			
 			glPushMatrix();
 			{
-				glColor3f(1, 1, 0);
 				glPointSize(10f);
 				glBegin(GL_LINES);
+				glColor3f(0.5f, 1, 0);
 				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
+				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
+				
+				// CFG.p(camera.position, pickingRay.start, pickingRay.end);
+				glEnd();
+				glBegin(GL_POINTS);
+				glColor3f(0, 0, 1);
+				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
+				
+				glColor3f(0, 1, 0);
 				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
 				
 				// CFG.p(camera.position, pickingRay.start, pickingRay.end);
