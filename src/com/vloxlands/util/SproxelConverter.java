@@ -10,6 +10,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -120,12 +121,24 @@ public class SproxelConverter
 		CSVReader csv = new CSVReader(csvFile);
 		csv.sep = ",";
 		String[] d = csv.readRow();
-		Block[][][] blocks = new Block[Integer.parseInt(d[0])][Integer.parseInt(d[1])][Integer.parseInt(d[2])];
+		
+		int width = Integer.parseInt(d[0]);
+		int height = Integer.parseInt(d[1]);
+		int depth = Integer.parseInt(d[2]);
+		
+		Block[][][] blocks = new Block[width][width][width];
 		
 		String cell;
 		int index = 0;
 		
 		CFG.p("> reading cell data");
+		
+		if (width != height || width != depth || height != depth)
+		{
+			JOptionPane.showMessageDialog(null, "The Input Sproxel-CSV-Model has to have cubic dimensions! ", "Error!", JOptionPane.ERROR_MESSAGE);
+			CFG.p("> ABORT");
+			return;
+		}
 		
 		while ((cell = csv.readNext()) != null)
 		{
@@ -151,12 +164,12 @@ public class SproxelConverter
 		CFG.p("  > got " + faces.size() + " faces");
 		
 		CFG.p("> running greedy meshing");
-		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces, blocks.length, blocks[0].length, blocks[0][0].length);
+		HashMap<VoxelFaceKey, VoxelFace> meshes = generateGreedyMesh(faces, blocks.length);
 		
 		CFG.p("  > got " + meshes.size() + " meshes");
 		
 		CFG.p("> saving obj file");
-		saveOBJ(new File(csvFile.getPath().replace(".csv", ".obj")), blocks.length, blocks[0].length, blocks[0][0].length, meshes);
+		saveOBJ(new File(csvFile.getPath().replace(".csv", ".obj")), blocks.length, meshes);
 		
 		CFG.p("> sorting files");
 		packFilesInFolder(csvFile);
@@ -199,19 +212,19 @@ public class SproxelConverter
 		return faces;
 	}
 	
-	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(HashMap<VoxelFaceKey, VoxelFace> originalMap, int width, int height, int depth)
+	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(HashMap<VoxelFaceKey, VoxelFace> originalMap, int size)
 	{
 		HashMap<VoxelFaceKey, VoxelFace> strips0 = new HashMap<>();
 		
 		if (originalMap.size() == 0) return originalMap;
 		
 		// greedy-mode along Z - axis
-		for (int posX = 0; posX < width; posX++)
+		for (int posX = 0; posX < size; posX++)
 		{
-			for (int posY = 0; posY < height; posY++)
+			for (int posY = 0; posY < size; posY++)
 			{
 				VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-				for (int posZ = 0; posZ < depth; posZ++)
+				for (int posZ = 0; posZ < size; posZ++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
@@ -249,12 +262,12 @@ public class SproxelConverter
 		HashMap<VoxelFaceKey, VoxelFace> strips1 = new HashMap<>();
 		
 		// greedy-mode along X - axis
-		for (int posY = 0; posY < height; posY++)
+		for (int posY = 0; posY < size; posY++)
 		{
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int posZ = 0; posZ < depth; posZ++)
+			for (int posZ = 0; posZ < size; posZ++)
 			{
-				for (int posX = 0; posX < width; posX++)
+				for (int posX = 0; posX < size; posX++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
@@ -297,12 +310,12 @@ public class SproxelConverter
 		HashMap<VoxelFaceKey, VoxelFace> strips2 = new HashMap<>();
 		
 		// greedy-mode along Y - axis
-		for (int posX = 0; posX < width; posX++)
+		for (int posX = 0; posX < size; posX++)
 		{
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int posZ = 0; posZ < depth; posZ++)
+			for (int posZ = 0; posZ < size; posZ++)
 			{
-				for (int posY = 0; posY < height; posY++)
+				for (int posY = 0; posY < size; posY++)
 				{
 					for (int i = 0; i < activeStrips.length; i++)
 					{
@@ -345,7 +358,7 @@ public class SproxelConverter
 		return strips2;
 	}
 	
-	public static void saveOBJ(File f, int width, int height, int depth, HashMap<VoxelFaceKey, VoxelFace> meshes)
+	public static void saveOBJ(File f, int size, HashMap<VoxelFaceKey, VoxelFace> meshes)
 	{
 		try
 		{
@@ -369,10 +382,15 @@ public class SproxelConverter
 			
 			for (VoxelFace vf : meshes.values())
 			{
-				if (!vertices.contains(new Vector(vf.bl).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.bl).add(new Vector(vf.pos)));
-				if (!vertices.contains(new Vector(vf.br).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.br).add(new Vector(vf.pos)));
-				if (!vertices.contains(new Vector(vf.tl).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tl).add(new Vector(vf.pos)));
-				if (!vertices.contains(new Vector(vf.tr).add(new Vector(vf.pos)))) vertices.add(new Vector(vf.tr).add(new Vector(vf.pos)));
+				Vector bl = transformVector(new Vector(vf.bl).add(new Vector(vf.pos)), size, size, size);
+				Vector br2 = transformVector(new Vector(vf.br).add(new Vector(vf.pos)), size, size, size);
+				Vector tl = transformVector(new Vector(vf.tl).add(new Vector(vf.pos)), size, size, size);
+				Vector tr = transformVector(new Vector(vf.tr).add(new Vector(vf.pos)), size, size, size);
+				
+				if (!vertices.contains(bl)) vertices.add(bl);
+				if (!vertices.contains(br2)) vertices.add(br2);
+				if (!vertices.contains(tl)) vertices.add(tl);
+				if (!vertices.contains(tr)) vertices.add(tr);
 				
 				Color c = loadColor(vf.textureIndex);
 				if (!materials.contains(c)) materials.add(c);
@@ -385,8 +403,11 @@ public class SproxelConverter
 			
 			CFG.p("  > writing vertices");
 			
+			
+			
 			for (Vector v : vertices)
-				obj.write("v " + (v.x / width) + " " + (v.y / height) + " " + (v.z / depth) + br);
+				// obj.write("v " + (v.z / min) + " " + ((size - v.x) / min) + " " + (v.y / min) + br);
+				obj.write("v " + (v.x * size / 16f) + " " + (v.y * size / 16f) + " " + (v.z * size / 16f) + br);
 			
 			obj.write(br);
 			
@@ -434,13 +455,12 @@ public class SproxelConverter
 			CFG.p("  > writing normals");
 			
 			for (Vector v : normals)
-				obj.write(("vn " + v.x + " " + v.y + " " + v.z).replace("-0.0", "0.0") + br);
+				obj.write(("vn " + v.x + " " + v.z + " " + v.y).replace("-0.0", "0.0") + br);
 			
 			obj.write(br);
 			
 			CFG.p("  > writing texture sheet");
 			ImageIO.write(textureSheet, "PNG", new File(f.getPath().replace(".obj", ".png")));
-			
 			
 			CFG.p("  > writing faces");
 			
@@ -459,10 +479,10 @@ public class SproxelConverter
 				
 				// tl, br, bl, tr
 				int[] v = { //
-				vertices.indexOf(new Vector(face.tl).add(new Vector(face.pos))) + 1,//
-				vertices.indexOf(new Vector(face.br).add(new Vector(face.pos))) + 1,//
-				vertices.indexOf(new Vector(face.bl).add(new Vector(face.pos))) + 1,//
-				vertices.indexOf(new Vector(face.tr).add(new Vector(face.pos))) + 1 //
+				vertices.indexOf(transformVector(new Vector(face.tl).add(new Vector(face.pos)), size, size, size)) + 1,//
+				vertices.indexOf(transformVector(new Vector(face.br).add(new Vector(face.pos)), size, size, size)) + 1,//
+				vertices.indexOf(transformVector(new Vector(face.bl).add(new Vector(face.pos)), size, size, size)) + 1,//
+				vertices.indexOf(transformVector(new Vector(face.tr).add(new Vector(face.pos)), size, size, size)) + 1 //
 				};
 				
 				int[] vt = { //
@@ -471,9 +491,9 @@ public class SproxelConverter
 				textureVertices.indexOf(new Vector(U + texMalus, V - step + texMalus, 0)) + 1, //
 				textureVertices.indexOf(new Vector(U + step - texMalus, V - texMalus, 0)) + 1, //
 				};
-				int vn = normals.indexOf(new Vector(face.dir.dir)) + 1;
+				int vn = normals.indexOf(new Vector(face.dir.dir.negate(null))) + 1;
 				
-				obj.write("f " + v[1] + "/" + vt[1] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + " " + v[0] + "/" + vt[0] + "/" + vn + " " + v[3] + "/" + vt[3] + "/" + vn + br);
+				obj.write("f " + v[3] + "/" + vt[3] + "/" + vn + " " + v[0] + "/" + vt[0] + "/" + vn + " " + v[2] + "/" + vt[2] + "/" + vn + " " + v[1] + "/" + vt[1] + "/" + vn + br);
 			}
 			
 			obj.close();
@@ -483,5 +503,11 @@ public class SproxelConverter
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public static Vector transformVector(Vector v, int w, int h, int d)
+	{
+		float min = Math.min(d, Math.min(w, h));
+		return new Vector(v.z / min, (h - v.x) / min, v.y / min);
 	}
 }

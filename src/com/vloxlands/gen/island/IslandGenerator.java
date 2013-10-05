@@ -5,7 +5,6 @@ import com.vloxlands.game.world.Island;
 import com.vloxlands.gen.structure.CrystalGenerator;
 import com.vloxlands.gen.structure.SpikeGenerator;
 import com.vloxlands.gen.structure.TopLayerGenerator;
-import com.vloxlands.gen.structure.TreeGenerator;
 
 public class IslandGenerator extends Thread
 {
@@ -57,7 +56,7 @@ public class IslandGenerator extends Thread
 		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		// Island m = mergeIslandData(L, R, OVR_L);
 		
-		new TreeGenerator(Island.SIZE / 2, Island.SIZE / 2).generate(L, this);
+		// new TreeGenerator(Island.SIZE / 2, Island.SIZE / 2).generate(L, this);
 		
 		new CrystalGenerator(yPos).generate(L, this);
 		

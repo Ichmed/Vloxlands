@@ -49,4 +49,10 @@ public class Vector
 	{
 		return "[" + x + ", " + y + ", " + z + "]";
 	}
+	
+	public static Vector negate(Vector v)
+	{
+		return new Vector(-v.x, -v.y, -v.z);
+	}
+	
 }
