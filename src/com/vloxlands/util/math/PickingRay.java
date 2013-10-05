@@ -50,6 +50,9 @@ public class PickingRay
 		near = MathHelper.rotateVectorByCameraRotation(near);
 		far = MathHelper.rotateVectorByCameraRotation(far);
 		
+		near.translate(Game.camera.position.x, Game.camera.position.y, Game.camera.position.z);
+		far.translate(Game.camera.position.x, Game.camera.position.y, Game.camera.position.z);
+		
 		return new PickingRay(near, far);
 	}
 }
