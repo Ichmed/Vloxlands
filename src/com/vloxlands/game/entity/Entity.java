@@ -18,7 +18,7 @@ public abstract class Entity implements IRendering
 	public boolean affectedByGravity = true;
 	public boolean canMove = true;
 	public boolean takeFallDmg = true;
-	private boolean canDie = true;
+	protected boolean canDie = true;
 	
 	int health = 100;
 	
@@ -55,16 +55,17 @@ public abstract class Entity implements IRendering
 	public void hurt(int strength, DamageType d)
 	{
 		// TODO: add resistances/weaknesses
-		this.onHurt();
+		onHurt();
 		health -= strength;
 	}
 	
 	private void die()
 	{
-		this.onDeath();
+		onDeath();
 		Game.currentMap.entities.remove(this);
 	}
 	
 	protected abstract void onDeath();
+	
 	protected abstract void onHurt();
 }

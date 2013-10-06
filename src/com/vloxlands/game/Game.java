@@ -26,8 +26,6 @@ import com.vloxlands.net.Client;
 import com.vloxlands.net.Player;
 import com.vloxlands.net.Server;
 import com.vloxlands.render.ChunkRenderer;
-import com.vloxlands.render.model.Model;
-import com.vloxlands.render.util.ModelLoader;
 import com.vloxlands.scene.Scene;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Settings;
@@ -71,7 +69,6 @@ public class Game
 	boolean hamachiInstallationDialogShown = false;
 	
 	ArrayList<Scene> sceneStack = new ArrayList<>();
-	Model kontor = ModelLoader.loadModel("/graphics/models/entity/Kontor/Kontor.obj");
 	
 	public float cameraSpeed = 0.3f;
 	public int cameraRotationSpeed = 180;

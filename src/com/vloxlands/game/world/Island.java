@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.entity.Entity;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk.ChunkKey;
 import com.vloxlands.settings.CFG;
@@ -24,6 +25,8 @@ public class Island
 	public static final float SNOW_INCREASE = 16;
 	
 	HashMap<ChunkKey, Chunk> chunks = new HashMap<>();
+	ArrayList<Entity> entities = new ArrayList<>();
+	
 	
 	Vector3f pos;
 	
@@ -60,6 +63,11 @@ public class Island
 	{
 		float deltaY = (int) (((uplift * Map.calculateUplift(pos.y) - weight) / 100000f - initBalance) * 100f) / 100f;
 		pos.translate(0, deltaY, 0);
+		
+		for (Entity e : entities)
+		{
+			e.onTick();
+		}
 	}
 	
 	public void calculateWeight()
@@ -165,6 +173,13 @@ public class Island
 			if (c.render(this, true)) renderedChunks++;
 		}
 		
+		for (Entity e : entities)
+		{
+			glPushMatrix();
+			e.render();
+			glPopMatrix();
+		}
+		
 		for (Chunk c : chunks.values())
 		{
 			c.render(this, false);
@@ -209,6 +224,17 @@ public class Island
 	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
+	}
+	
+	public void addEntity(Entity e)
+	{
+		e.island = this;
+		entities.add(e);
+	}
+	
+	public Entity[] getEntities()
+	{
+		return entities.toArray(new Entity[] {});
 	}
 	
 	public int grassify()

@@ -1,5 +1,8 @@
 package com.vloxlands.gen.island;
 
+import org.lwjgl.util.vector.Vector3f;
+
+import com.vloxlands.game.entity.EntityBuilding;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.gen.structure.CrystalGenerator;
@@ -59,6 +62,8 @@ public class IslandGenerator extends Thread
 		// new TreeGenerator(Island.SIZE / 2, Island.SIZE / 2).generate(L, this);
 		
 		new CrystalGenerator(yPos).generate(island, this);
+		
+		island.addEntity(new EntityBuilding(new Vector3f(Island.SIZE / 2, Island.SIZE / 4 * 3 + 1, Island.SIZE / 2), new Vector3f(4, 2, 4), "Kontor"));
 		
 		island.grassify();
 		return island;
