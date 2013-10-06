@@ -20,6 +20,7 @@ public abstract class Packet
 		SETTINGS,
 		ATTRIBUTE,
 		ISLAND,
+		ENTITYBUILDING,
 		
 		;
 		public int getID()

@@ -53,6 +53,7 @@ public class Server extends Thread
 			socket = new DatagramSocket(new InetSocketAddress(ipAddress, CFG.SERVER_PORT));
 			map = new Map();
 			lobby = true;
+			setName("Server-Thread");
 		}
 		catch (BindException e)
 		{
@@ -371,7 +372,6 @@ public class Server extends Thread
 	{
 		try
 		{
-			CFG.p(map.islands.size());
 			sendPacket(new Packet8Attribute("mapeditor_progress_float", 0), player);
 			for (int i = 0; i < map.islands.size(); i++)
 			{

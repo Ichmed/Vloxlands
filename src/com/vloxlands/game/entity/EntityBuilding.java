@@ -8,9 +8,9 @@ import com.vloxlands.render.util.ModelLoader;
 
 public class EntityBuilding extends Entity
 {
-	String modelName;
+	public String modelName;
+	public Vector3f size;
 	Model model;
-	Vector3f size;
 	
 	public EntityBuilding(Vector3f pos, Vector3f size, String modelName)
 	{
@@ -45,5 +45,4 @@ public class EntityBuilding extends Entity
 	@Override
 	protected void onHurt()
 	{}
-	
 }

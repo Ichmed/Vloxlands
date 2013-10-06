@@ -42,6 +42,7 @@ public class Client extends Thread
 			socket = new DatagramSocket();
 			connected = false;
 			rejectionCause = null;
+			setName("Client-Thread");
 		}
 		catch (Exception e)
 		{
@@ -90,6 +91,7 @@ public class Client extends Thread
 			case SERVERINFO:
 			case PLAYER:
 			case SETTINGS:
+			case ENTITYBUILDING:
 				break;
 			
 			case CONNECT:
@@ -135,9 +137,6 @@ public class Client extends Thread
 			}
 			case ISLAND:
 			{
-				// TODO: temporary
-				if (isConnectedToLocalhost()) break;
-				
 				final Packet9Island packet = new Packet9Island(data);
 				new Thread()
 				{
@@ -150,6 +149,20 @@ public class Client extends Thread
 				}.start();
 				break;
 			}
+			// case ENTITYBUILDING:
+			// {
+			// Packet10EntityBuilding packet = new Packet10EntityBuilding(data);
+			//
+			// if (packet.getIslandIndex() >= Game.currentMap.islands.size() - 1)
+			// {
+			// cache.add(packet);
+			// break;
+			// }
+			//
+			// Game.currentMap.islands.get(packet.getIslandIndex()).addEntity(packet.getEntityBuilding());
+			//
+			// break;
+			// }
 			default:
 				CFG.p("reveived unhandled packet: " + type + " [" + Packet.readData(data) + "]");
 		}

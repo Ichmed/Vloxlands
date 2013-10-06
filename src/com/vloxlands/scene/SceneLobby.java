@@ -21,6 +21,7 @@ import com.vloxlands.net.Server;
 import com.vloxlands.net.packet.Packet;
 import com.vloxlands.net.packet.Packet.PacketTypes;
 import com.vloxlands.net.packet.Packet0Connect;
+import com.vloxlands.net.packet.Packet10EntityBuilding;
 import com.vloxlands.net.packet.Packet3ChatMessage;
 import com.vloxlands.net.packet.Packet4ServerInfo;
 import com.vloxlands.net.packet.Packet6Player;
@@ -57,6 +58,8 @@ public class SceneLobby extends Scene
 	static float progress;
 	static String progressString;
 	static boolean wasRejoining = false;
+	
+	static ArrayList<Packet10EntityBuilding> p10Cache = new ArrayList<>();
 	
 	// TODO: Implement Multiplayer mapsaving + loading. Include player data into mapsave and demand the same setup when loadng the map again.
 	
@@ -365,6 +368,14 @@ public class SceneLobby extends Scene
 		{
 			if (!Game.currentMap.initialized && !progressString.equals(Tr._("renderchunks")))
 			{
+				progressString = Tr._("loadingbuildings");
+				for (Packet10EntityBuilding p : p10Cache)
+				{
+					Game.currentMap.islands.get(p.getIslandIndex()).addEntity(p.getEntityBuilding());
+				}
+				
+				p10Cache.clear();
+				
 				progressString = Tr._("renderchunks");
 				Game.currentMap.initMap();
 			}
@@ -378,10 +389,10 @@ public class SceneLobby extends Scene
 		}
 		
 		// TODO: temporary
-		if (progress == 0.5f && Game.client.isConnectedToLocalhost() && Game.currentMap.islands.size() == 0)
-		{
-			Game.currentMap = Game.server.getMap();
-		}
+		// if (progress == 0.5f && Game.client.isConnectedToLocalhost() && Game.currentMap.islands.size() == 0)
+		// {
+		// Game.currentMap = Game.server.getMap();
+		// }
 	}
 	
 	@Override
@@ -487,6 +498,11 @@ public class SceneLobby extends Scene
 					progressString = Tr._(p.getValue());
 					lockScene();
 				}
+				break;
+			}
+			case ENTITYBUILDING:
+			{
+				p10Cache.add(new Packet10EntityBuilding(data));
 				break;
 			}
 			default:

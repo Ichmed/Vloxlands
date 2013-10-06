@@ -6,9 +6,12 @@ import java.util.ArrayList;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.game.entity.Entity;
+import com.vloxlands.game.entity.EntityBuilding;
 import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.gen.island.IslandGenerator;
+import com.vloxlands.net.packet.Packet10EntityBuilding;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 
@@ -85,13 +88,9 @@ public class MapGenerator extends Thread
 			Point spot = pickRandomSpot();
 			generateIsland(y, 32, 48);
 			gen.finishedIsland.setPos(new Vector3f(spot.x * Island.SIZE, y, spot.y * Island.SIZE));
-			try
-			{
-				Game.server.sendPacketToAllClients(new Packet9Island(gen.finishedIsland));
-			}
-			catch (Exception e)
-			{}
+			
 			map.addIsland(gen.finishedIsland);
+			sendIsland(gen.finishedIsland);
 		}
 		
 		for (int i = 0; i < size.getSize(); i++)
@@ -102,13 +101,9 @@ public class MapGenerator extends Thread
 				float y = (float) (Math.random() * 256);
 				generateIsland(y, 12, 20);
 				gen.finishedIsland.setPos(new Vector3f(i * Island.SIZE, y, j * Island.SIZE));
-				try
-				{
-					Game.server.sendPacketToAllClients(new Packet9Island(gen.finishedIsland));
-				}
-				catch (Exception e)
-				{}
+				
 				map.addIsland(gen.finishedIsland);
+				sendIsland(gen.finishedIsland);
 			}
 		}
 		
@@ -157,5 +152,20 @@ public class MapGenerator extends Thread
 		takenSpots.add(p);
 		
 		return p;
+	}
+	
+	private void sendIsland(Island island)
+	{
+		try
+		{
+			Game.server.sendPacketToAllClients(new Packet9Island(island));
+			
+			for (Entity e : island.getEntities())
+			{
+				if (e instanceof EntityBuilding) Game.server.sendPacketToAllClients(new Packet10EntityBuilding((EntityBuilding) e, map.islands.indexOf(island)));
+			}
+		}
+		catch (Exception e)
+		{}
 	}
 }
