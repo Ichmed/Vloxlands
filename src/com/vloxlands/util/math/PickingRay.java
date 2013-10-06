@@ -28,24 +28,24 @@ public class PickingRay
 	{
 		ratio = (float) Display.getWidth() / Display.getHeight();
 		
-		hNear = (float) (2 * Math.tan(Math.toRadians(CFG.FOV)) * Game.zNear);
+		hNear = (float) (Math.tan(Math.toRadians(CFG.FOV / 2)) * Game.zNear);
 		wNear = hNear * ratio;
 		
-		hFar = (float) (2 * Math.tan(Math.toRadians(CFG.FOV)) * CFG.RENDER_DISTANCE);
+		hFar = (float) (Math.tan(Math.toRadians(CFG.FOV / 2)) * CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
 		wFar = hFar * ratio;
 	}
 	
 	public static PickingRay getPickingRay(float mouseX, float mouseY)
 	{
-		float displayNearRatio = wNear / Display.getWidth();
-		float displayFarRatio = wFar / Display.getWidth();
+		float displayNearRatio = wNear / Display.getWidth() * 2;
+		float displayFarRatio = wFar / Display.getWidth() * 2;
 		
-		float x = mouseX - (Display.getWidth() / 2);
-		float y = mouseY - (Display.getWidth() / 2);
+		float x = (Display.getWidth() / 2) - mouseX;
+		float y = (Display.getHeight() / 2) - (Display.getHeight() - mouseY);
 		
 		
 		Vector3f near = new Vector3f(x * displayNearRatio, y * displayNearRatio, Game.zNear);
-		Vector3f far = new Vector3f(x * displayFarRatio, y * displayFarRatio, CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE]);
+		Vector3f far = new Vector3f(x * displayFarRatio, y * displayFarRatio, (CFG.RENDER_DISTANCES[CFG.RENDER_DISTANCE] - 5));
 		
 		near = MathHelper.rotateVectorByCameraRotation(near);
 		far = MathHelper.rotateVectorByCameraRotation(far);
