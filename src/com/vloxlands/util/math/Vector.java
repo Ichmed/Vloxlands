@@ -1,5 +1,7 @@
 package com.vloxlands.util.math;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
@@ -14,6 +16,13 @@ public class Vector
 		this.x = x;
 		this.y = y;
 		this.z = z;
+	}
+	
+	public Vector(JSONArray arr) throws JSONException
+	{
+		x = arr.getInt(0);
+		y = arr.getInt(1);
+		z = arr.getInt(2);
 	}
 	
 	public Vector(Vector3f v)
@@ -65,9 +74,23 @@ public class Vector
 		return "[" + x + ", " + y + ", " + z + "]";
 	}
 	
+	public Vector3f toVector3f()
+	{
+		return new Vector3f(x, y, z);
+	}
+	
 	public static Vector negate(Vector v)
 	{
 		return new Vector(-v.x, -v.y, -v.z);
 	}
 	
+	public static JSONArray serialize(Vector v) throws JSONException
+	{
+		JSONArray arr = new JSONArray();
+		arr.put(v.x);
+		arr.put(v.y);
+		arr.put(v.z);
+		
+		return arr;
+	}
 }

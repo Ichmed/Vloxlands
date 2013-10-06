@@ -57,6 +57,9 @@ public class MapGenerator extends Thread
 		this.size = size;
 		this.playerCount = playerCount;
 		playableIslands = (int) (Math.random() * (playerCount * 2) + playerCount);
+		
+		if (playableIslands > size.getSizeSQ()) playableIslands = size.getSizeSQ();
+		
 		progress = 0;
 		progressBefore = 0;
 		setDaemon(true);
@@ -75,6 +78,7 @@ public class MapGenerator extends Thread
 		}
 		catch (Exception e)
 		{}
+		
 		for (int i = 0; i < playableIslands; i++)
 		{
 			float y = (float) (Math.random() * 256);
@@ -108,13 +112,13 @@ public class MapGenerator extends Thread
 			}
 		}
 		
+		Game.server.setMap(map);
 		try
 		{
 			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", 1));
 		}
 		catch (Exception e)
 		{}
-		Game.server.setMap(map);
 	}
 	
 	private void generateIsland(float y, int minSize, int maxSize)

@@ -135,6 +135,9 @@ public class Client extends Thread
 			}
 			case ISLAND:
 			{
+				// TODO: temporary
+				if (isConnectedToLocalhost()) break;
+				
 				final Packet9Island packet = new Packet9Island(data);
 				new Thread()
 				{

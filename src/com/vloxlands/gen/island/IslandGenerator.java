@@ -52,16 +52,16 @@ public class IslandGenerator extends Thread
 		
 		quotient = radius + 2;
 		
-		Island L = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 4 * 3, Island.SIZE / 2, radius);
+		Island island = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 4 * 3, Island.SIZE / 2, radius);
 		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
 		// Island m = mergeIslandData(L, R, OVR_L);
 		
 		// new TreeGenerator(Island.SIZE / 2, Island.SIZE / 2).generate(L, this);
 		
-		new CrystalGenerator(yPos).generate(L, this);
+		new CrystalGenerator(yPos).generate(island, this);
 		
-		L.grassify();
-		return L;
+		island.grassify();
+		return island;
 	}
 	
 	public void updateProgress()

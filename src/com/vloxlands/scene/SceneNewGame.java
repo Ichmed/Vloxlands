@@ -3,6 +3,7 @@ package com.vloxlands.scene;
 import org.lwjgl.opengl.Display;
 
 import com.vloxlands.game.Game;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.settings.Tr;
 import com.vloxlands.ui.Container;
 import com.vloxlands.ui.IGuiEvent;
@@ -50,6 +51,7 @@ public class SceneNewGame extends Scene
 				Game.currentGame.addScene(new SceneLobby());
 			}
 		});
+		b.setEnabled(CFG.INTERNET);
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 250, Tr._("back"));

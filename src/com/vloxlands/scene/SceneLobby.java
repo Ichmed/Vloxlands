@@ -376,6 +376,12 @@ public class SceneLobby extends Scene
 			if (s.contains(mapname.getText())) start.setEnabled(false);
 			else start.setEnabled(true);
 		}
+		
+		// TODO: temporary
+		if (progress == 0.5f && Game.client.isConnectedToLocalhost() && Game.currentMap.islands.size() == 0)
+		{
+			Game.currentMap = Game.server.getMap();
+		}
 	}
 	
 	@Override
