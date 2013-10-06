@@ -1,26 +1,18 @@
 package com.vloxlands.gen.island;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.entity.EntityBuilding;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Island;
+import com.vloxlands.gen.Generator;
 import com.vloxlands.gen.structure.CrystalGenerator;
 import com.vloxlands.gen.structure.SpikeGenerator;
 import com.vloxlands.gen.structure.TopLayerGenerator;
 
 public class IslandGenerator extends Thread
 {
-	/**
-	 * Override L
-	 */
-	public static final boolean OVR_L = true;
-	/**
-	 * Override R
-	 */
-	public static final boolean OVR_R = false;
-	
-	
 	public static final float MIN_VEIN_DISTANCE = 30;
 	
 	public float progress;
@@ -51,13 +43,28 @@ public class IslandGenerator extends Thread
 	
 	private Island generateIsland()
 	{
-		int radius = getRandomRadius();
+		int radius = rand(minSize, maxSize);
+		int subislands = (int) Math.round((1f / radius * 16f) * Math.random() * 3);
 		
 		quotient = radius + 2;
 		
+		int[] radii = new int[subislands];
+		for (int i = 0; i < radii.length; i++)
+		{
+			radii[i] = rand(minSize, maxSize / 2);
+			quotient += radii[i] + 3;
+		}
+		
+		
 		Island island = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 4 * 3, Island.SIZE / 2, radius);
-		// Island R = generatePerfectIsland((int) (128 + radius / Math.PI), Island.SIZE / 2, 128, radius);
-		// Island m = mergeIslandData(L, R, OVR_L);
+		
+		
+		for (int i = 0; i < subislands; i++)
+		{
+			Vector2f pos = Generator.getRandomCircleInCircle(new Vector2f(Island.SIZE / 2, Island.SIZE / 2), radius, 2);
+			
+			mergeIslandData(island, generatePerfectIsland((int) pos.x, Island.SIZE / 4 * 3, (int) pos.y, radii[i]));
+		}
 		
 		// new TreeGenerator(Island.SIZE / 2, Island.SIZE / 2).generate(L, this);
 		
@@ -109,29 +116,28 @@ public class IslandGenerator extends Thread
 		return island;
 	}
 	
-	private int getRandomRadius()
+	private int rand(int min, int max)
 	{
-		return (int) (Math.random() * (maxSize - minSize)) + minSize;
+		return (int) (Math.random() * (max - min)) + min;
 	}
 	
-	// public Island mergeIslandData(Island L, Island R, boolean rule)
-	// {
-	// Island island = rule ? L.clone() : R.clone();
-	//
-	// Island ovr = rule ? R : L;
-	// for (int x = 0; x < Island.SIZE; x++)
-	// {
-	// for (int y = 0; y < Island.SIZE; y++)
-	// {
-	// for (int z = 0; z < Island.SIZE; z++)
-	// {
-	// if (ovr.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
-	//
-	// island.setVoxel(x, y, z, ovr.getVoxelId(x, y, z));
-	// }
-	// }
-	// }
-	// updateProgress();
-	// return island;
-	// }
+	/**
+	 * L gets overwritten by R
+	 */
+	public void mergeIslandData(Island L, Island R)
+	{
+		for (int x = 0; x < Island.SIZE; x++)
+		{
+			for (int y = 0; y < Island.SIZE; y++)
+			{
+				for (int z = 0; z < Island.SIZE; z++)
+				{
+					if (R.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
+					
+					L.setVoxel(x, y, z, R.getVoxelId(x, y, z));
+				}
+			}
+		}
+		updateProgress();
+	}
 }
