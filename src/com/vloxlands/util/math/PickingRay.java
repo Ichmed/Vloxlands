@@ -37,8 +37,8 @@ public class PickingRay
 	
 	public static PickingRay getPickingRay(float mouseX, float mouseY)
 	{
-		float displayNearRatio = wNear / Display.getWidth() * 2;
-		float displayFarRatio = wFar / Display.getWidth() * 2;
+		float displayNearRatio = wNear / Display.getWidth();
+		float displayFarRatio = wFar / Display.getWidth();
 		
 		float x = (Display.getWidth() / 2) - mouseX;
 		float y = (Display.getHeight() / 2) - (Display.getHeight() - mouseY);

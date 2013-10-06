@@ -81,9 +81,7 @@ public class UpdateThread extends Thread
 				}
 				
 				if (Game.currentMap != null)
-				{
-					if (Game.pickingRay == null) PickingRay.update();
-					
+				{					
 					Game.pickingRay = PickingRay.getPickingRay(Mouse.getX(), Mouse.getY());
 					
 					if (Game.currentMap != null && Game.currentMap.initialized) Game.currentMap.onTick();

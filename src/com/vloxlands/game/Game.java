@@ -246,6 +246,7 @@ public class Game
 	
 	public static void initGame()
 	{
+		PickingRay.update();
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();
