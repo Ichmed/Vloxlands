@@ -70,7 +70,8 @@ public class IslandGenerator extends Thread
 		
 		new CrystalGenerator(yPos).generate(island, this);
 		
-		island.addEntity(new EntityBuilding(new Vector3f(Island.SIZE / 2, Island.SIZE / 4 * 3 + 1, Island.SIZE / 2), new Vector3f(4, 2, 4), "Kontor"));
+		EntityBuilding eb = new EntityBuilding(new Vector3f(Island.SIZE / 2, Island.SIZE / 4 * 3 + 1, Island.SIZE / 2), new Vector3f(4, 2, 4), "Kontor");
+		island.addEntity(eb);
 		
 		island.grassify();
 		return island;

@@ -194,6 +194,12 @@ public class VoxelFace
 		return "VoxelFace[pos=" + pos.toString() + ", DIR=" + dir + ", sizeX=" + sizeX + ", sizeY=" + sizeY + ", sizeZ=" + sizeZ + ", tl=" + tl + ", tr=" + tr + ", bl=" + bl + ", br=" + br + "]";
 	}
 	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return toString().equals(obj.toString());
+	}
+	
 	public double getDistanceToCamera()
 	{
 		return Vector3f.sub(Game.camera.position, pos, null).length();

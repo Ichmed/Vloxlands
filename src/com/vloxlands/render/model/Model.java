@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
 
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.MathHelper;
@@ -24,7 +25,9 @@ public class Model
 	public boolean hasTextures = false;
 	public boolean usesMaterials = false;
 	
-	int displayListID;
+	Color color;
+	
+	int displayListID = -1;
 	boolean wantsRender;
 	
 	/**
@@ -38,7 +41,6 @@ public class Model
 	
 	public Model()
 	{
-		displayListID = glGenLists(1);
 		wantsRender = true;
 	}
 	
@@ -52,24 +54,33 @@ public class Model
 		
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_FOG);
-		// glDisable(GL_CULL_FACE);
 		
-		// if (!usesMaterials) glBindTexture(GL_TEXTURE_2D, 0);
 		for (int i = 0; i < faces.size(); i++)
 		{
+			boolean rewrite = false;
+			
 			if (usesMaterials)
 			{
 				Material m = materials.get(faceMaterials.get(i));
+				
 				if (m.hasTexture) RenderAssistant.bindTexture(m.texturePath);
 				else glDisable(GL_TEXTURE_2D);
 				
-				// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
+				if (m.name.equals("white"))
+				{
+					if (color != null) rewrite = true;
+				}
+				else
+				{
+					// glColor4f(m.difuseColor.x, m.difuseColor.y, m.difuseColor.z, m.difuseColor.w);
+					
+					glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { m.ambientColor.x, m.ambientColor.y, m.ambientColor.z, m.ambientColor.w }));
+					glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { m.diffuseColor.x, m.diffuseColor.y, m.diffuseColor.z, m.diffuseColor.w }));
+					glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { m.specularColor.x, m.specularColor.y, m.specularColor.z, m.specularColor.w }));
+					
+					glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);
+				}
 				
-				glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { m.ambientColor.x, m.ambientColor.y, m.ambientColor.z, m.ambientColor.w }));
-				glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { m.diffuseColor.x, m.diffuseColor.y, m.diffuseColor.z, m.diffuseColor.w }));
-				glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { m.specularColor.x, m.specularColor.y, m.specularColor.z, m.specularColor.w }));
-				
-				glMaterialf(GL_FRONT, GL_SHININESS, m.shininess);
 			}
 			
 			for (Face face : faces.get(i))
@@ -83,6 +94,8 @@ public class Model
 						Vector3f n1 = normals.get((int) face.points[j].z - 1);
 						glNormal3f(n1.x, n1.y, n1.z);
 					}
+					
+					if (rewrite) glColor3f(1, 0, 0);
 					if (hasTextures)
 					{
 						Vector2f t1 = tetxures.get((int) face.points[j].y - 1);
@@ -90,6 +103,8 @@ public class Model
 					}
 					Vector3f v1 = vertices.get((int) face.points[j].x - 1);
 					glVertex3f(v1.x, v1.y, v1.z);
+					
+					glColor3f(1, 1, 1);
 				}
 				
 				glEnd();
@@ -102,6 +117,7 @@ public class Model
 	
 	public void render()
 	{
+		if (displayListID == -1) displayListID = glGenLists(1);
 		if (wantsRender) renderModel();
 		
 		glCallList(displayListID);
@@ -130,5 +146,10 @@ public class Model
 			v[i] = new Vector3f(w.x, w.y, w.z);
 		}
 		return v;
+	}
+	
+	public void enablePlayerRecoloring(Color color)
+	{
+		this.color = color;
 	}
 }

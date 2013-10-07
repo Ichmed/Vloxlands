@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -423,6 +425,15 @@ public class SproxelConverter
 					+ "illum 2" + br //
 					+ "map_Kd " + f.getName().replace(".obj", ".png") + br);
 			
+			mtl.write("newmtl white" + br //
+					+ "Ns 0.000000" + br //
+					+ "Ka 0.500000 0.500000 0.500000" + br //
+					+ "Kd 1.000000 1.000000 1.000000" + br //
+					+ "Ks 0.000000 0.000000 0.000000" + br //
+					+ "Ni 1.000000" + br //
+					+ "d 0.000000" + br //
+					+ "illum 2" + br);
+			
 			CFG.p("  > writing texture vertices");
 			
 			Graphics g = textureSheet.getGraphics();
@@ -464,12 +475,43 @@ public class SproxelConverter
 			
 			CFG.p("  > writing faces");
 			
-			obj.write("usemtl mtl0" + br);
-			
 			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
+			Collections.sort(values, new Comparator<VoxelFace>()
+			{
+				@Override
+				public int compare(VoxelFace o1, VoxelFace o2)
+				{
+					Color c1 = loadColor(o1.textureIndex);
+					Color c2 = loadColor(o2.textureIndex);
+					
+					if (c1.equals(c2))
+					{
+						return 0;
+					}
+					else if (c1.equals(Color.white))
+					{
+						return -1;
+					}
+					
+					return 1;
+				}
+			});
+			
+			boolean prev = false;
+			
+			obj.write("usemtl white" + br);
+			
 			for (int i = 0; i < values.size(); i++)
 			{
 				VoxelFace face = values.get(i);
+				
+				boolean white = loadColor(face.textureIndex).equals(Color.white);
+				
+				if (!white && !prev)
+				{
+					obj.write("usemtl mtl0" + br);
+					prev = true;
+				}
 				
 				int material = materials.indexOf(loadColor(face.textureIndex));
 				
