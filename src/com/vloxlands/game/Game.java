@@ -145,34 +145,14 @@ public class Game
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
 		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive())
 		{
+			Game.pickingRay = PickingRay.getPickingRay(Mouse.getX(), Mouse.getY());
+			
 			glPushMatrix();
 			{
 				currentMap.render();
 				
 				// glTranslatef(64, currentMap.islands.get(0).getPos().y + 97, 64);
 				// kontor.render();
-			}
-			glPopMatrix();
-			
-			glPushMatrix();
-			{
-				glPointSize(10f);
-				glBegin(GL_LINES);
-				glColor3f(0.5f, 1, 0);
-				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
-				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
-				
-				// CFG.p(camera.position, pickingRay.start, pickingRay.end);
-				glEnd();
-				glBegin(GL_POINTS);
-				glColor3f(0, 0, 1);
-				glVertex3f(pickingRay.start.x, pickingRay.start.y, pickingRay.start.z);
-				
-				glColor3f(0, 1, 0);
-				glVertex3f(pickingRay.end.x, pickingRay.end.y, pickingRay.end.z);
-				
-				// CFG.p(camera.position, pickingRay.start, pickingRay.end);
-				glEnd();
 			}
 			glPopMatrix();
 		}
@@ -238,7 +218,7 @@ public class Game
 				scene.init();
 			}
 			
-			PickingRay.update();
+			// PickingRay.update();
 		}
 		catch (ConcurrentModificationException e)
 		{}
@@ -246,7 +226,7 @@ public class Game
 	
 	public static void initGame()
 	{
-		PickingRay.update();
+		// PickingRay.update();
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
 		currentGame = new Game();

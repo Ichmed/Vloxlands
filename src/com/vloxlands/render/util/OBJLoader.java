@@ -13,7 +13,6 @@ import org.lwjgl.util.vector.Vector4f;
 import com.vloxlands.render.model.Face;
 import com.vloxlands.render.model.Material;
 import com.vloxlands.render.model.Model;
-import com.vloxlands.settings.CFG;
 
 public class OBJLoader
 {
@@ -28,8 +27,6 @@ public class OBJLoader
 	@SuppressWarnings("unchecked")
 	public static Model loadModel(String path) throws IOException
 	{
-		CFG.p("call");
-		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(OBJLoader.class.getResourceAsStream(path)));
 		Model m = new Model();
 		String line;

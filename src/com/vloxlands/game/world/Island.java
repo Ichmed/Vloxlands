@@ -199,7 +199,14 @@ public class Island
 					Vector3f pos = new Vector3f(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE);
 					
 					glColor3f(1, 0, 0);
-					if (MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE))) glColor3f(0, 1, 1);
+					
+					float intersection = MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE));
+					
+					if (intersection != -1)
+					{
+						// CFG.p(intersection);
+						glColor3f(0, 1, 1);
+					}
 					
 					RenderAssistant.renderCuboid(pos.x, pos.y, pos.z, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
 				}

@@ -218,14 +218,17 @@ public class MathHelper
 		return true;
 	}
 	
-	public static boolean intersects(PickingRay ray, AABB aabb)
+	/**
+	 * returns length of ray until intersection or -1 if no intersection
+	 */
+	public static float intersects(PickingRay ray, AABB aabb)
 	{
 		float[] fs = new float[] { 0, 1 };
 		
-		if (!clipLine(0, aabb, ray, fs)) return false;
-		if (!clipLine(1, aabb, ray, fs)) return false;
-		if (!clipLine(2, aabb, ray, fs)) return false;
+		if (!clipLine(0, aabb, ray, fs)) return -1;
+		if (!clipLine(1, aabb, ray, fs)) return -1;
+		if (!clipLine(2, aabb, ray, fs)) return -1;
 		
-		return true;
+		return fs[0] * Vector3f.sub(ray.end, ray.start, null).length();
 	}
 }
