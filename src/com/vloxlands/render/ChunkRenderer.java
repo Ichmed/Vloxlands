@@ -18,7 +18,7 @@ public class ChunkRenderer
 		ArrayList<Chunk> chunks = new ArrayList<>(island.getChunks());
 		for (int i = 0; i < chunks.size(); i++)
 		{
-			chunks.get(i).updateMesh(island);
+			chunks.get(i).updateMesh();
 		}
 	}
 	

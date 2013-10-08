@@ -87,7 +87,7 @@ public class MapAssistant
 			ByteBuffer bb = ByteBuffer.wrap(data, pos, 3);
 			pos += 3;
 			
-			Chunk c = new Chunk(bb.get(), bb.get(), bb.get());
+			Chunk c = new Chunk(bb.get(), bb.get(), bb.get(), island);
 			
 			// ids
 			bb = ByteBuffer.wrap(data, pos, 4);
