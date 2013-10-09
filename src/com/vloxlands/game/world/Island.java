@@ -219,6 +219,7 @@ public class Island
 			glPopMatrix();
 		}
 		glEnable(GL_LIGHTING);
+		glEnable(GL_FOG);
 		
 		glDisable(GL_TEXTURE_2D);
 	}
