@@ -13,11 +13,9 @@ import com.vloxlands.game.entity.Entity;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk.ChunkKey;
 import com.vloxlands.settings.CFG;
-import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.AABB;
-import com.vloxlands.util.math.MathHelper;
 
-public class Island
+public class Island extends AABB
 {
 	public static final int SIZE = 128;
 	public static final int SNOWLEVEL = 50;
@@ -36,6 +34,9 @@ public class Island
 	
 	public Island()
 	{
+		super(new Vector3f(0, 0, 0), SIZE, SIZE, SIZE);
+		cubic = true;
+		
 		pos = new Vector3f(0, 0, 0);
 	}
 	
@@ -160,9 +161,12 @@ public class Island
 		chunks.get(cp).setMetadata(x - cp.x * Chunk.SIZE, y - cp.y * Chunk.SIZE, z - cp.z * Chunk.SIZE, metadata);
 	}
 	
+	@Override
 	public void render()
 	{
 		if (!Game.frustum.sphereInFrustum(pos.x, pos.y, pos.z, SIZE * (float) Math.sqrt(2))) return;
+		
+		// if (!inViewFrustum()) return;
 		
 		glTranslatef(pos.x, pos.y, pos.z);
 		
@@ -170,7 +174,7 @@ public class Island
 		
 		for (Chunk c : chunks.values())
 		{
-			if (c.render(this, true)) renderedChunks++;
+			if (c.render(true)) renderedChunks++;
 		}
 		
 		for (Entity e : entities)
@@ -182,41 +186,44 @@ public class Island
 		
 		for (Chunk c : chunks.values())
 		{
-			c.render(this, false);
+			c.render(false);
 		}
 		
 		glDisable(GL_LIGHTING);
 		if (CFG.SHOW_CHUNK_BOUNDARIES)
 		{
-			glPushMatrix();
-			{
-				glLineWidth(1);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-				for (Chunk c : chunks.values())
-				{
-					if (c.getResource(Voxel.get("AIR")) == Math.pow(Chunk.SIZE, 3)) continue;
-					
-					Vector3f pos = new Vector3f(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE);
-					
-					glColor3f(1, 0, 0);
-					
-					float intersection = MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE));
-					
-					if (intersection != -1)
-					{
-						// CFG.p(intersection);
-						glColor3f(0, 1, 1);
-					}
-					
-					RenderAssistant.renderCuboid(pos.x, pos.y, pos.z, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
-				}
-				
-				glColor3f(0, 0, 0);
-				RenderAssistant.renderCuboid(0, 0, 0, SIZE, SIZE, SIZE);
-				glColor3f(1, 1, 1);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			}
-			glPopMatrix();
+			glColor3f(0, 0, 0);
+			super.render();
+			glColor3f(1, 1, 1);
+			// glPushMatrix();
+			// {
+			// glLineWidth(1);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			// for (Chunk c : chunks.values())
+			// {
+			// if (c.getResource(Voxel.get("AIR")) == Math.pow(Chunk.SIZE, 3)) continue;
+			//
+			// Vector3f pos = new Vector3f(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE);
+			//
+			// glColor3f(1, 0, 0);
+			//
+			// // float intersection = MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE));
+			// //
+			// // if (intersection != -1)
+			// // {
+			// // // CFG.p(intersection);
+			// // glColor3f(0, 1, 1);
+			// // }
+			//
+			// // RenderAssistant.renderCuboid(pos.x, pos.y, pos.z, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
+			// }
+			//
+			// glColor3f(0, 0, 0);
+			// RenderAssistant.renderCuboid(0, 0, 0, SIZE, SIZE, SIZE);
+			// glColor3f(1, 1, 1);
+			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			// }
+			// glPopMatrix();
 		}
 		glEnable(GL_LIGHTING);
 		glEnable(GL_FOG);
@@ -232,6 +239,8 @@ public class Island
 	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
+		min = pos;
+		max = new Vector3f(pos.x + SIZE, pos.y + SIZE, pos.z + SIZE);
 	}
 	
 	public void addEntity(Entity e)
@@ -306,7 +315,7 @@ public class Island
 	{
 		if (chunks.containsKey(pos)) return;
 		
-		chunks.put(pos, new Chunk(pos));
+		chunks.put(pos, new Chunk(pos, this));
 	}
 	
 	public void removeEmptyChunks()

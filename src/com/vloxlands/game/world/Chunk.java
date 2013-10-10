@@ -4,13 +4,16 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.HashMap;
 
+import org.lwjgl.util.vector.Vector3f;
+
 import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
+import com.vloxlands.util.math.AABB;
 
-public class Chunk
+public class Chunk extends AABB
 {
 	public static class ChunkKey
 	{
@@ -58,23 +61,32 @@ public class Chunk
 	boolean opaqueUTD = false;
 	boolean transparentUTD = false;
 	
-	byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
-	byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
+	Block[][][] blocks = new Block[SIZE][SIZE][SIZE];
+	
+	// byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
+	// byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
 	
 	float weight, uplift;
+	Island island;
 	
 	/**
 	 * Keeps track of which resources can be found on this Chunk
 	 */
 	int[] resources = new int[Voxel.VOXELS];
 	
-	public Chunk(ChunkKey pos)
+	public Chunk(ChunkKey pos, Island island)
 	{
-		this(pos.x, pos.y, pos.z);
+		this(pos.x, pos.y, pos.z, island);
 	}
 	
-	public Chunk(int x, int y, int z)
+	public Chunk(int x, int y, int z, Island island)
 	{
+		super(new Vector3f(x * SIZE, y * SIZE, z * SIZE), SIZE, SIZE, SIZE);
+		parent = island;
+		cubic = true;
+		
+		this.island = island;
+		
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -90,8 +102,9 @@ public class Chunk
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					voxels[i][j][k] = Voxel.get("AIR").getId();
-					voxelMetadata[i][j][k] = 0;
+					blocks[i][j][k] = new Block(Voxel.get("AIR").getId(), (byte) 0, new Vector3f(i, j, k), this);
+					// voxels[i][j][k] = Voxel.get("AIR").getId();
+					// voxelMetadata[i][j][k] = 0;
 				}
 			}
 		}
@@ -110,9 +123,9 @@ public class Chunk
 		}
 	}
 	
-	public void updateMesh(Island i)
+	public void updateMesh()
 	{
-		faces = ChunkRenderer.generateFaces(x, y, z, i);
+		faces = ChunkRenderer.generateFaces(x, y, z, island);
 		if (faces[0].size() + faces[1].size() == 0)
 		{
 			meshes[0] = new HashMap<>();
@@ -126,7 +139,7 @@ public class Chunk
 		transparentUTD = false;
 	}
 	
-	public boolean render(Island i, boolean opaque)
+	public boolean render(boolean opaque)
 	{
 		if (meshes[0].size() + meshes[1].size() == 0) return false;
 		
@@ -147,7 +160,7 @@ public class Chunk
 			renderDisplayList(false);
 			transparentUTD = true;
 		}
-		if (Game.frustum.sphereInFrustum(x * Chunk.SIZE + Chunk.SIZE / 2 + i.pos.x, y * Chunk.SIZE + Chunk.SIZE / 2 + i.pos.y, z * Chunk.SIZE + Chunk.SIZE / 2 + i.pos.z, Chunk.SIZE * (float) Math.sqrt(2) / 2))
+		if (/* inViewFrustum() */Game.frustum.sphereInFrustum(x * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.x, y * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.y, z * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.z, Chunk.SIZE * (float) Math.sqrt(2) / 2))
 		{
 			glPushMatrix();
 			{
@@ -172,12 +185,12 @@ public class Chunk
 	public byte getVoxelId(int x, int y, int z)
 	{
 		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return 0;
-		return voxels[x][y][z];
+		return blocks[x][y][z].voxel;
 	}
 	
 	public void setMetadata(int x, int y, int z, byte metadata)
 	{
-		voxelMetadata[x][y][z] = metadata;
+		blocks[x][y][z].metadata = metadata;
 	}
 	
 	public byte[] getVoxels()
@@ -189,7 +202,7 @@ public class Chunk
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					bytes[(i * SIZE + j) * SIZE + k] = voxels[i][j][k];
+					bytes[(i * SIZE + j) * SIZE + k] = blocks[i][j][k].voxel;
 				}
 			}
 		}
@@ -198,16 +211,16 @@ public class Chunk
 	
 	public byte getMetadata(int x, int y, int z)
 	{
-		return voxelMetadata[x][y][z];
+		return blocks[x][y][z].metadata;
 	}
 	
 	public void setVoxel(int x, int y, int z, byte id)
 	{
 		if (x >= SIZE || y >= SIZE || z >= SIZE || x < 0 || y < 0 || z < 0) return;
-		addResource(Voxel.getVoxelForId(voxels[x][y][z]), -1);
+		addResource(Voxel.getVoxelForId(blocks[x][y][z].voxel), -1);
 		addResource(Voxel.getVoxelForId(id), 1);
 		
-		voxels[x][y][z] = id;
+		blocks[x][y][z].voxel = id;
 	}
 	
 	public byte[] getVoxelMetadatas()
@@ -219,7 +232,7 @@ public class Chunk
 			{
 				for (int k = 0; k < SIZE; k++)
 				{
-					bytes[(i * SIZE + j) * SIZE + k] = voxelMetadata[i][j][k];
+					bytes[(i * SIZE + j) * SIZE + k] = blocks[i][j][k].metadata;
 				}
 			}
 		}
@@ -277,7 +290,7 @@ public class Chunk
 	{
 		for (int i = SIZE - 1; i > -1; i--)
 		{
-			if (voxels[x][i][z] != Voxel.get("AIR").getId()) return i;
+			if (blocks[x][i][z].voxel != Voxel.get("AIR").getId()) return i;
 		}
 		
 		return -1;
