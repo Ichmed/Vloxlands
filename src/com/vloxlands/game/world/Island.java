@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.game.Game;
 import com.vloxlands.game.entity.Entity;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.game.world.Chunk.ChunkKey;
@@ -164,10 +163,17 @@ public class Island extends AABB
 	@Override
 	public void render()
 	{
-		if (!Game.frustum.sphereInFrustum(pos.x, pos.y, pos.z, SIZE * (float) Math.sqrt(2))) return;
+		if (!inViewFrustum()) return;
 		
-		// if (!inViewFrustum()) return;
-		
+		glDisable(GL_LIGHTING);
+		if (CFG.SHOW_CHUNK_BOUNDARIES)
+		{
+			glColor3f(0, 0, 0);
+			super.render();
+			glColor3f(1, 1, 1);
+		}
+		glEnable(GL_LIGHTING);
+		glEnable(GL_FOG);
 		glTranslatef(pos.x, pos.y, pos.z);
 		
 		renderedChunks = 0;
@@ -189,45 +195,6 @@ public class Island extends AABB
 			c.render(false);
 		}
 		
-		glDisable(GL_LIGHTING);
-		if (CFG.SHOW_CHUNK_BOUNDARIES)
-		{
-			glColor3f(0, 0, 0);
-			super.render();
-			glColor3f(1, 1, 1);
-			// glPushMatrix();
-			// {
-			// glLineWidth(1);
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			// for (Chunk c : chunks.values())
-			// {
-			// if (c.getResource(Voxel.get("AIR")) == Math.pow(Chunk.SIZE, 3)) continue;
-			//
-			// Vector3f pos = new Vector3f(c.getX() * Chunk.SIZE, c.getY() * Chunk.SIZE, c.getZ() * Chunk.SIZE);
-			//
-			// glColor3f(1, 0, 0);
-			//
-			// // float intersection = MathHelper.intersects(Game.pickingRay, new AABB(Vector3f.add(pos, this.pos, null), Chunk.SIZE, Chunk.SIZE, Chunk.SIZE));
-			// //
-			// // if (intersection != -1)
-			// // {
-			// // // CFG.p(intersection);
-			// // glColor3f(0, 1, 1);
-			// // }
-			//
-			// // RenderAssistant.renderCuboid(pos.x, pos.y, pos.z, Chunk.SIZE, Chunk.SIZE, Chunk.SIZE);
-			// }
-			//
-			// glColor3f(0, 0, 0);
-			// RenderAssistant.renderCuboid(0, 0, 0, SIZE, SIZE, SIZE);
-			// glColor3f(1, 1, 1);
-			// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-			// }
-			// glPopMatrix();
-		}
-		glEnable(GL_LIGHTING);
-		glEnable(GL_FOG);
-		
 		glDisable(GL_TEXTURE_2D);
 	}
 	
@@ -239,7 +206,7 @@ public class Island extends AABB
 	public void setPos(Vector3f pos)
 	{
 		this.pos = pos;
-		min = pos;
+		min = new Vector3f(pos.x, pos.y, pos.z);
 		max = new Vector3f(pos.x + SIZE, pos.y + SIZE, pos.z + SIZE);
 	}
 	

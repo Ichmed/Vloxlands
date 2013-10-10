@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import com.vloxlands.game.Game;
 import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.render.ChunkRenderer;
 import com.vloxlands.render.VoxelFace;
 import com.vloxlands.render.VoxelFace.VoxelFaceKey;
+import com.vloxlands.settings.CFG;
 import com.vloxlands.util.math.AABB;
 
 public class Chunk extends AABB
@@ -63,9 +63,6 @@ public class Chunk extends AABB
 	
 	Block[][][] blocks = new Block[SIZE][SIZE][SIZE];
 	
-	// byte[][][] voxels = new byte[SIZE][SIZE][SIZE];
-	// byte[][][] voxelMetadata = new byte[SIZE][SIZE][SIZE];
-	
 	float weight, uplift;
 	Island island;
 	
@@ -97,17 +94,9 @@ public class Chunk extends AABB
 		resources[Voxel.get("AIR").getId() + 128] = (int) Math.pow(Chunk.SIZE, 3);
 		
 		for (int i = 0; i < SIZE; i++)
-		{
 			for (int j = 0; j < SIZE; j++)
-			{
 				for (int k = 0; k < SIZE; k++)
-				{
 					blocks[i][j][k] = new Block(Voxel.get("AIR").getId(), (byte) 0, new Vector3f(i, j, k), this);
-					// voxels[i][j][k] = Voxel.get("AIR").getId();
-					// voxelMetadata[i][j][k] = 0;
-				}
-			}
-		}
 	}
 	
 	public int getResource(Voxel v)
@@ -160,13 +149,29 @@ public class Chunk extends AABB
 			renderDisplayList(false);
 			transparentUTD = true;
 		}
-		if (/* inViewFrustum() */Game.frustum.sphereInFrustum(x * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.x, y * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.y, z * Chunk.SIZE + Chunk.SIZE / 2 + island.pos.z, Chunk.SIZE * (float) Math.sqrt(2) / 2))
+		if (inViewFrustum())
 		{
 			glPushMatrix();
 			{
 				glCallList(opaque ? opaqueID : transparentID);
 			}
 			glPopMatrix();
+			
+			if (CFG.SHOW_CHUNK_BOUNDARIES)
+			{
+				glTranslatef(-island.pos.x, -island.pos.y, -island.pos.z);
+				glColor3f(0, 0, 0);
+				if (intersects() != -1) glColor3f(1, 0, 0);
+				super.render();
+				glColor3f(1, 1, 1);
+				
+				for (Block[][] b2 : blocks)
+					for (Block[] b1 : b2)
+						for (Block b : b1)
+							b.render();
+				
+				glTranslatef(island.pos.x, island.pos.y, island.pos.z);
+			}
 			return true;
 		}
 		return false;

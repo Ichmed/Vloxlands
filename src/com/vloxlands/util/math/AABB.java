@@ -60,7 +60,7 @@ public abstract class AABB
 		while (ref.parent != null)
 		{
 			Vector3f.add(min, ref.parent.min, min);
-			Vector3f.add(max, ref.parent.max, max);
+			Vector3f.add(max, ref.parent.min, max);
 			
 			ref = ref.parent;
 		}
@@ -91,10 +91,7 @@ public abstract class AABB
 	public void render()
 	{
 		AABB full = getFullAABB();
-		
-		glLineWidth(1);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		RenderAssistant.renderCuboid(full.min.x, full.min.y, full.min.z, full.getSize().x, full.getSize().y, full.getSize().z);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		RenderAssistant.renderCuboid(full.min.x, full.min.y, full.min.z, full.getSize().x - 0.02f, full.getSize().y - 0.02f, full.getSize().z - 0.02f);
 	}
 }

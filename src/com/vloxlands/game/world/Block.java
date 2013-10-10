@@ -1,8 +1,10 @@
 package com.vloxlands.game.world;
 
-import org.lwjgl.opengl.GL11;
+import static org.lwjgl.opengl.GL11.*;
+
 import org.lwjgl.util.vector.Vector3f;
 
+import com.vloxlands.game.voxel.Voxel;
 import com.vloxlands.util.math.AABB;
 
 /**
@@ -25,11 +27,13 @@ public class Block extends AABB
 		this.chunk = chunk;
 	}
 	
+	@Override
 	public void render()
 	{
-		if (!inViewFrustum()) return;
+		if (!inViewFrustum() || voxel == Voxel.get("AIR").getId() || intersects() == -1) return;
 		
-		GL11.glColor3f(1, 0.5f, 0);
-		GL11.glColor3f(1, 1, 1);
+		glColor3f(1, 0.5f, 0);
+		super.render();
+		glColor3f(1, 1, 1);
 	}
 }
