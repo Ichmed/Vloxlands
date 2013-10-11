@@ -153,24 +153,46 @@ public class Chunk extends AABB
 		{
 			glPushMatrix();
 			{
+				glLineWidth(1);
 				glCallList(opaque ? opaqueID : transparentID);
 			}
 			glPopMatrix();
-			
 			if (CFG.SHOW_CHUNK_BOUNDARIES)
 			{
-				glTranslatef(-island.pos.x, -island.pos.y, -island.pos.z);
-				glColor3f(0, 0, 0);
-				if (intersects() != -1) glColor3f(1, 0, 0);
-				super.render();
-				glColor3f(1, 1, 1);
-				
-				for (Block[][] b2 : blocks)
-					for (Block[] b1 : b2)
-						for (Block b : b1)
-							b.render();
-				
-				glTranslatef(island.pos.x, island.pos.y, island.pos.z);
+				glPushMatrix();
+				{
+					glTranslatef(-island.pos.x, -island.pos.y, -island.pos.z);
+					glColor3f(0, 0, 0);
+					// if (intersects() != -1) glColor3f(1, 0, 0);
+					super.render();
+					glColor3f(1, 1, 1);
+					
+					Block selected = null;
+					float smallest = -1;
+					
+					
+					for (Block[][] b2 : blocks)
+						for (Block[] b1 : b2)
+							for (Block b : b1)
+							{
+								if (b.voxel == Voxel.get("AIR").getId()) continue;
+								
+								float intersection = b.intersects();
+								if (intersection < smallest || smallest == -1)
+								{
+									if (intersection != -1)
+									{
+										selected = b;
+										smallest = intersection;
+									}
+								}
+							}
+					
+					if (selected != null) selected.render();
+					
+					glTranslatef(island.pos.x, island.pos.y, island.pos.z);
+				}
+				glPopMatrix();
 			}
 			return true;
 		}
@@ -179,6 +201,7 @@ public class Chunk extends AABB
 	
 	public void renderDisplayList(boolean opaque)
 	{
+		glLineWidth(1);
 		glPushMatrix();
 		glNewList(opaque ? opaqueID : transparentID, GL_COMPILE);
 		for (VoxelFace v : meshes[opaque ? 0 : 1].values())
