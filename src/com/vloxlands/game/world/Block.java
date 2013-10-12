@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import org.lwjgl.util.vector.Vector3f;
 
 import com.vloxlands.game.voxel.Voxel;
+import com.vloxlands.scene.SceneGame;
 import com.vloxlands.util.math.AABB;
 
 /**
@@ -30,10 +31,12 @@ public class Block extends AABB
 	@Override
 	public void render()
 	{
-		if (!inViewFrustum() || voxel == Voxel.get("AIR").getId() || intersects() == -1) return;
+		if (!inViewFrustum() || voxel == Voxel.get("AIR").getId()) return;
 		
-		glColor3f(1, 0.5f, 0);
+		glColor3f(1, 0, 0);
 		super.render();
 		glColor3f(1, 1, 1);
+		
+		SceneGame.testLabel.setTitle(Voxel.getVoxelForId(voxel).getName());
 	}
 }

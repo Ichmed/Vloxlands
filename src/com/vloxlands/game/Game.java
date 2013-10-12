@@ -143,7 +143,7 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
-		if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive())
+		if (currentMap != null && sceneStack.size() > 0 && currentMap.initialized)
 		{
 			Game.pickingRay = PickingRay.getPickingRay(Mouse.getX(), Mouse.getY());
 			
@@ -313,30 +313,13 @@ public class Game
 		
 		glLightModel(GL_LIGHT_MODEL_AMBIENT, MathHelper.asFloatBuffer(new float[] { amb, amb, amb, 1 }));
 		glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[] { 1, 0, 0, 1 }));
-		// glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new float[] { 1, 1, 1, 1 }));
 		glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[] { 0.1f, 0.1f, 0.1f, 1 }));
 		glLight(GL_LIGHT0, GL_POSITION, MathHelper.asFloatBuffer(new float[] { 0, 0, 0, 1 }));
-		// glEnable(GL_CULL_FACE);
-		// glCullFace(GL_BACK);
 		glEnable(GL_COLOR_MATERIAL);
 		glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 		glMaterialf(GL_FRONT, GL_SHININESS, 1f);
 		
 		glEnable(GL_FOG);
-		
-		// glMaterialf(GL_FRONT, GL_SHININESS, 100f);
-		//
-		// glMaterial(GL_FRONT, GL_DIFFUSE, MathHelper.asFloatBuffer(new float[]
-		// { 1, 0, 0, 1 }));
-		// glMaterial(GL_FRONT, GL_SPECULAR, MathHelper.asFloatBuffer(new
-		// float[] { 1, 1, 1, 1 }));
-		// glMaterial(GL_FRONT, GL_AMBIENT, MathHelper.asFloatBuffer(new float[]
-		// { 0.1f, 0.1f, 0.1f, 1 }));
-		//
-		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		// glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//
-		// glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	}
 	
 	public void moveCamera()

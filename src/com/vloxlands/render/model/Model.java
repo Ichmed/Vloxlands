@@ -52,6 +52,7 @@ public class Model
 		wantsRender = false;
 		glNewList(displayListID, GL_COMPILE_AND_EXECUTE);
 		
+		glLineWidth(1);
 		glEnable(GL_TEXTURE_2D);
 		glDisable(GL_FOG);
 		
@@ -117,6 +118,8 @@ public class Model
 	
 	public void render()
 	{
+		glLineWidth(1);
+		
 		if (displayListID == -1) displayListID = glGenLists(1);
 		if (wantsRender) renderModel();
 		

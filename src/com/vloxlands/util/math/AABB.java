@@ -50,7 +50,7 @@ public abstract class AABB
 		
 		center = Vector3f.add(full.min, center, null);
 		
-		return Game.frustum.sphereInFrustum(center.x, center.y, center.z, getDiameter() * (cubic ? (float) Math.sqrt(2) / 4f : 1));
+		return Game.frustum.sphereInFrustum(center.x, center.y, center.z, getDiameter() * (cubic ? (float) Math.sqrt(2) / 2f : 1));
 	}
 	
 	public AABB getFullAABB()
@@ -92,6 +92,11 @@ public abstract class AABB
 	{
 		AABB full = getFullAABB();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		RenderAssistant.renderCuboid(full.min.x, full.min.y, full.min.z, full.getSize().x - 0.02f, full.getSize().y - 0.02f, full.getSize().z - 0.02f);
+		
+		float malus = 0.01f;
+		
+		RenderAssistant.renderCuboid(full.min.x - malus, full.min.y - malus, full.min.z - malus, full.getSize().x + malus * 2, full.getSize().y + malus * 2, full.getSize().z + malus * 2);
+		
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
