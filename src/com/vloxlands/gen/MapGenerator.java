@@ -15,10 +15,8 @@ import com.vloxlands.net.packet.Packet10EntityBuilding;
 import com.vloxlands.net.packet.Packet8Attribute;
 import com.vloxlands.net.packet.Packet9Island;
 
-public class MapGenerator extends Thread
-{
-	public static enum MapSize
-	{
+public class MapGenerator extends Thread {
+	public static enum MapSize {
 		DEBUG(1),
 		TINY(3),
 		SMALL(5),
@@ -28,18 +26,15 @@ public class MapGenerator extends Thread
 		
 		private int size;
 		
-		private MapSize(int size)
-		{
+		private MapSize(int size) {
 			this.size = size;
 		}
 		
-		public int getSizeSQ()
-		{
+		public int getSizeSQ() {
 			return size * size;
 		}
 		
-		public int getSize()
-		{
+		public int getSize() {
 			return size;
 		}
 	}
@@ -55,8 +50,7 @@ public class MapGenerator extends Thread
 	MapSize size;
 	ArrayList<Point> takenSpots;
 	
-	public MapGenerator(int playerCount, MapSize size)
-	{
+	public MapGenerator(int playerCount, MapSize size) {
 		this.size = size;
 		this.playerCount = playerCount;
 		playableIslands = (int) (Math.random() * (playerCount * 2) + playerCount);
@@ -72,18 +66,13 @@ public class MapGenerator extends Thread
 	}
 	
 	@Override
-	public void run()
-	{
+	public void run() {
 		map = new Map();
-		try
-		{
+		try {
 			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_string", "generatemap"));
-		}
-		catch (Exception e)
-		{}
+		} catch (Exception e) {}
 		
-		for (int i = 0; i < playableIslands; i++)
-		{
+		for (int i = 0; i < playableIslands; i++) {
 			float y = (float) (Math.random() * 256);
 			Point spot = pickRandomSpot();
 			generateIsland(y, 32, 48);
@@ -93,10 +82,8 @@ public class MapGenerator extends Thread
 			sendIsland(gen.finishedIsland);
 		}
 		
-		for (int i = 0; i < size.getSize(); i++)
-		{
-			for (int j = 0; j < size.getSize(); j++)
-			{
+		for (int i = 0; i < size.getSize(); i++) {
+			for (int j = 0; j < size.getSize(); j++) {
 				if (takenSpots.contains(new Point(i, j))) continue;
 				float y = (float) (Math.random() * 256);
 				generateIsland(y, 12, 20);
@@ -108,64 +95,47 @@ public class MapGenerator extends Thread
 		}
 		
 		Game.server.setMap(map);
-		try
-		{
+		try {
 			Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", 1));
-		}
-		catch (Exception e)
-		{}
+		} catch (Exception e) {}
 	}
 	
-	private void generateIsland(float y, int minSize, int maxSize)
-	{
+	private void generateIsland(float y, int minSize, int maxSize) {
 		gen = new IslandGenerator(minSize, maxSize, y);
 		gen.start();
-		while (gen.finishedIsland == null)
-		{
+		while (gen.finishedIsland == null) {
 			lastProgress = new Float(progress);
 			
 			progress = (gen.progress / factor) + progressBefore;
 			
-			if (progress != lastProgress)
-			{
-				try
-				{
+			if (progress != lastProgress) {
+				try {
 					Game.server.sendPacketToAllClients(new Packet8Attribute("mapeditor_progress_float", progress));
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 			}
 		}
 		progressBefore = new Float(progress);
 	}
 	
-	private Point pickRandomSpot()
-	{
+	private Point pickRandomSpot() {
 		Point p = new Point();
 		
-		do
-		{
+		do {
 			p.x = (int) (Math.random() * size.getSize());
 			p.y = (int) (Math.random() * size.getSize());
-		}
-		while (takenSpots.contains(p));
+		} while (takenSpots.contains(p));
 		takenSpots.add(p);
 		
 		return p;
 	}
 	
-	private void sendIsland(Island island)
-	{
-		try
-		{
+	private void sendIsland(Island island) {
+		try {
 			Game.server.sendPacketToAllClients(new Packet9Island(island));
 			
-			for (Entity e : island.getEntities())
-			{
+			for (Entity e : island.getEntities()) {
 				if (e instanceof EntityBuilding) Game.server.sendPacketToAllClients(new Packet10EntityBuilding((EntityBuilding) e, map.islands.indexOf(island)));
 			}
-		}
-		catch (Exception e)
-		{}
+		} catch (Exception e) {}
 	}
 }

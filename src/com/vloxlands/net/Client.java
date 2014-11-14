@@ -24,8 +24,7 @@ import com.vloxlands.settings.Tr;
 /**
  * @author Dakror
  */
-public class Client extends Thread
-{
+public class Client extends Thread {
 	private DatagramSocket socket;
 	private InetAddress serverIP;
 	private Player player;
@@ -34,55 +33,42 @@ public class Client extends Thread
 	boolean rejoin;
 	Cause rejectionCause;
 	
-	public Client(Player player)
-	{
-		try
-		{
+	public Client(Player player) {
+		try {
 			this.player = player;
 			socket = new DatagramSocket();
 			connected = false;
 			rejectionCause = null;
 			setName("Client-Thread");
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		start();
 	}
 	
 	@Override
-	public void run()
-	{
-		while (Vloxlands.running)
-		{
+	public void run() {
+		while (Vloxlands.running) {
 			byte[] data = new byte[Server.PACKETSIZE];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
-			try
-			{
+			try {
 				socket.receive(packet);
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			parsePacket(data);
 		}
 	}
 	
-	private void parsePacket(byte[] data)
-	{
+	private void parsePacket(byte[] data) {
 		PacketTypes type = Packet.lookupPacket(data[0]);
-		switch (type)
-		{
-			case INVALID:
-			{
+		switch (type) {
+			case INVALID: {
 				CFG.p("received invalid packet: " + new String(data));
 				return;
 			}
 			
-			case ATTRIBUTE:
-			{
+			case ATTRIBUTE: {
 				Packet8Attribute p = new Packet8Attribute(data);
 				if (p.getKey().equals("net_rejoin")) rejoin = true;
 				
@@ -94,55 +80,44 @@ public class Client extends Thread
 			case ENTITYBUILDING:
 				break;
 			
-			case CONNECT:
-			{
+			case CONNECT: {
 				Packet0Connect packet = new Packet0Connect(data);
 				if (packet.getUsername().equals(player.getUsername())) connected = true;
 				else print(Tr._("mp.connect").replace("%player%", packet.getUsername()), "INFO");
 				break;
 			}
-			case DISCONNECT:
-			{
+			case DISCONNECT: {
 				Packet1Disconnect packet = new Packet1Disconnect(data);
-				if (packet.getUsername().equals(player.getUsername()))
-				{
-					if (isConnectedToLocalhost())
-					{
+				if (packet.getUsername().equals(player.getUsername())) {
+					if (isConnectedToLocalhost()) {
 						Game.server.shutdown();
 						Game.server = null;
 					}
 					connected = false;
-				}
-				else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
+				} else print(Tr._("mp.disconnect").replace("%player%", packet.getUsername()) + " (" + Tr._(packet.getReason()) + ")", "INFO");
 				break;
 			}
-			case RENAME:
-			{
+			case RENAME: {
 				Packet2Rename packet = new Packet2Rename(data);
 				if (packet.getOldUsername().equals(player.getUsername())) player.setUsername(packet.getNewUsername());
 				print(Tr._("mp.rename").replace("%oldname%", packet.getOldUsername()).replace("%newname%", packet.getNewUsername()), "INFO");
 				break;
 			}
-			case CHATMESSAGE:
-			{
+			case CHATMESSAGE: {
 				Packet3ChatMessage packet = new Packet3ChatMessage(data);
 				print(packet.getUsername() + ": " + packet.getMessage(), "");
 				break;
 			}
-			case REJECT:
-			{
+			case REJECT: {
 				Packet5Reject packet = new Packet5Reject(data);
 				rejectionCause = packet.getCause();
 				break;
 			}
-			case ISLAND:
-			{
+			case ISLAND: {
 				final Packet9Island packet = new Packet9Island(data);
-				new Thread()
-				{
+				new Thread() {
 					@Override
-					public void run()
-					{
+					public void run() {
 						Island island = packet.getIsland();
 						Game.currentMap.addIsland(island);
 					}
@@ -170,118 +145,90 @@ public class Client extends Thread
 		Game.currentGame.onClientReveivedData(data);
 	}
 	
-	public void print(String message, String level)
-	{
+	public void print(String message, String level) {
 		Game.currentGame.onClientMessage(level + "$" + message);
 	}
 	
-	public boolean connectToServer(InetAddress ip)
-	{
-		if (connected)
-		{
+	public boolean connectToServer(InetAddress ip) {
+		if (connected) {
 			System.err.println("Client is already connected to a server. Disconnect first!");
 			return false;
 		}
 		rejectionCause = null;
 		
 		serverIP = ip;
-		try
-		{
+		try {
 			sendPacket(new Packet0Connect(player.getUsername(), CFG.VERSION));
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
 	
-	public String getUsername()
-	{
+	public String getUsername() {
 		return player.getUsername();
 	}
 	
-	public void disconnect()
-	{
+	public void disconnect() {
 		if (!connected) return;
 		
 		rejectionCause = null;
-		try
-		{
+		try {
 			sendPacket(new Packet1Disconnect(player.getUsername(), "mp.reason.disconnect"));
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public boolean isRejoined()
-	{
+	public boolean isRejoined() {
 		return rejoin;
 	}
 	
-	public void resetRejoined()
-	{
+	public void resetRejoined() {
 		rejoin = false;
 	}
 	
-	public boolean isRejected()
-	{
+	public boolean isRejected() {
 		return rejectionCause != null;
 	}
 	
-	public void resetRejection()
-	{
+	public void resetRejection() {
 		rejectionCause = null;
 	}
 	
-	public Cause getRejectionCause()
-	{
+	public Cause getRejectionCause() {
 		return rejectionCause;
 	}
 	
-	public boolean isConnected()
-	{
+	public boolean isConnected() {
 		return connected;
 	}
 	
-	public Player getPlayer()
-	{
+	public Player getPlayer() {
 		return player;
 	}
 	
-	public boolean isConnectedToLocalhost()
-	{
+	public boolean isConnectedToLocalhost() {
 		return connected && serverIP.equals(Game.IP) && Game.server != null;
 	}
 	
-	public void renameClient(String newName)
-	{
-		if (connected)
-		{
-			try
-			{
+	public void renameClient(String newName) {
+		if (connected) {
+			try {
 				sendPacket(new Packet2Rename(player.getUsername(), newName));
-			}
-			catch (IOException e)
-			{
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		else player.setUsername(newName);
+		} else player.setUsername(newName);
 	}
 	
-	public void sendPacket(Packet p) throws IOException
-	{
+	public void sendPacket(Packet p) throws IOException {
 		sendData(p.getData());
 	}
 	
-	public void sendData(byte[] data) throws IOException
-	{
-		if (serverIP == null)
-		{
+	public void sendData(byte[] data) throws IOException {
+		if (serverIP == null) {
 			System.err.println("Connect to a server first!");
 			return;
 		}

@@ -3,23 +3,20 @@ package com.vloxlands.net.packet;
 /**
  * @author Dakror
  */
-public class Packet8Attribute extends Packet
-{
+public class Packet8Attribute extends Packet {
 	String key;
 	String value;
 	
 	/**
 	 * Key format: class_field_type
 	 */
-	public Packet8Attribute(String key, Object value)
-	{
+	public Packet8Attribute(String key, Object value) {
 		super(8);
 		this.key = key;
 		this.value = value.toString();
 	}
 	
-	public Packet8Attribute(byte[] data)
-	{
+	public Packet8Attribute(byte[] data) {
 		super(8);
 		String[] s = readData(data).split(":");
 		key = s[0];
@@ -27,18 +24,15 @@ public class Packet8Attribute extends Packet
 	}
 	
 	@Override
-	protected byte[] getPacketData()
-	{
+	protected byte[] getPacketData() {
 		return (key + ":" + value).getBytes();
 	}
 	
-	public String getKey()
-	{
+	public String getKey() {
 		return key;
 	}
 	
-	public String getValue()
-	{
+	public String getValue() {
 		return value;
 	}
 }

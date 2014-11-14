@@ -13,21 +13,18 @@ import com.vloxlands.settings.CFG;
 import com.vloxlands.util.Direction;
 import com.vloxlands.util.RenderAssistant;
 
-public class VoxelFace
-{
+public class VoxelFace {
 	public Direction dir;
 	public Vector3f pos, tl, tr, bl, br, n;
 	
 	public long textureIndex;
 	public int sizeX, sizeY, sizeZ;
 	
-	public VoxelFace(Direction dir, Vector3f pos, long texInd)
-	{
+	public VoxelFace(Direction dir, Vector3f pos, long texInd) {
 		this(dir, pos, texInd, 1, 1, 1);
 	}
 	
-	public VoxelFace(VoxelFace o)
-	{
+	public VoxelFace(VoxelFace o) {
 		sizeX = o.sizeX;
 		sizeY = o.sizeY;
 		sizeZ = o.sizeZ;
@@ -38,8 +35,7 @@ public class VoxelFace
 		updateVertices();
 	}
 	
-	public VoxelFace(Direction dir, Vector3f pos, long texInd, int sizeX, int sizeY, int sizeZ)
-	{
+	public VoxelFace(Direction dir, Vector3f pos, long texInd, int sizeX, int sizeY, int sizeZ) {
 		super();
 		this.dir = dir;
 		this.pos = pos;
@@ -47,8 +43,7 @@ public class VoxelFace
 		setSize(sizeX, sizeY, sizeZ);
 	}
 	
-	public void setSize(int sizeX, int sizeY, int sizeZ)
-	{
+	public void setSize(int sizeX, int sizeY, int sizeZ) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.sizeZ = sizeZ;
@@ -56,16 +51,13 @@ public class VoxelFace
 		updateVertices();
 	}
 	
-	public void updateVertices()
-	{
+	public void updateVertices() {
 		tl = new Vector3f(0, sizeY, 0);
 		tr = new Vector3f(sizeX, sizeY, 0);
 		bl = new Vector3f(0, 0, 0);
 		br = new Vector3f(sizeX, 0, 0);
-		switch (dir)
-		{
-			case NORTH:
-			{
+		switch (dir) {
+			case NORTH: {
 				tl.x = sizeX;
 				bl.x = sizeX;
 				
@@ -74,8 +66,7 @@ public class VoxelFace
 				
 				break;
 			}
-			case SOUTH:
-			{
+			case SOUTH: {
 				tl.z = sizeZ;
 				bl.z = sizeZ;
 				
@@ -84,8 +75,7 @@ public class VoxelFace
 				
 				break;
 			}
-			case WEST:
-			{
+			case WEST: {
 				tl.z = sizeZ;
 				bl.z = sizeZ;
 				tr.z = sizeZ;
@@ -98,8 +88,7 @@ public class VoxelFace
 				
 				break;
 			}
-			case UP:
-			{
+			case UP: {
 				tl.z = sizeZ;
 				tr.z = sizeZ;
 				
@@ -107,8 +96,7 @@ public class VoxelFace
 				br.y = sizeY;
 				break;
 			}
-			case DOWN:
-			{
+			case DOWN: {
 				tl.y = 0;
 				tr.y = 0;
 				
@@ -123,23 +111,19 @@ public class VoxelFace
 		n = Vector3f.cross(Vector3f.sub(bl, br, null), Vector3f.sub(tr, br, null), null).normalise(null);
 	}
 	
-	public void increaseSize(int sizeX, int sizeY, int sizeZ)
-	{
+	public void increaseSize(int sizeX, int sizeY, int sizeZ) {
 		setSize(this.sizeX + sizeX, this.sizeY + sizeY, this.sizeZ + sizeZ);
 	}
 	
-	public void render()
-	{
+	public void render() {
 		int texX = (int) (textureIndex % 32);
 		int texY = (int) (textureIndex / 32);
 		
 		glEnable(GL_CULL_FACE);
 		
-		if (CFG.SHOW_WIREFRAME)
-		{
+		if (CFG.SHOW_WIREFRAME) {
 			RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", 7, 7);
-		}
-		else RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
+		} else RenderAssistant.bindTextureAtlasTile("graphics/textures/voxelTextures.png", texX, texY);
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -189,36 +173,30 @@ public class VoxelFace
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "VoxelFace[pos=" + pos.toString() + ", DIR=" + dir + ", sizeX=" + sizeX + ", sizeY=" + sizeY + ", sizeZ=" + sizeZ + ", tl=" + tl + ", tr=" + tr + ", bl=" + bl + ", br=" + br + "]";
 	}
 	
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		return toString().equals(obj.toString());
 	}
 	
-	public double getDistanceToCamera()
-	{
+	public double getDistanceToCamera() {
 		return Vector3f.sub(Game.camera.position, pos, null).length();
 	}
 	
-	public static class VoxelFaceKey implements Comparable<VoxelFaceKey>
-	{
+	public static class VoxelFaceKey implements Comparable<VoxelFaceKey> {
 		public int x, y, z, d;
 		
-		public VoxelFaceKey(int x, int y, int z, int d)
-		{
+		public VoxelFaceKey(int x, int y, int z, int d) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 			this.d = d;
 		}
 		
-		public VoxelFaceKey(VoxelFace vf)
-		{
+		public VoxelFaceKey(VoxelFace vf) {
 			x = (int) vf.pos.x;
 			y = (int) vf.pos.y;
 			z = (int) vf.pos.z;
@@ -226,28 +204,24 @@ public class VoxelFace
 		}
 		
 		@Override
-		public int hashCode()
-		{
+		public int hashCode() {
 			return ((x * Island.SIZE + y) * Island.SIZE + z) * Island.SIZE + d;// Integer.parseInt(x + "" + y + "" + z + "" + d);
 		}
 		
 		@Override
-		public boolean equals(Object o)
-		{
+		public boolean equals(Object o) {
 			if (!(o instanceof VoxelFaceKey)) return false;
 			
 			return hashCode() == o.hashCode();
 		}
 		
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			return "[" + x + ", " + y + ", " + z + ", " + Direction.values()[d] + "]";
 		}
 		
 		@Override
-		public int compareTo(VoxelFaceKey o)
-		{
+		public int compareTo(VoxelFaceKey o) {
 			if (x != o.x) return x - o.x;
 			else if (y != o.x) return y - o.y;
 			else if (z != o.z) return z - o.z;

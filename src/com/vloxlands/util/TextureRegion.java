@@ -9,13 +9,11 @@ import javax.imageio.ImageIO;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.util.BufferedImageUtil;
 
-public class TextureRegion
-{
+public class TextureRegion {
 	int x, y, width, height;
 	String file;
 	
-	public TextureRegion(String file, int x, int y, int width, int height)
-	{
+	public TextureRegion(String file, int x, int y, int width, int height) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -25,23 +23,18 @@ public class TextureRegion
 		loadTexture();
 	}
 	
-	public Texture loadTexture()
-	{
-		try
-		{
+	public Texture loadTexture() {
+		try {
 			BufferedImage bi = ImageIO.read(new File(file));
 			return BufferedImageUtil.getTexture(file, bi.getSubimage(x, y, width, height));
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
 	@Override
-	public boolean equals(Object o)
-	{
+	public boolean equals(Object o) {
 		if (!(o instanceof TextureRegion)) return false;
 		
 		TextureRegion t = (TextureRegion) o;

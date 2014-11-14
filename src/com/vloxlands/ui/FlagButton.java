@@ -9,25 +9,21 @@ import com.vloxlands.settings.Tr;
 import com.vloxlands.util.RenderAssistant;
 
 
-public class FlagButton extends ClickableGui
-{
+public class FlagButton extends ClickableGui {
 	public static final int SIZE = 48;
 	
 	String lang;
 	
-	public FlagButton(int x, int y, final String lang)
-	{
+	public FlagButton(int x, int y, final String lang) {
 		this.x = x;
 		this.y = y;
 		this.lang = lang;
 		width = SIZE;
 		height = SIZE;
 		
-		clickEvent = new IGuiEvent()
-		{
+		clickEvent = new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Tr.loadLanguage(lang);
 				Game.currentGame.updateViewport = true;
 			}
@@ -35,8 +31,7 @@ public class FlagButton extends ClickableGui
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		RenderAssistant.bindTexture("/graphics/textures/lang/" + lang + ".png");
 		if (!enabled) glColor3f(0.8f, 0.8f, 0.8f);
@@ -47,12 +42,10 @@ public class FlagButton extends ClickableGui
 	}
 	
 	@Override
-	public void onTick()
-	{}
+	public void onTick() {}
 	
 	@Override
-	public void handleMouse(int posX, int posY, int flag)
-	{
+	public void handleMouse(int posX, int posY, int flag) {
 		if (!enabled) return;
 		if ((flag & 2) != 0) clickEvent.trigger();
 	}

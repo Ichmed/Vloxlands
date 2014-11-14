@@ -11,8 +11,7 @@ import com.vloxlands.gen.structure.CrystalGenerator;
 import com.vloxlands.gen.structure.SpikeGenerator;
 import com.vloxlands.gen.structure.TopLayerGenerator;
 
-public class IslandGenerator extends Thread
-{
+public class IslandGenerator extends Thread {
 	public static final float MIN_VEIN_DISTANCE = 30;
 	
 	public float progress;
@@ -25,8 +24,7 @@ public class IslandGenerator extends Thread
 	int minSize, maxSize;
 	float yPos;
 	
-	public IslandGenerator(int minSize, int maxSize, float yPos)
-	{
+	public IslandGenerator(int minSize, int maxSize, float yPos) {
 		this.minSize = minSize;
 		this.maxSize = maxSize;
 		progress = quotient = 0;
@@ -36,21 +34,18 @@ public class IslandGenerator extends Thread
 	}
 	
 	@Override
-	public void run()
-	{
+	public void run() {
 		finishedIsland = generateIsland();
 	}
 	
-	private Island generateIsland()
-	{
+	private Island generateIsland() {
 		int radius = rand(minSize, maxSize);
 		int subislands = (int) Math.round((1f / radius * 16f) * Math.random() * 3);
 		
 		quotient = radius + 2;
 		
 		int[] radii = new int[subislands];
-		for (int i = 0; i < radii.length; i++)
-		{
+		for (int i = 0; i < radii.length; i++) {
 			radii[i] = rand(minSize, maxSize / 2);
 			quotient += radii[i] + 3;
 		}
@@ -59,8 +54,7 @@ public class IslandGenerator extends Thread
 		Island island = generatePerfectIsland(Island.SIZE / 2, Island.SIZE / 4 * 3, Island.SIZE / 2, radius);
 		
 		
-		for (int i = 0; i < subislands; i++)
-		{
+		for (int i = 0; i < subislands; i++) {
 			Vector2f pos = Generator.getRandomCircleInCircle(new Vector2f(Island.SIZE / 2, Island.SIZE / 2), radius, 2);
 			
 			mergeIslandData(island, generatePerfectIsland((int) pos.x, Island.SIZE / 4 * 3, (int) pos.y, radii[i]));
@@ -77,8 +71,7 @@ public class IslandGenerator extends Thread
 		return island;
 	}
 	
-	public void updateProgress()
-	{
+	public void updateProgress() {
 		progress = actions / (float) quotient;
 		actions++;
 	}
@@ -88,16 +81,14 @@ public class IslandGenerator extends Thread
 	 * 
 	 * @param size Either a Constant or the real Radius
 	 */
-	private Island generatePerfectIsland(int x, int y, int z, int radius)
-	{
+	private Island generatePerfectIsland(int x, int y, int z, int radius) {
 		int topLayers = (int) ((float) Math.random() * 3 + 3 + radius / 8.0f);
 		
 		Island island = new Island();
 		
 		new TopLayerGenerator(x, y, z, radius, topLayers).generate(island, this);
 		
-		for (int i = 0; i < radius; i++)
-		{
+		for (int i = 0; i < radius; i++) {
 			new SpikeGenerator(x, y, z, radius, topLayers).generate(island, this);
 		}
 		
@@ -106,8 +97,7 @@ public class IslandGenerator extends Thread
 		{
 			for (int j = 0; j < Island.SIZE; j++) // z axis
 			{
-				if (island.getVoxelId(i, y, j) == Voxel.get("STONE").getId())
-				{
+				if (island.getVoxelId(i, y, j) == Voxel.get("STONE").getId()) {
 					island.setVoxel(i, y, j, Voxel.get("DIRT").getId());
 				}
 			}
@@ -117,22 +107,17 @@ public class IslandGenerator extends Thread
 		return island;
 	}
 	
-	private int rand(int min, int max)
-	{
+	private int rand(int min, int max) {
 		return (int) (Math.random() * (max - min)) + min;
 	}
 	
 	/**
 	 * L gets overwritten by R
 	 */
-	public void mergeIslandData(Island L, Island R)
-	{
-		for (int x = 0; x < Island.SIZE; x++)
-		{
-			for (int y = 0; y < Island.SIZE; y++)
-			{
-				for (int z = 0; z < Island.SIZE; z++)
-				{
+	public void mergeIslandData(Island L, Island R) {
+		for (int x = 0; x < Island.SIZE; x++) {
+			for (int y = 0; y < Island.SIZE; y++) {
+				for (int z = 0; z < Island.SIZE; z++) {
 					if (R.getVoxelId(x, y, z) == Voxel.get("AIR").getId()) continue;
 					
 					L.setVoxel(x, y, z, R.getVoxelId(x, y, z));

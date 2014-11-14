@@ -11,39 +11,33 @@ import org.lwjgl.util.vector.Vector3f;
 import com.vloxlands.game.Game;
 import com.vloxlands.util.Assistant;
 
-public class MathHelper
-{
+public class MathHelper {
 	public static final Plane PITCH_PLANE = new Plane(new Vector3f(1, 0, 0), new Vector3f());
 	public static final Plane YAW_PLANE = new Plane(new Vector3f(0, 1, 0), new Vector3f());
 	public static final Plane ROLL_PLANE = new Plane(new Vector3f(0, 0, 1), new Vector3f());
 	
 	
-	public static float clamp(float x, float i, float j)
-	{
+	public static float clamp(float x, float i, float j) {
 		return Math.max(i, Math.min(x, j));
 	}
 	
-	public static float round(float i, float step)
-	{
+	public static float round(float i, float step) {
 		if (i % step > step / 2.0f) return i + (step - (i % step));
 		else return i - (i % step);
 	}
 	
-	public static FloatBuffer asFloatBuffer(float[] fs)
-	{
+	public static FloatBuffer asFloatBuffer(float[] fs) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(fs.length);
 		buffer.put(fs);
 		buffer.flip();
 		return buffer;
 	}
 	
-	public static Vector2f scaleVector2f(Vector2f v, float scale)
-	{
+	public static Vector2f scaleVector2f(Vector2f v, float scale) {
 		return new Vector2f(v.x * scale, v.y * scale);
 	}
 	
-	public static Vector2f bezierCurve(float[] c, float t)
-	{
+	public static Vector2f bezierCurve(float[] c, float t) {
 		Vector2f p0 = new Vector2f(c[0], c[1]);
 		Vector2f p1 = new Vector2f(c[2], c[3]);
 		Vector2f p2 = new Vector2f(c[4], c[5]);
@@ -71,14 +65,12 @@ public class MathHelper
 		return Vector2f.add(MathHelper.scaleVector2f(bs0, t), b0, null);
 	}
 	
-	public static void renderBezierCurve(float[] c, String file)
-	{
+	public static void renderBezierCurve(float[] c, String file) {
 		String s = "<?xml version=\"1.0\" standalone=\"no\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\"><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" >";
 		
 		String color = "rgb(" + (int) Math.round(Math.random() * 256) + "," + (int) Math.round(Math.random() * 256) + "," + (int) Math.round(Math.random() * 256) + ")";
 		s += "<polyline fill=\"none\" stroke=\"" + color + "\" stroke-width=\"10\" points=\"";
-		for (float i = 0; i < 1.0f; i += 0.01f)
-		{
+		for (float i = 0; i < 1.0f; i += 0.01f) {
 			Vector2f point = bezierCurve(c, i);
 			s += Math.round(point.x * 300 + 200) + "," + Math.round(point.y * 300 + 200) + " ";
 		}
@@ -90,20 +82,16 @@ public class MathHelper
 		Assistant.setFileContent(new File("src/test/bezier/" + file + ".svg"), s);
 	}
 	
-	public static Vector2f getRandomCircleInCircle(Vector2f center, int radius, int rad2)
-	{
+	public static Vector2f getRandomCircleInCircle(Vector2f center, int radius, int rad2) {
 		Vector2f v = new Vector2f();
-		do
-		{
+		do {
 			v = new Vector2f((int) Math.round(Math.random() * radius * 2 - radius + center.x), (int) Math.round(Math.random() * radius * 2 - radius + center.y));
-		}
-		while (Vector2f.sub(v, center, null).length() > radius - rad2);
+		} while (Vector2f.sub(v, center, null).length() > radius - rad2);
 		
 		return v;
 	}
 	
-	public static Vector3f vector3fDotMatrix3f(Vector3f v, Matrix3f m)
-	{
+	public static Vector3f vector3fDotMatrix3f(Vector3f v, Matrix3f m) {
 		return new Vector3f( //
 		m.m00 * v.x + m.m01 * v.y + m.m02 * v.z, //
 		m.m10 * v.x + m.m11 * v.y + m.m12 * v.z, //
@@ -111,8 +99,7 @@ public class MathHelper
 		);
 	}
 	
-	public static Vector3f getNormalizedRotationVector(Vector3f v)
-	{
+	public static Vector3f getNormalizedRotationVector(Vector3f v) {
 		double x = Math.sin(Math.toRadians(v.y)) * Math.cos(Math.toRadians(v.x));
 		double y = Math.sin(Math.toRadians(v.x));
 		double z = Math.cos(Math.toRadians(v.y)) * Math.cos(Math.toRadians(v.x));
@@ -120,8 +107,7 @@ public class MathHelper
 		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
 	
-	public static Vector3f normalise(Vector3f v)
-	{
+	public static Vector3f normalise(Vector3f v) {
 		double l = Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
 		Vector3f w = new Vector3f(v);
 		w.x = (float) (v.x / l);
@@ -131,18 +117,15 @@ public class MathHelper
 		return w;
 	}
 	
-	public static Vector3f mul(Vector3f l, Vector3f r)
-	{
+	public static Vector3f mul(Vector3f l, Vector3f r) {
 		return new Vector3f(l.x * r.x, l.y * r.y, l.z * r.z);
 	}
 	
-	public static Vector2f mul(Vector2f l, Vector2f r)
-	{
+	public static Vector2f mul(Vector2f l, Vector2f r) {
 		return new Vector2f(l.x * r.x, l.y * r.y);
 	}
 	
-	public static float roundToDecimal(float f, int decimals)
-	{
+	public static float roundToDecimal(float f, int decimals) {
 		return (int) (f * Math.pow(10, decimals)) / (float) Math.pow(10, decimals);
 	}
 	
@@ -156,8 +139,7 @@ public class MathHelper
 	 * @param rotationPlane
 	 *          the plane within the vector should be rotated
 	 */
-	public static Vector3f rotateVector(Vector3f vector, float degree, Plane rotationPlane)
-	{
+	public static Vector3f rotateVector(Vector3f vector, float degree, Plane rotationPlane) {
 		double tempDegree = Math.toRadians(degree);
 		rotationPlane.transformToHesseNormalForm();
 		// Creating a Matrix for rotating the Vector
@@ -177,8 +159,7 @@ public class MathHelper
 		return vector;
 	}
 	
-	public static Vector3f rotateVectorByCameraRotation(Vector3f v)
-	{
+	public static Vector3f rotateVectorByCameraRotation(Vector3f v) {
 		v = rotateVector(v, Game.camera.rotation.x, PITCH_PLANE);
 		v = rotateVector(v, Game.camera.rotation.y, YAW_PLANE);
 		v = rotateVector(v, Game.camera.rotation.z, ROLL_PLANE);
@@ -189,8 +170,7 @@ public class MathHelper
 	/**
 	 * @param fs: pointers
 	 */
-	private static boolean clipLine(int dimension, AABB aabb, PickingRay ray, float[] fs)
-	{
+	private static boolean clipLine(int dimension, AABB aabb, PickingRay ray, float[] fs) {
 		float fdLow, fdHigh;
 		
 		float dimLength = new Vector(ray.end).get(dimension) - new Vector(ray.start).get(dimension);
@@ -198,8 +178,7 @@ public class MathHelper
 		fdLow = (new Vector(aabb.min).get(dimension) - new Vector(ray.start).get(dimension)) / dimLength;
 		fdHigh = (new Vector(aabb.max).get(dimension) - new Vector(ray.start).get(dimension)) / dimLength;
 		
-		if (fdHigh < fdLow)
-		{
+		if (fdHigh < fdLow) {
 			// swap
 			Float temp = new Float(fdHigh);
 			fdHigh = fdLow;
@@ -221,8 +200,7 @@ public class MathHelper
 	/**
 	 * returns length of ray until intersection or -1 if no intersection
 	 */
-	public static float intersects(PickingRay ray, AABB aabb)
-	{
+	public static float intersects(PickingRay ray, AABB aabb) {
 		float[] fs = new float[] { 0, 1 };
 		
 		if (!clipLine(0, aabb, ray, fs)) return -1;

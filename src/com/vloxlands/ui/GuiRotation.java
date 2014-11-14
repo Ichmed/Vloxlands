@@ -1,7 +1,6 @@
 package com.vloxlands.ui;
 
-public enum GuiRotation
-{
+public enum GuiRotation {
 	VERTICAL,
 	HORIZONTAL;
 }

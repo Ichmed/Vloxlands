@@ -45,8 +45,7 @@ import com.vloxlands.util.Assistant;
 import com.vloxlands.util.MediaAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class SceneLobby extends Scene
-{
+public class SceneLobby extends Scene {
 	ProgressBar progressBar;
 	TextButton start, back, disco;
 	Spinner mapsize;
@@ -64,10 +63,8 @@ public class SceneLobby extends Scene
 	// TODO: Implement Multiplayer mapsaving + loading. Include player data into mapsave and demand the same setup when loadng the map again.
 	
 	@Override
-	public void init()
-	{
-		if (Game.server == null && !Game.client.isConnected())
-		{
+	public void init() {
+		if (Game.server == null && !Game.client.isConnected()) {
 			Game.server = new Server(Game.IP); // host
 			chat = null;
 			lobby = null;
@@ -82,8 +79,7 @@ public class SceneLobby extends Scene
 		
 		setTitle(Tr._("newGame"));
 		
-		if (lobby == null)
-		{
+		if (lobby == null) {
 			lobby = new Container(0, 115, Display.getWidth() - TextButton.WIDTH - 90, Display.getHeight() - 220);
 		}
 		lobby.setX(0);
@@ -92,8 +88,7 @@ public class SceneLobby extends Scene
 		lobby.setHeight(Display.getHeight() - 220);
 		content.add(lobby);
 		
-		if (chat == null)
-		{
+		if (chat == null) {
 			chat = new ChatContainer(0, 115 + Display.getHeight() - 220 - TextButton.HEIGHT - 150, Display.getWidth() - TextButton.WIDTH - 90, TextButton.HEIGHT + 150);
 		}
 		chat.setX(0);
@@ -103,21 +98,15 @@ public class SceneLobby extends Scene
 		content.add(chat);
 		
 		final InputField chatInput = new InputField(5, Display.getHeight() - 115 - InputField.HEIGHT - 15, Display.getWidth() - TextButton.WIDTH - 120, "", "");
-		chatInput.setClickEvent(new IGuiEvent()
-		{
+		chatInput.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				String msg = chatInput.getText();
-				if (msg.length() > 0)
-				{
-					try
-					{
+				if (msg.length() > 0) {
+					try {
 						Game.client.sendPacket(new Packet3ChatMessage(Game.client.getUsername(), msg));
 						chatInput.setText("");
-					}
-					catch (IOException e)
-					{
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
@@ -132,11 +121,9 @@ public class SceneLobby extends Scene
 		content.add(progressBar);
 		
 		disco = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("disconnect"));
-		disco.setClickEvent(new IGuiEvent()
-		{
+		disco.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.client.disconnect();
 				Game.currentGame.removeActiveScene();
 			}
@@ -144,11 +131,9 @@ public class SceneLobby extends Scene
 		content.add(disco);
 		
 		back = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
-		back.setClickEvent(new IGuiEvent()
-		{
+		back.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.removeActiveScene();
 				Game.currentGame.removeActiveScene();
 			}
@@ -156,11 +141,9 @@ public class SceneLobby extends Scene
 		content.add(back);
 		
 		start = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH, Display.getHeight() - TextButton.HEIGHT, Tr._("start"));
-		start.setClickEvent(new IGuiEvent()
-		{
+		start.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentMap.setName(mapname.getText().length() > 0 ? mapname.getText() : mapname.getHint());
 				Game.server.setMapGenerator(new MapGenerator(Game.server.getConnectedClientCount(), MapSize.values()[mapsize.getValue()]));
 			}
@@ -170,35 +153,28 @@ public class SceneLobby extends Scene
 		content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, 130, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapsize") + ":", false));
 		mapsize = new Spinner(Display.getWidth() - TextButton.WIDTH - 70, 155, TextButton.WIDTH + 55, 0, MapSize.values().length, 1, 1, GuiRotation.HORIZONTAL);
 		mapsize.setArrowButtonTypes(ArrowButton.ARROW_L_HOR, ArrowButton.ARROW_R_HOR);
-		mapsize.setClickEvent(new IGuiEvent()
-		{
+		mapsize.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
-				try
-				{
+			public void trigger() {
+				try {
 					Game.client.sendPacket(new Packet7Settings("mapsize", mapsize.getValue() + ""));
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		});
 		String[] titles = new String[MapSize.values().length];
-		for (int i = 0; i < titles.length; i++)
-		{
+		for (int i = 0; i < titles.length; i++) {
 			MapSize ms = MapSize.values()[i];
 			titles[i] = Tr._("mapsize." + ms.name().toLowerCase()) + " " + ms.getSize() + "x" + ms.getSize();
 		}
 		mapsize.setTitles(titles);
 		content.add(mapsize);
 		
-		if (!Game.client.isConnected() || Game.client.isConnectedToLocalhost())
-		{
+		if (!Game.client.isConnected() || Game.client.isConnectedToLocalhost()) {
 			content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, Display.getHeight() - 210, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapname") + ":", false));
 			mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map") + (MediaAssistant.getMaps().length + 1));
-			mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZöüäÖÜÄ,.-0987654321ß'#+_; ";
+			mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,.-0987654321ï¿½'#+_; ";
 			content.add(mapname);
 		}
 		
@@ -211,26 +187,20 @@ public class SceneLobby extends Scene
 		otherColors.setZIndex(10);
 		otherColors.setVisible(false);
 		
-		for (int i = 0; i < Player.COLORS.length; i++)
-		{
+		for (int i = 0; i < Player.COLORS.length; i++) {
 			final ColorLabel cl = new ColorLabel(15 + (size + spacing) * (i % inRow), 15 + (size + spacing) * (i / inRow), size, Player.COLORS[i]);
 			cl.parent = otherColors;
 			cl.setZIndex(11);
-			cl.setClickEvent(new IGuiEvent()
-			{
+			cl.setClickEvent(new IGuiEvent() {
 				@Override
-				public void trigger()
-				{
+				public void trigger() {
 					otherColors.setVisible(false);
 					otherColors.components.get(Assistant.asList(Player.COLORS).indexOf(Game.client.getPlayer().getColor())).setEnabled(true);
 					Game.client.getPlayer().setColor(cl.getColor());
 					cl.setEnabled(false);
-					try
-					{
+					try {
 						Game.client.sendPacket(new Packet6Player(Game.client.getPlayer()));
-					}
-					catch (IOException e)
-					{
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
@@ -239,38 +209,31 @@ public class SceneLobby extends Scene
 		}
 		content.add(otherColors);
 		
-		if (!Game.client.isConnected())
-		{
+		if (!Game.client.isConnected()) {
 			Game.client.connectToServer(Game.IP);
 		}
-		if (Game.client.isConnectedToLocalhost())
-		{
+		if (Game.client.isConnectedToLocalhost()) {
 			start.setEnabled(true);
 			back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
 			disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
 			mapsize.setEnabled(Game.client.isConnectedToLocalhost());
 			content.add(start);
 		}
-		try
-		{
+		try {
 			Game.client.sendPacket(new Packet4ServerInfo());
 			
-			if (Game.client.isRejoined())
-			{
+			if (Game.client.isRejoined()) {
 				lockScene();
 				Game.client.sendPacket(new Packet8Attribute("net_rejoin", "_"));
 				wasRejoining = true;
 				Game.client.resetRejoined();
 			}
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void updateLobby(Player[] pl)
-	{
+	private void updateLobby(Player[] pl) {
 		ArrayList<Player> players = Assistant.asList(pl);
 		
 		@SuppressWarnings("unchecked")
@@ -278,10 +241,8 @@ public class SceneLobby extends Scene
 		lobby.components.clear();
 		
 		int index = 0;
-		for (IGuiElement iG : lobbyCopy)
-		{
-			if (players.indexOf(((LobbySlot) iG).getPlayer()) > -1)
-			{
+		for (IGuiElement iG : lobbyCopy) {
+			if (players.indexOf(((LobbySlot) iG).getPlayer()) > -1) {
 				iG.setY(15 + index * LobbySlot.HEIGHT2);
 				iG.setWidth(lobby.getWidth() - 20);
 				iG.setX(10);
@@ -290,8 +251,7 @@ public class SceneLobby extends Scene
 				index++;
 			}
 		}
-		for (int i = 0; i < players.size(); i++)
-		{
+		for (int i = 0; i < players.size(); i++) {
 			LobbySlot slot = new LobbySlot(players.get(i));
 			slot.parent = lobby;
 			slot.setX(10);
@@ -300,8 +260,7 @@ public class SceneLobby extends Scene
 			lobby.add(slot);
 		}
 		
-		for (IGuiElement iG : lobby.components)
-		{
+		for (IGuiElement iG : lobby.components) {
 			final LobbySlot slot = (LobbySlot) iG;
 			
 			slot.initButtons();
@@ -320,11 +279,9 @@ public class SceneLobby extends Scene
 			for (Player player : pl)
 				otherColors.components.get(colors.indexOf(player.getColor())).setEnabled(false);
 			
-			cl.setClickEvent(new IGuiEvent()
-			{
+			cl.setClickEvent(new IGuiEvent() {
 				@Override
-				public void trigger()
-				{
+				public void trigger() {
 					otherColors.setVisible(!otherColors.isVisible());
 					otherColors.setX(slot.getX() + slot.getWidth() - 400 + lobby.getX());
 					otherColors.setY(slot.getY() + slot.getHeight() - 26 + lobby.getY());
@@ -334,11 +291,9 @@ public class SceneLobby extends Scene
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		if (!wasRejoining) super.render();
-		if (!chat.isEnabled())
-		{
+		if (!chat.isEnabled()) {
 			TextureImpl.bindNone();
 			glEnable(GL_BLEND);
 			glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
@@ -351,8 +306,7 @@ public class SceneLobby extends Scene
 			glDisable(GL_BLEND);
 		}
 		
-		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ())
-		{
+		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ()) {
 			progress = 0.5f + (Game.currentMap.initializedIslands / (float) Game.currentMap.islands.size()) / 2;
 		}
 		
@@ -360,17 +314,13 @@ public class SceneLobby extends Scene
 	}
 	
 	@Override
-	public void onTick()
-	{
+	public void onTick() {
 		super.onTick();
 		
-		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ())
-		{
-			if (!Game.currentMap.initialized && !progressString.equals(Tr._("renderchunks")))
-			{
+		if (Game.currentMap.islands.size() == MapSize.values()[mapsize.getValue()].getSizeSQ()) {
+			if (!Game.currentMap.initialized && !progressString.equals(Tr._("renderchunks"))) {
 				progressString = Tr._("loadingbuildings");
-				for (Packet10EntityBuilding p : p10Cache)
-				{
+				for (Packet10EntityBuilding p : p10Cache) {
 					Game.currentMap.islands.get(p.getIslandIndex()).addEntity(p.getEntityBuilding());
 				}
 				
@@ -381,8 +331,7 @@ public class SceneLobby extends Scene
 			}
 		}
 		
-		if (mapname != null && mapname.isEnabled())
-		{
+		if (mapname != null && mapname.isEnabled()) {
 			List<String> s = Arrays.asList(MediaAssistant.getMaps());
 			if (s.contains(mapname.getText())) start.setEnabled(false);
 			else start.setEnabled(true);
@@ -396,14 +345,11 @@ public class SceneLobby extends Scene
 	}
 	
 	@Override
-	public void onClientMessage(String message)
-	{
+	public void onClientMessage(String message) {
 		String type = message.substring(0, message.indexOf("$"));
 		Vector3f color = new Vector3f(1, 1, 1);
-		switch (type)
-		{
-			case "INFO":
-			{
+		switch (type) {
+			case "INFO": {
 				color = new Vector3f(0.9f, 0.9f, 0);
 				break;
 			}
@@ -412,18 +358,13 @@ public class SceneLobby extends Scene
 	}
 	
 	@Override
-	public void onClientReveivedData(byte[] data)
-	{
+	public void onClientReveivedData(byte[] data) {
 		PacketTypes type = Packet.lookupPacket(data[0]);
-		switch (type)
-		{
-			case CONNECT:
-			{
+		switch (type) {
+			case CONNECT: {
 				Packet0Connect p = new Packet0Connect(data);
-				if (p.getUsername().equals(Game.client.getUsername()))
-				{
-					if (Game.client.isConnectedToLocalhost())
-					{
+				if (p.getUsername().equals(Game.client.getUsername())) {
+					if (Game.client.isConnectedToLocalhost()) {
 						start.setEnabled(true);
 						back.setX(Display.getWidth() / 2 - TextButton.WIDTH / 2);
 						disco.setX((int) (Display.getWidth() / 2 - TextButton.WIDTH * 1.5f));
@@ -433,32 +374,24 @@ public class SceneLobby extends Scene
 				}
 			}
 			
-			case RENAME:
-			{
-				try
-				{
+			case RENAME: {
+				try {
 					Game.client.sendPacket(new Packet4ServerInfo());
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				break;
 			}
-			case SERVERINFO:
-			{
+			case SERVERINFO: {
 				updateLobby(new Packet4ServerInfo(data).getPlayers());
 				break;
 			}
-			case PLAYER:
-			{
+			case PLAYER: {
 				Packet6Player p = new Packet6Player(data);
 				Player player = p.getPlayer();
-				for (IGuiElement iG : lobby.components)
-				{
+				for (IGuiElement iG : lobby.components) {
 					LobbySlot slot = (LobbySlot) iG;
-					if (slot.getPlayer().getUsername().equals(player.getUsername()))
-					{
+					if (slot.getPlayer().getUsername().equals(player.getUsername())) {
 						TextButton tb = (TextButton) slot.components.get(2); // ready
 						tb.setActive(player.isReady());
 						if (player.isReady()) tb.textColor = new Vector3f(124 / 256f, 222 / 256f, 106 / 256f);
@@ -472,36 +405,29 @@ public class SceneLobby extends Scene
 				}
 				break;
 			}
-			case SETTINGS:
-			{
+			case SETTINGS: {
 				Packet7Settings p = new Packet7Settings(data);
-				switch (p.getKey())
-				{
-					case "mapsize":
-					{
+				switch (p.getKey()) {
+					case "mapsize": {
 						mapsize.setValue(Integer.parseInt(p.getValue()));
 						break;
 					}
 				}
 				break;
 			}
-			case ATTRIBUTE:
-			{
+			case ATTRIBUTE: {
 				Packet8Attribute p = new Packet8Attribute(data);
-				if (p.getKey().equals("mapeditor_progress_float"))
-				{
+				if (p.getKey().equals("mapeditor_progress_float")) {
 					progress = Float.parseFloat(p.getValue()) / 2;
 					lockScene();
 				}
-				if (p.getKey().equals("mapeditor_progress_string"))
-				{
+				if (p.getKey().equals("mapeditor_progress_string")) {
 					progressString = Tr._(p.getValue());
 					lockScene();
 				}
 				break;
 			}
-			case ENTITYBUILDING:
-			{
+			case ENTITYBUILDING: {
 				p10Cache.add(new Packet10EntityBuilding(data));
 				break;
 			}

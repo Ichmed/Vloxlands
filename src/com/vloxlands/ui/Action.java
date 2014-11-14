@@ -3,34 +3,28 @@ package com.vloxlands.ui;
 /**
  * @author Dakror
  */
-public class Action
-{
+public class Action {
 	String text;
 	IGuiEvent event;
 	
-	public Action(String text, IGuiEvent event)
-	{
+	public Action(String text, IGuiEvent event) {
 		this.text = text;
 		this.event = event;
 	}
 	
-	public String getText()
-	{
+	public String getText() {
 		return text;
 	}
 	
-	public void setText(String text)
-	{
+	public void setText(String text) {
 		this.text = text;
 	}
 	
-	public IGuiEvent getEvent()
-	{
+	public IGuiEvent getEvent() {
 		return event;
 	}
 	
-	public void setEvent(IGuiEvent event)
-	{
+	public void setEvent(IGuiEvent event) {
 		this.event = event;
 	}
 }

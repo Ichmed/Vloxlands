@@ -12,16 +12,14 @@ import com.vloxlands.ui.ProgressBar;
 import com.vloxlands.util.ZipAssistant;
 
 
-public class SceneLogo extends Scene
-{
+public class SceneLogo extends Scene {
 	ProgressBar download;
 	float alpha;
 	boolean update;
 	ZipAssistant downloader;
 	
 	@Override
-	public void init()
-	{
+	public void init() {
 		Label dakror = new Label(Display.getWidth() / 2 - 768 / 2, Display.getHeight() / 2 - 384 / 2, 768, 384, "");
 		dakror.setTexture("/graphics/logo/dakror.png");
 		content.add(dakror);
@@ -32,54 +30,42 @@ public class SceneLogo extends Scene
 		content.add(ichmed);
 		
 		alpha = 0;
-		if (CFG.INTERNET)
-		{
-			try
-			{
+		if (CFG.INTERNET) {
+			try {
 				downloader = new ZipAssistant();
 				// if (MediaAssistant.needMediaUpdate("natives")) downloader.addDownload(new URL("http://dakror.de/vloxlands/GAMECONTENT/natives.zip"), new File(CFG.DIR, "natives"), true);
 				
-				if (downloader.hasDownloads())
-				{
+				if (downloader.hasDownloads()) {
 					download = new ProgressBar(Display.getWidth() / 2, Display.getHeight() - 40, Display.getWidth() - 40, 0, true);
 					content.add(download);
 					downloader.start();
 					update = true;
 				}
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		else update = false;
+		} else update = false;
 	}
 	
 	@Override
-	public void onTick()
-	{
+	public void onTick() {
 		super.onTick();
 		
-		if (alpha >= Math.PI * 2)
-		{
+		if (alpha >= Math.PI * 2) {
 			content.get(0).setVisible(false);
 			content.get(1).setVisible(true);
 		}
 		alpha += 0.05f;
-		if (!update)
-		{
+		if (!update) {
 			if (alpha >= Math.PI * 4 || Keyboard.isKeyDown(Keyboard.KEY_SPACE)) Game.currentGame.setScene(new SceneMainMenu());
-		}
-		else
-		{
+		} else {
 			download.setValue(downloader.progress / (float) downloader.fullsize);
 			if (downloader.state.equals("Fertig")) Game.currentGame.setScene(new SceneMainMenu());
 		}
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		float val = (float) (0.5 * Math.sin(alpha - 0.5 * Math.PI) + 0.5);

@@ -11,8 +11,7 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * @author Dakror
  */
-public class Frustum
-{
+public class Frustum {
 	public static final int RIGHT = 0;
 	public static final int LEFT = 1;
 	public static final int BOTTOM = 2;
@@ -28,14 +27,12 @@ public class Frustum
 	FloatBuffer modelViewBuffer;
 	FloatBuffer projectionBuffer;
 	
-	public Frustum()
-	{
+	public Frustum() {
 		modelViewBuffer = BufferUtils.createFloatBuffer(16);
 		projectionBuffer = BufferUtils.createFloatBuffer(16);
 	}
 	
-	public void calculateFrustum()
-	{
+	public void calculateFrustum() {
 		float[] proj = new float[16];
 		float[] modl = new float[16];
 		float[] clip = new float[16];
@@ -81,12 +78,9 @@ public class Frustum
 		frustum[FRONT] = new Plane(clip[3] + clip[2], clip[7] + clip[6], clip[11] + clip[10], clip[15] + clip[14]);
 	}
 	
-	public boolean pointInFrustum(float x, float y, float z)
-	{
-		for (int i = 0; i < 6; i++)
-		{
-			if (Vector3f.dot(frustum[i].n, new Vector3f(x, y, z)) + frustum[i].d <= 0)
-			{
+	public boolean pointInFrustum(float x, float y, float z) {
+		for (int i = 0; i < 6; i++) {
+			if (Vector3f.dot(frustum[i].n, new Vector3f(x, y, z)) + frustum[i].d <= 0) {
 				return false;
 			}
 		}
@@ -94,12 +88,9 @@ public class Frustum
 		return true;
 	}
 	
-	public boolean sphereInFrustum(float x, float y, float z, float radius)
-	{
-		for (int i = 0; i < 6; i++)
-		{
-			if (Vector3f.dot(frustum[i].n, new Vector3f(x, y, z)) + frustum[i].d <= -radius)
-			{
+	public boolean sphereInFrustum(float x, float y, float z, float radius) {
+		for (int i = 0; i < 6; i++) {
+			if (Vector3f.dot(frustum[i].n, new Vector3f(x, y, z)) + frustum[i].d <= -radius) {
 				return false;
 			}
 		}
@@ -107,37 +98,32 @@ public class Frustum
 		return true;
 	}
 	
-	public static Vector2f calculate2DPlaneDimension(float fov, float dist, int width, int height)
-	{
+	public static Vector2f calculate2DPlaneDimension(float fov, float dist, int width, int height) {
 		float rad = (float) (Math.toRadians(fov) / 2f);
 		
 		return new Vector2f((float) Math.tan(rad) * width / 2f, (float) Math.tan(rad) * height / 2f);
 	}
 	
-	private static class Plane
-	{
+	private static class Plane {
 		public Vector3f n;
 		public float d;
 		
-		public Plane(float x, float y, float z, float d)
-		{
+		public Plane(float x, float y, float z, float d) {
 			this(new Vector3f(x, y, z), d);
 		}
 		
-		public Plane(Vector3f n, float d)
-		{
+		public Plane(Vector3f n, float d) {
 			this.n = n;
 			this.d = d;
 			
 			normalize();
 		}
 		
-		public void normalize()
-		{
+		public void normalize() {
 			float length = 1 / n.length();
 			n.normalise();
 			d *= length;
 		}
 	}
-
+	
 }

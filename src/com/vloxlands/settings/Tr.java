@@ -5,14 +5,12 @@ import java.util.HashMap;
 import com.vloxlands.util.Assistant;
 import com.vloxlands.util.CSVReader;
 
-public class Tr
-{
+public class Tr {
 	private static HashMap<String, String> tr = new HashMap<>();
 	
 	public static String activeLanguage;
 	
-	public static void loadLanguage(String langName)
-	{
+	public static void loadLanguage(String langName) {
 		langName = langName.toLowerCase();
 		
 		activeLanguage = langName;
@@ -24,15 +22,13 @@ public class Tr
 		
 		String cell;
 		String key = "";
-		while ((cell = csv.readNext()) != null)
-		{
+		while ((cell = csv.readNext()) != null) {
 			if (csv.getIndex() == 0) key = cell;
 			else if (csv.getIndex() == lang) tr.put(key, cell);
 		}
 	}
 	
-	public static String _(String key)
-	{
+	public static String _(String key) {
 		String s = tr.get(key);
 		return s == null ? key : s;
 	}

@@ -18,17 +18,14 @@ import com.vloxlands.ui.InputField;
 import com.vloxlands.ui.Label;
 import com.vloxlands.ui.TextButton;
 
-public class SceneMainMenu extends Scene
-{
+public class SceneMainMenu extends Scene {
 	@Override
-	public void init()
-	{
+	public void init() {
 		if (Game.client == null) Game.currentGame.initMultiplayer();
 		
 		setBackground();
 		
-		if (Game.currentMap != null && Game.currentGame.isActiveScene(this))
-		{
+		if (Game.currentMap != null && Game.currentGame.isActiveScene(this)) {
 			Game.currentMap = null;
 			System.gc();
 		}
@@ -40,11 +37,9 @@ public class SceneMainMenu extends Scene
 		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
 		
 		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 40, Tr._("play"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.addScene(new SceneNewGame());
 			}
 		});
@@ -52,19 +47,15 @@ public class SceneMainMenu extends Scene
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("join"));
 		if (!CFG.INTERNET || (Game.client != null && Game.client.isConnected())) b.setEnabled(false);
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				final InputField ip = new InputField(0, 0, 0, "", Tr._("ip"));
 				final InputField name = new InputField(0, 50, 0, "", Tr._("username"));
 				name.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ#0123456789_";
-				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent()
-				{
+				Dialog dialog = new Dialog(Tr._("join"), Tr._("joindesc"), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("connect"), new IGuiEvent() {
 					@Override
-					public void trigger()
-					{
+					public void trigger() {
 						if (name.getText().length() == 0 || ip.getText().length() == 0) return;
 						
 						if (Game.client.isConnected()) Game.client.disconnect();
@@ -83,22 +74,18 @@ public class SceneMainMenu extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 180, Tr._("settings"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.addScene(new SceneSettings());
 			}
 		});
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 250, Tr._("quitGame"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Vloxlands.exit();
 			}
 		});
@@ -107,68 +94,52 @@ public class SceneMainMenu extends Scene
 		content.add(c);
 	}
 	
-	class LoginThread extends Thread
-	{
+	class LoginThread extends Thread {
 		Dialog d;
 		boolean abort = false;
 		
 		String ip;
 		
-		LoginThread(String ip)
-		{
+		LoginThread(String ip) {
 			this.ip = ip;
 		}
 		
 		@Override
-		public void run()
-		{
+		public void run() {
 			d = ((Dialog) Game.currentGame.getActiveScene());
 			d.lockScene();
 			
 			d.buttons[0].setEnabled(true);
-			d.buttons[0].setClickEvent(new IGuiEvent()
-			{
+			d.buttons[0].setClickEvent(new IGuiEvent() {
 				@Override
-				public void trigger()
-				{
+				public void trigger() {
 					abort = true;
 					d.buttons[1].setEnabled(true);
 				}
 			});
-			try
-			{
+			try {
 				boolean response = Game.client.connectToServer(InetAddress.getByName(ip));
 				if (!response) CFG.p("catch that error you fool");
 				
-				while (!abort)
-				{
-					if (!Game.client.isConnected())
-					{
-						if (Game.client.isRejected())
-						{
+				while (!abort) {
+					if (!Game.client.isConnected()) {
+						if (Game.client.isRejected()) {
 							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 							resetButtons();
 							break;
 						}
-						try
-						{
+						try {
 							Thread.sleep(100);
-						}
-						catch (InterruptedException e)
-						{
+						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-					}
-					else
-					{
+					} else {
 						Game.currentGame.removeActiveScene();
 						Game.currentGame.addScene(new SceneLobby());
 						break;
 					}
 				}
-			}
-			catch (UnknownHostException e)
-			{
+			} catch (UnknownHostException e) {
 				showErrorDialog();
 			}
 			
@@ -176,15 +147,13 @@ public class SceneMainMenu extends Scene
 		}
 		
 		
-		void resetButtons()
-		{
+		void resetButtons() {
 			d.unlockScene();
 			d.buttons[0].setClickEvent(Dialog.CLOSE_EVENT);
 			d.buttons[1].setEnabled(true);
 		}
 		
-		void showErrorDialog()
-		{
+		void showErrorDialog() {
 			resetButtons();
 			Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("iperror").replace("%ip%", ip), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 		}

@@ -11,20 +11,17 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * @author Dakror
  */
-public class PickingRay
-{
+public class PickingRay {
 	public Vector3f start, end;
 	float length;
 	
-	public PickingRay(Vector3f n, Vector3f f)
-	{
+	public PickingRay(Vector3f n, Vector3f f) {
 		start = n;
 		end = f;
 		length = Vector3f.sub(n, f, null).length();
 	}
 	
-	public static PickingRay getPickingRay(float mouseX, float mouseY)
-	{
+	public static PickingRay getPickingRay(float mouseX, float mouseY) {
 		FloatBuffer projection = BufferUtils.createFloatBuffer(16);
 		FloatBuffer modelview = BufferUtils.createFloatBuffer(16);
 		IntBuffer viewport = BufferUtils.createIntBuffer(16);

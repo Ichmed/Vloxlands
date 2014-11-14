@@ -8,14 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class ShaderLoader
-{
+public class ShaderLoader {
 	
 	private static HashMap<String, Integer> programs = new HashMap<>();
 	private static String currentProgramName = "";
 	
-	public static int loadProgram(String path, String vertexName, String fragmentName)
-	{
+	public static int loadProgram(String path, String vertexName, String fragmentName) {
 		int program = glCreateProgram();
 		int vertex = glCreateShader(GL_VERTEX_SHADER);
 		int fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -23,29 +21,23 @@ public class ShaderLoader
 		StringBuilder vertexSource = new StringBuilder();
 		StringBuilder fragmentSource = new StringBuilder();
 		
-		try
-		{
+		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderLoader.class.getResourceAsStream(path + vertexName + ".vert")));
 			String line;
 			while ((line = reader.readLine()) != null)
 				vertexSource.append(line).append('\n');
 			reader.close();
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		try
-		{
+		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(ShaderLoader.class.getResourceAsStream(path + fragmentName + ".frag")));
 			String line;
 			while ((line = reader.readLine()) != null)
 				fragmentSource.append(line).append("\n");
 			reader.close();
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -66,33 +58,27 @@ public class ShaderLoader
 		return program;
 	}
 	
-	public static void createProgram(String path, String name)
-	{
+	public static void createProgram(String path, String name) {
 		programs.put(path + name, loadProgram(path, name, name));
 	}
 	
-	public static void createProgram(String path, String vertexName, String fragmentName)
-	{
+	public static void createProgram(String path, String vertexName, String fragmentName) {
 		programs.put(path + vertexName + "-" + fragmentName, loadProgram(path, vertexName, fragmentName));
 	}
 	
 	
-	public static boolean useProgram(String path, String name)
-	{
+	public static boolean useProgram(String path, String name) {
 		return useProgram(path, name, true);
 	}
 	
-	public static boolean useProgram(String path, String name, boolean doWork)
-	{
+	public static boolean useProgram(String path, String name, boolean doWork) {
 		Integer i = programs.get(path + name);
-		if (i == null)
-		{
+		if (i == null) {
 			if (doWork) createProgram(path, name);
 			else return false;
 			i = programs.get(path + name);
 		}
-		if (i != null)
-		{
+		if (i != null) {
 			glUseProgram(i);
 			currentProgramName = path + name;
 			return true;
@@ -100,8 +86,7 @@ public class ShaderLoader
 		return false;
 	}
 	
-	public static int getCurrentProgram()
-	{
+	public static int getCurrentProgram() {
 		if (programs.get(currentProgramName) == null) return -1;
 		return programs.get(currentProgramName);
 	}

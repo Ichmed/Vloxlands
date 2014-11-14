@@ -13,11 +13,9 @@ import com.vloxlands.ui.TextButton;
 /**
  * @author Dakror
  */
-public class SceneNewGame extends Scene
-{
+public class SceneNewGame extends Scene {
 	@Override
-	public void init()
-	{
+	public void init() {
 		if (Game.client.isConnected()) Game.currentGame.addScene(new SceneLobby());
 		
 		setBackground();
@@ -30,11 +28,9 @@ public class SceneNewGame extends Scene
 		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
 		
 		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 70, Tr._("lan"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.setIP(true);
 				Game.currentGame.addScene(new SceneLobby());
 			}
@@ -42,11 +38,9 @@ public class SceneNewGame extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, b.getY() + 70, Tr._("global"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.setIP(false);
 				Game.currentGame.addScene(new SceneLobby());
 			}
@@ -55,11 +49,9 @@ public class SceneNewGame extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 250, Tr._("back"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.removeActiveScene();
 			}
 		});

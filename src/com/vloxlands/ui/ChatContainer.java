@@ -13,24 +13,20 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public class ChatContainer extends Container
-{
+public class ChatContainer extends Container {
 	int lastY;
 	
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.PLAIN, 24f);
 	
-	public ChatContainer(int x, int y, int width, int height)
-	{
+	public ChatContainer(int x, int y, int width, int height) {
 		super(x, y, width, height, false, true);
 		lastY = 15;
 		FontAssistant.getFont(font);
 	}
 	
 	@Override
-	public void render()
-	{
-		if (border)
-		{
+	public void render() {
+		if (border) {
 			if (filled) RenderAssistant.renderContainer(x, y, width, height, doubled);
 			else RenderAssistant.renderOutline(x, y, width, height, doubled);
 		}
@@ -39,8 +35,7 @@ public class ChatContainer extends Container
 		int dif = height - 65 - lastY;
 		if (lastY > height - 65) glTranslatef(x, y + dif, 0);
 		else glTranslatef(x, y, 0);
-		for (IGuiElement g : components)
-		{
+		for (IGuiElement g : components) {
 			if (g.isVisible() && g.wantsRender()) g.render();
 		}
 		
@@ -49,12 +44,10 @@ public class ChatContainer extends Container
 		glDisable(GL_SCISSOR_TEST);
 	}
 	
-	public void addMessage(String message, Vector3f color)
-	{
+	public void addMessage(String message, Vector3f color) {
 		int lineHeight = 25;
 		String[] lines = RenderAssistant.wrap(message, font, width - 30);
-		for (int i = 0; i < lines.length; i++)
-		{
+		for (int i = 0; i < lines.length; i++) {
 			Label label = new Label(20, lastY + i * lineHeight, width, lineHeight, lines[i], false);
 			label.font = font;
 			label.color = color;

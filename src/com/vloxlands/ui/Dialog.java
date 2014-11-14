@@ -16,13 +16,10 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public class Dialog extends Scene
-{
-	public static final IGuiEvent CLOSE_EVENT = new IGuiEvent()
-	{
+public class Dialog extends Scene {
+	public static final IGuiEvent CLOSE_EVENT = new IGuiEvent() {
 		@Override
-		public void trigger()
-		{
+		public void trigger() {
 			Game.currentGame.removeActiveScene();
 		}
 	};
@@ -41,8 +38,7 @@ public class Dialog extends Scene
 	String rawTitle, rawMessage;
 	Action[] rawActions;
 	
-	public Dialog(String title, String message, Action... buttons)
-	{
+	public Dialog(String title, String message, Action... buttons) {
 		width = TextButton.WIDTH * 2 + 20;
 		rawTitle = title;
 		rawMessage = message;
@@ -54,8 +50,7 @@ public class Dialog extends Scene
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 		TextureImpl.bindNone();
@@ -73,10 +68,8 @@ public class Dialog extends Scene
 		RenderAssistant.renderText(x + mx, y + 16, title, titleFont);
 		RenderAssistant.renderLine(x + 10, y + 46, width - 20, true, false);
 		int h = FontAssistant.getFont(messageFont).getHeight();
-		for (int i = 0; i < lines.length; i++)
-		{
-			if (centered)
-			{
+		for (int i = 0; i < lines.length; i++) {
+			if (centered) {
 				tx = FontAssistant.getFont(messageFont).getWidth(lines[i]);
 				mx = width / 2 - tx / 2;
 				RenderAssistant.renderText(x + mx, y + 16 + 50 + i * h, lines[i], messageFont);
@@ -87,8 +80,7 @@ public class Dialog extends Scene
 	}
 	
 	@Override
-	public void init()
-	{
+	public void init() {
 		content.clear();
 		title = rawTitle;
 		centered = true;
@@ -107,8 +99,7 @@ public class Dialog extends Scene
 		if (rawActions.length > 2) throw new InvalidParameterException("Max button count is 2");
 		buttons = new TextButton[rawActions.length];
 		if (rawActions.length == 1) buttons[0] = new TextButton(x + width / 2, y + height - 20 - TextButton.HEIGHT, rawActions[0]);
-		else
-		{
+		else {
 			buttons[0] = new TextButton(x + width / 4 + 10, y + height - 20 - TextButton.HEIGHT, rawActions[0]);
 			buttons[1] = new TextButton(x + width / 4 * 3 - 10, y + height - 20 - TextButton.HEIGHT, rawActions[1]);
 		}
@@ -119,50 +110,41 @@ public class Dialog extends Scene
 		content.add(container);
 	}
 	
-	public void addComponent(IGuiElement g)
-	{
+	public void addComponent(IGuiElement g) {
 		container.add(g);
 		container.pack(false, true);
 		container.setHeight(container.getHeight() + 30);
 	}
 	
-	public int getWidth()
-	{
+	public int getWidth() {
 		return width;
 	}
 	
-	public void setWidth(int width)
-	{
+	public void setWidth(int width) {
 		this.width = width;
 	}
 	
-	public int getHeight()
-	{
+	public int getHeight() {
 		return height;
 	}
 	
-	public void setHeight(int height)
-	{
+	public void setHeight(int height) {
 		this.height = height;
 	}
 	
-	public int getX()
-	{
+	public int getX() {
 		return x;
 	}
 	
-	public void setX(int x)
-	{
+	public void setX(int x) {
 		this.x = x;
 	}
 	
-	public int getY()
-	{
+	public int getY() {
 		return y;
 	}
 	
-	public void setY(int y)
-	{
+	public void setY(int y) {
 		this.y = y;
 	}
 }

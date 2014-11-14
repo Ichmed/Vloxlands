@@ -32,8 +32,7 @@ import com.vloxlands.util.Assistant;
 /**
  * @author Dakror
  */
-public class Server extends Thread
-{
+public class Server extends Thread {
 	public static final int PACKETSIZE = 65536;
 	
 	private DatagramSocket socket;
@@ -45,152 +44,104 @@ public class Server extends Thread
 	MapGenerator mapGenerator;
 	boolean lobby;
 	
-	public Server(InetAddress ipAddress)
-	{
-		try
-		{
+	public Server(InetAddress ipAddress) {
+		try {
 			ip = ipAddress;
 			socket = new DatagramSocket(new InetSocketAddress(ipAddress, CFG.SERVER_PORT));
 			map = new Map();
 			lobby = true;
 			setName("Server-Thread");
-		}
-		catch (BindException e)
-		{
+		} catch (BindException e) {
 			CFG.p("There is a server running at that port already!");
 			return;
-		}
-		catch (SocketException e)
-		{}
+		} catch (SocketException e) {}
 		start();
 	}
 	
-	public InetAddress getIP()
-	{
+	public InetAddress getIP() {
 		return ip;
 	}
 	
 	@Override
-	public void run()
-	{
+	public void run() {
 		CFG.p("[SERVER]: Starting server");
 		CFG.p("[SERVER]: -------------------------------------------------");
-		while (!socket.isClosed())
-		{
+		while (!socket.isClosed()) {
 			byte[] data = new byte[PACKETSIZE];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
-			try
-			{
+			try {
 				socket.receive(packet);
 				parsePacket(packet.getData(), packet.getAddress(), packet.getPort());
-			}
-			catch (Exception e)
-			{}
+			} catch (Exception e) {}
 		}
 	}
 	
-	public void shutdown()
-	{
-		try
-		{
-			for (Player p : clients)
-			{
+	public void shutdown() {
+		try {
+			for (Player p : clients) {
 				sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.serverclosed"), p);
 			}
-		}
-		catch (Exception e)
-		{}
+		} catch (Exception e) {}
 		socket.close();
 		CFG.p("[SERVER]: Server stopped\n");
 	}
 	
-	public void setMapGenerator(MapGenerator mg)
-	{
+	public void setMapGenerator(MapGenerator mg) {
 		mapGenerator = mg;
 		mapGenerator.start();
 		lobby = false;
 	}
 	
-	public boolean areAllClientsReady()
-	{
+	public boolean areAllClientsReady() {
 		if (clients.size() == 1) return true;
-		for (Player p : clients)
-		{
+		for (Player p : clients) {
 			if (!p.isReady()) return false;
 		}
 		
 		return true;
 	}
 	
-	private void parsePacket(byte[] data, InetAddress address, int port) throws Exception
-	{
+	private void parsePacket(byte[] data, InetAddress address, int port) throws Exception {
 		PacketTypes type = Packet.lookupPacket(data[0]);
-		switch (type)
-		{
-			case INVALID:
-			{
+		switch (type) {
+			case INVALID: {
 				break;
 			}
-			case CONNECT:
-			{
+			case CONNECT: {
 				Packet0Connect packet = new Packet0Connect(data);
 				Player player = new Player(packet.getUsername(), address, port);
-				if (packet.getVersion() < CFG.VERSION)
-				{
-					try
-					{
+				if (packet.getVersion() < CFG.VERSION) {
+					try {
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated client");
 						sendPacket(new Packet5Reject(Cause.OUTDATEDCLIENT), player);
 						return;
-					}
-					catch (Exception e)
-					{}
-				}
-				else if (packet.getVersion() > CFG.VERSION)
-				{
-					try
-					{
+					} catch (Exception e) {}
+				} else if (packet.getVersion() > CFG.VERSION) {
+					try {
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): outdated server");
 						sendPacket(new Packet5Reject(Cause.OUTDATEDSERVER), player);
 						return;
-					}
-					catch (Exception e)
-					{}
-				}
-				else if (!lobby && !connectableClients.contains(player))
-				{
-					try
-					{
+					} catch (Exception e) {}
+				} else if (!lobby && !connectableClients.contains(player)) {
+					try {
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): game already started");
 						sendPacket(new Packet5Reject(Cause.GAMERUNNING), player);
 						return;
-					}
-					catch (Exception e)
-					{}
-				}
-				else if (clients.size() == 4)
-				{
-					try
-					{
+					} catch (Exception e) {}
+				} else if (clients.size() == 4) {
+					try {
 						CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): game full");
 						sendPacket(new Packet5Reject(Cause.FULL), player);
 						return;
-					}
-					catch (Exception e)
-					{}
+					} catch (Exception e) {}
 				}
-				for (Player p : clients)
-				{
-					if (p.getUsername().equals(packet.getUsername()))
-					{
-						try
-						{
+				for (Player p : clients) {
+					if (p.getUsername().equals(packet.getUsername())) {
+						try {
 							sendPacket(new Packet5Reject(Cause.USERNAMETAKEN), player);
 							CFG.p("[SERVER]: Rejected " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): username taken");
 							return;
-						}
-						catch (Exception e)
-						{}
+						} catch (Exception e) {}
 					}
 				}
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has connected.");
@@ -202,134 +153,93 @@ public class Server extends Thread
 				player.setPort(port);
 				clients.add(player);
 				if (!connectableClients.contains(player)) connectableClients.add(player);
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
 					if (!lobby && connectableClients.contains(player)) sendPacket(new Packet8Attribute("net_rejoin", "_"), player);
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case DISCONNECT:
-			{
+			case DISCONNECT: {
 				Packet1Disconnect packet = new Packet1Disconnect(data);
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + ") has disconnected. (" + packet.getReason() + ")");
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
-				}
-				catch (Exception e)
-				{}
-				for (int i = 0; i < clients.size(); i++)
-				{
-					if (clients.get(i).getUsername().equals(packet.getUsername()))
-					{
+				} catch (Exception e) {}
+				for (int i = 0; i < clients.size(); i++) {
+					if (clients.get(i).getUsername().equals(packet.getUsername())) {
 						clients.remove(i);
 						break;
 					}
 				}
 				break;
 			}
-			case RENAME:
-			{
+			case RENAME: {
 				Packet2Rename packet = new Packet2Rename(data);
-				for (int i = 0; i < clients.size(); i++)
-				{
-					if (clients.get(i).getUsername().equals(packet.getNewUsername()))
-					{
-						try
-						{
+				for (int i = 0; i < clients.size(); i++) {
+					if (clients.get(i).getUsername().equals(packet.getNewUsername())) {
+						try {
 							sendPacket(new Packet5Reject(Cause.USERNAMETAKEN), new Player(packet.getOldUsername(), address, port));
-						}
-						catch (Exception e)
-						{}
+						} catch (Exception e) {}
 						return;
 					}
 				}
 				CFG.p("[SERVER]: " + packet.getOldUsername() + " changed their name to " + packet.getNewUsername() + ".");
-				for (int i = 0; i < clients.size(); i++)
-				{
-					if (clients.get(i).getUsername().equals(packet.getOldUsername()))
-					{
+				for (int i = 0; i < clients.size(); i++) {
+					if (clients.get(i).getUsername().equals(packet.getOldUsername())) {
 						clients.get(i).setUsername(packet.getNewUsername());
 						break;
 					}
 				}
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case CHATMESSAGE:
-			{
+			case CHATMESSAGE: {
 				Packet3ChatMessage packet = new Packet3ChatMessage(data);
 				CFG.p("[SERVER]: " + packet.getUsername() + " (" + address.getHostAddress() + ":" + port + "): " + packet.getMessage());
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case SERVERINFO:
-			{
-				try
-				{
+			case SERVERINFO: {
+				try {
 					sendPacketToAllClients(new Packet4ServerInfo(clients.toArray(new Player[] {})));
-					for (Player p : clients)
-					{
+					for (Player p : clients) {
 						sendPacketToAllClients(new Packet6Player(p));
 					}
-					for (String key : settings.keySet())
-					{
+					for (String key : settings.keySet()) {
 						sendPacketToAllClients(new Packet7Settings(key, settings.get(key)));
 					}
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case PLAYER:
-			{
+			case PLAYER: {
 				Packet6Player packet = new Packet6Player(data);
 				Player player = packet.getPlayer();
 				player.setPort(port);
-				for (int i = 0; i < clients.size(); i++)
-				{
+				for (int i = 0; i < clients.size(); i++) {
 					Player p = clients.get(i);
-					if (player.getUsername().equals(p.getUsername()))
-					{
+					if (player.getUsername().equals(p.getUsername())) {
 						clients.set(i, player);
 						break;
 					}
 				}
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case SETTINGS:
-			{
+			case SETTINGS: {
 				Packet7Settings packet = new Packet7Settings(data);
 				settings.put(packet.getKey(), packet.getValue());
-				try
-				{
+				try {
 					sendPacketToAllClients(packet);
-				}
-				catch (Exception e)
-				{}
+				} catch (Exception e) {}
 				break;
 			}
-			case ATTRIBUTE:
-			{
+			case ATTRIBUTE: {
 				Packet8Attribute packet = new Packet8Attribute(data);
 				if (packet.getKey().equals("net_rejoin")) sendRejoinData(new Player("", address, port));
 				
@@ -340,56 +250,44 @@ public class Server extends Thread
 		}
 	}
 	
-	public void sendPacket(Packet p, Player client) throws Exception
-	{
+	public void sendPacket(Packet p, Player client) throws Exception {
 		sendData(p.getData(), client);
 	}
 	
-	public void sendData(byte[] data, Player client) throws Exception
-	{
+	public void sendData(byte[] data, Player client) throws Exception {
 		DatagramPacket packet = new DatagramPacket(data, data.length, client.getIP(), client.getPort());
 		
 		socket.send(packet);
 	}
 	
-	public void sendPacketToAllClients(Packet packet) throws Exception
-	{
+	public void sendPacketToAllClients(Packet packet) throws Exception {
 		sendDataToAllClients(packet.getData());
 	}
 	
-	public void sendDataToAllClients(byte[] data) throws Exception
-	{
+	public void sendDataToAllClients(byte[] data) throws Exception {
 		for (Player p : clients)
 			sendData(data, p);
 	}
 	
-	public int getConnectedClientCount()
-	{
+	public int getConnectedClientCount() {
 		return clients.size();
 	}
 	
-	private void sendRejoinData(Player player)
-	{
-		try
-		{
+	private void sendRejoinData(Player player) {
+		try {
 			sendPacket(new Packet8Attribute("mapeditor_progress_float", 0), player);
-			for (int i = 0; i < map.islands.size(); i++)
-			{
+			for (int i = 0; i < map.islands.size(); i++) {
 				sendPacket(new Packet9Island(map.islands.get(i)), player);
 				sendPacket(new Packet8Attribute("mapeditor_progress_float", i / (float) (map.islands.size() - 1)), player);
 			}
-		}
-		catch (Exception e)
-		{}
+		} catch (Exception e) {}
 	}
 	
-	public Map getMap()
-	{
+	public Map getMap() {
 		return map;
 	}
 	
-	public void setMap(Map m)
-	{
+	public void setMap(Map m) {
 		map = m;
 	}
 }

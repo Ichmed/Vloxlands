@@ -14,11 +14,9 @@ import com.vloxlands.ui.Label;
 import com.vloxlands.ui.Slider;
 import com.vloxlands.ui.TextButton;
 
-public class SceneSettings extends Scene
-{
+public class SceneSettings extends Scene {
 	@Override
-	public void init()
-	{
+	public void init() {
 		setBackground();
 		setTitle(Tr._("settings"));
 		
@@ -56,24 +54,20 @@ public class SceneSettings extends Scene
 		content.add(zfar);
 		
 		TextButton b = new TextButton(Display.getWidth() / 2 - TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("back"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.removeScene(SceneSettings.this);
 			}
 		});
 		content.add(b);
 		
 		TextButton s = new TextButton(Display.getWidth() / 2 + TextButton.WIDTH / 2, Display.getHeight() - TextButton.HEIGHT, Tr._("save"));
-		s.setClickEvent(new IGuiEvent()
-		{
+		s.setClickEvent(new IGuiEvent() {
 			
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				CFG.FOV = (int) fov.getValue();
 				CFG.FPS = (int) fps.getValue();
 				CFG.RENDER_DISTANCE = (int) zfar.getValue();

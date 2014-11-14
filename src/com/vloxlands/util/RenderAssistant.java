@@ -30,11 +30,10 @@ import com.vloxlands.render.util.ShaderLoader;
 import com.vloxlands.settings.CFG;
 import com.vloxlands.ui.IGuiElement;
 
-//import render.Model;
-//import util.math.MathHelper;
+// import render.Model;
+// import util.math.MathHelper;
 
-public class RenderAssistant
-{
+public class RenderAssistant {
 	public static HashMap<String, Texture> textures = new HashMap<>();
 	private static HashMap<TextureRegion, Texture> textureRegions = new HashMap<>();
 	private static HashMap<String, TextureAtlas> textureAtlases = new HashMap<>();
@@ -42,51 +41,42 @@ public class RenderAssistant
 	
 	// public static HashMap<String, Model> models = new HashMap<>();
 	
-	public static void storeTexture(String path)
-	{
+	public static void storeTexture(String path) {
 		Texture t = loadTexture(path);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		textures.put(path, t);
 	}
 	
-	public static void bindTextureRegion(String path, int x, int y, int width, int height)
-	{
+	public static void bindTextureRegion(String path, int x, int y, int width, int height) {
 		TextureRegion tr = new TextureRegion(path, x, y, width, height);
 		Texture t = textureRegions.get(tr);
 		
-		if (t != null)
-		{
+		if (t != null) {
 			t.bind();
-		}
-		else
-		{
+		} else {
 			Texture tex = tr.loadTexture();
 			textureRegions.put(tr, tex);
 			tex.bind();
 		}
 	}
 	
-	public static void storeTextureAtlas(String path, int cw, int ch)
-	{
+	public static void storeTextureAtlas(String path, int cw, int ch) {
 		if (!textureAtlases.containsKey(path)) textureAtlases.put(path, new TextureAtlas(path, cw, ch));
 		
 	}
 	
-	public static void bindTextureAtlasTile(String path, int x, int y)
-	{
+	public static void bindTextureAtlasTile(String path, int x, int y) {
 		if (!textureAtlases.containsKey(path)) throw new NoSuchElementException(" texture atlas " + path);
 		else textureAtlases.get(path).getTile(x, y).bind();
 	}
 	
-	public static void bindTexture(String path)
-	{
+	public static void bindTexture(String path) {
 		if (path == null) return;
 		
 		Texture t = textures.get(path);
 		if (t != null) t.bind();// glBindTexture(GL_TEXTURE_2D, t.getTextureID());
-		else
-		{
+		else {
 			t = loadTexture(path);
 			t.bind();// glBindTexture(GL_TEXTURE_2D, t.getTextureID());
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -121,24 +111,19 @@ public class RenderAssistant
 	// getModel(path).renderModel();
 	// }
 	
-	private static Texture loadTexture(String path)
-	{
-		try
-		{
+	private static Texture loadTexture(String path) {
+		try {
 			Texture texture = TextureLoader.getTexture(".png", RenderAssistant.class.getResourceAsStream(path));
 			improveTexture(texture);
 			return texture;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			CFG.p(path);
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	public static void improveTexture(Texture texture)
-	{
+	public static void improveTexture(Texture texture) {
 		texture.bind();
 		
 		int width = texture.getImageWidth();
@@ -158,18 +143,15 @@ public class RenderAssistant
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, 8);
 	}
 	
-	public static void renderRect(float posX, float posY, float sizeX, float sizeY)
-	{
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY) {
 		renderRect(posX, posY, sizeX, sizeY, 1, 1);
 	}
 	
-	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texSizeX, float texSizeY)
-	{
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texSizeX, float texSizeY) {
 		renderRect(posX, posY, sizeX, sizeY, 0, 0, texSizeX, texSizeY);
 	}
 	
-	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY)
-	{
+	public static void renderRect(float posX, float posY, float sizeX, float sizeY, float texPosX, float texPosY, float texSizeX, float texSizeY) {
 		glPushMatrix();
 		{
 			glDisable(GL_CULL_FACE);
@@ -193,8 +175,7 @@ public class RenderAssistant
 		glPopMatrix();
 	}
 	
-	public static void renderCuboid(float x, float y, float z, float sizeX, float sizeY, float sizeZ)
-	{
+	public static void renderCuboid(float x, float y, float z, float sizeX, float sizeY, float sizeZ) {
 		glBegin(GL_LINES);
 		{
 			glVertex3f(x, y, z);
@@ -236,8 +217,7 @@ public class RenderAssistant
 		glEnd();
 	}
 	
-	public static void drawRect(float posX, float posY, float sizeX, float sizeY)
-	{
+	public static void drawRect(float posX, float posY, float sizeX, float sizeY) {
 		glPushMatrix();
 		{
 			glDisable(GL_CULL_FACE);
@@ -256,8 +236,7 @@ public class RenderAssistant
 		glPopMatrix();
 	}
 	
-	public static void renderText(float x, float y, String text, Font f)
-	{
+	public static void renderText(float x, float y, String text, Font f) {
 		TextureImpl.bindNone();
 		glEnable(GL_BLEND);
 		FloatBuffer fb = BufferUtils.createFloatBuffer(16);
@@ -266,10 +245,8 @@ public class RenderAssistant
 		glDisable(GL_BLEND);
 	}
 	
-	public static void set2DRenderMode(boolean t)
-	{
-		if (t)
-		{
+	public static void set2DRenderMode(boolean t) {
+		if (t) {
 			glMatrixMode(GL_PROJECTION);
 			glPushMatrix();
 			glLoadIdentity();
@@ -281,40 +258,32 @@ public class RenderAssistant
 			glDisable(GL_TEXTURE_2D);
 			glShadeModel(GL_SMOOTH);
 			glDisable(GL_DEPTH_TEST);
-		}
-		else
-		{
+		} else {
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 		}
 	}
 	
-	public static void glColorHex(String hex, float alpha)
-	{
+	public static void glColorHex(String hex, float alpha) {
 		glColor4f(Integer.parseInt(hex.substring(0, 2), 16) / 255f, Integer.parseInt(hex.substring(2, 4), 16) / 255f, Integer.parseInt(hex.substring(4, 6), 16) / 255f, alpha);
 	}
 	
-	public static void enable(int key)
-	{
-		if (key == GL_LIGHTING)
-		{
+	public static void enable(int key) {
+		if (key == GL_LIGHTING) {
 			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
 			ARBShaderObjects.glUniform1fARB(location, 1);
 		}
 	}
 	
-	public static void disable(int key)
-	{
-		if (key == GL_LIGHTING)
-		{
+	public static void disable(int key) {
+		if (key == GL_LIGHTING) {
 			int location = GL20.glGetUniformLocation(ShaderLoader.getCurrentProgram(), "lighting");
 			ARBShaderObjects.glUniform1fARB(location, 0);
 		}
 	}
 	
-	public static int getUniformLocation(String name)
-	{
+	public static int getUniformLocation(String name) {
 		CFG.p(ShaderLoader.getCurrentProgram());
 		HashMap<String, Integer> h = uniformPosition.get(ShaderLoader.getCurrentProgram());
 		if (h == null) h = new HashMap<>();
@@ -323,33 +292,27 @@ public class RenderAssistant
 		
 	}
 	
-	public static void setUniform1f(String name, float value)
-	{
+	public static void setUniform1f(String name, float value) {
 		ARBShaderObjects.glUniform1fARB(getUniformLocation(name), value);
 	}
 	
-	public static void setUniform2f(String name, Vector2f v)
-	{
+	public static void setUniform2f(String name, Vector2f v) {
 		setUniform2f(name, v.x, v.y);
 	}
 	
-	public static void setUniform2f(String name, float a, float b)
-	{
+	public static void setUniform2f(String name, float a, float b) {
 		ARBShaderObjects.glUniform2fARB(getUniformLocation(name), a, b);
 	}
 	
-	public static void setUniform3f(String name, Vector3f v)
-	{
+	public static void setUniform3f(String name, Vector3f v) {
 		setUniform3f(name, v.x, v.y, v.z);
 	}
 	
-	public static void setUniform3f(String name, float a, float b, float c)
-	{
+	public static void setUniform3f(String name, float a, float b, float c) {
 		ARBShaderObjects.glUniform3fARB(getUniformLocation(name), a, b, c);
 	}
 	
-	public static BufferedImage toBufferedImage(Image img)
-	{
+	public static BufferedImage toBufferedImage(Image img) {
 		BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		image.getGraphics().drawImage(img, 0, 0, null);
 		
@@ -358,8 +321,7 @@ public class RenderAssistant
 	
 	// -- 2D GUI Helper functions -- //
 	
-	public static void renderOutline(int x, int y, int width, int height, boolean doubled)
-	{
+	public static void renderOutline(int x, int y, int width, int height, boolean doubled) {
 		glEnable(GL_BLEND);
 		bindTexture("/graphics/textures/ui/gui.png");
 		
@@ -399,8 +361,7 @@ public class RenderAssistant
 		glDisable(GL_BLEND);
 	}
 	
-	public static void renderContainer(int x, int y, int width, int height, boolean doubled)
-	{
+	public static void renderContainer(int x, int y, int width, int height, boolean doubled) {
 		glPushMatrix();
 		{
 			glEnable(GL_BLEND);
@@ -416,8 +377,7 @@ public class RenderAssistant
 		glPopMatrix();
 	}
 	
-	public static void renderLine(int x, int y, int length, boolean horizontal, boolean doubled)
-	{
+	public static void renderLine(int x, int y, int length, boolean horizontal, boolean doubled) {
 		glEnable(GL_BLEND);
 		bindTexture("/graphics/textures/ui/gui.png");
 		
@@ -438,8 +398,7 @@ public class RenderAssistant
 		// x2 y2
 		int[] m = (doubled) ? new int[] { 893, 189 } : new int[] { 899, 398 };
 		
-		if (!horizontal)
-		{
+		if (!horizontal) {
 			glTranslatef(x, y, 0);
 			glRotatef(-90, 0, 0, 1);
 			glTranslatef(-x, -y, 0);
@@ -452,8 +411,7 @@ public class RenderAssistant
 		renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
 		
 		renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
-		if (!horizontal)
-		{
+		if (!horizontal) {
 			glTranslatef(width, height, 0);
 			glTranslatef(x, y, 0);
 			glRotatef(90, 0, 0, 1);
@@ -462,30 +420,24 @@ public class RenderAssistant
 		glDisable(GL_BLEND);
 	}
 	
-	public static void renderShadow(int x, int y, int width, int height, float rotInDegrees)
-	{
+	public static void renderShadow(int x, int y, int width, int height, float rotInDegrees) {
 		glEnable(GL_BLEND);
 		bindTexture("/graphics/textures/ui/gui.png");
 		glDisable(GL_BLEND);
 	}
 	
-	public static String[] wrap(String raw, Font f, int width)
-	{
+	public static String[] wrap(String raw, Font f, int width) {
 		String[] words = raw.split(" ");
 		ArrayList<String> lines = new ArrayList<>();
 		int wordIndex = 0;
 		String line = "";
 		TrueTypeFont ttf = FontAssistant.getFont(f);
 		
-		while (wordIndex < words.length)
-		{
-			if (ttf.getWidth(line + " " + words[wordIndex]) <= width)
-			{
+		while (wordIndex < words.length) {
+			if (ttf.getWidth(line + " " + words[wordIndex]) <= width) {
 				line += " " + words[wordIndex];
 				wordIndex++;
-			}
-			else
-			{
+			} else {
 				
 				lines.add(line);
 				line = "";
@@ -494,8 +446,7 @@ public class RenderAssistant
 		lines.add(line);
 		
 		ArrayList<String> realLines = new ArrayList<>();
-		for (String s : lines)
-		{
+		for (String s : lines) {
 			String[] nls = s.split("\n");
 			for (String nl : nls)
 				realLines.add(nl);

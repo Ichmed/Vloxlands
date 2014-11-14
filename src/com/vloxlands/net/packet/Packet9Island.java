@@ -10,40 +10,32 @@ import com.vloxlands.util.MapAssistant;
 /**
  * @author Dakror
  */
-public class Packet9Island extends Packet
-{
+public class Packet9Island extends Packet {
 	byte[] islandData;
 	
-	public Packet9Island(Island island)
-	{
+	public Packet9Island(Island island) {
 		super(9);
 		
-		try
-		{
+		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			MapAssistant.saveIsland(island, baos);
 			islandData = Compressor.compress(baos.toByteArray());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Packet9Island(byte[] data)
-	{
+	public Packet9Island(byte[] data) {
 		super(9);
 		islandData = Arrays.copyOfRange(data, 1, data.length);
 	}
 	
-	public Island getIsland()
-	{
+	public Island getIsland() {
 		return MapAssistant.loadIsland(Compressor.decompress(islandData), false);
 	}
 	
 	@Override
-	protected byte[] getPacketData()
-	{
+	protected byte[] getPacketData() {
 		return islandData;
 	}
 }

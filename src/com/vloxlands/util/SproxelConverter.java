@@ -27,16 +27,13 @@ import com.vloxlands.util.math.Vector;
 /**
  * @author Dakror
  */
-public class SproxelConverter
-{
-	static class Block
-	{
+public class SproxelConverter {
+	static class Block {
 		int x, y, z;
 		long c;
 		Color color;
 		
-		Block(int x, int y, int z, long c)
-		{
+		Block(int x, int y, int z, long c) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -45,36 +42,28 @@ public class SproxelConverter
 		}
 	}
 	
-	public static void main(String[] args)
-	{
-		try
-		{
+	public static void main(String[] args) {
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			JFileChooser jfc = new JFileChooser(new File(SproxelConverter.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
 			jfc.setFileFilter(new FileNameExtensionFilter("Sproxel CSV Files (*.csv)", "csv"));
 			jfc.setMultiSelectionEnabled(false);
 			jfc.setFileHidingEnabled(false);
 			jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			switch (jfc.showOpenDialog(null))
-			{
-				case JFileChooser.APPROVE_OPTION:
-				{
+			switch (jfc.showOpenDialog(null)) {
+				case JFileChooser.APPROVE_OPTION: {
 					convertFile(jfc.getSelectedFile());
 					break;
 				}
 			}
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void packFilesInFolder(File csvFile)
-	{
+	public static void packFilesInFolder(File csvFile) {
 		String name = csvFile.getName().substring(0, csvFile.getName().lastIndexOf("."));
-		if (csvFile.getParentFile().getName().equals(name))
-		{
+		if (csvFile.getParentFile().getName().equals(name)) {
 			CFG.p("  > already sorted");
 			return;
 		}
@@ -82,12 +71,10 @@ public class SproxelConverter
 		dir.mkdir();
 		
 		int sorted = 0;
-		for (File f : csvFile.getParentFile().listFiles())
-		{
+		for (File f : csvFile.getParentFile().listFiles()) {
 			if (f.isDirectory()) continue;
 			
-			if (f.getName().startsWith(name + "."))
-			{
+			if (f.getName().startsWith(name + ".")) {
 				sorted++;
 				f.renameTo(new File(dir, f.getName()));
 			}
@@ -95,21 +82,18 @@ public class SproxelConverter
 		CFG.p("  > sorted " + sorted + " files");
 	}
 	
-	public static long parseLong(String hex)
-	{
+	public static long parseLong(String hex) {
 		hex = hex.toLowerCase().replace("0x", "").replace("#", "");
 		
 		long value = 0;
-		for (int i = 0; i < hex.length(); i++)
-		{
+		for (int i = 0; i < hex.length(); i++) {
 			value += Math.pow(16, hex.length() - i - 1) * Integer.parseInt(hex.substring(i, i + 1), 16);
 		}
 		
 		return value;
 	}
 	
-	public static Color loadColor(long value)
-	{
+	public static Color loadColor(long value) {
 		long r = (value & 0xFF000000) >> 24;
 		long g = (value & 0x00FF0000) >> 16;
 		long b = (value & 0x0000FF00) >> 8;
@@ -118,8 +102,7 @@ public class SproxelConverter
 		return new Color((int) r, (int) g, (int) b, (int) a);
 	}
 	
-	public static void convertFile(File csvFile)
-	{
+	public static void convertFile(File csvFile) {
 		CSVReader csv = new CSVReader(csvFile);
 		csv.sep = ",";
 		String[] d = csv.readRow();
@@ -135,24 +118,19 @@ public class SproxelConverter
 		
 		CFG.p("> reading cell data");
 		
-		if (width != height || width != depth || height != depth)
-		{
+		if (width != height || width != depth || height != depth) {
 			JOptionPane.showMessageDialog(null, "The Input Sproxel-CSV-Model has to have cubic dimensions! ", "Error!", JOptionPane.ERROR_MESSAGE);
 			CFG.p("> ABORT");
 			return;
 		}
 		
-		while ((cell = csv.readNext()) != null)
-		{
+		while ((cell = csv.readNext()) != null) {
 			int x = index / (blocks.length * blocks[0].length);
 			int y = index / blocks.length % blocks[0].length;
 			int z = index % blocks[0][0].length;
-			try
-			{
+			try {
 				blocks[x][y][z] = new Block(x, y, z, parseLong(cell));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			index++;
@@ -179,21 +157,16 @@ public class SproxelConverter
 		CFG.p("> DONE");
 	}
 	
-	public static HashMap<VoxelFaceKey, VoxelFace> generateFaces(Block[][][] blocks)
-	{
+	public static HashMap<VoxelFaceKey, VoxelFace> generateFaces(Block[][][] blocks) {
 		HashMap<VoxelFaceKey, VoxelFace> faces = new HashMap<>();
-		for (int x = 0; x < blocks.length; x++)
-		{
-			for (int y = 0; y < blocks[x].length; y++)
-			{
-				for (int z = 0; z < blocks[x][y].length; z++)
-				{
+		for (int x = 0; x < blocks.length; x++) {
+			for (int y = 0; y < blocks[x].length; y++) {
+				for (int z = 0; z < blocks[x][y].length; z++) {
 					if (blocks[x][y][z].c == 0) continue;
 					
 					Color v = blocks[x][y][z].color;
 					
-					for (Direction d : Direction.values())
-					{
+					for (Direction d : Direction.values()) {
 						int x1 = x + (int) d.dir.x;
 						int y1 = y + (int) d.dir.y;
 						int z1 = z + (int) d.dir.z;
@@ -201,8 +174,7 @@ public class SproxelConverter
 						boolean outOfBounds = !(x1 >= 0 && y1 >= 0 && z1 >= 0 && x1 < blocks.length && y1 < blocks[x].length && z1 < blocks[x][y].length);
 						
 						boolean filled = (outOfBounds) ? true : !blocks[x1][y1][z1].color.equals(v);
-						if (filled)
-						{
+						if (filled) {
 							VoxelFace f = new VoxelFace(d, new Vector3f(x, y, z), blocks[x][y][z].c);
 							faces.put(new VoxelFaceKey(x, y, z, d.ordinal()), f);
 						}
@@ -214,44 +186,31 @@ public class SproxelConverter
 		return faces;
 	}
 	
-	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(HashMap<VoxelFaceKey, VoxelFace> originalMap, int size)
-	{
+	public static HashMap<VoxelFaceKey, VoxelFace> generateGreedyMesh(HashMap<VoxelFaceKey, VoxelFace> originalMap, int size) {
 		HashMap<VoxelFaceKey, VoxelFace> strips0 = new HashMap<>();
 		
 		if (originalMap.size() == 0) return originalMap;
 		
 		// greedy-mode along Z - axis
-		for (int posX = 0; posX < size; posX++)
-		{
-			for (int posY = 0; posY < size; posY++)
-			{
+		for (int posX = 0; posX < size; posX++) {
+			for (int posY = 0; posY < size; posY++) {
 				VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-				for (int posZ = 0; posZ < size; posZ++)
-				{
-					for (int i = 0; i < activeStrips.length; i++)
-					{
+				for (int posZ = 0; posZ < size; posZ++) {
+					for (int i = 0; i < activeStrips.length; i++) {
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = originalMap.get(key);
 						
-						if (activeStrips[i] != null)
-						{
-							if (val == null)
-							{
+						if (activeStrips[i] != null) {
+							if (val == null) {
 								strips0.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 								activeStrips[i] = null;
-							}
-							else if (val.textureIndex == activeStrips[i].textureIndex)
-							{
+							} else if (val.textureIndex == activeStrips[i].textureIndex) {
 								activeStrips[i].increaseSize(0, 0, 1);
-							}
-							else
-							{
+							} else {
 								strips0.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 								activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), val.textureIndex);
 							}
-						}
-						else if (val != null)
-						{
+						} else if (val != null) {
 							activeStrips[i] = new VoxelFace(Direction.values()[i], new Vector3f(posX, posY, posZ), val.textureIndex);
 						}
 					}
@@ -264,41 +223,28 @@ public class SproxelConverter
 		HashMap<VoxelFaceKey, VoxelFace> strips1 = new HashMap<>();
 		
 		// greedy-mode along X - axis
-		for (int posY = 0; posY < size; posY++)
-		{
+		for (int posY = 0; posY < size; posY++) {
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int posZ = 0; posZ < size; posZ++)
-			{
-				for (int posX = 0; posX < size; posX++)
-				{
-					for (int i = 0; i < activeStrips.length; i++)
-					{
+			for (int posZ = 0; posZ < size; posZ++) {
+				for (int posX = 0; posX < size; posX++) {
+					for (int i = 0; i < activeStrips.length; i++) {
 						
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips0.get(key);
 						
-						if (val != null)
-						{
-							if (activeStrips[i] == null)
-							{
+						if (val != null) {
+							if (activeStrips[i] == null) {
 								activeStrips[i] = new VoxelFace(val);
-							}
-							else
-							{
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.pos.z == activeStrips[i].pos.z)
-								{
+							} else {
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.pos.z == activeStrips[i].pos.z) {
 									activeStrips[i].increaseSize(1, 0, 0);
-								}
-								else
-								{
+								} else {
 									strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 									
 									activeStrips[i] = new VoxelFace(val);
 								}
 							}
-						}
-						else if (activeStrips[i] != null)
-						{
+						} else if (activeStrips[i] != null) {
 							strips1.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 							activeStrips[i] = null;
 						}
@@ -312,41 +258,28 @@ public class SproxelConverter
 		HashMap<VoxelFaceKey, VoxelFace> strips2 = new HashMap<>();
 		
 		// greedy-mode along Y - axis
-		for (int posX = 0; posX < size; posX++)
-		{
+		for (int posX = 0; posX < size; posX++) {
 			VoxelFace[] activeStrips = new VoxelFace[Direction.values().length];
-			for (int posZ = 0; posZ < size; posZ++)
-			{
-				for (int posY = 0; posY < size; posY++)
-				{
-					for (int i = 0; i < activeStrips.length; i++)
-					{
+			for (int posZ = 0; posZ < size; posZ++) {
+				for (int posY = 0; posY < size; posY++) {
+					for (int i = 0; i < activeStrips.length; i++) {
 						
 						VoxelFaceKey key = new VoxelFaceKey(posX, posY, posZ, i);
 						VoxelFace val = strips1.get(key);
 						
-						if (val != null)
-						{
-							if (activeStrips[i] == null)
-							{
+						if (val != null) {
+							if (activeStrips[i] == null) {
 								activeStrips[i] = new VoxelFace(val);
-							}
-							else
-							{
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX && val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z)
-								{
+							} else {
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX && val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z) {
 									activeStrips[i].increaseSize(0, 1, 0);
-								}
-								else
-								{
+								} else {
 									strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 									
 									activeStrips[i] = new VoxelFace(val);
 								}
 							}
-						}
-						else if (activeStrips[i] != null)
-						{
+						} else if (activeStrips[i] != null) {
 							strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
 							activeStrips[i] = null;
 						}
@@ -360,10 +293,8 @@ public class SproxelConverter
 		return strips2;
 	}
 	
-	public static void saveOBJ(File f, int size, HashMap<VoxelFaceKey, VoxelFace> meshes)
-	{
-		try
-		{
+	public static void saveOBJ(File f, int size, HashMap<VoxelFaceKey, VoxelFace> meshes) {
+		try {
 			int texSize = 16;
 			float texMalus = 0.4f / 32f; // 0.0125
 			
@@ -382,8 +313,7 @@ public class SproxelConverter
 			
 			CFG.p("  > sorting data");
 			
-			for (VoxelFace vf : meshes.values())
-			{
+			for (VoxelFace vf : meshes.values()) {
 				Vector bl = transformVector(new Vector(vf.bl).add(new Vector(vf.pos)), size, size, size);
 				Vector br2 = transformVector(new Vector(vf.br).add(new Vector(vf.pos)), size, size, size);
 				Vector tl = transformVector(new Vector(vf.tl).add(new Vector(vf.pos)), size, size, size);
@@ -440,16 +370,13 @@ public class SproxelConverter
 			
 			ArrayList<Vector> textureVertices = new ArrayList<>();
 			
-			for (int i = 0; i < materials.size(); i++)
-			{
+			for (int i = 0; i < materials.size(); i++) {
 				Color c = materials.get(i);
 				g.setColor(new java.awt.Color(c.r, c.g, c.b, c.a));
 				g.fillRect((i % grid) * texSize, (i / grid) * texSize, texSize, texSize);
 				
-				for (int j = 0; j < 2; j++)
-				{
-					for (int k = 0; k < 2; k++)
-					{
+				for (int j = 0; j < 2; j++) {
+					for (int k = 0; k < 2; k++) {
 						float U = (((i % grid) + j) / (float) grid) + (j == 0 ? texMalus : -texMalus);
 						float V = 1 - (((i / grid) + k) / (float) grid) + (k == 0 ? -texMalus : texMalus);
 						
@@ -476,20 +403,15 @@ public class SproxelConverter
 			CFG.p("  > writing faces");
 			
 			ArrayList<VoxelFace> values = new ArrayList<>(meshes.values());
-			Collections.sort(values, new Comparator<VoxelFace>()
-			{
+			Collections.sort(values, new Comparator<VoxelFace>() {
 				@Override
-				public int compare(VoxelFace o1, VoxelFace o2)
-				{
+				public int compare(VoxelFace o1, VoxelFace o2) {
 					Color c1 = loadColor(o1.textureIndex);
 					Color c2 = loadColor(o2.textureIndex);
 					
-					if (c1.equals(c2))
-					{
+					if (c1.equals(c2)) {
 						return 0;
-					}
-					else if (c1.equals(Color.white))
-					{
+					} else if (c1.equals(Color.white)) {
 						return -1;
 					}
 					
@@ -501,14 +423,12 @@ public class SproxelConverter
 			
 			obj.write("usemtl white" + br);
 			
-			for (int i = 0; i < values.size(); i++)
-			{
+			for (int i = 0; i < values.size(); i++) {
 				VoxelFace face = values.get(i);
 				
 				boolean white = loadColor(face.textureIndex).equals(Color.white);
 				
-				if (!white && !prev)
-				{
+				if (!white && !prev) {
 					obj.write("usemtl mtl0" + br);
 					prev = true;
 				}
@@ -540,15 +460,12 @@ public class SproxelConverter
 			
 			obj.close();
 			mtl.close();
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static Vector transformVector(Vector v, int w, int h, int d)
-	{
+	public static Vector transformVector(Vector v, int w, int h, int d) {
 		float min = Math.min(d, Math.min(w, h));
 		return new Vector(v.z / min, (h - v.x) / min, v.y / min);
 	}

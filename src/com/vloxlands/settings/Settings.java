@@ -8,12 +8,9 @@ import org.json.JSONObject;
 import com.vloxlands.util.Assistant;
 
 
-public class Settings
-{
-	public static void saveSettings()
-	{
-		try
-		{
+public class Settings {
+	public static void saveSettings() {
+		try {
 			File file = new File(CFG.DIR, "settings.json");
 			JSONObject data = new JSONObject();
 			
@@ -26,18 +23,13 @@ public class Settings
 			data.put("zfar", CFG.RENDER_DISTANCE);
 			
 			Assistant.setFileContent(file, data.toString());
-		}
-		catch (JSONException e)
-		{}
+		} catch (JSONException e) {}
 	}
 	
-	public static void loadSettings()
-	{
-		try
-		{
+	public static void loadSettings() {
+		try {
 			File file = new File(CFG.DIR, "settings.json");
-			if (!file.exists())
-			{
+			if (!file.exists()) {
 				Tr.loadLanguage("us");
 				CFG.FULLSCREEN = false;
 				return;
@@ -49,8 +41,6 @@ public class Settings
 			CFG.FOV = data.getInt("fov");
 			CFG.FPS = data.getInt("fps");
 			CFG.RENDER_DISTANCE = data.getInt("zfar");
-		}
-		catch (JSONException e)
-		{}
+		} catch (JSONException e) {}
 	}
 }

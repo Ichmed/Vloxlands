@@ -10,12 +10,9 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public abstract class AABB
-{
-	public static class Box extends AABB
-	{
-		public Box(Vector3f min, Vector3f max)
-		{
+public abstract class AABB {
+	public static class Box extends AABB {
+		public Box(Vector3f min, Vector3f max) {
 			super(min, max);
 		}
 	};
@@ -26,24 +23,20 @@ public abstract class AABB
 	
 	public boolean cubic;
 	
-	public AABB()
-	{
+	public AABB() {
 		min = max = new Vector3f(0, 0, 0);
 	}
 	
-	public AABB(Vector3f min, Vector3f max)
-	{
+	public AABB(Vector3f min, Vector3f max) {
 		this.min = min;
 		this.max = max;
 	}
 	
-	public AABB(Vector3f pos, int width, int height, int depth)
-	{
+	public AABB(Vector3f pos, int width, int height, int depth) {
 		this(pos, Vector3f.add(pos, new Vector3f(width, height, depth), null));
 	}
 	
-	public boolean inViewFrustum()
-	{
+	public boolean inViewFrustum() {
 		Vector3f center = getCenter();
 		
 		AABB full = getFullAABB();
@@ -53,12 +46,10 @@ public abstract class AABB
 		return Game.frustum.sphereInFrustum(center.x, center.y, center.z, getDiameter() * (cubic ? (float) Math.sqrt(2) / 2f : 1));
 	}
 	
-	public AABB getFullAABB()
-	{
+	public AABB getFullAABB() {
 		Vector3f min = new Vector3f(this.min), max = new Vector3f(this.max);
 		AABB ref = this;
-		while (ref.parent != null)
-		{
+		while (ref.parent != null) {
 			Vector3f.add(min, ref.parent.min, min);
 			Vector3f.add(max, ref.parent.min, max);
 			
@@ -68,28 +59,23 @@ public abstract class AABB
 		return new Box(min, max);
 	}
 	
-	public float getDiameter()
-	{
+	public float getDiameter() {
 		return Vector3f.sub(max, min, null).length();
 	}
 	
-	public Vector3f getCenter()
-	{
+	public Vector3f getCenter() {
 		return (Vector3f) Vector3f.sub(max, min, null).scale(0.5f);
 	}
 	
-	public Vector3f getSize()
-	{
+	public Vector3f getSize() {
 		return Vector3f.sub(max, min, null);
 	}
 	
-	public float intersects()
-	{
+	public float intersects() {
 		return MathHelper.intersects(Game.pickingRay, getFullAABB());
 	}
 	
-	public void render()
-	{
+	public void render() {
 		AABB full = getFullAABB();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		

@@ -9,8 +9,7 @@ import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 import com.vloxlands.util.math.MathHelper;
 
-public class Slider extends ClickableGui
-{
+public class Slider extends ClickableGui {
 	HashMap<Float, String> customTitles;
 	
 	public static final int WIDTH = 205;
@@ -28,23 +27,18 @@ public class Slider extends ClickableGui
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 30f);
 	IGuiEvent event;
 	
-	public Slider(int x, int y, int size, float min, float max, GuiRotation rot)
-	{
+	public Slider(int x, int y, int size, float min, float max, GuiRotation rot) {
 		this(x, y, size, min, max, min, rot);
 	}
 	
-	public Slider(int x, int y, int size, float min, float max, float startValue, GuiRotation rot)
-	{
+	public Slider(int x, int y, int size, float min, float max, float startValue, GuiRotation rot) {
 		super();
 		this.x = x;
 		this.y = y;
-		if (rot == GuiRotation.HORIZONTAL)
-		{
+		if (rot == GuiRotation.HORIZONTAL) {
 			height = HEIGHT;
 			width = size;
-		}
-		else
-		{
+		} else {
 			height = size;
 			width = HEIGHT;
 		}
@@ -58,31 +52,24 @@ public class Slider extends ClickableGui
 		customTitles = new HashMap<>();
 	}
 	
-	public void addCustomTitle(float value, String title)
-	{
+	public void addCustomTitle(float value, String title) {
 		customTitles.put(value, title);
 	}
 	
 	@Override
-	public void onTick()
-	{}
+	public void onTick() {}
 	
 	@Override
-	public void handleMouse(int x, int z, int flag)
-	{
-		if ((flag & 1) != 0)
-		{
-			if (guiRot == GuiRotation.VERTICAL)
-			{
+	public void handleMouse(int x, int z, int flag) {
+		if ((flag & 1) != 0) {
+			if (guiRot == GuiRotation.VERTICAL) {
 				float percent = MathHelper.clamp(z - 5, 0, height - 14) / (height - 14) * 100;
 				
 				if (stepMode) percent = MathHelper.round(percent, stepSize);
 				
 				sliderPos = percent / 100 * (height - 14);
 				value = (maxValue - minValue) * (percent / 100) + minValue;
-			}
-			else
-			{
+			} else {
 				float percent = MathHelper.clamp(x - 5, 0, width - 14) / (width - 14) * 100;
 				
 				if (stepMode) percent = MathHelper.round(percent, stepSize);
@@ -97,8 +84,7 @@ public class Slider extends ClickableGui
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glPushMatrix();
 		{
 			RenderAssistant.disable(GL_LIGHTING);
@@ -107,8 +93,7 @@ public class Slider extends ClickableGui
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			RenderAssistant.bindTexture(texture);
 			
-			if (guiRot == GuiRotation.HORIZONTAL)
-			{
+			if (guiRot == GuiRotation.HORIZONTAL) {
 				RenderAssistant.renderRect(x, y, 7, height, 794 / 1024.0f, 72 / 1024.0f, 7 / 1024.0f, 20 / 1024.0f);
 				RenderAssistant.renderRect(x + width - 7, y, 7, height, 994 / 1024.0f, 72 / 1024.0f, 7 / 1024.0f, 20 / 1024.0f);
 				for (int i = 0; i < (width - 14) / 193; i++)
@@ -116,9 +101,7 @@ public class Slider extends ClickableGui
 				RenderAssistant.renderRect(x + 7 + (width - 14) / 193 * 193, y, (width - 14) % 193, height, 801 / 1024.0f, 72 / 1024.0f, (width - 14) % 193 / 1024.0f, 20 / 1024.0f);
 				
 				RenderAssistant.renderRect(x + sliderPos - 5, y - (38 - height) / 2, 20, 35, 889 / 1024.0f, 16 / 1024.0f, 25 / 1024.0f, 44 / 1024.0f);
-			}
-			else
-			{
+			} else {
 				glTranslatef(x + HEIGHT / 2, y + HEIGHT / 2, 0);
 				glRotatef(90, 0, 0, 1);
 				glTranslatef(-x - HEIGHT / 2, -y - HEIGHT / 2, 0);
@@ -150,29 +133,24 @@ public class Slider extends ClickableGui
 		glPopMatrix();
 	}
 	
-	public void setIntegerMode(boolean b)
-	{
+	public void setIntegerMode(boolean b) {
 		integerMode = b;
 	}
 	
-	public float getValue()
-	{
+	public float getValue() {
 		return value;
 	}
 	
-	public void setStepSize(float f)
-	{
+	public void setStepSize(float f) {
 		stepSize = f / (maxValue - minValue) * 100;
 		stepMode = true;
 	}
 	
-	public void setTitle(String s)
-	{
+	public void setTitle(String s) {
 		title = s;
 	}
 	
-	public void setEvent(IGuiEvent e)
-	{
+	public void setEvent(IGuiEvent e) {
 		event = e;
 	}
 }

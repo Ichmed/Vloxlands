@@ -9,20 +9,17 @@ import com.vloxlands.game.entity.EntityBuilding;
 /**
  * @author Dakror
  */
-public class Packet10EntityBuilding extends Packet
-{
+public class Packet10EntityBuilding extends Packet {
 	EntityBuilding building;
 	int islandIndex;
 	
-	public Packet10EntityBuilding(EntityBuilding building, int islandIndex)
-	{
+	public Packet10EntityBuilding(EntityBuilding building, int islandIndex) {
 		super(10);
 		this.building = building;
 		this.islandIndex = islandIndex;
 	}
 	
-	public Packet10EntityBuilding(byte[] b)
-	{
+	public Packet10EntityBuilding(byte[] b) {
 		super(10);
 		
 		ByteBuffer bb = ByteBuffer.wrap(b, 1, b.length - 1);
@@ -37,19 +34,16 @@ public class Packet10EntityBuilding extends Packet
 		building = new EntityBuilding(pos, size, new String(name));
 	}
 	
-	public EntityBuilding getEntityBuilding()
-	{
+	public EntityBuilding getEntityBuilding() {
 		return building;
 	}
 	
-	public int getIslandIndex()
-	{
+	public int getIslandIndex() {
 		return islandIndex;
 	}
 	
 	@Override
-	protected byte[] getPacketData()
-	{
+	protected byte[] getPacketData() {
 		ByteBuffer bb = ByteBuffer.allocate(32 + building.modelName.getBytes().length);
 		bb.putInt(islandIndex);
 		bb.putFloat(building.pos.x);

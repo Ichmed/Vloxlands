@@ -20,22 +20,17 @@ import com.vloxlands.util.MediaAssistant;
 
 import de.dakror.universion.UniVersion;
 
-public class Vloxlands
-{
+public class Vloxlands {
 	public static boolean running;
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		CFG.INTERNET = Assistant.isInternetReachable();
 		
 		Settings.loadSettings();
 		
-		try
-		{
+		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e1)
-		{
+		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 		
@@ -43,8 +38,7 @@ public class Vloxlands
 		UniVersion.offline = !CFG.INTERNET;
 		UniVersion.init(Vloxlands.class, CFG.VERSION, CFG.PHASE);
 		
-		if (!CFG.DEBUG)
-		{
+		if (!CFG.DEBUG) {
 			// -- Deactivated while in development stage -- //
 			// Reporter.init(new File(FileManager.dir, "Logs"));
 		}
@@ -53,76 +47,59 @@ public class Vloxlands
 		MediaAssistant.initNatives();
 		Thread.currentThread().setName("Main Thread");
 		System.setProperty("org.lwjgl.librarypath", new File(CFG.DIR, "natives").getAbsolutePath());
-		try
-		{
+		try {
 			running = true;
 			setFullscreen();
 			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			Display.setResizable(true);
-			try
-			{
+			try {
 				Display.create(new PixelFormat(0, 8, 0, 4));
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				Display.create();
 			}
 			Game.initGLSettings();
 			
 			Game.initGame();
 			Game.currentGame.addScene(new SceneLogo());
-			while (running)
-			{
+			while (running) {
 				if (Display.isCloseRequested()) break;
 				
 				Game.currentGame.gameLoop();
 			}
 			exit();
 			
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void setFullscreen()
-	{
+	public static void setFullscreen() {
 		if (CFG.FULLSCREEN) enterFullscreen();
 		else leaveFullscreen();
 	}
 	
-	public static void enterFullscreen()
-	{
-		try
-		{
+	public static void enterFullscreen() {
+		try {
 			Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
 			Display.setVSyncEnabled(true);
-		}
-		catch (LWJGLException e)
-		{
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void leaveFullscreen()
-	{
+	public static void leaveFullscreen() {
 		// Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
-		try
-		{
+		try {
 			Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */720));
 			Display.setFullscreen(false);
-		}
-		catch (LWJGLException e)
-		{
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static void exit()
-	{
+	public static void exit() {
 		if (Game.client != null && Game.client.isConnected()) Game.client.disconnect();
 		if (Game.server != null) Game.server.shutdown();
 		running = false;

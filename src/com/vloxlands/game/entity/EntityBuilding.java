@@ -7,14 +7,12 @@ import org.newdawn.slick.Color;
 import com.vloxlands.render.model.Model;
 import com.vloxlands.render.util.ModelLoader;
 
-public class EntityBuilding extends Entity
-{
+public class EntityBuilding extends Entity {
 	public String modelName;
 	public Vector3f size;
 	public Model model;
 	
-	public EntityBuilding(Vector3f pos, Vector3f size, String modelName)
-	{
+	public EntityBuilding(Vector3f pos, Vector3f size, String modelName) {
 		this.pos = pos;
 		this.size = size;
 		this.modelName = modelName;
@@ -26,21 +24,17 @@ public class EntityBuilding extends Entity
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		GL11.glTranslatef(pos.x, pos.y, pos.z);
 		model.render();
 	}
 	
 	@Override
-	public void onUpdate()
-	{}
+	public void onUpdate() {}
 	
 	@Override
-	protected void onDeath()
-	{}
+	protected void onDeath() {}
 	
 	@Override
-	protected void onHurt()
-	{}
+	protected void onHurt() {}
 }

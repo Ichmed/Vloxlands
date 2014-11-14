@@ -10,8 +10,7 @@ import org.newdawn.slick.TrueTypeFont;
 import com.vloxlands.util.FontAssistant;
 import com.vloxlands.util.RenderAssistant;
 
-public class TextButton extends ClickableGui
-{
+public class TextButton extends ClickableGui {
 	public static final int WIDTH = 288;
 	public static final int HEIGHT = 59;
 	
@@ -23,8 +22,7 @@ public class TextButton extends ClickableGui
 	int texX = 12;
 	int texY = 124;
 	
-	public TextButton(int x, int y, String title)
-	{
+	public TextButton(int x, int y, String title) {
 		this.x = x - 144;
 		this.y = y;
 		width = WIDTH;
@@ -36,15 +34,13 @@ public class TextButton extends ClickableGui
 		texture = "/graphics/textures/ui/gui.png";
 	}
 	
-	public TextButton(int x, int y, Action action)
-	{
+	public TextButton(int x, int y, Action action) {
 		this(x, y, action.getText());
 		setClickEvent(action.getEvent());
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		glColor3f(1, 1, 1);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -64,56 +60,42 @@ public class TextButton extends ClickableGui
 		glColor3f(1, 1, 1);
 	}
 	
-	public String getTitle()
-	{
+	public String getTitle() {
 		return title;
 	}
 	
-	public void setTitle(String title)
-	{
+	public void setTitle(String title) {
 		this.title = title;
 	}
 	
 	@Override
-	public void setWidth(int width)
-	{
+	public void setWidth(int width) {
 		x = x + this.width / 2 - width / 2;
 		this.width = width;
 	}
 	
 	@Override
-	public void onTick()
-	{
-		if (!toggleMode)
-		{
+	public void onTick() {
+		if (!toggleMode) {
 			if (!enabled) texY = 358;
 			else texY = 124;
 			
-		}
-		else
-		{
+		} else {
 			if (active) texY = 202;
 			else texY = 124;
 		}
 	}
 	
 	@Override
-	public void handleMouse(int posX, int posY, int flag)
-	{
+	public void handleMouse(int posX, int posY, int flag) {
 		if (!enabled) return;
-		if (!toggleMode)
-		{
+		if (!toggleMode) {
 			if ((flag & 1) != 0) texY = 202;
-			else if ((flag & 2) != 0)
-			{
+			else if ((flag & 2) != 0) {
 				if (clickEvent != null) clickEvent.trigger();
-			}
-			else texY = 280;
-		}
-		else
-		{
-			if (flag == 2)
-			{
+			} else texY = 280;
+		} else {
+			if (flag == 2) {
 				active = !active;
 				if (clickEvent != null) clickEvent.trigger();
 			}
@@ -123,23 +105,19 @@ public class TextButton extends ClickableGui
 	/**
 	 * @return only useful stuff if in toggleMode
 	 */
-	public boolean isActive()
-	{
+	public boolean isActive() {
 		return active;
 	}
 	
-	public void setActive(boolean b)
-	{
+	public void setActive(boolean b) {
 		active = b;
 	}
 	
-	public boolean isInToggleMode()
-	{
+	public boolean isInToggleMode() {
 		return toggleMode;
 	}
 	
-	public void setToggleMode(boolean toggleMode)
-	{
+	public void setToggleMode(boolean toggleMode) {
 		this.toggleMode = toggleMode;
 	}
 }

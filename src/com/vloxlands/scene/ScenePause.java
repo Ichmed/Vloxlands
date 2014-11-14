@@ -20,15 +20,12 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public class ScenePause extends Scene
-{
+public class ScenePause extends Scene {
 	
-	public ScenePause()
-	{}
+	public ScenePause() {}
 	
 	@Override
-	public void init()
-	{
+	public void init() {
 		Label l = new Label(0, 100, Display.getWidth(), 60, Tr._("pause"));
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
@@ -36,22 +33,18 @@ public class ScenePause extends Scene
 		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
 		
 		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 40, Tr._("back"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.removeActiveScene();
 			}
 		});
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 110, Tr._("save"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				MapAssistant.saveMap(Game.currentMap);
 			}
 		});
@@ -59,22 +52,18 @@ public class ScenePause extends Scene
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 180, Tr._("settings"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.currentGame.addScene(new SceneSettings());
 			}
 		});
 		c.add(b);
 		
 		b = new TextButton(TextButton.WIDTH / 2 + 40, 250, Tr._("disconnect"));
-		b.setClickEvent(new IGuiEvent()
-		{
+		b.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				Game.client.disconnect();
 			}
 		});
@@ -84,14 +73,12 @@ public class ScenePause extends Scene
 	}
 	
 	@Override
-	public void handleKeyboard(int key, char chr, boolean down)
-	{
+	public void handleKeyboard(int key, char chr, boolean down) {
 		if (key == Keyboard.KEY_ESCAPE && down) Game.currentGame.removeActiveScene();
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		glColor4f(IGuiElement.gray.x, IGuiElement.gray.y, IGuiElement.gray.z, IGuiElement.gray.w);
 		

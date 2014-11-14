@@ -7,33 +7,28 @@ import org.lwjgl.util.vector.Vector3f;
 /**
  * @author Dakror
  */
-public class Vector
-{
+public class Vector {
 	public float x, y, z;
 	
-	public Vector(float x, float y, float z)
-	{
+	public Vector(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public Vector(JSONArray arr) throws JSONException
-	{
+	public Vector(JSONArray arr) throws JSONException {
 		x = arr.getInt(0);
 		y = arr.getInt(1);
 		z = arr.getInt(2);
 	}
 	
-	public Vector(Vector3f v)
-	{
+	public Vector(Vector3f v) {
 		x = v.x;
 		y = v.y;
 		z = v.z;
 	}
 	
-	public Vector add(Vector o)
-	{
+	public Vector add(Vector o) {
 		x += o.x;
 		y += o.y;
 		z += o.z;
@@ -41,10 +36,8 @@ public class Vector
 		return this;
 	}
 	
-	public float get(int dimension)
-	{
-		switch (dimension)
-		{
+	public float get(int dimension) {
+		switch (dimension) {
 			case 0:
 				return x;
 			case 1:
@@ -57,10 +50,8 @@ public class Vector
 	}
 	
 	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof Vector)
-		{
+	public boolean equals(Object obj) {
+		if (obj instanceof Vector) {
 			Vector o = (Vector) obj;
 			
 			return o.x == x && o.y == y && o.z == z;
@@ -69,23 +60,19 @@ public class Vector
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[" + x + ", " + y + ", " + z + "]";
 	}
 	
-	public Vector3f toVector3f()
-	{
+	public Vector3f toVector3f() {
 		return new Vector3f(x, y, z);
 	}
 	
-	public static Vector negate(Vector v)
-	{
+	public static Vector negate(Vector v) {
 		return new Vector(-v.x, -v.y, -v.z);
 	}
 	
-	public static JSONArray serialize(Vector v) throws JSONException
-	{
+	public static JSONArray serialize(Vector v) throws JSONException {
 		JSONArray arr = new JSONArray();
 		arr.put(v.x);
 		arr.put(v.y);

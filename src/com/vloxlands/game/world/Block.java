@@ -11,16 +11,14 @@ import com.vloxlands.util.math.AABB;
 /**
  * @author Dakror
  */
-public class Block extends AABB
-{
+public class Block extends AABB {
 	public byte voxel;
 	public byte metadata;
 	
 	Vector3f pos;
 	Chunk chunk;
 	
-	public Block(byte voxel, byte metadata, Vector3f pos, Chunk chunk)
-	{
+	public Block(byte voxel, byte metadata, Vector3f pos, Chunk chunk) {
 		super(pos, 1, 1, 1);
 		parent = chunk;
 		cubic = true;
@@ -29,8 +27,7 @@ public class Block extends AABB
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		if (!inViewFrustum() || voxel == Voxel.get("AIR").getId()) return;
 		
 		glColor3f(1, 0, 0);

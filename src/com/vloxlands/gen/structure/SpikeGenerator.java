@@ -10,15 +10,13 @@ import com.vloxlands.gen.island.IslandGenerator;
 /**
  * @author Dakror
  */
-public class SpikeGenerator extends Generator
-{
+public class SpikeGenerator extends Generator {
 	
 	public static final float[] BEZIER = new float[] { 1, 1, 0.0f, 0.5f, 0.5f, 0.5f, 0, 0 };
 	
 	int x, y, z, radius, topLayers;
 	
-	public SpikeGenerator(int x, int y, int z, int radius, int topLayers)
-	{
+	public SpikeGenerator(int x, int y, int z, int radius, int topLayers) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -27,8 +25,7 @@ public class SpikeGenerator extends Generator
 	}
 	
 	@Override
-	public void generate(Island island, IslandGenerator gen)
-	{
+	public void generate(Island island, IslandGenerator gen) {
 		int MAXRAD = (int) (radius * 0.3f + 5);
 		int rad = (int) Math.round(Math.random() * (radius * 0.3f)) + 3;
 		

@@ -42,8 +42,7 @@ import com.vloxlands.util.math.PickingRay;
 
 import de.dakror.universion.UniVersion;
 
-public class Game
-{
+public class Game {
 	public static InetAddress IP;
 	public static Server server;
 	public static Client client;
@@ -75,8 +74,7 @@ public class Game
 	Vector3f lightPos = new Vector3f();
 	Vector3f directionalArrowsPos = new Vector3f();
 	
-	public void gameLoop()
-	{
+	public void gameLoop() {
 		if (start == 0) start = System.currentTimeMillis();
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
@@ -114,8 +112,7 @@ public class Game
 		
 		// -- BEGIN: update stuff that needs the GL Context -- //
 		
-		if (fullscreenToggled)
-		{
+		if (fullscreenToggled) {
 			CFG.FULLSCREEN = !CFG.FULLSCREEN;
 			Vloxlands.setFullscreen();
 			updateViewport();
@@ -123,8 +120,7 @@ public class Game
 			fullscreenToggled = false;
 		}
 		
-		if (updateViewport)
-		{
+		if (updateViewport) {
 			updateViewport();
 			updateViewport = false;
 		}
@@ -133,8 +129,7 @@ public class Game
 		
 		Mouse.setGrabbed(mouseGrabbed);
 		
-		if (rerender)
-		{
+		if (rerender) {
 			if (currentMap != null && currentMap.islands.size() > 0) ChunkRenderer.renderChunks(currentMap.islands.get(0));
 			rerender = false;
 		}
@@ -143,8 +138,7 @@ public class Game
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		if (CFG.SHOW_DIRECTIONS) renderDirectionalArrows();
-		if (currentMap != null && sceneStack.size() > 0 && currentMap.initialized)
-		{
+		if (currentMap != null && sceneStack.size() > 0 && currentMap.initialized) {
 			Game.pickingRay = PickingRay.getPickingRay(Mouse.getX(), Mouse.getY());
 			
 			glPushMatrix();
@@ -164,30 +158,23 @@ public class Game
 		
 		glPushMatrix();
 		{
-			try
-			{
-				for (Scene s : sceneStack)
-				{
-					if (!s.initialized)
-					{
+			try {
+				for (Scene s : sceneStack) {
+					if (!s.initialized) {
 						s.init();
 						s.initialized = true;
 					}
 					s.render();
 				}
-			}
-			catch (ConcurrentModificationException e)
-			{}
+			} catch (ConcurrentModificationException e) {}
 		}
 		glPopMatrix();
 		
 		glColor4f(1, 1, 1, 1);
-		if (CFG.SHOW_DEBUG)
-		{
+		if (CFG.SHOW_DEBUG) {
 			RenderAssistant.renderText(0, 0, "FPS: " + getFPS(), FontAssistant.GAMEFONT.deriveFont(30f));
 			RenderAssistant.renderText(0, 30, "Ticks: " + UpdateThread.currentUpdateThread.getTicksPS(), FontAssistant.GAMEFONT.deriveFont(30f));
-			if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive())
-			{
+			if (currentMap != null && sceneStack.size() > 0 && getActiveScene().isWorldActive()) {
 				RenderAssistant.renderText(0, 60, "Rendered Chunks: " + currentMap.renderedChunks + " / " + currentMap.chunks, FontAssistant.GAMEFONT.deriveFont(30f));
 				RenderAssistant.renderText(0, 100, "X: " + MathHelper.roundToDecimal(camera.getPosition().x, 2), FontAssistant.GAMEFONT.deriveFont(30f));
 				RenderAssistant.renderText(0, 130, "Y: " + MathHelper.roundToDecimal(camera.getPosition().y, 2), FontAssistant.GAMEFONT.deriveFont(30f));
@@ -208,24 +195,18 @@ public class Game
 		frames++;
 	}
 	
-	public void updateViewport()
-	{
-		try
-		{
-			for (Scene scene : sceneStack)
-			{
+	public void updateViewport() {
+		try {
+			for (Scene scene : sceneStack) {
 				scene.content.clear();
 				scene.init();
 			}
 			
 			// PickingRay.update();
-		}
-		catch (ConcurrentModificationException e)
-		{}
+		} catch (ConcurrentModificationException e) {}
 	}
 	
-	public static void initGame()
-	{
+	public static void initGame() {
 		// PickingRay.update();
 		Voxel.loadVoxels();
 		RenderAssistant.storeTextureAtlas("graphics/textures/voxelTextures.png", 16, 16);
@@ -237,63 +218,52 @@ public class Game
 		new UpdateThread();
 	}
 	
-	public void resetCamera()
-	{
+	public void resetCamera() {
 		camera.setPosition(128.5f, 130, 128.5f);
 		camera.setRotation(30, 135, 0);
 	}
 	
-	public void addScene(Scene s, int index)
-	{
+	public void addScene(Scene s, int index) {
 		sceneStack.add(index, s);
 	}
 	
-	public void setSceneIndex(Scene s, int index)
-	{
+	public void setSceneIndex(Scene s, int index) {
 		sceneStack.remove(s);
 		addScene(s, index);
 	}
 	
-	public void setScene(Scene s)
-	{
+	public void setScene(Scene s) {
 		sceneStack.clear();
 		addScene(s);
 	}
 	
-	public void removeScene(Scene s)
-	{
+	public void removeScene(Scene s) {
 		sceneStack.remove(s);
 	}
 	
-	public void removeActiveScene()
-	{
+	public void removeActiveScene() {
 		if (sceneStack.size() == 0) return;
 		sceneStack.remove(sceneStack.size() - 1);
 	}
 	
-	public boolean isActiveScene(Scene s)
-	{
+	public boolean isActiveScene(Scene s) {
 		return getActiveScene().equals(s);
 	}
 	
-	public Scene getActiveScene()
-	{
+	public Scene getActiveScene() {
 		if (sceneStack.size() == 0) return null;
 		return sceneStack.get(sceneStack.size() - 1);
 	}
 	
-	public void addScene(Scene s)
-	{
+	public void addScene(Scene s) {
 		addScene(s, sceneStack.size());
 	}
 	
-	public int getFPS()
-	{
+	public int getFPS() {
 		return Math.round(frames / ((System.currentTimeMillis() - start) / 1000f));
 	}
 	
-	public static void initGLSettings()
-	{
+	public static void initGLSettings() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
@@ -322,36 +292,28 @@ public class Game
 		glEnable(GL_FOG);
 	}
 	
-	public void moveCamera()
-	{
-		if (Keyboard.isKeyDown(Keyboard.KEY_W))
-		{
+	public void moveCamera() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 			camera.move((Vector3f) MathHelper.getNormalizedRotationVector(camera.getRotation()).scale(cameraSpeed));
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_S))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
 			camera.move((Vector3f) MathHelper.getNormalizedRotationVector(camera.getRotation()).scale(cameraSpeed).negate());
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_D))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
 			camera.move((Vector3f) getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, 90, 0)).scale(cameraSpeed));
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_A))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
 			camera.move((Vector3f) getNormalizedRotationVectorForSidewardMovement(camera.getRotation().translate(0, -90, 0)).scale(cameraSpeed));
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_Q))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
 			camera.move(0, 0.5f, 0);
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_E))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_E)) {
 			camera.move(0, -0.5f, 0);
 		}
 	}
 	
-	public void rotateCamera()
-	{
+	public void rotateCamera() {
 		float x = (Mouse.getY() - Display.getHeight() / 2) / (float) Display.getHeight() * cameraRotationSpeed;
 		float y = (Mouse.getX() - Display.getWidth() / 2) / (float) Display.getWidth() * cameraRotationSpeed;
 		
@@ -362,8 +324,7 @@ public class Game
 		Mouse.setCursorPosition(Display.getWidth() / 2, Display.getHeight() / 2);
 	}
 	
-	public static Vector3f getNormalizedRotationVectorForSidewardMovement(Vector3f v)
-	{
+	public static Vector3f getNormalizedRotationVectorForSidewardMovement(Vector3f v) {
 		double x = Math.sin(Math.toRadians(v.y));
 		double y = 0;
 		double z = Math.cos(Math.toRadians(v.y));
@@ -371,8 +332,7 @@ public class Game
 		return new Vector3f((float) -x, (float) -y, (float) z);
 	}
 	
-	public void renderDirectionalArrows()
-	{
+	public void renderDirectionalArrows() {
 		glPushMatrix();
 		{
 			glTranslatef(directionalArrowsPos.x, directionalArrowsPos.y, directionalArrowsPos.z);
@@ -409,94 +369,64 @@ public class Game
 		glPopMatrix();
 	}
 	
-	public void initMultiplayer()
-	{
+	public void initMultiplayer() {
 		Player player = new Player("Player", null, 0);
 		Game.client = new Client(player);
 	}
 	
-	public void setIP(boolean lan)
-	{
+	public void setIP(boolean lan) {
 		if (sceneStack.size() == 0 || IP != null || hamachiInstallationDialogShown) return;
-		if (lan)
-		{
-			try
-			{
+		if (lan) {
+			try {
 				IP = InetAddress.getLocalHost();
-			}
-			catch (UnknownHostException e)
-			{
+			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
-		}
-		else
-		{
+		} else {
 			InetAddress ip = NetworkAssistant.getMyHamachiIP();
-			if (ip == null)
-			{
-				addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("cancel"), new IGuiEvent()
-				{
+			if (ip == null) {
+				addScene(new Dialog(Tr._("error"), Tr._("hamachierror"), new Action(Tr._("cancel"), new IGuiEvent() {
 					@Override
-					public void trigger()
-					{
+					public void trigger() {
 						hamachiInstallationDialogShown = true;
 						Game.currentGame.removeActiveScene();
 					}
-				}), new Action(Tr._("yes"), new IGuiEvent()
-				{
+				}), new Action(Tr._("yes"), new IGuiEvent() {
 					@Override
-					public void trigger()
-					{
+					public void trigger() {
 						hamachiInstallationDialogShown = true;
 						Game.currentGame.removeActiveScene();
-						try
-						{
+						try {
 							Desktop.getDesktop().browse(new URL("https://secure.logmein.com/products/hamachi/download.aspx").toURI());
-						}
-						catch (Exception e)
-						{
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				})));
-			}
-			else
-			{
+			} else {
 				IP = ip;
 			}
 		}
 		Game.client.getPlayer().setIP(IP);
 	}
 	
-	public void onClientMessage(String message)
-	{
-		if (sceneStack.size() > 0)
-		{
-			try
-			{
-				for (Scene s : sceneStack)
-				{
+	public void onClientMessage(String message) {
+		if (sceneStack.size() > 0) {
+			try {
+				for (Scene s : sceneStack) {
 					s.onClientMessage(message);
 				}
-			}
-			catch (ConcurrentModificationException e)
-			{}
+			} catch (ConcurrentModificationException e) {}
 		}
 	}
 	
-	public void onClientReveivedData(byte[] data)
-	{
-		if (sceneStack.size() > 0)
-		{
-			try
-			{
-				for (Scene s : sceneStack)
-				{
+	public void onClientReveivedData(byte[] data) {
+		if (sceneStack.size() > 0) {
+			try {
+				for (Scene s : sceneStack) {
 					s.onClientReveivedData(data);
 				}
-			}
-			catch (ConcurrentModificationException e)
-			{}
+			} catch (ConcurrentModificationException e) {}
 		}
 	}
 }

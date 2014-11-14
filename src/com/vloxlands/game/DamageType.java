@@ -1,7 +1,6 @@
 package com.vloxlands.game;
 
-public enum DamageType
-{
+public enum DamageType {
 	PHYSICAL_DAMAGE,
 	MAGICAL_DAMAGE;
 }

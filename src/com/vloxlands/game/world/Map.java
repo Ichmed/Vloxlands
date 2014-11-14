@@ -10,8 +10,7 @@ import org.newdawn.slick.opengl.TextureImpl;
 import com.vloxlands.game.entity.Entity;
 import com.vloxlands.render.ChunkRenderer;
 
-public class Map
-{
+public class Map {
 	public ArrayList<Island> islands = new ArrayList<>();
 	public boolean initialized = false;
 	public int initializedIslands = 0;
@@ -24,14 +23,11 @@ public class Map
 	public int chunks = 0;
 	String name;
 	
-	public void placeVoxel(Island i, int x, int y, int z, int id)
-	{}
+	public void placeVoxel(Island i, int x, int y, int z, int id) {}
 	
-	public void render()
-	{
+	public void render() {
 		renderedChunks = 0;
-		for (Island i : islands)
-		{
+		for (Island i : islands) {
 			glPushMatrix();
 			i.render();
 			glPopMatrix();
@@ -42,31 +38,26 @@ public class Map
 		TextureImpl.bindNone();
 	}
 	
-	public void onTick()
-	{
+	public void onTick() {
 		for (Island i : islands)
 			i.onTick();
 		for (Entity e : entities)
 			e.onTick();
 	}
 	
-	public Island[] getIslands()
-	{
+	public Island[] getIslands() {
 		return islands.toArray(new Island[] {});
 	}
 	
-	public void addIsland(Island i)
-	{
+	public void addIsland(Island i) {
 		islands.add(i);
 		
 		chunks = (int) (Math.pow(Island.SIZE / Chunk.SIZE, 3) * islands.size());
 	}
 	
-	public void initMap()
-	{
+	public void initMap() {
 		initializedIslands = 0;
-		for (Island i : islands)
-		{
+		for (Island i : islands) {
 			ChunkRenderer.renderChunks(i);
 			i.calculateInitBalance();
 			initializedIslands++;
@@ -74,18 +65,15 @@ public class Map
 		initialized = true;
 	}
 	
-	public static float calculateUplift(float height)
-	{
+	public static float calculateUplift(float height) {
 		return (1 - height / MAXHEIGHT) * 4 + 0.1f;
 	}
 	
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 	
-	public void setName(String name)
-	{
+	public void setName(String name) {
 		this.name = name;
 	}
 }

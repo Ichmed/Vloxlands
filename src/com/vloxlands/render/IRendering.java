@@ -1,7 +1,6 @@
 package com.vloxlands.render;
 
 
-public interface IRendering
-{
+public interface IRendering {
 	void render();
 }

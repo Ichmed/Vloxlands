@@ -12,45 +12,36 @@ import com.vloxlands.game.world.Island;
 import com.vloxlands.game.world.Map;
 import com.vloxlands.settings.CFG;
 
-public class MapAssistant
-{
+public class MapAssistant {
 	private static int pos;
 	
-	public static void saveMap(Map m)
-	{
-		try
-		{
+	public static void saveMap(Map m) {
+		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			for (Island island : m.getIslands())
-			{
+			for (Island island : m.getIslands()) {
 				saveIsland(island, baos);
 			}
 			
 			Compressor.compressFile(new File(CFG.DIR, "maps/" + m.getName() + ".map"), baos.toByteArray());
 			
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static Map loadMap(String name)
-	{
+	public static Map loadMap(String name) {
 		pos = 0;
 		Map map = new Map();
 		// -- bin file -- //
 		File bin = new File(CFG.DIR, "maps/" + name + ".map");
 		byte[] data = Compressor.decompress(Compressor.getFileContentAsByteArray(bin));
-		while (pos < data.length)
-		{
+		while (pos < data.length) {
 			map.addIsland(loadIsland(data, true));
 		}
 		return map;
 	}
 	
-	public static Island loadIsland(byte[] data, boolean posing)
-	{
+	public static Island loadIsland(byte[] data, boolean posing) {
 		Island island = new Island();
 		
 		int pos = (posing) ? MapAssistant.pos : 0;
@@ -78,12 +69,10 @@ public class MapAssistant
 		return island;
 	}
 	
-	public static void loadChunks(Island island, byte[] data)
-	{
+	public static void loadChunks(Island island, byte[] data) {
 		int pos = 0;
 		
-		while (pos < data.length - 1)
-		{
+		while (pos < data.length - 1) {
 			ByteBuffer bb = ByteBuffer.wrap(data, pos, 3);
 			pos += 3;
 			
@@ -99,8 +88,7 @@ public class MapAssistant
 			
 			ids = Compressor.decompressRow(ids);
 			
-			for (int i = 0; i < ids.length; i++)
-			{
+			for (int i = 0; i < ids.length; i++) {
 				int[] index = get3DIndex(i);
 				c.setVoxel(index[0], index[1], index[2], ids[i]);
 			}
@@ -116,8 +104,7 @@ public class MapAssistant
 			
 			mds = Compressor.decompressRow(mds);
 			
-			for (int i = 0; i < mds.length; i++)
-			{
+			for (int i = 0; i < mds.length; i++) {
 				int[] index = get3DIndex(i);
 				c.setMetadata(index[0], index[1], index[2], mds[i]);
 			}
@@ -127,13 +114,11 @@ public class MapAssistant
 		}
 	}
 	
-	public static int[] get3DIndex(int i)
-	{
+	public static int[] get3DIndex(int i) {
 		return new int[] { (int) (i / (float) Math.pow(Chunk.SIZE, 2)), (int) ((i / (float) Chunk.SIZE) % Chunk.SIZE), (i % Chunk.SIZE) };
 	}
 	
-	public static void saveIsland(Island island, OutputStream os) throws Exception
-	{
+	public static void saveIsland(Island island, OutputStream os) throws Exception {
 		ByteBuffer bb = ByteBuffer.allocate(12);
 		bb.putFloat(island.getPos().x);
 		bb.putFloat(island.getPos().y);
@@ -142,8 +127,7 @@ public class MapAssistant
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
-		for (Chunk c : island.getChunks())
-		{
+		for (Chunk c : island.getChunks()) {
 			saveChunk(island, c, baos);
 		}
 		
@@ -153,8 +137,7 @@ public class MapAssistant
 		os.write(baos.toByteArray());
 	}
 	
-	public static void saveChunk(Island island, Chunk c, OutputStream os) throws Exception
-	{
+	public static void saveChunk(Island island, Chunk c, OutputStream os) throws Exception {
 		// coordinates
 		os.write((byte) c.getX());
 		os.write((byte) c.getY());

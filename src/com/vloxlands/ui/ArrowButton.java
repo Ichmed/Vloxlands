@@ -6,8 +6,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 import com.vloxlands.util.RenderAssistant;
 
-public class ArrowButton extends ClickableGui
-{
+public class ArrowButton extends ClickableGui {
 	public static final Vector2f MINUS_HOR = new Vector2f(322, 5);
 	public static final Vector2f PLUS_HOR = new Vector2f(360, 5);
 	public static final Vector2f MINUS_VER = new Vector2f(419, 5);
@@ -23,8 +22,7 @@ public class ArrowButton extends ClickableGui
 	Vector2f type;
 	int texY;
 	
-	public ArrowButton(int x, int y, Vector2f type)
-	{
+	public ArrowButton(int x, int y, Vector2f type) {
 		this.x = x;
 		this.y = y;
 		this.type = type;
@@ -35,15 +33,13 @@ public class ArrowButton extends ClickableGui
 	}
 	
 	@Override
-	public void onTick()
-	{
+	public void onTick() {
 		if (!enabled) texY = 161;
 		else texY = (int) type.y;
 	}
 	
 	@Override
-	public void handleMouse(int posX, int posY, int flag)
-	{
+	public void handleMouse(int posX, int posY, int flag) {
 		if (!enabled) return;
 		if ((flag & 1) != 0) texY = 57;
 		else if ((flag & 2) != 0) clickEvent.trigger();
@@ -51,8 +47,7 @@ public class ArrowButton extends ClickableGui
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		RenderAssistant.disable(GL_LIGHTING);
 		glEnable(GL_BLEND);
 		glColor3f(1, 1, 1);
@@ -62,8 +57,7 @@ public class ArrowButton extends ClickableGui
 		RenderAssistant.renderRect(x, y, width, height, type.x / 1024.0f, texY / 1024.0f, WIDTH / 1024.0f, HEIGHT / 1024.0f);
 	}
 	
-	public void setType(Vector2f type)
-	{
+	public void setType(Vector2f type) {
 		this.type = type;
 	}
 }

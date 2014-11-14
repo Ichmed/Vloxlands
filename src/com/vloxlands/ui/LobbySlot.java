@@ -16,27 +16,23 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public class LobbySlot extends Container
-{
+public class LobbySlot extends Container {
 	public static final int HEIGHT = 80;
 	public static final int HEIGHT2 = 68;
 	public Font font = FontAssistant.GAMEFONT.deriveFont(Font.BOLD, 40f);
 	Player p;
 	
-	public LobbySlot(Player p)
-	{
+	public LobbySlot(Player p) {
 		super(0, 0, 0, HEIGHT, false, false);
 		this.p = p;
 	}
 	
-	public Player getPlayer()
-	{
+	public Player getPlayer() {
 		return p;
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		if (p.getUsername().equals(Game.client.getUsername())) glColor3f(166 / 256f, 213 / 256f, 236 / 256f);
 		RenderAssistant.renderText(x + 15, y + height / 6, p.getUsername(), font);
 		if (p.getUsername().equals(Game.client.getUsername())) glColor3f(1, 1, 1);
@@ -58,47 +54,35 @@ public class LobbySlot extends Container
 	/**
 	 * Should have set the slot's width first
 	 */
-	public void initButtons()
-	{
+	public void initButtons() {
 		components.clear();
 		
 		ImageButton rename = new ImageButton(width - 124, 0, 45, 45);
 		rename.setTexture("/graphics/textures/ui/Rename.png");
 		rename.disabledColor = IGuiElement.gray;
-		rename.setClickEvent(new IGuiEvent()
-		{
+		rename.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
+			public void trigger() {
 				final InputField name = new InputField(0, 0, 0, Game.client.getUsername(), Tr._("username"));
-				Dialog dialog = new Dialog(Tr._("namechange"), "", new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
-				{
+				Dialog dialog = new Dialog(Tr._("namechange"), "", new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent() {
 					@Override
-					public void trigger()
-					{
-						new Thread()
-						{
+					public void trigger() {
+						new Thread() {
 							@Override
-							public void run()
-							{
+							public void run() {
 								Game.currentGame.getActiveScene().lockScene();
 								String oldUsername = Game.client.getUsername();
 								Game.client.renameClient(name.getText());
-								while (Game.client.getUsername().equals(oldUsername))
-								{
-									if (Game.client.isRejected())
-									{
+								while (Game.client.getUsername().equals(oldUsername)) {
+									if (Game.client.isRejected()) {
 										Game.currentGame.getActiveScene().unlockScene();
 										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
 										Game.client.resetRejection();
 										return;
 									}
-									try
-									{
+									try {
 										Thread.sleep(100);
-									}
-									catch (InterruptedException e)
-									{
+									} catch (InterruptedException e) {
 										e.printStackTrace();
 									}
 								}
@@ -118,23 +102,16 @@ public class LobbySlot extends Container
 		ImageButton kick = new ImageButton(width - 124, 36, 45, 45);
 		kick.setTexture("/graphics/textures/ui/Logout.png");
 		kick.disabledColor = IGuiElement.gray;
-		kick.setClickEvent(new IGuiEvent()
-		{
+		kick.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
-				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", p.getUsername()), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent()
-				{
+			public void trigger() {
+				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", p.getUsername()), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent() {
 					@Override
-					public void trigger()
-					{
-						try
-						{
+					public void trigger() {
+						try {
 							Game.client.sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.kicked"));
 							Game.currentGame.removeActiveScene();
-						}
-						catch (IOException e)
-						{
+						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					}
@@ -150,18 +127,13 @@ public class LobbySlot extends Container
 		ready.setWidth(nw);
 		ready.setHeight((int) (ratio * nw));
 		ready.setToggleMode(true);
-		ready.setClickEvent(new IGuiEvent()
-		{
+		ready.setClickEvent(new IGuiEvent() {
 			@Override
-			public void trigger()
-			{
-				try
-				{
+			public void trigger() {
+				try {
 					p.setReady(ready.isActive());
 					Game.client.sendPacket(new Packet6Player(p));
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}

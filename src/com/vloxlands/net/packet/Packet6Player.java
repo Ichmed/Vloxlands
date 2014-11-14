@@ -8,37 +8,29 @@ import com.vloxlands.net.Player;
 /**
  * @author Dakror
  */
-public class Packet6Player extends Packet
-{
+public class Packet6Player extends Packet {
 	Player player;
 	
-	public Packet6Player(Player p)
-	{
+	public Packet6Player(Player p) {
 		super(6);
 		player = p;
 	}
 	
-	public Packet6Player(byte[] data)
-	{
+	public Packet6Player(byte[] data) {
 		super(6);
-		try
-		{
+		try {
 			player = new Player(new JSONObject(readData(data)));
-		}
-		catch (JSONException e)
-		{
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public Player getPlayer()
-	{
+	public Player getPlayer() {
 		return player;
 	}
 	
 	@Override
-	public byte[] getPacketData()
-	{
+	public byte[] getPacketData() {
 		return player.serialize().getBytes();
 	}
 }

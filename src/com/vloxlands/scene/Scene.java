@@ -25,8 +25,7 @@ import com.vloxlands.ui.IGuiEvent;
 import com.vloxlands.ui.Label;
 import com.vloxlands.util.RenderAssistant;
 
-public abstract class Scene
-{
+public abstract class Scene {
 	public ArrayList<IGuiElement> content = new ArrayList<>();
 	private boolean wasButton0Down;
 	private boolean wasButton1Down;
@@ -40,8 +39,7 @@ public abstract class Scene
 	// -- title -- //
 	boolean titled = false;
 	
-	protected void setBackground()
-	{
+	protected void setBackground() {
 		Label bg = new Label(0, 0, Display.getWidth(), Display.getHeight(), "");
 		bg.setZIndex(-1);
 		bg.setTexture("/graphics/textures/ui/paper.png");
@@ -51,8 +49,7 @@ public abstract class Scene
 		content.add(bg);
 	}
 	
-	protected void setTitle(String title)
-	{
+	protected void setTitle(String title) {
 		Label l = new Label(0, 0, Display.getWidth(), 60, title);
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
@@ -60,39 +57,33 @@ public abstract class Scene
 		titled = true;
 	}
 	
-	public void onTickContent()
-	{
+	public void onTickContent() {
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		
 		for (IGuiElement i : sorted)
-			if (i instanceof ClickableGui)
-			{
+			if (i instanceof ClickableGui) {
 				((ClickableGui) i).onTick();
 			}
 	}
 	
-	public void onTick()
-	{
+	public void onTick() {
 		onTickContent();
 	}
 	
-	public void render()
-	{
+	public void render() {
 		renderContent();
 		
 		glColor3f(1, 1, 1);
 		if (titled) RenderAssistant.renderLine(0, 83, Display.getWidth(), true, true);
 	}
 	
-	public void renderContent()
-	{
+	public void renderContent() {
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		for (IGuiElement g : sorted)
 			if (g.isVisible() && g.wantsRender()) g.render();
 	}
 	
-	public void handleMouse()
-	{
+	public void handleMouse() {
 		int x = Mouse.getX();
 		int y = Display.getHeight() - Mouse.getY();
 		int flag = 0;
@@ -110,66 +101,55 @@ public abstract class Scene
 		
 		
 		
-		if ((!uiActive || !handleMouseGUI(x, y, flag)))
-		{
+		if ((!uiActive || !handleMouseGUI(x, y, flag))) {
 			if ((flag & 1) != 0) resetScene();
 			if (worldActive) handleMouseWorld(x, y, flag);
 		}
 	}
 	
-	public void resetScene()
-	{
+	public void resetScene() {
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		Collections.reverse(sorted);
 		for (IGuiElement i : sorted)
 			if (i instanceof ClickableGui) ((ClickableGui) i).resetElement();
 	}
 	
-	public void handleKeyboard(int key, char chr, boolean down)
-	{
-		for (IGuiElement iG : content)
-		{
+	public void handleKeyboard(int key, char chr, boolean down) {
+		for (IGuiElement iG : content) {
 			iG.handleKeyboard(key, chr, down);
 		}
 	}
 	
 	// not abstract so that implementing won't be forced
-	public boolean handleMouseGUI(int posX, int posY, int flag)
-	{
+	public boolean handleMouseGUI(int posX, int posY, int flag) {
 		ClickableGui iG = getObjectUnderCursor();
-		if (iG != null && iG.isVisible() && iG.isEnabled())
-		{
+		if (iG != null && iG.isVisible() && iG.isEnabled()) {
 			iG.handleMouse(posX - iG.getX(), posY - iG.getY(), flag);
 			return true;
 		}
 		return false;
 	}
 	
-	private ClickableGui getObjectUnderCursor()
-	{
+	private ClickableGui getObjectUnderCursor() {
 		ArrayList<IGuiElement> sorted = getSortedContent();
 		Collections.reverse(sorted);
 		for (IGuiElement i : sorted)
-			if (i instanceof ClickableGui)
-			{
+			if (i instanceof ClickableGui) {
 				ClickableGui iG = (ClickableGui) i;
 				if (iG.isUnderCursor()) return iG;
 			}
 		return null;
 	}
 	
-	protected ArrayList<IGuiElement> getSortedContent()
-	{
+	protected ArrayList<IGuiElement> getSortedContent() {
 		@SuppressWarnings("unchecked")
 		final ArrayList<IGuiElement> sorted = (ArrayList<IGuiElement>) content.clone();
 		if (sorted.size() == 0 || sorted.get(0) == null) return new ArrayList<>();
 		
-		Collections.sort(sorted, new Comparator<IGuiElement>()
-		{
+		Collections.sort(sorted, new Comparator<IGuiElement>() {
 			
 			@Override
-			public int compare(IGuiElement o1, IGuiElement o2)
-			{
+			public int compare(IGuiElement o1, IGuiElement o2) {
 				return o1.getZIndex() - o2.getZIndex();
 			}
 		});
@@ -178,66 +158,48 @@ public abstract class Scene
 	}
 	
 	// not abstract so that implementing won't be forced
-	public void handleMouseWorld(int x, int y, int flag)
-	{}
+	public void handleMouseWorld(int x, int y, int flag) {}
 	
-	public void lockScene()
-	{
+	public void lockScene() {
 		for (IGuiElement i : content)
-			if (i instanceof ClickableGui)
-			{
+			if (i instanceof ClickableGui) {
 				((ClickableGui) i).setEnabled(false);
 			}
 	}
 	
-	public void unlockScene()
-	{
+	public void unlockScene() {
 		for (IGuiElement i : content)
-			if (i instanceof ClickableGui)
-			{
+			if (i instanceof ClickableGui) {
 				((ClickableGui) i).setEnabled(true);
 			}
 	}
 	
-	public boolean isWorldActive()
-	{
+	public boolean isWorldActive() {
 		return worldActive;
 	}
 	
 	// not abstract so that implementing won't be forced
-	public void onClientMessage(String message)
-	{}
+	public void onClientMessage(String message) {}
 	
 	// not abstract so that implementing won't be forced
-	public void onClientReveivedData(byte[] data)
-	{
+	public void onClientReveivedData(byte[] data) {
 		PacketTypes type = Packet.lookupPacket(data[0]);
-		switch (type)
-		{
-			case DISCONNECT:
-			{
+		switch (type) {
+			case DISCONNECT: {
 				Packet1Disconnect p = new Packet1Disconnect(data);
-				if (p.getUsername().equals(Game.client.getUsername()))
-				{
-					if (!p.getReason().equals("mp.reason.disconnect"))
-					{
-						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent()
-						{
+				if (p.getUsername().equals(Game.client.getUsername())) {
+					if (!p.getReason().equals("mp.reason.disconnect")) {
+						Game.currentGame.addScene(new Dialog(Tr._("info"), Tr._(p.getReason()), new Action(Tr._("close"), new IGuiEvent() {
 							@Override
-							public void trigger()
-							{
+							public void trigger() {
 								Game.currentGame.setScene(new SceneMainMenu());
 							}
 						})));
-					}
-					else Game.currentGame.setScene(new SceneMainMenu());
+					} else Game.currentGame.setScene(new SceneMainMenu());
 				}
-				try
-				{
+				try {
 					Game.client.sendPacket(new Packet4ServerInfo());
-				}
-				catch (IOException e)
-				{
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				break;

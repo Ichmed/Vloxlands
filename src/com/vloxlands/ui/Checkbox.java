@@ -7,20 +7,17 @@ import com.vloxlands.util.RenderAssistant;
 /**
  * @author Dakror
  */
-public class Checkbox extends ClickableGui
-{
+public class Checkbox extends ClickableGui {
 	public static final int WIDTH = 44;
 	public static final int HEIGHT = 44;
 	boolean selected;
 	int texX, texY;
 	
-	public Checkbox(int x, int y)
-	{
+	public Checkbox(int x, int y) {
 		this(x, y, false);
 	}
 	
-	public Checkbox(int x, int y, boolean selected)
-	{
+	public Checkbox(int x, int y, boolean selected) {
 		this.x = x;
 		this.y = y;
 		width = WIDTH;
@@ -30,21 +27,18 @@ public class Checkbox extends ClickableGui
 	}
 	
 	@Override
-	public void handleMouse(int posX, int posY, int flag)
-	{
+	public void handleMouse(int posX, int posY, int flag) {
 		if (!enabled) return;
 		if (flag == 2) selected = !selected;
 		else texX = 183;
 	}
 	
-	public boolean isSelected()
-	{
+	public boolean isSelected() {
 		return selected;
 	}
 	
 	@Override
-	public void render()
-	{
+	public void render() {
 		glEnable(GL_BLEND);
 		RenderAssistant.bindTexture(texture);
 		
@@ -53,8 +47,7 @@ public class Checkbox extends ClickableGui
 	}
 	
 	@Override
-	public void onTick()
-	{
+	public void onTick() {
 		if (!enabled) texX = 228;
 		else texX = 138;
 		
