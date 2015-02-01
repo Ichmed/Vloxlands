@@ -271,7 +271,8 @@ public class SproxelConverter {
 							if (activeStrips[i] == null) {
 								activeStrips[i] = new VoxelFace(val);
 							} else {
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX && val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z) {
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX
+										&& val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z) {
 									activeStrips[i].increaseSize(0, 1, 0);
 								} else {
 									strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);
@@ -442,16 +443,16 @@ public class SproxelConverter {
 				// tl, br, bl, tr
 				int[] v = { //
 				vertices.indexOf(transformVector(new Vector(face.tl).add(new Vector(face.pos)), size, size, size)) + 1,//
-				vertices.indexOf(transformVector(new Vector(face.br).add(new Vector(face.pos)), size, size, size)) + 1,//
-				vertices.indexOf(transformVector(new Vector(face.bl).add(new Vector(face.pos)), size, size, size)) + 1,//
-				vertices.indexOf(transformVector(new Vector(face.tr).add(new Vector(face.pos)), size, size, size)) + 1 //
+						vertices.indexOf(transformVector(new Vector(face.br).add(new Vector(face.pos)), size, size, size)) + 1,//
+						vertices.indexOf(transformVector(new Vector(face.bl).add(new Vector(face.pos)), size, size, size)) + 1,//
+						vertices.indexOf(transformVector(new Vector(face.tr).add(new Vector(face.pos)), size, size, size)) + 1 //
 				};
 				
 				int[] vt = { //
 				textureVertices.indexOf(new Vector(U + texMalus, V - texMalus, 0)) + 1, //
-				textureVertices.indexOf(new Vector(U + step - texMalus, V - step + texMalus, 0)) + 1, //
-				textureVertices.indexOf(new Vector(U + texMalus, V - step + texMalus, 0)) + 1, //
-				textureVertices.indexOf(new Vector(U + step - texMalus, V - texMalus, 0)) + 1, //
+						textureVertices.indexOf(new Vector(U + step - texMalus, V - step + texMalus, 0)) + 1, //
+						textureVertices.indexOf(new Vector(U + texMalus, V - step + texMalus, 0)) + 1, //
+						textureVertices.indexOf(new Vector(U + step - texMalus, V - texMalus, 0)) + 1, //
 				};
 				int vn = normals.indexOf(new Vector(face.dir.dir.negate(null))) + 1;
 				

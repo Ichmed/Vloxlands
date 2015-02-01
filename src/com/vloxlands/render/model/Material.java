@@ -18,6 +18,7 @@ public class Material {
 	
 	@Override
 	public String toString() {
-		return "[diffuseColor=" + diffuseColor + ", ambientColor=" + ambientColor + ", specularColor=" + specularColor + ", shininess=" + shininess + ", transparency=" + transparency + ", texturePath=" + texturePath + ", hasTexture=" + Boolean.toString(hasTexture) + ", name=" + name + "]";
+		return "[diffuseColor=" + diffuseColor + ", ambientColor=" + ambientColor + ", specularColor=" + specularColor + ", shininess=" + shininess + ", transparency=" + transparency
+				+ ", texturePath=" + texturePath + ", hasTexture=" + Boolean.toString(hasTexture) + ", name=" + name + "]";
 	}
 }

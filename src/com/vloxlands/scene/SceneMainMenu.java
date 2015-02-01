@@ -34,7 +34,8 @@ public class SceneMainMenu extends Scene {
 		l.font = l.font.deriveFont(Font.BOLD, 60f);
 		content.add(l);
 		
-		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
+		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80,
+																110 + TextButton.HEIGHT * 4, true);
 		
 		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 40, Tr._("play"));
 		b.setClickEvent(new IGuiEvent() {
@@ -124,7 +125,8 @@ public class SceneMainMenu extends Scene {
 				while (!abort) {
 					if (!Game.client.isConnected()) {
 						if (Game.client.isRejected()) {
-							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+							Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"),
+																																																																												Dialog.CLOSE_EVENT)));
 							resetButtons();
 							break;
 						}

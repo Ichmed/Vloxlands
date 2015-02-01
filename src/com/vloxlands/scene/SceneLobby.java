@@ -173,7 +173,8 @@ public class SceneLobby extends Scene {
 		
 		if (!Game.client.isConnected() || Game.client.isConnectedToLocalhost()) {
 			content.add(new Label(Display.getWidth() - TextButton.WIDTH - 70, Display.getHeight() - 210, (TextButton.WIDTH + 70) / 2, 25, Tr._("mapname") + ":", false));
-			mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map") + (MediaAssistant.getMaps().length + 1));
+			mapname = new InputField(Display.getWidth() - TextButton.WIDTH - 75, Display.getHeight() - 175, (TextButton.WIDTH + 40), "", Tr._("map")
+					+ (MediaAssistant.getMaps().length + 1));
 			mapname.allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ������,.-0987654321�'#+_; ";
 			content.add(mapname);
 		}

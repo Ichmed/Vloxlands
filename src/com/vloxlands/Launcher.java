@@ -37,7 +37,9 @@ public class Launcher {
 		UniVersion.init(Vloxlands.class, v[1], v[0]);
 		
 		if (!jar.exists() && !CFG.INTERNET) {
-			JOptionPane.showMessageDialog(null, "In order to launch the game the first time,you need to have an internet connection!\nEstablish a connection first, then start the game again.", "Error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+																		"In order to launch the game the first time,you need to have an internet connection!\nEstablish a connection first, then start the game again.",
+																		"Error!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		

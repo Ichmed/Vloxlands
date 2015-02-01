@@ -81,7 +81,8 @@ public abstract class AABB {
 		
 		float malus = 0.01f;
 		
-		RenderAssistant.renderCuboid(full.min.x - malus, full.min.y - malus, full.min.z - malus, full.getSize().x + malus * 2, full.getSize().y + malus * 2, full.getSize().z + malus * 2);
+		RenderAssistant.renderCuboid(full.min.x - malus, full.min.y - malus, full.min.z - malus, full.getSize().x + malus * 2, full.getSize().y + malus * 2, full.getSize().z + malus
+				* 2);
 		
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}

@@ -76,7 +76,8 @@ public class LobbySlot extends Container {
 								while (Game.client.getUsername().equals(oldUsername)) {
 									if (Game.client.isRejected()) {
 										Game.currentGame.getActiveScene().unlockScene();
-										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"), Dialog.CLOSE_EVENT)));
+										Game.currentGame.addScene(new Dialog(Tr._("error"), Tr._("mp.reject." + Game.client.getRejectionCause().name().toLowerCase()), new Action(Tr._("close"),
+																																																																															Dialog.CLOSE_EVENT)));
 										Game.client.resetRejection();
 										return;
 									}
@@ -105,17 +106,18 @@ public class LobbySlot extends Container {
 		kick.setClickEvent(new IGuiEvent() {
 			@Override
 			public void trigger() {
-				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", p.getUsername()), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT), new Action(Tr._("ok"), new IGuiEvent() {
-					@Override
-					public void trigger() {
-						try {
-							Game.client.sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.kicked"));
-							Game.currentGame.removeActiveScene();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}));
+				Dialog dialog = new Dialog(Tr._("kick"), Tr._("kickquestion").replace("%player%", p.getUsername()), new Action(Tr._("cancel"), Dialog.CLOSE_EVENT),
+																		new Action(Tr._("ok"), new IGuiEvent() {
+																			@Override
+																			public void trigger() {
+																				try {
+																					Game.client.sendPacket(new Packet1Disconnect(p.getUsername(), "mp.reason.kicked"));
+																					Game.currentGame.removeActiveScene();
+																				} catch (IOException e) {
+																					e.printStackTrace();
+																				}
+																			}
+																		}));
 				Game.currentGame.addScene(dialog);
 			}
 		});

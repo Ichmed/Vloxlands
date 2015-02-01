@@ -93,9 +93,9 @@ public class MathHelper {
 	
 	public static Vector3f vector3fDotMatrix3f(Vector3f v, Matrix3f m) {
 		return new Vector3f( //
-		m.m00 * v.x + m.m01 * v.y + m.m02 * v.z, //
-		m.m10 * v.x + m.m11 * v.y + m.m12 * v.z, //
-		m.m20 * v.x + m.m21 * v.y + m.m22 * v.z //
+												m.m00 * v.x + m.m01 * v.y + m.m02 * v.z, //
+												m.m10 * v.x + m.m11 * v.y + m.m12 * v.z, //
+												m.m20 * v.x + m.m21 * v.y + m.m22 * v.z //
 		);
 	}
 	

@@ -25,7 +25,8 @@ public class SceneNewGame extends Scene {
 		MultilineLabel desc = new MultilineLabel(100, 50, Display.getWidth() - 200, 120, Tr._("spdesc"));
 		content.add(desc);
 		
-		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80, 110 + TextButton.HEIGHT * 4, true);
+		Container c = new Container(Display.getWidth() / 2 - TextButton.WIDTH / 2 - 40, Display.getHeight() / 2 - (110 + TextButton.HEIGHT * 4) / 2, TextButton.WIDTH + 80,
+																110 + TextButton.HEIGHT * 4, true);
 		
 		TextButton b = new TextButton(TextButton.WIDTH / 2 + 40, 70, Tr._("lan"));
 		b.setClickEvent(new IGuiEvent() {

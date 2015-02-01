@@ -338,23 +338,27 @@ public class RenderAssistant {
 		
 		for (int i = 0; i < (width - cornerSize * 2) / lineWidth; i++)
 			renderRect(x + cornerSize + i * lineWidth, y, lineWidth, lineThickness, m[0] / 1024f, c[1] / 1024f, lineWidth / 1024f, lineThickness / 1024f); // mt
-		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, c[1] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
+		renderRect(	x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, c[1] / 1024.0f,
+								((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
 		
 		renderRect(x + width - cornerSize, y, cornerSize, cornerSize, c[3] / 1024f, c[1] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rt
 		
 		for (int i = 0; i < (height - cornerSize * 2) / lineHeight; i++)
 			renderRect(x, y + cornerSize + i * lineHeight, lineThickness, lineHeight, c[0] / 1024f, m[1] / 1024f, lineThickness / 1024f, lineHeight / 1024f); // ml
-		renderRect(x, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight, c[0] / 1024.0f, m[1] / 1024.0f, lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
+		renderRect(	x, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight, c[0] / 1024.0f, m[1] / 1024.0f,
+								lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
 		
 		for (int i = 0; i < (height - cornerSize * 2) / lineHeight; i++)
 			renderRect(x + width - lineThickness, y + cornerSize + i * lineHeight, lineThickness, lineHeight, m[3] / 1024f, m[1] / 1024f, lineThickness / 1024f, lineHeight / 1024f); // mr
-		renderRect(x + width - lineThickness, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight, m[3] / 1024.0f, m[1] / 1024.0f, lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
+		renderRect(	x + width - lineThickness, y + cornerSize + (height - cornerSize * 2) / lineHeight * lineHeight, lineThickness, (height - cornerSize * 2) % lineHeight,
+								m[3] / 1024.0f, m[1] / 1024.0f, lineThickness / 1024.0f, ((height - cornerSize * 2) % lineHeight) / 1024.0f);
 		
 		renderRect(x, y + height - cornerSize, cornerSize, cornerSize, c[0] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // lb
 		
 		for (int i = 0; i < (width - cornerSize * 2) / lineWidth; i++)
 			renderRect(x + cornerSize + i * lineWidth, y + height - lineThickness, lineWidth, lineThickness, m[0] / 1024f, m[2] / 1024f, lineWidth / 1024f, lineThickness / 1024f); // mb
-		renderRect(x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y + height - lineThickness, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f, m[2] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
+		renderRect(	x + cornerSize + (width - cornerSize * 2) / lineWidth * lineWidth, y + height - lineThickness, (width - cornerSize * 2) % lineWidth, lineThickness, m[0] / 1024.0f,
+								m[2] / 1024.0f, ((width - cornerSize * 2) % lineWidth) / 1024.0f, lineThickness / 1024.0f);
 		
 		renderRect(x + width - cornerSize, y + height - cornerSize, cornerSize, cornerSize, c[3] / 1024f, c[2] / 1024f, cornerSize / 1024f, cornerSize / 1024f); // rb
 		
@@ -408,7 +412,8 @@ public class RenderAssistant {
 		
 		for (int i = 0; i < (width - 15) / lineLength; i++)
 			renderRect(x + i * lineLength + 15, y, lineLength, height, m[0] / 1024f, m[1] / 1024f, lineLength / 1024f, height / 1024f);
-		renderRect(x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f, height / 1024f);
+		renderRect(	x + 15 + ((width - 30) / lineLength * lineLength), y, (width - 30) % lineLength, height, m[0] / 1024f, m[1] / 1024f, ((width - 30) % lineLength) / 1024f,
+								height / 1024f);
 		
 		renderRect(x + width - 15, y, 15, height, c[2] / 1024f, c[1] / 1024f, 15 / 1024f, height / 1024f);
 		if (!horizontal) {

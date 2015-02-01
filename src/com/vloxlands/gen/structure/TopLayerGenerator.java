@@ -24,7 +24,8 @@ public class TopLayerGenerator extends Generator {
 	
 	@Override
 	public void generate(Island island, IslandGenerator gen) {
-		generateBezier(island, BEZIER, x, z, radius, y, topLayers, Generator.createRatio(new byte[] { Voxel.get("DIRT").getId(), Voxel.get("STONE").getId() }, new int[] { 30, 1 }), true);
+		generateBezier(	island, BEZIER, x, z, radius, y, topLayers, Generator.createRatio(new byte[] { Voxel.get("DIRT").getId(), Voxel.get("STONE").getId() }, new int[] { 30, 1 }),
+										true);
 		gen.updateProgress();
 	}
 	

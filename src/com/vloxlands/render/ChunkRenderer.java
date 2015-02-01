@@ -148,7 +148,8 @@ public class ChunkRenderer {
 							if (activeStrips[i] == null) {
 								activeStrips[i] = new VoxelFace(val);
 							} else {
-								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX && val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z) {
+								if (val.textureIndex == activeStrips[i].textureIndex && val.sizeZ == activeStrips[i].sizeZ && val.sizeX == activeStrips[i].sizeX
+										&& val.pos.x == activeStrips[i].pos.x && val.pos.z == activeStrips[i].pos.z) {
 									activeStrips[i].increaseSize(0, 1, 0);
 								} else {
 									strips2.put(new VoxelFaceKey(activeStrips[i]), activeStrips[i]);

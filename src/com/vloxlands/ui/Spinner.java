@@ -37,7 +37,8 @@ public class Spinner extends ClickableGui {
 		
 		titles = new String[max - min];
 		
-		minus = new ArrowButton(x, y + ((rot == GuiRotation.HORIZONTAL) ? 0 : height - ArrowButton.HEIGHT), (rot == GuiRotation.HORIZONTAL) ? ArrowButton.MINUS_HOR : ArrowButton.MINUS_VER);
+		minus = new ArrowButton(x, y + ((rot == GuiRotation.HORIZONTAL) ? 0 : height - ArrowButton.HEIGHT), (rot == GuiRotation.HORIZONTAL) ? ArrowButton.MINUS_HOR
+				: ArrowButton.MINUS_VER);
 		minus.setClickEvent(new IGuiEvent() {
 			
 			@Override

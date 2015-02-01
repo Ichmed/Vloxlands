@@ -50,7 +50,8 @@ public class Vloxlands {
 		try {
 			running = true;
 			setFullscreen();
-			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")), Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
+			Display.setIcon(new ByteBuffer[] { Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo16.png")),
+					Assistant.loadImage(Vloxlands.class.getResourceAsStream("/graphics/logo/logo32.png")) });
 			Display.setTitle("Vloxlands");
 			Display.setResizable(true);
 			try {
@@ -92,7 +93,8 @@ public class Vloxlands {
 		// Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		try {
-			Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */720));
+			Display.setDisplayMode(new DisplayMode(1280/* d.width - 300 */, /* (int) (d.height - 300 * (d.height / (float) d.width)) */
+			720));
 			Display.setFullscreen(false);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
